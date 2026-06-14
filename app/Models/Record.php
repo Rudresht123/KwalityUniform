@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\LogsAllActivity;
 
 class Record extends Model
 {
+    use LogsAllActivity;
+
     protected static function booted(): void
     {
         static::creating(function ($model) {

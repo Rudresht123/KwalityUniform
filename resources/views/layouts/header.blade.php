@@ -626,11 +626,12 @@
                     class="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown"
                     data-bs-auto-close="outside" aria-expanded="false">
                     <div class="d-flex align-items-center">
-                        <div class="header-link-icon"> <img src="../assets/images/faces/1.jpg" alt="img"
-                                width="32" height="32" class="rounded-circle"> </div>
+                        <div class="header-link-icon"> 
+                            <img src="{{ auth()->user()->avatar_url }}" alt="img"
+                                width="32" height="32" class="rounded-circle border"> 
+                        </div>
                         <div class="d-none">
-                            <p class="fw-semibold mb-0">Angelica</p><span class="op-7 fw-normal d-block fs-11">Web
-                                Designer</span>
+                            <p class="fw-semibold mb-0">{{ auth()->user()->name }}</p>
                         </div>
                     </div>
                 </a> <!-- End::header-link|dropdown-toggle -->
@@ -638,24 +639,22 @@
                     aria-labelledby="mainHeaderProfile">
                     <li>
                         <div class="header-navheading border-bottom">
-                            <h6 class="main-notification-title">Sonia Taylor</h6>
-                            <p class="main-notification-text mb-0">Web Designer</p>
+                            <h6 class="main-notification-title text-dark">{{ auth()->user()->name }}</h6>
+                            <p class="main-notification-text mb-0 text-muted small">{{ auth()->user()->email }}</p>
                         </div>
                     </li>
-                    <li><a class="dropdown-item d-flex border-bottom" href="profile.html"><i
+                    <li><a class="dropdown-item d-flex border-bottom" href="{{ route('profile.edit') }}"><i
                                 class="fe fe-user fs-16 align-middle me-2"></i>Profile</a></li>
-                    <li><a class="dropdown-item d-flex border-bottom" href="mail-inbox.html"><i
-                                class="fe fe-inbox fs-16 align-middle me-2"></i>Inbox <span
-                                class="badge bg-success ms-auto">25</span></a></li>
-                    <li><a class="dropdown-item d-flex border-bottom border-block-end"
-                            href="notifications-list.html"><i
-                                class="fe fe-compass fs-16 align-middle me-2"></i>Activity</a></li>
-                    <li><a class="dropdown-item d-flex border-bottom" href="settings.html"><i
-                                class="fe fe-settings fs-16 align-middle me-2"></i>Settings</a></li>
-                    <li><a class="dropdown-item d-flex border-bottom" href="chat.html"><i
-                                class="fe fe-headphones fs-16 align-middle me-2"></i>Support</a></li>
-                    <li><a class="dropdown-item d-flex" onclick="logout()" ><i
-                                class="fe fe-power fs-16 align-middle me-2"></i>Log Out</a></li>
+                    <li><a class="dropdown-item d-flex border-bottom" href="{{ route('lockscreen.lock') }}"><i
+                                class="fe fe-lock fs-16 align-middle me-2"></i>Lock Screen</a></li>
+                    <li>
+                       <form method="POST" action="{{ route('logout') }}" id="logout-header-form">
+                           @csrf
+                           <a class="dropdown-item d-flex" href="javascript:void(0);" onclick="confirmLogout();" style="cursor: pointer !important;">
+                               <i class="fe fe-power fs-16 align-middle me-2"></i>Log Out
+                           </a>
+                       </form>
+                    </li>
                 </ul>
             </div> <!-- End::header-element --> <!-- Start::header-element -->
             <div class="header-element right-sidebar d-xl-flex d-none"> <a href="javascript:void(0);"
@@ -670,3 +669,27 @@
         </div> <!-- End::header-content-right -->
     </div> <!-- End::main-header-container -->
 </header>
+
+<script>
+function confirmLogout() {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You will be logged out of your session!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#6B62DD',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Log Out!',
+        cancelButtonText: 'Stay Logged In',
+        customClass: {
+            confirmButton: 'btn btn-primary rounded-pill px-4',
+            cancelButton: 'btn btn-light rounded-pill px-4 ms-2'
+        },
+        buttonsStyling: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('logout-header-form').submit();
+        }
+    })
+}
+</script>

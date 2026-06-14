@@ -5,9 +5,11 @@ namespace App\Models\RolePermission;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Permission\Models\Permission as SpatiePermission;
 
+use App\Traits\LogsAllActivity;
+
 class Permission extends SpatiePermission
 {
-    use HasFactory;
+    use HasFactory, LogsAllActivity;
 
     protected $fillable = [
         'name',

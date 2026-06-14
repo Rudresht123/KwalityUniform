@@ -650,18 +650,12 @@
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.custom-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08) !important;
-}
+
 
 .custom-card .rounded-3, .custom-card .rounded-circle {
     transition: all 0.3s ease;
 }
 
-.custom-card:hover .rounded-3, .custom-card:hover .rounded-circle {
-    transform: scale(1.1);
-}
 
 .list-group-item-action {
     transition: all 0.2s ease;

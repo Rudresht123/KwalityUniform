@@ -39,6 +39,17 @@ class PermissionSeeder extends Seeder
                 'school_class.delete' => 'Delete School Class',
             ],
 
+            'Audit Management' => [
+                'audit.view' => 'View Audit Reports',
+            ],
+
+            'Category Management' => [
+                'category.view'   => 'View Categories',
+                'category.create' => 'Create Category',
+                'category.edit'   => 'Edit Category',
+                'category.delete' => 'Delete Category',
+            ],
+
         ];
 
         foreach ($modules as $group => $permissions) {

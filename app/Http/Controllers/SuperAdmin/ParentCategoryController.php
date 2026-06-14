@@ -1,0 +1,76 @@
+<?php
+
+namespace App\Http\Controllers\SuperAdmin;
+
+use App\Http\Controllers\BaseController;
+use App\Http\Requests\SuperAdmin\StoreParentCategoryRequest;
+use App\Http\Requests\SuperAdmin\UpdateParentCategoryRequest;
+use App\Models\SuperAdmin\ParentCategory;
+use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
+use Throwable;
+
+class ParentCategoryController extends BaseController
+{
+    public function index(Request $request)
+    {
+        if ($request->ajax()) {
+            $parents = ParentCategory::latest();
+
+            return DataTables::of($parents)
+                ->addIndexColumn()
+                ->addColumn('status', function ($row) {
+                    return $row->is_active 
+                        ? '<span class="badge bg-success">ACTIVE</span>' 
+                        : '<span class="badge bg-danger">INACTIVE</span>';
+                })
+                ->addColumn('options', function ($row) {
+                    return view('super-admin.parent-category.actions', compact('row'))->render();
+                })
+                ->rawColumns(['status', 'options'])
+                ->make(true);
+        }
+
+        return view('super-admin.parent-category.index', $this->pageData('Parent Category Management', 'Home|Product|Parent Categories'));
+    }
+
+    public function create()
+    {
+        return view('super-admin.parent-category.create', $this->pageData('Create Parent Category', 'Home|Product|Parent Categories|Create'));
+    }
+
+    public function store(StoreParentCategoryRequest $request)
+    {
+        try {
+            ParentCategory::create($request->validated());
+            return redirect()->route('parent-category.index')->with('success', 'Parent category created successfully.');
+        } catch (Throwable $e) {
+            return back()->withInput()->with('error', 'Failed to create parent category: ' . $e->getMessage());
+        }
+    }
+
+    public function edit(ParentCategory $parentCategory)
+    {
+        return view('super-admin.parent-category.edit', compact('parentCategory'), $this->pageData('Edit Parent Category', 'Home|Product|Parent Categories|Edit'));
+    }
+
+    public function update(UpdateParentCategoryRequest $request, ParentCategory $parentCategory)
+    {
+        try {
+            $parentCategory->update($request->validated());
+            return redirect()->route('parent-category.index')->with('success', 'Parent category updated successfully.');
+        } catch (Throwable $e) {
+            return back()->withInput()->with('error', 'Failed to update parent category: ' . $e->getMessage());
+        }
+    }
+
+    public function destroy(ParentCategory $parentCategory)
+    {
+        try {
+            $parentCategory->delete();
+            return redirect()->route('parent-category.index')->with('success', 'Parent category deleted successfully.');
+        } catch (Throwable $e) {
+            return back()->with('error', 'Failed to delete parent category: ' . $e->getMessage());
+        }
+    }
+}

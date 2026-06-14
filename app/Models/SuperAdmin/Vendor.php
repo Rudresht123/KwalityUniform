@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use App\Traits\LogsAllActivity;
 
 #[Fillable(['business_name', 'owner_name', 'email', 'phone', 'address', 'city', 'state', 'pincode', 'gstin', 'pan_number', 'bank_account_no', 'ifsc_code', 'commission_rate', 'status', 'logo_url', 'is_active', 'created_by', 'updated_by'])]
 class Vendor extends Record
