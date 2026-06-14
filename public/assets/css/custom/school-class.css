@@ -1,0 +1,45 @@
+/* Bulk Class Setup Styles */
+.hover-elevate {
+    transition: all 0.2s ease;
+}
+.hover-elevate:hover {
+    transform: translateY(-2px);
+    background-color: rgba(255,255,255,0.2) !important;
+}
+.btn-light-danger {
+    background-color: #fff5f5;
+    color: #ff5b5b;
+    border: 1px solid #ffe3e3;
+}
+.btn-light-danger:hover {
+    background-color: #ff5b5b;
+    color: #fff;
+}
+.btn-light-danger:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+.input-group-merge:focus-within {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.25rem rgba(var(--primary-rgb), 0.1);
+}
+.tracking-wider {
+    letter-spacing: 0.05em;
+}
+.row-number {
+    font-size: 0.85rem;
+}
+#class-fields-container::-webkit-scrollbar {
+    width: 6px;
+}
+#class-fields-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+#class-fields-container::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+#class-fields-container::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
