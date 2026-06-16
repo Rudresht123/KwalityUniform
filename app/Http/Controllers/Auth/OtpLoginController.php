@@ -65,6 +65,13 @@ class OtpLoginController extends Controller
             Auth::login($user, $request->boolean('remember'));
             $request->session()->regenerate();
 
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'message' => 'Login successful',
+                    'redirect' => redirect()->intended(route('dashboard', absolute: false))->getTargetUrl()
+                ]);
+            }
+
             return redirect()->intended(route('dashboard', absolute: false));
         }
 

@@ -85,7 +85,7 @@ class RoleController extends BaseController
     public function show(Role $role): View
     {
         $role->load('permissions');
-        return view('super-admin.role.show', compact('role'), $this->pageData('Role Details', 'Home|Roles|View'));
+        return view('super-admin.role.show', compact('role'), $this->pageData('Role Details', 'Home|Access Control|Roles|View'));
     }
 
     /**
@@ -98,7 +98,7 @@ class RoleController extends BaseController
     {
         $role->load('permissions');
         $groupedPermissions = $this->roleService->getGroupedPermissions();
-        return view('super-admin.role.edit', compact('role', 'groupedPermissions'), $this->pageData('Edit Role', 'Home|Roles|Edit'));
+        return view('super-admin.role.edit', compact('role', 'groupedPermissions'), $this->pageData('Edit Role', 'Home|Access Control|Roles|Edit'));
     }
 
     /**

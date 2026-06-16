@@ -31,12 +31,12 @@ class ParentCategoryController extends BaseController
                 ->make(true);
         }
 
-        return view('super-admin.parent-category.index', $this->pageData('Parent Category Management', 'Home|Product|Parent Categories'));
+        return view('super-admin.parent-category.index', $this->pageData('Parent Category Management', 'Home|Product Attributes|Parent Categories'));
     }
 
     public function create()
     {
-        return view('super-admin.parent-category.create', $this->pageData('Create Parent Category', 'Home|Product|Parent Categories|Create'));
+        return view('super-admin.parent-category.create', $this->pageData('Create Parent Category', 'Home|Product Attributes|Parent Categories|Create'));
     }
 
     public function store(StoreParentCategoryRequest $request)
@@ -51,7 +51,7 @@ class ParentCategoryController extends BaseController
 
     public function edit(ParentCategory $parentCategory)
     {
-        return view('super-admin.parent-category.edit', compact('parentCategory'), $this->pageData('Edit Parent Category', 'Home|Product|Parent Categories|Edit'));
+        return view('super-admin.parent-category.edit', compact('parentCategory'), $this->pageData('Edit Parent Category', 'Home|Product Attributes|Parent Categories|Edit'));
     }
 
     public function update(UpdateParentCategoryRequest $request, ParentCategory $parentCategory)

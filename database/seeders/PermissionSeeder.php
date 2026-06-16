@@ -50,6 +50,34 @@ class PermissionSeeder extends Seeder
                 'category.delete' => 'Delete Category',
             ],
 
+            'Size Management' => [
+                'size.view'   => 'View Sizes',
+                'size.create' => 'Create Size',
+                'size.edit'   => 'Edit Size',
+                'size.delete' => 'Delete Size',
+            ],
+
+            'Color Management' => [
+                'color.view'   => 'View Colors',
+                'color.create' => 'Create Color',
+                'color.edit'   => 'Edit Color',
+                'color.delete' => 'Delete Color',
+            ],
+
+            'Admin Management' => [
+                'admin.view'   => 'View Admins',
+                'admin.create' => 'Create Admin',
+                'admin.edit'   => 'Edit Admin',
+                'admin.delete' => 'Delete Admin',
+            ],
+
+            'Product Management' => [
+                'product.view'   => 'View Products',
+                'product.create' => 'Create Product',
+                'product.edit'   => 'Edit Product',
+                'product.delete' => 'Delete Product',
+            ],
+
         ];
 
         foreach ($modules as $group => $permissions) {

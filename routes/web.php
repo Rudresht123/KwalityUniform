@@ -22,6 +22,9 @@ Route::middleware(['auth', CheckScreenLock::class])->group(function () {
 
     Route::get('/lock-screen-action', [ScreenLockController::class, 'lock'])->name('lockscreen.lock');
 
+    Route::post('/notifications/mark-as-read', [\App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+    Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+
     require __DIR__.'/superadmin-routes.php';
 });
 

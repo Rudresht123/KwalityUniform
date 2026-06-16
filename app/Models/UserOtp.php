@@ -9,11 +9,14 @@ class UserOtp extends Model
     protected $fillable = [
         'user_id',
         'otp',
-        'expire_at',
+        'type',
+        'expires_at',
+        'verified_at',
     ];
 
     protected $casts = [
-        'expire_at' => 'datetime',
+        'expires_at' => 'datetime',
+        'verified_at' => 'datetime',
     ];
 
     public function user()
@@ -23,6 +26,6 @@ class UserOtp extends Model
 
     public function isExpired()
     {
-        return $this->expire_at->isPast();
+        return $this->expires_at->isPast();
     }
 }

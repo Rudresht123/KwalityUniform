@@ -66,3 +66,43 @@ Route::prefix('audit-logs')->name('audit.')->group(function () {
     Route::get('/index', [\App\Http\Controllers\SuperAdmin\AuditReportController::class, 'index'])->name('index')->middleware('permission:audit.view');
     Route::get('/show/{activity}', [\App\Http\Controllers\SuperAdmin\AuditReportController::class, 'show'])->name('show')->middleware('permission:audit.view');
 });
+
+Route::prefix('sizes')->name('size.')->group(function () {
+    Route::get('/index', [\App\Http\Controllers\SuperAdmin\SizeController::class, 'index'])->name('index')->middleware('permission:size.view');
+    Route::get('/create', [\App\Http\Controllers\SuperAdmin\SizeController::class, 'create'])->name('create')->middleware('permission:size.create');
+    Route::post('/store', [\App\Http\Controllers\SuperAdmin\SizeController::class, 'store'])->name('store')->middleware('permission:size.create');
+    Route::get('/show/{size}', [\App\Http\Controllers\SuperAdmin\SizeController::class, 'show'])->name('show')->middleware('permission:size.view');
+    Route::get('/edit/{size}', [\App\Http\Controllers\SuperAdmin\SizeController::class, 'edit'])->name('edit')->middleware('permission:size.edit');
+    Route::put('/update/{size}', [\App\Http\Controllers\SuperAdmin\SizeController::class, 'update'])->name('update')->middleware('permission:size.edit');
+    Route::delete('/delete/{size}', [\App\Http\Controllers\SuperAdmin\SizeController::class, 'destroy'])->name('destroy')->middleware('permission:size.delete');
+});
+
+Route::prefix('colors')->name('color.')->group(function () {
+    Route::get('/index', [\App\Http\Controllers\SuperAdmin\ColorController::class, 'index'])->name('index')->middleware('permission:color.view');
+    Route::get('/create', [\App\Http\Controllers\SuperAdmin\ColorController::class, 'create'])->name('create')->middleware('permission:color.create');
+    Route::post('/store', [\App\Http\Controllers\SuperAdmin\ColorController::class, 'store'])->name('store')->middleware('permission:color.create');
+    Route::get('/show/{color}', [\App\Http\Controllers\SuperAdmin\ColorController::class, 'show'])->name('show')->middleware('permission:color.view');
+    Route::get('/edit/{color}', [\App\Http\Controllers\SuperAdmin\ColorController::class, 'edit'])->name('edit')->middleware('permission:color.edit');
+    Route::put('/update/{color}', [\App\Http\Controllers\SuperAdmin\ColorController::class, 'update'])->name('update')->middleware('permission:color.edit');
+    Route::delete('/delete/{color}', [\App\Http\Controllers\SuperAdmin\ColorController::class, 'destroy'])->name('destroy')->middleware('permission:color.delete');
+});
+
+Route::prefix('admins')->name('admin.')->group(function () {
+    Route::get('/index', [\App\Http\Controllers\SuperAdmin\AdminController::class, 'index'])->name('index')->middleware('permission:admin.view');
+    Route::get('/create', [\App\Http\Controllers\SuperAdmin\AdminController::class, 'create'])->name('create')->middleware('permission:admin.create');
+    Route::post('/store', [\App\Http\Controllers\SuperAdmin\AdminController::class, 'store'])->name('store')->middleware('permission:admin.create');
+    Route::get('/show/{admin}', [\App\Http\Controllers\SuperAdmin\AdminController::class, 'show'])->name('show')->middleware('permission:admin.view');
+    Route::get('/edit/{admin}', [\App\Http\Controllers\SuperAdmin\AdminController::class, 'edit'])->name('edit')->middleware('permission:admin.edit');
+    Route::put('/update/{admin}', [\App\Http\Controllers\SuperAdmin\AdminController::class, 'update'])->name('update')->middleware('permission:admin.edit');
+    Route::delete('/delete/{admin}', [\App\Http\Controllers\SuperAdmin\AdminController::class, 'destroy'])->name('destroy')->middleware('permission:admin.delete');
+});
+
+Route::prefix('products')->name('product.')->group(function () {
+    Route::get('/index', [\App\Http\Controllers\SuperAdmin\ProductController::class, 'index'])->name('index')->middleware('permission:product.view');
+    Route::get('/create', [\App\Http\Controllers\SuperAdmin\ProductController::class, 'create'])->name('create')->middleware('permission:product.create');
+    Route::post('/store', [\App\Http\Controllers\SuperAdmin\ProductController::class, 'store'])->name('store')->middleware('permission:product.create');
+    Route::get('/show/{product}', [\App\Http\Controllers\SuperAdmin\ProductController::class, 'show'])->name('show')->middleware('permission:product.view');
+    Route::get('/edit/{product}', [\App\Http\Controllers\SuperAdmin\ProductController::class, 'edit'])->name('edit')->middleware('permission:product.edit');
+    Route::put('/update/{product}', [\App\Http\Controllers\SuperAdmin\ProductController::class, 'update'])->name('update')->middleware('permission:product.edit');
+    Route::delete('/delete/{product}', [\App\Http\Controllers\SuperAdmin\ProductController::class, 'destroy'])->name('destroy')->middleware('permission:product.delete');
+});

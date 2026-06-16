@@ -15,17 +15,21 @@ class OtpService
      * @param User $user
      * @return bool
      */
-    public function sendOtp(User $user): bool
+    public function sendOtp(User $user, string $type = 'email'): bool
     {
         try {
             $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
             $expiryMinutes = 10;
 
             UserOtp::updateOrCreate(
-                ['user_id' => $user->id],
+                [
+                    'user_id' => $user->id,
+                    'type' => $type
+                ],
                 [
                     'otp' => $otp,
-                    'expire_at' => Carbon::now()->addMinutes($expiryMinutes),
+                    'expires_at' => Carbon::now()->addMinutes($expiryMinutes),
+                    'verified_at' => null,
                 ]
             );
 
@@ -48,11 +52,13 @@ class OtpService
      *
      * @param User $user
      * @param string $otp
+     * @param string $type
      * @return bool
      */
-    public function verifyOtp(User $user, string $otp): bool
+    public function verifyOtp(User $user, string $otp, string $type = 'email'): bool
     {
         $userOtp = UserOtp::where('user_id', $user->id)
+            ->where('type', $type)
             ->where('otp', $otp)
             ->first();
 
@@ -60,7 +66,8 @@ class OtpService
             return false;
         }
 
-        // Delete OTP after successful verification
+        // Mark as verified instead of deleting immediately if needed, 
+        // but here we just return true and the controller handles the rest.
         $userOtp->delete();
 
         return true;

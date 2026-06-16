@@ -19,53 +19,22 @@
 </head>
 
 <body>
+    <div id="loader" class="d-none"></div>
+
+    {{-- links for the js --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
     {{-- content section start here --}}
     @yield('content')
     {{-- content section end here --}}
 
-    {{-- links for the js --}}
-    <script src="{{ asset('assets/js/defaultmenu.min.js') }}"></script>
     <script src="{{ asset('assets/js/defaultmenu.min.js') }}"></script>
     <script src="{{ asset('assets/js/index.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
     <script src="{{ asset('assets/js/simplebar.js') }}"></script>
     <script src="{{ asset('assets/js/sticky.js') }}"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-
-    const togglePassword =
-        document.getElementById('togglePassword');
-
-    const passwordInput =
-        document.getElementById('password');
-
-    togglePassword.addEventListener('click', function () {
-
-        const icon =
-            this.querySelector('i');
-
-        if (passwordInput.type === 'password') {
-
-            passwordInput.type = 'text';
-
-            icon.classList.remove('ti-eye');
-            icon.classList.add('ti-eye-off');
-
-        } else {
-
-            passwordInput.type = 'password';
-
-            icon.classList.remove('ti-eye-off');
-            icon.classList.add('ti-eye');
-        }
-
-    });
-
-});
-    </script>
 </body>
 
 </html>

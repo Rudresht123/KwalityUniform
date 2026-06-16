@@ -43,7 +43,7 @@ class CategoryController extends BaseController
                 ->make(true);
         }
 
-        return view('super-admin.category.index', $this->pageData('Sub Category Management', 'Home|Product|Sub Categories'));
+        return view('super-admin.category.index', $this->pageData('Sub Category Management', 'Home|Product Attributes|Sub Categories'));
     }
 
     /**
@@ -52,7 +52,7 @@ class CategoryController extends BaseController
     public function create()
     {
         $parents = ParentCategory::active()->get();
-        return view('super-admin.category.create', compact('parents'), $this->pageData('Create Sub Category', 'Home|Product|Sub Categories|Create'));
+        return view('super-admin.category.create', compact('parents'), $this->pageData('Create Sub Category', 'Home|Product Attributes|Sub Categories|Create'));
     }
 
     /**
@@ -74,7 +74,7 @@ class CategoryController extends BaseController
     public function edit(Category $category)
     {
         $parents = ParentCategory::active()->get();
-        return view('super-admin.category.edit', compact('category', 'parents'), $this->pageData('Edit Sub Category', 'Home|Product|Sub Categories|Edit'));
+        return view('super-admin.category.edit', compact('category', 'parents'), $this->pageData('Edit Sub Category', 'Home|Product Attributes|Sub Categories|Edit'));
     }
 
     /**

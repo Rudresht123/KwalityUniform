@@ -43,13 +43,19 @@
 
         .login-card {
             border: none;
-            border-radius: 24px;
-            box-shadow: 0 50px 100px -20px rgba(50, 50, 93, 0.15), 0 30px 60px -30px rgba(0, 0, 0, 0.2);
+            border-radius: 28px;
+            box-shadow: 0 40px 100px -20px rgba(50, 50, 93, 0.12), 0 30px 60px -30px rgba(0, 0, 0, 0.15);
             background: var(--bg-glass);
-            backdrop-filter: blur(10px);
-            padding: 3rem;
+            backdrop-filter: blur(15px);
+            padding: 3.5rem;
             width: 100%;
-            max-width: 480px;
+            max-width: 500px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: transform 0.3s ease;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
         }
 
         .brand-logo {
@@ -86,22 +92,37 @@
             border: none;
             display: flex;
             margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-tabs-custom .nav-item {
+            flex: 1;
         }
 
         .nav-tabs-custom .nav-link {
-            flex: 1;
+            width: 100%;
             border: none;
             border-radius: 12px;
-            padding: 12px;
+            padding: 14px;
             font-weight: 700;
             color: var(--text-muted);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
         }
 
         .nav-tabs-custom .nav-link.active {
             background: white;
             color: var(--primary);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .nav-tabs-custom .nav-link:hover:not(.active) {
+            color: var(--primary);
+            background: rgba(255, 255, 255, 0.5);
         }
 
         .floating-label-group {
@@ -110,33 +131,38 @@
         }
 
         .form-control-custom {
-            height: 56px;
-            padding: 12px 16px 12px 48px;
-            border-radius: 14px;
+            height: 60px;
+            padding: 12px 16px 12px 52px;
+            border-radius: 16px;
             border: 2px solid #eef2f7;
             background: #f8fafc;
             font-weight: 500;
+            font-size: 1rem;
             transition: all 0.3s ease;
         }
 
         .form-control-custom:focus {
             border-color: var(--primary);
             background: white;
-            box-shadow: 0 0 0 4px rgba(107, 98, 221, 0.1);
+            box-shadow: 0 10px 20px rgba(107, 98, 221, 0.08);
         }
 
         .input-icon {
             position: absolute;
-            left: 18px;
+            left: 20px;
             top: 50%;
             transform: translateY(-50%);
             color: #94a3b8;
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .form-control-custom:focus + .input-icon {
             color: var(--primary);
+            transform: translateY(-50%) scale(1.1);
         }
 
         .password-toggle {
@@ -187,6 +213,48 @@
             justify-content: center;
             font-size: 1.25rem;
             border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Step Transitions */
+        .step-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .fade-out {
+            opacity: 0;
+            transform: translateX(-20px);
+            pointer-events: none;
+        }
+        
+        .fade-in {
+            opacity: 1 !important;
+            transform: translateX(0) !important;
+        }
+
+        .otp-input-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .otp-digit {
+            width: 45px;
+            height: 55px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border: 2px solid #eef2f7;
+            border-radius: 12px;
+            background: #f8fafc;
+            transition: all 0.3s ease;
+        }
+
+        .otp-digit:focus {
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(107, 98, 221, 0.1);
+            outline: none;
         }
     </style>
 
@@ -313,7 +381,7 @@
                             <div class="tab-pane fade" id="otp-pane" role="tabpanel">
                                 <form id="otpForm" method="POST" action="{{ route('otp.login') }}">
                                     @csrf
-                                    <div id="emailStep">
+                                    <div id="emailStep" class="step-transition">
                                         <div class="floating-label-group">
                                             <input type="email" id="otpEmail" name="email" 
                                                    class="form-control form-control-custom" 
@@ -326,30 +394,40 @@
                                         </button>
                                     </div>
 
-                                    <div id="otpStep" class="d-none">
-                                        <div class="text-center mb-3">
-                                            <span class="badge bg-light text-secondary p-2 rounded-3">
-                                                OTP sent to <span id="displayEmail" class="fw-bold"></span>
-                                            </span>
+                                    <div id="otpStep" class="step-transition d-none" style="opacity: 0; transform: translateX(20px);">
+                                        <div class="text-center mb-4">
+                                            <div class="d-inline-flex align-items-center justify-content-center bg-primary-light bg-opacity-10 text-primary p-3 rounded-circle mb-3">
+                                                <i class="ti ti-mail-opened fs-2"></i>
+                                            </div>
+                                            <p class="text-muted small">We've sent a 6-digit code to<br><span id="displayEmail" class="fw-bold text-secondary"></span></p>
                                         </div>
+                                        
                                         <div class="floating-label-group">
                                             <input type="text" name="otp" id="otpCode" 
                                                    class="form-control form-control-custom text-center fw-bold fs-4" 
-                                                   placeholder="· · · · · ·" maxlength="6" required>
+                                                   placeholder="· · · · · ·" maxlength="6" required
+                                                   style="letter-spacing: 0.5rem;">
                                             <i class="ti ti-shield-check input-icon"></i>
                                             <div id="otpCodeError" class="invalid-feedback d-block"></div>
                                         </div>
                                         
                                         <div class="d-flex justify-content-between align-items-center mb-4">
-                                            <span id="timerText" class="text-muted small"></span>
-                                            <button type="button" id="resendOtpBtn" class="btn btn-link text-primary small fw-bold p-0 text-decoration-none d-none">Resend OTP</button>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="remember" id="remember_otp">
+                                                <label class="form-check-label text-muted small" for="remember_otp">Remember me</label>
+                                            </div>
+                                            <div class="text-end">
+                                                <span id="timerText" class="text-muted small d-block"></span>
+                                                <button type="button" id="resendOtpBtn" class="btn btn-link text-primary small fw-bold p-0 text-decoration-none d-none">Resend OTP</button>
+                                            </div>
                                         </div>
 
                                         <button type="submit" class="btn btn-primary w-100 btn-login">
                                             Verify & Login <i class="ti ti-circle-check ms-2"></i>
                                         </button>
-                                        <button type="button" class="btn btn-link w-100 mt-2 text-muted small text-decoration-none" onclick="resetOtpSteps()">
-                                            Change Email
+                                        
+                                        <button type="button" class="btn btn-link w-100 mt-3 text-muted small text-decoration-none" onclick="resetOtpSteps()">
+                                            <i class="ti ti-arrow-left me-1"></i> Use different email
                                         </button>
                                     </div>
                                 </form>
@@ -363,7 +441,6 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function togglePass(inputId, btn) {
             const input = document.getElementById(inputId);
@@ -378,13 +455,30 @@
         }
 
         function resetOtpSteps() {
-            $('#emailStep').removeClass('d-none');
-            $('#otpStep').addClass('d-none');
-            $('#otpEmailError, #otpCodeError').text('');
-            $('#sendOtpBtn').prop('disabled', false).html('Get OTP <i class="ti ti-send ms-2"></i>');
+            $('#otpStep').addClass('fade-out');
+            setTimeout(() => {
+                $('#otpStep').addClass('d-none').removeClass('fade-out fade-in');
+                $('#emailStep').removeClass('d-none').addClass('fade-in');
+                $('#otpEmailError, #otpCodeError').text('');
+                $('#sendOtpBtn').prop('disabled', false).html('Get OTP <i class="ti ti-send ms-2"></i>');
+            }, 400);
         }
 
         $(document).ready(function() {
+            @if($errors->has('otp') || old('otp'))
+                setTimeout(function() {
+                    const otpTab = document.querySelector('#otp-tab');
+                    if (otpTab) {
+                        const tab = new bootstrap.Tab(otpTab);
+                        tab.show();
+                        $('#displayEmail').text("{{ old('email') }}");
+                        $('#otpEmail').val("{{ old('email') }}");
+                        $('#emailStep').addClass('d-none');
+                        $('#otpStep').removeClass('d-none').addClass('fade-in');
+                    }
+                }, 100);
+            @endif
+
             $('#sendOtpBtn').click(function() {
                 const email = $('#otpEmail').val();
                 const btn = $(this);
@@ -406,9 +500,17 @@
                     },
                     success: function(response) {
                         $('#displayEmail').text(email);
-                        $('#emailStep').addClass('d-none');
-                        $('#otpStep').removeClass('d-none');
-                        startTimer(60);
+                        
+                        // Start animation
+                        $('#emailStep').addClass('fade-out');
+                        setTimeout(() => {
+                            $('#emailStep').addClass('d-none');
+                            $('#otpStep').removeClass('d-none');
+                            setTimeout(() => {
+                                $('#otpStep').addClass('fade-in');
+                            }, 50);
+                            startTimer(60);
+                        }, 400);
                     },
                     error: function(xhr) {
                         btn.prop('disabled', false).html('Get OTP <i class="ti ti-send ms-2"></i>');
@@ -443,6 +545,40 @@
 
             $('#resendOtpBtn').click(function() {
                 $('#sendOtpBtn').click();
+            });
+
+            // AJAX Login Submission
+            $('#otpForm').submit(function(e) {
+                e.preventDefault();
+                const form = $(this);
+                const btn = form.find('button[type="submit"]');
+                const originalHtml = btn.html();
+
+                btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span> Verifying...');
+                $('#otpCodeError').text('');
+
+                $.ajax({
+                    url: form.attr('action'),
+                    method: "POST",
+                    data: form.serialize(),
+                    dataType: 'json',
+                    success: function(response) {
+                        btn.html('<i class="ti ti-check me-2"></i> Success!').addClass('btn-success').removeClass('btn-primary');
+                        setTimeout(() => {
+                            window.location.href = response.redirect;
+                        }, 500);
+                    },
+                    error: function(xhr) {
+                        btn.prop('disabled', false).html(originalHtml);
+                        if(xhr.status === 422) {
+                            const errors = xhr.responseJSON.errors;
+                            if(errors.otp) $('#otpCodeError').text(errors.otp[0]);
+                            if(errors.email) $('#otpEmailError').text(errors.email[0]);
+                        } else {
+                            $('#otpCodeError').text('An error occurred. Please try again.');
+                        }
+                    }
+                });
             });
         });
     </script>
