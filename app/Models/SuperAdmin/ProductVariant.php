@@ -9,25 +9,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
-class Product extends Record
+class ProductVariant extends Record
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'products';
-    protected $primaryKey = 'product_id';
+    protected $table = 'product_variants';
+    protected $primaryKey = 'variant_id';
     protected $keyType = 'string';
     public $incrementing = false;
 
     protected $fillable = [
+        'variant_id',
         'product_id',
-        'vendor_id',
-        'category_id',
-        'product_code',
-        'product_name',
-        'description',
-        'fabric_composition',
-        'gender_type',
-        'approval_status',
+        'sku',
+        'size_id',
+        'color_id',
+        'mrp',
+        'selling_price',
+        'stock_qty',
+        'low_stock_alert',
+        'barcode',
         'is_active',
         'created_by',
         'updated_by',
@@ -35,6 +36,10 @@ class Product extends Record
     ];
 
     protected $casts = [
+        'mrp' => 'decimal:2',
+        'selling_price' => 'decimal:2',
+        'stock_qty' => 'integer',
+        'low_stock_alert' => 'integer',
         'is_active' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
@@ -46,8 +51,8 @@ class Product extends Record
         parent::boot();
         
         static::creating(function ($model) {
-            if (!$model->product_id) {
-                $model->product_id = (string) Str::uuid();
+            if (!$model->variant_id) {
+                $model->variant_id = (string) Str::uuid();
             }
         });
 
@@ -61,32 +66,22 @@ class Product extends Record
 
     public function getRouteKeyName()
     {
-        return 'product_id';
+        return 'variant_id';
     }
 
-    public function vendor()
+    public function product()
     {
-        return $this->belongsTo(Vendor::class, 'vendor_id', 'vendor_id');
+        return $this->belongsTo(Product::class, 'product_id', 'product_id');
     }
 
-    public function category()
+    public function size()
     {
-        return $this->belongsTo(Category::class, 'category_id', 'category_id');
+        return $this->belongsTo(Size::class, 'size_id', 'size_id');
     }
 
-    public function variants()
+    public function color()
     {
-        return $this->hasMany(ProductVariant::class, 'product_id', 'product_id');
-    }
-
-    public function images()
-    {
-        return $this->hasMany(ProductImage::class, 'product_id', 'product_id');
-    }
-
-    public function primaryImage()
-    {
-        return $this->hasOne(ProductImage::class, 'product_id', 'product_id')->where('is_primary', true);
+        return $this->belongsTo(Color::class, 'color_id', 'color_id');
     }
 
     public function creator()
@@ -97,15 +92,5 @@ class Product extends Record
     public function updater()
     {
         return $this->belongsTo(User::class, 'updated_by');
-    }
-
-    public function scopeApproved($query)
-    {
-        return $query->where('approval_status', 'approved');
-    }
-
-    public function scopeActive($query)
-    {
-        return $query->where('is_active', true);
     }
 }

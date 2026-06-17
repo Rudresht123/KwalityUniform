@@ -1,114 +1,358 @@
 @extends('layouts.common')
 
+
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-lg-10">
-        <div class="card custom-card">
-            <div class="card-header justify-content-between">
-                <div class="card-title">Create New Product</div>
-                <a href="{{ route('product.index') }}" class="btn btn-light btn-sm border">
+<div class="container-fluid pb-5">
+    <form action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data" id="product-form">
+        @csrf
+
+        <!-- Page Header -->
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+                <h4 class="fw-bold mb-1">Add New Product</h4>
+                <p class="text-muted fs-13">Fill in the details below to create a new product and its variants.</p>
+            </div>
+            <div class="btn-list">
+                <a href="{{ route('product.index') }}" class="btn btn-light btn-sm border fw-bold">
                     <i class="ti ti-arrow-left me-1"></i> Back to List
                 </a>
-            </div>
-            <div class="card-body p-4">
-                <form action="{{ route('product.store') }}" method="POST">
-                    @csrf
-                    
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Vendor</label>
-                            <select name="vendor_id" class="form-select @error('vendor_id') is-invalid @enderror" required>
-                                <option value="" disabled selected>Select Vendor</option>
-                                @foreach($vendors as $vendor)
-                                    <option value="{{ $vendor->vendor_id }}" {{ old('vendor_id') == $vendor->vendor_id ? 'selected' : '' }}>
-                                        {{ $vendor->business_name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('vendor_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Sub Category</label>
-                            <select name="category_id" class="form-select @error('category_id') is-invalid @enderror" required>
-                                <option value="" disabled selected>Select Category</option>
-                                @foreach($categories as $category)
-                                    <option value="{{ $category->category_id }}" {{ old('category_id') == $category->category_id ? 'selected' : '' }}>
-                                        {{ $category->category_name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('category_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Product Code</label>
-                            <input type="text" name="product_code" value="{{ old('product_code') }}" 
-                                   class="form-control @error('product_code') is-invalid @enderror" 
-                                   placeholder="e.g. UN-SHT-001" required>
-                            @error('product_code') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Product Name</label>
-                            <input type="text" name="product_name" value="{{ old('product_name') }}" 
-                                   class="form-control @error('product_name') is-invalid @enderror" 
-                                   placeholder="e.g. White Formal Shirt" required>
-                            @error('product_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        </div>
-
-                        <div class="col-md-12">
-                            <label class="form-label fw-bold">Description</label>
-                            <textarea name="description" class="form-control @error('description') is-invalid @enderror" 
-                                      rows="3" placeholder="Detailed product description...">{{ old('description') }}</textarea>
-                            @error('description') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Fabric Composition</label>
-                            <input type="text" name="fabric_composition" value="{{ old('fabric_composition') }}" 
-                                   class="form-control @error('fabric_composition') is-invalid @enderror" 
-                                   placeholder="e.g. 60% Cotton, 40% Polyester">
-                            @error('fabric_composition') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Gender Type</label>
-                            <select name="gender_type" class="form-select @error('gender_type') is-invalid @enderror" required>
-                                <option value="unisex" {{ old('gender_type') == 'unisex' ? 'selected' : '' }}>Unisex</option>
-                                <option value="boys" {{ old('gender_type') == 'boys' ? 'selected' : '' }}>Boys</option>
-                                <option value="girls" {{ old('gender_type') == 'girls' ? 'selected' : '' }}>Girls</option>
-                            </select>
-                            @error('gender_type') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Approval Status</label>
-                            <select name="approval_status" class="form-select @error('approval_status') is-invalid @enderror" required>
-                                <option value="pending" {{ old('approval_status', 'pending') == 'pending' ? 'selected' : '' }}>Pending</option>
-                                <option value="approved" {{ old('approval_status') == 'approved' ? 'selected' : '' }}>Approved</option>
-                                <option value="rejected" {{ old('approval_status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
-                            </select>
-                            @error('approval_status') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Status</label>
-                            <select name="is_active" class="form-select" required>
-                                <option value="1" {{ old('is_active', '1') == '1' ? 'selected' : '' }}>Active</option>
-                                <option value="0" {{ old('is_active') == '0' ? 'selected' : '' }}>Inactive</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-12 mt-5">
-                            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold rounded-3 shadow-sm">
-                                <i class="ti ti-check me-1"></i> Save Product
-                            </button>
-                        </div>
-                    </div>
-                </form>
+                <button type="submit" class="btn btn-primary btn-sm fw-bold shadow-sm px-4">
+                    <i class="ti ti-check me-1"></i> Save Product
+                </button>
             </div>
         </div>
-    </div>
+
+        <div class="row">
+            <div class="col-xl-8">
+                <!-- Section 1: General Information -->
+                <div class="card form-section-card">
+                    <div class="card-header border-bottom-0 pt-4 px-4">
+                        <h5 class="section-title mb-0"><i class="ti ti-info-circle"></i> General Information</h5>
+                    </div>
+                    <div class="card-body px-4 pb-4">
+                        <div class="row g-4">
+                            @if(!auth()->user()->hasRole('vendor'))
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold fs-13">Vendor Account</label>
+                                <select name="vendor_id" class="form-select form-select-sm @error('vendor_id') is-invalid @enderror" required>
+                                    <option value="" disabled selected>Select Vendor</option>
+                                    @foreach($vendors as $vendor)
+                                        <option value="{{ $vendor->vendor_id }}" {{ old('vendor_id') == $vendor->vendor_id ? 'selected' : '' }}>
+                                            {{ $vendor->business_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('vendor_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                            @endif
+
+                            <div class="col-md-{{ auth()->user()->hasRole('vendor') ? '12' : '6' }}">
+                                <label class="form-label fw-semibold fs-13">Sub Category</label>
+                                <select name="category_id" class="form-select form-select-sm @error('category_id') is-invalid @enderror" required>
+                                    <option value="" disabled selected>Select Category</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->category_id }}" {{ old('category_id') == $category->category_id ? 'selected' : '' }}>
+                                            {{ $category->category_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('category_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold fs-13">Product Code</label>
+                                <input type="text" name="product_code" value="{{ old('product_code') }}" 
+                                       class="form-control form-control-sm @error('product_code') is-invalid @enderror" 
+                                       placeholder="e.g. UN-SHT-001" required>
+                                @error('product_code') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold fs-13">Product Name</label>
+                                <input type="text" name="product_name" value="{{ old('product_name') }}" 
+                                       class="form-control form-control-sm @error('product_name') is-invalid @enderror" 
+                                       placeholder="e.g. White Formal Shirt" required>
+                                @error('product_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Specifications -->
+                <div class="card form-section-card">
+                    <div class="card-header border-bottom-0 pt-4 px-4">
+                        <h5 class="section-title mb-0"><i class="ti ti-settings"></i> Product Specifications</h5>
+                    </div>
+                    <div class="card-body px-4 pb-4">
+                        <div class="row g-4">
+                            <div class="col-md-12">
+                                <label class="form-label fw-semibold fs-13">Description</label>
+                                <textarea name="description" class="form-control form-control-sm @error('description') is-invalid @enderror" 
+                                          rows="4" placeholder="Detailed product description...">{{ old('description') }}</textarea>
+                                @error('description') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold fs-13">Fabric Composition</label>
+                                <input type="text" name="fabric_composition" value="{{ old('fabric_composition') }}" 
+                                       class="form-control form-control-sm @error('fabric_composition') is-invalid @enderror" 
+                                       placeholder="e.g. 60% Cotton, 40% Polyester">
+                                @error('fabric_composition') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold fs-13">Gender Type</label>
+                                <select name="gender_type" class="form-select form-select-sm @error('gender_type') is-invalid @enderror" required>
+                                    <option value="unisex" {{ old('gender_type') == 'unisex' ? 'selected' : '' }}>Unisex</option>
+                                    <option value="boys" {{ old('gender_type') == 'boys' ? 'selected' : '' }}>Boys</option>
+                                    <option value="girls" {{ old('gender_type') == 'girls' ? 'selected' : '' }}>Girls</option>
+                                </select>
+                                @error('gender_type') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4">
+                <!-- Section 4: Publishing Details -->
+                <div class="card form-section-card">
+                    <div class="card-header border-bottom-0 pt-4 px-4">
+                        <h5 class="section-title mb-0"><i class="ti ti-send"></i> Publishing</h5>
+                    </div>
+                    <div class="card-body px-4 pb-4">
+                        <div class="row g-4">
+                            @if(!auth()->user()->hasRole('vendor'))
+                            <div class="col-md-12">
+                                <label class="form-label fw-semibold fs-13">Approval Status</label>
+                                <select name="approval_status" class="form-select form-select-sm @error('approval_status') is-invalid @enderror" required>
+                                    <option value="pending" {{ old('approval_status', 'pending') == 'pending' ? 'selected' : '' }}>Pending</option>
+                                    <option value="approved" {{ old('approval_status') == 'approved' ? 'selected' : '' }}>Approved</option>
+                                    <option value="rejected" {{ old('approval_status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                                </select>
+                                @error('approval_status') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                            @endif
+
+                            <div class="col-md-12">
+                                <label class="form-label fw-semibold fs-13">Visibility Status</label>
+                                <select name="is_active" class="form-select form-select-sm" required>
+                                    <option value="1" {{ old('is_active', '1') == '1' ? 'selected' : '' }}>Active</option>
+                                    <option value="0" {{ old('is_active') == '0' ? 'selected' : '' }}>Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Media Gallery -->
+                <div class="card form-section-card">
+                    <div class="card-header border-bottom-0 pt-4 px-4">
+                        <h5 class="section-title mb-0"><i class="ti ti-photo"></i> Media Gallery</h5>
+                    </div>
+                    <div class="card-body px-4 pb-4">
+                        <p class="text-muted fs-12 mb-3">Upload multiple high-quality images. The first image will be set as primary.</p>
+                        <div class="media-upload-wrapper" id="media-preview-container" style="grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));">
+                            <label class="image-upload-box" id="upload-trigger">
+                                <i class="ti ti-cloud-upload"></i>
+                                <span>Add Images</span>
+                                <input type="file" name="images[]" id="images-input" multiple class="d-none" accept="image/*">
+                                <div class="upload-animation" id="global-upload-bar"></div>
+                            </label>
+                        </div>
+                        @error('images') <div class="text-danger fs-12 mt-2">{{ $message }}</div> @enderror
+                        @error('images.*') <div class="text-danger fs-12 mt-2">{{ $message }}</div> @enderror
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5: Variants (Full Width) -->
+            <div class="col-12">
+                <div class="card form-section-card">
+                    <div class="card-header d-flex align-items-center justify-content-between border-bottom-0 pt-4 px-4">
+                        <h5 class="section-title mb-0"><i class="ti ti-layers-intersect"></i> Product Variants</h5>
+                       
+                    </div>
+                    <div class="card-body px-4 pb-4">
+                        <div class="table-responsive variant-table-container">
+                            <table class="table text-nowrap mb-0" id="variants-table">
+                                <thead>
+                                    <tr>
+                                        <th>SKU <span class="text-danger">*</span></th>
+                                        <th>Size</th>
+                                        <th>Color</th>
+                                        <th>MRP <span class="text-danger">*</span></th>
+                                        <th>Selling Price <span class="text-danger">*</span></th>
+                                        <th>Stock <span class="text-danger">*</span></th>
+                                        <th>Alert</th>
+                                        <th>Barcode</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if(old('variants'))
+                                        @foreach(old('variants') as $index => $variant)
+                                            <tr class="variant-row">
+                                                <td><input type="text" name="variants[{{ $index }}][sku]" class="form-control form-control-sm" value="{{ $variant['sku'] }}" required></td>
+                                                <td>
+                                                    <select name="variants[{{ $index }}][size_id]" class="form-select form-select-sm">
+                                                        <option value="">N/A</option>
+                                                        @foreach($sizes as $size)
+                                                            <option value="{{ $size->size_id }}" {{ $variant['size_id'] == $size->size_id ? 'selected' : '' }}>{{ $size->size_name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <select name="variants[{{ $index }}][color_id]" class="form-select form-select-sm">
+                                                        <option value="">N/A</option>
+                                                        @foreach($colors as $color)
+                                                            <option value="{{ $color->color_id }}" {{ $variant['color_id'] == $color->color_id ? 'selected' : '' }}>{{ $color->color_name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                                <td><input type="number" step="0.01" name="variants[{{ $index }}][mrp]" class="form-control form-control-sm" value="{{ $variant['mrp'] }}" required></td>
+                                                <td><input type="number" step="0.01" name="variants[{{ $index }}][selling_price]" class="form-control form-control-sm" value="{{ $variant['selling_price'] }}" required></td>
+                                                <td><input type="number" name="variants[{{ $index }}][stock_qty]" class="form-control form-control-sm" value="{{ $variant['stock_qty'] }}" required></td>
+                                                <td><input type="number" name="variants[{{ $index }}][low_stock_alert]" class="form-control form-control-sm" value="{{ $variant['low_stock_alert'] ?? 5 }}"></td>
+                                                <td><input type="text" name="variants[{{ $index }}][barcode]" class="form-control form-control-sm" value="{{ $variant['barcode'] }}"></td>
+                                                <input type="hidden" name="variants[{{ $index }}][is_active]" value="1">
+                                                <td class="text-center">
+                                                    <div class="variant-action-group">
+                                                        <button type="button" class="btn-variant btn-variant-danger remove-variant" title="Remove Row"><i class="ti-trash"></i></button>
+                                                        <button type="button" class="btn-variant btn-variant-primary add-variant-btn" title="Add Row Below"><i class="ti-plus"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr class="variant-row">
+                                            <td><input type="text" name="variants[0][sku]" class="form-control form-control-sm" placeholder="SKU" required></td>
+                                            <td>
+                                                <select name="variants[0][size_id]" class="form-select form-select-sm">
+                                                    <option value="">N/A</option>
+                                                    @foreach($sizes as $size)
+                                                        <option value="{{ $size->size_id }}">{{ $size->size_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select name="variants[0][color_id]" class="form-select form-select-sm">
+                                                    <option value="">N/A</option>
+                                                    @foreach($colors as $color)
+                                                        <option value="{{ $color->color_id }}">{{ $color->color_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td><input type="number" step="0.01" name="variants[0][mrp]" class="form-control form-control-sm" placeholder="0.00" required></td>
+                                            <td><input type="number" step="0.01" name="variants[0][selling_price]" class="form-control form-control-sm" placeholder="0.00" required></td>
+                                            <td><input type="number" name="variants[0][stock_qty]" class="form-control form-control-sm" placeholder="0" required></td>
+                                            <td><input type="number" name="variants[0][low_stock_alert]" class="form-control form-control-sm" value="5"></td>
+                                            <td><input type="text" name="variants[0][barcode]" class="form-control form-control-sm" placeholder="Barcode"></td>
+                                            <input type="hidden" name="variants[0][is_active]" value="1">
+                                            <td class="text-center">
+                                                <div class="variant-action-group">
+                                                    <button type="button" class="btn-variant btn-variant-danger remove-variant" title="Remove Row"><i class="ti-trash"></i></button>
+                                                    <button type="button" class="btn-variant btn-variant-primary add-variant-btn" title="Add Row Below"><i class="ti-plus"></i></button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        // Variant Logic
+        let variantIndex = {{ old('variants') ? count(old('variants')) : 1 }};
+        
+        $(document).on('click', '.add-variant-btn', function() {
+            let row = `
+                <tr class="variant-row">
+                    <td><input type="text" name="variants[${variantIndex}][sku]" class="form-control form-control-sm" placeholder="e.g. SKU-01" required></td>
+                    <td>
+                        <select name="variants[${variantIndex}][size_id]" class="form-select form-select-sm">
+                            <option value="">N/A</option>
+                            @foreach($sizes as $size) <option value="{{ $size->size_id }}">{{ $size->size_name }}</option> @endforeach
+                        </select>
+                    </td>
+                    <td>
+                        <select name="variants[${variantIndex}][color_id]" class="form-select form-select-sm">
+                            <option value="">N/A</option>
+                            @foreach($colors as $color) <option value="{{ $color->color_id }}">{{ $color->color_name }}</option> @endforeach
+                        </select>
+                    </td>
+                    <td><input type="number" step="0.01" name="variants[${variantIndex}][mrp]" class="form-control form-control-sm" placeholder="0.00" required></td>
+                    <td><input type="number" step="0.01" name="variants[${variantIndex}][selling_price]" class="form-control form-control-sm" placeholder="0.00" required></td>
+                    <td><input type="number" name="variants[${variantIndex}][stock_qty]" class="form-control form-control-sm" placeholder="0" required></td>
+                    <td><input type="number" name="variants[${variantIndex}][low_stock_alert]" class="form-control form-control-sm" value="5" placeholder="5"></td>
+                    <td><input type="text" name="variants[${variantIndex}][barcode]" class="form-control form-control-sm" placeholder="UPC/EAN"></td>
+                    <input type="hidden" name="variants[${variantIndex}][is_active]" value="1">
+                    <td class="text-center">
+                        <div class="variant-action-group">
+                            <button type="button" class="btn-variant btn-variant-danger remove-variant" title="Remove Row"><i class="ti ti-trash"></i></button>
+                            <button type="button" class="btn-variant btn-variant-primary add-variant-btn" title="Add Row Below"><i class="ti ti-plus"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            $(this).closest('tr').after(row);
+            variantIndex++;
+        });
+
+        $(document).on('click', '.remove-variant', function() {
+            if ($('#variants-table tbody tr').length > 1) $(this).closest('tr').remove();
+            else alert('At least one variant is required.');
+        });
+
+        // Media Upload Logic with Animation
+        const dt = new DataTransfer();
+        $('#images-input').on('change', function(e) {
+            const files = e.target.files;
+            const container = $('#media-preview-container');
+            const globalBar = $('#global-upload-bar');
+
+            globalBar.css('width', '100%');
+            
+            setTimeout(() => {
+                for(let file of files) {
+                    dt.items.add(file);
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const previewHtml = `
+                            <div class="preview-item">
+                                <img src="${e.target.result}">
+                                <button type="button" class="remove-preview" data-name="${file.name}"><i class="ti ti-x"></i></button>
+                            </div>
+                        `;
+                        $(previewHtml).insertBefore('#upload-trigger');
+                    }
+                    reader.readAsDataURL(file);
+                }
+                globalBar.css('width', '0%');
+                this.files = dt.files;
+            }, 600);
+        });
+
+        $(document).on('click', '.remove-preview', function() {
+            const name = $(this).data('name');
+            for(let i = 0; i < dt.items.length; i++) {
+                if(dt.items[i].getAsFile().name === name) {
+                    dt.items.remove(i);
+                    break;
+                }
+            }
+            $('#images-input')[0].files = dt.files;
+            $(this).parent().remove();
+        });
+    });
+</script>
+@endpush

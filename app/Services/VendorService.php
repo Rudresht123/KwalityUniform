@@ -50,7 +50,7 @@ class VendorService
                     'data' => $data,
                     'exception' => $e,
                 ]);
-                throw new Exception('Failed to create vendor: ' . $e->getMessage());
+                throw new Exception('Unable to create vendor profile. ' . $e->getMessage());
             }
         });
     }
@@ -93,7 +93,7 @@ class VendorService
                     'vendor_id' => $vendor->vendor_id,
                     'exception' => $e,
                 ]);
-                throw new Exception('Failed to update vendor: ' . $e->getMessage());
+                throw new Exception('Unable to update vendor profile. ' . $e->getMessage());
             }
         });
     }

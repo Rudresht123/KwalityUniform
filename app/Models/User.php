@@ -47,4 +47,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the vendor associated with the user.
+     */
+    public function vendor()
+    {
+        return $this->hasOne(\App\Models\SuperAdmin\Vendor::class, 'user_id');
+    }
 }

@@ -3,15 +3,11 @@
 namespace App\Notifications;
 
 use App\Models\SuperAdmin\Product;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ProductApprovalRequestNotification extends Notification implements ShouldQueue
+class ProductApprovalRequestNotification extends Notification
 {
-    use Queueable;
-
     protected $product;
 
     public function __construct(Product $product)

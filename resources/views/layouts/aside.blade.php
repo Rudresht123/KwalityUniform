@@ -123,6 +123,7 @@
 
                                     @endcanany 
 
+                                    @if(auth()->user()->hasRole('vendor'))
                                     @canany(['product.view', 'product.create'])
 
                                         <li class="slide has-sub {{ request()->routeIs('product.*') ? 'open active' : '' }}">
@@ -158,6 +159,7 @@
                                         </li>
 
                                     @endcanany
+                                    @endif
 
                                     @canany(['category.view', 'category.create', 'size.view', 'color.view'])
 
@@ -303,7 +305,7 @@
                                                 <span class="shape1"></span>
                                                 <span class="shape2"></span>
 
-                                                <i class="ti ti-users-lock side-menu__icon"></i>
+                                                <i class="ti-user side-menu__icon"></i>
 
                                                 <span class="side-menu__label">
                                                     Access Control

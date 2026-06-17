@@ -8,9 +8,13 @@ use App\Http\Requests\SuperAdmin\UpdateProductRequest;
 use App\Models\SuperAdmin\Category;
 use App\Models\SuperAdmin\Product;
 use App\Models\SuperAdmin\Vendor;
+use App\Models\SuperAdmin\Size;
+use App\Models\SuperAdmin\Color;
+use App\Models\SuperAdmin\ProductVariant;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Throwable;
+use Illuminate\Support\Facades\DB;
 
 use App\Notifications\ProductApprovalRequestNotification;
 use App\Notifications\ProductStatusUpdatedNotification;
@@ -26,10 +30,20 @@ class ProductController extends BaseController
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $products = Product::with(['vendor', 'category'])->latest();
+            $products = Product::with(['vendor', 'category', 'primaryImage.file'])->latest();
+
+            // Filter by vendor if the user is a vendor
+            if (auth()->user()->hasRole('vendor')) {
+                $vendorId = auth()->user()->vendor?->vendor_id;
+                $products->where('vendor_id', $vendorId);
+            }
 
             return DataTables::of($products)
                 ->addIndexColumn()
+                ->addColumn('image', function ($row) {
+                    $url = $row->primaryImage ? $row->primaryImage->url : asset('images/no_image.png');
+                    return '<img src="' . $url . '" alt="Product Image" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">';
+                })
                 ->addColumn('vendor_name', function ($row) {
                     return $row->vendor->business_name ?? 'N/A';
                 })
@@ -50,9 +64,16 @@ class ProductController extends BaseController
                         : '<span class="badge bg-danger">INACTIVE</span>';
                 })
                 ->addColumn('options', function ($row) {
-                    return view('super-admin.product.actions', compact('row'))->render();
+                    $showBtn = '<a href="' . route('product.show', $row->product_id) . '" class="btn btn-icon btn-sm btn-info-light me-1" title="View"><i class="ti ti-eye"></i></a>';
+                    $editBtn = '<a href="' . route('product.edit', $row->product_id) . '" class="btn btn-icon btn-sm btn-primary-light me-1" title="Edit"><i class="ti ti-edit"></i></a>';
+                    $deleteBtn = '<form action="' . route('product.destroy', $row->product_id) . '" method="POST" class="d-inline" onsubmit="return confirm(\'Are you sure you want to delete this product?\');">
+                                    ' . csrf_field() . '
+                                    ' . method_field('DELETE') . '
+                                    <button type="submit" class="btn btn-icon btn-sm btn-danger-light" title="Delete"><i class="ti ti-trash"></i></button>
+                                  </form>';
+                    return '<div class="btn-list">' . $showBtn . $editBtn . $deleteBtn . '</div>';
                 })
-                ->rawColumns(['approval_status', 'status', 'options'])
+                ->rawColumns(['image', 'approval_status', 'status', 'options'])
                 ->make(true);
         }
 
@@ -66,7 +87,9 @@ class ProductController extends BaseController
     {
         $vendors = Vendor::approved()->get();
         $categories = Category::active()->get();
-        return view('super-admin.product.create', compact('vendors', 'categories'), $this->pageData('Create Product', 'Home|Products|Create'));
+        $sizes = Size::active()->orderBy('sort_order')->get();
+        $colors = Color::active()->get();
+        return view('super-admin.product.create', compact('vendors', 'categories', 'sizes', 'colors'), $this->pageData('Create Product', 'Home|Products|Create'));
     }
 
     /**
@@ -74,16 +97,53 @@ class ProductController extends BaseController
      */
     public function store(StoreProductRequest $request)
     {
+        DB::beginTransaction();
         try {
-            $product = Product::create($request->validated());
+            $data = $request->validated();
+
+            // If user is a vendor, force their vendor_id and set status to pending
+            if (auth()->user()->hasRole('vendor')) {
+                $vendor = auth()->user()->vendor;
+                if (!$vendor) {
+                    return back()->with('error', 'Vendor account not found.');
+                }
+                $data['vendor_id'] = $vendor->vendor_id;
+                $data['approval_status'] = 'pending';
+            }
+
+            $product = Product::create($data);
+
+            // Handle Multiple Image Uploads
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $index => $image) {
+                    $fileId = uploadFile($image, 'products');
+                    $product->images()->create([
+                        'file_id' => $fileId,
+                        'is_primary' => $index === 0, // First image is primary
+                        'sort_order' => $index
+                    ]);
+                }
+            }
+
+            // Create Variants
+            if ($request->has('variants')) {
+                foreach ($request->variants as $variantData) {
+                    $product->variants()->create($variantData);
+                }
+            }
 
             // Notify Super Admin and Admins
             $admins = User::role(['super-admin', 'admin'])->get();
             Notification::send($admins, new ProductApprovalRequestNotification($product));
 
-            return redirect()->route('product.index')->with('success', 'Product created successfully and submitted for approval.');
+            DB::commit();
+            notify()->success('Product created successfully and submitted for approval.');
+            return redirect()->route('product.index');
         } catch (Throwable $e) {
-            return back()->withInput()->with('error', 'Failed to create product: ' . $e->getMessage());
+            DB::rollBack();
+            \Illuminate\Support\Facades\Log::error('Product creation failed: ' . $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine());
+            notify()->error('Failed to create product. Please check your inputs or try again.');
+            return back()->withInput();
         }
     }
 
@@ -92,7 +152,15 @@ class ProductController extends BaseController
      */
     public function show(Product $product)
     {
-        $product->load(['vendor', 'category', 'creator', 'updater']);
+        // Check ownership if user is a vendor
+        if (auth()->user()->hasRole('vendor')) {
+            $vendorId = auth()->user()->vendor?->vendor_id;
+            if ($product->vendor_id !== $vendorId) {
+                abort(403, 'Unauthorized access to this product.');
+            }
+        }
+
+        $product->load(['vendor', 'category', 'creator', 'updater', 'variants.size', 'variants.color', 'images.file']);
         return view('super-admin.product.show', compact('product'), $this->pageData('Product Details', 'Home|Products|View'));
     }
 
@@ -101,9 +169,20 @@ class ProductController extends BaseController
      */
     public function edit(Product $product)
     {
+        // Check ownership if user is a vendor
+        if (auth()->user()->hasRole('vendor')) {
+            $vendorId = auth()->user()->vendor?->vendor_id;
+            if ($product->vendor_id !== $vendorId) {
+                abort(403, 'Unauthorized access to this product.');
+            }
+        }
+
+        $product->load(['variants', 'primaryImage.file']);
         $vendors = Vendor::approved()->get();
         $categories = Category::active()->get();
-        return view('super-admin.product.edit', compact('product', 'vendors', 'categories'), $this->pageData('Edit Product', 'Home|Products|Edit'));
+        $sizes = Size::active()->orderBy('sort_order')->get();
+        $colors = Color::active()->get();
+        return view('super-admin.product.edit', compact('product', 'vendors', 'categories', 'sizes', 'colors'), $this->pageData('Edit Product', 'Home|Products|Edit'));
     }
 
     /**
@@ -111,7 +190,16 @@ class ProductController extends BaseController
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
+        DB::beginTransaction();
         try {
+            // Check ownership if user is a vendor
+            if (auth()->user()->hasRole('vendor')) {
+                $vendorId = auth()->user()->vendor?->vendor_id;
+                if ($product->vendor_id !== $vendorId) {
+                    abort(403, 'Unauthorized access to this product.');
+                }
+            }
+
             $data = $request->validated();
             $oldStatus = $product->approval_status;
 
@@ -122,7 +210,40 @@ class ProductController extends BaseController
                 }
             }
 
+            // If user is a vendor, force their vendor_id
+            if (auth()->user()->hasRole('vendor')) {
+                $data['vendor_id'] = auth()->user()->vendor->vendor_id;
+            }
+
             $product->update($data);
+
+            // Handle Multiple Image Uploads
+            if ($request->hasFile('images')) {
+                $hasPrimary = $product->images()->where('is_primary', true)->exists();
+                
+                foreach ($request->file('images') as $index => $image) {
+                    $fileId = uploadFile($image, 'products');
+                    $product->images()->create([
+                        'file_id' => $fileId,
+                        'is_primary' => !$hasPrimary && $index === 0,
+                        'sort_order' => $product->images()->count()
+                    ]);
+                }
+            }
+
+            // Sync Variants
+            if ($request->has('variants')) {
+                $variantIds = collect($request->variants)->pluck('variant_id')->filter()->toArray();
+                $product->variants()->whereNotIn('variant_id', $variantIds)->delete();
+
+                foreach ($request->variants as $variantData) {
+                    if (!empty($variantData['variant_id'])) {
+                        $product->variants()->where('variant_id', $variantData['variant_id'])->update($variantData);
+                    } else {
+                        $product->variants()->create($variantData);
+                    }
+                }
+            }
 
             // If status changed to approved/rejected, notify Vendor
             if (isset($data['approval_status']) && $data['approval_status'] !== $oldStatus) {
@@ -142,9 +263,13 @@ class ProductController extends BaseController
                 }
             }
 
-            return redirect()->route('product.index')->with('success', 'Product updated successfully.');
+            DB::commit();
+            notify()->success('Product updated successfully.');
+            return redirect()->route('product.index');
         } catch (Throwable $e) {
-            return back()->withInput()->with('error', 'Failed to update product: ' . $e->getMessage());
+            DB::rollBack();
+            notify()->error('Failed to update product: ' . $e->getMessage());
+            return back()->withInput();
         }
     }
 
@@ -154,10 +279,20 @@ class ProductController extends BaseController
     public function destroy(Product $product)
     {
         try {
+            // Check ownership if user is a vendor
+            if (auth()->user()->hasRole('vendor')) {
+                $vendorId = auth()->user()->vendor?->vendor_id;
+                if ($product->vendor_id !== $vendorId) {
+                    abort(403, 'Unauthorized access to this product.');
+                }
+            }
+
             $product->delete();
-            return redirect()->route('product.index')->with('success', 'Product deleted successfully.');
+            notify()->success('Product deleted successfully.');
+            return redirect()->route('product.index');
         } catch (Throwable $e) {
-            return back()->with('error', 'Failed to delete product: ' . $e->getMessage());
+            notify()->error('Failed to delete product: ' . $e->getMessage());
+            return back();
         }
     }
 }

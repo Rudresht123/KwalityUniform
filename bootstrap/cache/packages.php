@@ -1,4 +1,11 @@
 <?php return array (
+  'blade-ui-kit/blade-icons' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'BladeUI\\Icons\\BladeIconsServiceProvider',
+    ),
+  ),
   'laravel/breeze' => 
   array (
     'providers' => 
@@ -36,6 +43,20 @@
     'providers' => 
     array (
       0 => 'Livewire\\LivewireServiceProvider',
+    ),
+  ),
+  'mckenziearts/blade-untitledui-icons' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Mckenziearts\\BladeUntitledUIIcons\\BladeUntitledUIIconsServiceProvider',
+    ),
+  ),
+  'mckenziearts/laravel-notify' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Mckenziearts\\Notify\\NotifyServiceProvider',
     ),
   ),
   'nesbot/carbon' => 
