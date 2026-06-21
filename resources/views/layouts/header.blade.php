@@ -354,93 +354,151 @@
                         </div>
                     </div>
                 </div> <!-- End::main-header-dropdown -->
-            </div> <!-- End::header-element --> <!-- Start::header-element -->
-            <div class="header-element notifications-dropdown"> <!-- Start::header-link|dropdown-toggle --> <a
-                    href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-toggle="dropdown"
-                    data-bs-auto-close="outside" id="messageDropdown" aria-expanded="false"> <i
-                        class="fe fe-bell header-link-icon"></i> 
-                    @if(auth()->user()->unreadNotifications->count() > 0)
-                        <span class="badge bg-secondary header-icon-badge pulse pulse-secondary"
-                        id="notification-icon-badge">{{ auth()->user()->unreadNotifications->count() }}</span> 
-                    @endif
-                </a> <!-- End::header-link|dropdown-toggle -->
-                <!-- Start::main-header-dropdown -->
-                <div class="main-header-dropdown dropdown-menu dropdown-menu-end" data-popper-placement="none">
+            </div>
+            <div class="header-element notifications-dropdown">
+
+                <!-- Bell Icon -->
+                <a href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-toggle="dropdown"
+                    data-bs-auto-close="outside" id="messageDropdown">
+
+                    <i class="fe fe-bell header-link-icon"></i>
+
+                    <span
+                        class="badge bg-secondary header-icon-badge pulse pulse-secondary {{ auth()->user()->unreadNotifications()->count() ? '' : 'd-none' }}"
+                        id="notification-icon-badge">
+
+                        {{ auth()->user()->unreadNotifications()->count() }}
+
+                    </span>
+
+                </a>
+
+                <!-- Notification Dropdown -->
+                <div class="main-header-dropdown dropdown-menu dropdown-menu-end">
+
+                    <!-- Header -->
                     <div class="p-3">
                         <div class="d-flex align-items-center justify-content-between">
-                            <p class="mb-0 fs-17 fw-semibold">Notifications</p>
-                            <span class="badge bg-secondary rounded-pill" id="notifiation-data">{{ auth()->user()->unreadNotifications->count() }} Unread</span>
-                        </div>
-                    </div>
-                    <div class="dropdown-divider"></div>
-                    <ul class="list-unstyled mb-0" id="header-notification-scroll" data-simplebar="init">
-                        <div class="simplebar-wrapper" style="margin: 0px;">
-                            <div class="simplebar-height-auto-observer-wrapper">
-                                <div class="simplebar-height-auto-observer"></div>
+
+                            <div>
+                                <h6 class="mb-0 fw-semibold">
+                                    Notifications
+                                </h6>
+
+                                <small class="text-muted">
+                                    Latest updates
+                                </small>
                             </div>
-                            <div class="simplebar-mask">
-                                <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
-                                    <div class="simplebar-content-wrapper" tabindex="0" role="region"
-                                        aria-label="scrollable content" style="height: auto; overflow: hidden;">
-                                        <div class="simplebar-content" style="padding: 0px;">
-                                            @forelse(auth()->user()->unreadNotifications->take(5) as $notification)
-                                                <li class="dropdown-item">
-                                                    <div class="d-flex align-items-start">
-                                                        <div class="pe-2"> 
-                                                            <span class="avatar avatar-md online bg-primary-transparent br-5">
-                                                                <i class="ti ti-bell fs-18"></i>
-                                                            </span> 
-                                                        </div>
-                                                        <div class="flex-grow-1 d-flex align-items-center justify-content-between">
-                                                            <div>
-                                                                <p class="mb-0">
-                                                                    <a href="javascript:void(0);" 
-                                                                       onclick="markNotificationAsRead('{{ $notification->id }}', '{{ $notification->data['url'] ?? '#' }}')"
-                                                                       class="text-dark">
-                                                                        {{ $notification->data['message'] ?? 'New Notification' }}
-                                                                    </a>
-                                                                </p>
-                                                                <span class="text-muted fw-normal fs-12 header-notification-text">
-                                                                    {{ $notification->created_at->diffForHumans() }}
-                                                                </span>
-                                                            </div>
-                                                            <div> 
-                                                                <a href="javascript:void(0);" 
-                                                                   onclick="markNotificationAsRead('{{ $notification->id }}')"
-                                                                   class="min-w-fit-content text-muted me-1 dropdown-item-close1">
-                                                                    <i class="ti ti-x fs-16"></i>
-                                                                </a> 
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            @empty
-                                                <div class="p-4 text-center">
-                                                    <p class="mb-0 text-muted">No unread notifications</p>
-                                                </div>
-                                            @endforelse
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="simplebar-placeholder" style="width: 0px; height: 0px;"></div>
-                        </div>
-                    </ul>
-                    <div class="p-3 empty-header-item1 border-top">
-                        <div class="d-grid"> 
-                            <a href="{{ route('notifications.index') }}" class="btn btn-primary">View All</a>
-                        </div>
-                    </div>
-                    <div class="p-5 empty-item1 d-none">
-                        <div class="text-center"> 
-                            <span class="avatar avatar-xl avatar-rounded bg-secondary-transparent"> 
-                                <i class="ri-notification-off-line fs-2"></i> 
+
+                            <span class="badge bg-secondary rounded-pill" id="notifiation-data">
+
+                                {{ auth()->user()->unreadNotifications()->count() }}
+                                Unread
+
                             </span>
-                            <h6 class="fw-semibold mt-3">No New Notifications</h6>
+
                         </div>
                     </div>
-                </div> <!-- End::main-header-dropdown -->
-            </div> <!-- End::header-element --> <!-- Start::header-element -->
+
+                    <div class="dropdown-divider"></div>
+
+                    <!-- Notification List -->
+                    <ul class="list-unstyled mb-0" id="header-notification-scroll" data-simplebar
+                        style="max-height:350px;">
+
+                        @forelse(auth()->user()
+                    ->unreadNotifications()
+                    ->latest()
+                    ->take(5)
+                    ->get()
+                as $notification)
+                       <li class="dropdown-item border-bottom py-3 notification-item"
+    id="notification-{{ $notification->id }}">
+
+    <div class="d-flex align-items-start">
+
+        <div class="pe-3">
+            <span class="avatar avatar-md bg-primary-transparent br-5">
+                <i class="ti ti-bell fs-18 text-primary"></i>
+            </span>
+        </div>
+
+        <div class="flex-grow-1">
+
+            <p class="mb-1">
+                <a href="javascript:void(0);"
+                    onclick="markNotificationAsRead(
+                        '{{ $notification->id }}',
+                        '{{ $notification->data['url'] ?? '#' }}'
+                    )"
+                    class="text-dark text-decoration-none fw-semibold">
+
+                    {{ $notification->data['message'] ?? 'New Notification' }}
+
+                </a>
+            </p>
+
+            <small class="text-muted">
+                {{ $notification->created_at->diffForHumans() }}
+            </small>
+
+        </div>
+
+        <div>
+            <a href="javascript:void(0);"
+                onclick="hideNotification('{{ $notification->id }}')"
+                class="text-muted">
+
+                <i class="ti ti-x fs-16"></i>
+
+            </a>
+        </div>
+
+    </div>
+
+</li>
+
+                        @empty
+
+                            <div class="p-5 text-center">
+
+                                <span class="avatar avatar-xl avatar-rounded bg-secondary-transparent">
+
+                                    <i class="ri-notification-off-line fs-2"></i>
+
+                                </span>
+
+                                <h6 class="fw-semibold mt-3">
+                                    No New Notifications
+                                </h6>
+
+                                <p class="text-muted mb-0">
+                                    You're all caught up.
+                                </p>
+
+                            </div>
+                        @endforelse
+
+                    </ul>
+
+                    <!-- Footer -->
+                    <div class="p-3 border-top">
+
+                        <div class="d-grid">
+
+                            <a href="{{ route('notifications.index') }}" class="btn btn-primary">
+
+                                View All Notifications
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
             <div class="header-element header-shortcuts-dropdown d-xl-flex d-none">
                 <!-- Start::header-link|dropdown-toggle --> <a href="javascript:void(0);"
                     class="header-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside"
@@ -552,9 +610,9 @@
                     class="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown"
                     data-bs-auto-close="outside" aria-expanded="false">
                     <div class="d-flex align-items-center">
-                        <div class="header-link-icon"> 
-                            <img src="{{ auth()->user()->avatar_url }}" alt="img"
-                                width="32" height="32" class="rounded-circle border"> 
+                        <div class="header-link-icon">
+                            <img src="{{ auth()->user()->avatar_url }}" alt="img" width="32" height="32"
+                                class="rounded-circle border">
                         </div>
                         <div class="d-none">
                             <p class="fw-semibold mb-0">{{ auth()->user()->name }}</p>
@@ -574,12 +632,13 @@
                     <li><a class="dropdown-item d-flex border-bottom" href="{{ route('lockscreen.lock') }}"><i
                                 class="fe fe-lock fs-16 align-middle me-2"></i>Lock Screen</a></li>
                     <li>
-                       <form method="POST" action="{{ route('logout') }}" id="logout-header-form">
-                           @csrf
-                           <a class="dropdown-item d-flex" href="javascript:void(0);" onclick="confirmLogout();" style="cursor: pointer !important;">
-                               <i class="fe fe-power fs-16 align-middle me-2"></i>Log Out
-                           </a>
-                       </form>
+                        <form method="POST" action="{{ route('logout') }}" id="logout-header-form">
+                            @csrf
+                            <a class="dropdown-item d-flex" href="javascript:void(0);" onclick="confirmLogout();"
+                                style="cursor: pointer !important;">
+                                <i class="fe fe-power fs-16 align-middle me-2"></i>Log Out
+                            </a>
+                        </form>
                     </li>
                 </ul>
             </div> <!-- End::header-element --> <!-- Start::header-element -->
@@ -597,47 +656,52 @@
 </header>
 
 <script>
-function markNotificationAsRead(id, redirectUrl = null) {
-    fetch('{{ route("notifications.markAsRead") }}', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        },
-        body: JSON.stringify({ id: id })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            if (redirectUrl) {
-                window.location.href = redirectUrl;
-            } else {
-                location.reload();
-            }
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
+    function markNotificationAsRead(id, redirectUrl = null) {
+        fetch('{{ route('notifications.markAsRead') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    id: id
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (redirectUrl) {
+                        window.location.href = redirectUrl;
+                    } else {
+                        location.reload();
+                    }
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
 
-function confirmLogout() {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You will be logged out of your session!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#6B62DD',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, Log Out!',
-        cancelButtonText: 'Stay Logged In',
-        customClass: {
-            confirmButton: 'btn btn-primary rounded-pill px-4',
-            cancelButton: 'btn btn-light rounded-pill px-4 ms-2'
-        },
-        buttonsStyling: false
-    }).then((result) => {
-        if (result.isConfirmed) {
-            document.getElementById('logout-header-form').submit();
-        }
-    })
-}
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be logged out of your session!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#6B62DD',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Log Out!',
+            cancelButtonText: 'Stay Logged In',
+            customClass: {
+                confirmButton: 'btn btn-primary rounded-pill px-4',
+                cancelButton: 'btn btn-light rounded-pill px-4 ms-2'
+            },
+            buttonsStyling: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('logout-header-form').submit();
+            }
+        })
+    }
+</script>
+<script>
+    window.userId = {{ auth()->id() }};
 </script>

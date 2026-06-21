@@ -59,16 +59,21 @@ class ProductController extends BaseController
                     return '<span class="badge bg-' . $class . '-transparent">' . strtoupper($row->approval_status) . '</span>';
                 })
                 ->addColumn('status', function ($row) {
-                    return $row->is_active 
-                        ? '<span class="badge bg-success">ACTIVE</span>' 
-                        : '<span class="badge bg-danger">INACTIVE</span>';
+                    return $row->is_active ? '<span class="badge bg-success">ACTIVE</span>' : '<span class="badge bg-danger">INACTIVE</span>';
                 })
                 ->addColumn('options', function ($row) {
                     $showBtn = '<a href="' . route('product.show', $row->product_id) . '" class="btn btn-icon btn-sm btn-info-light me-1" title="View"><i class="ti ti-eye"></i></a>';
                     $editBtn = '<a href="' . route('product.edit', $row->product_id) . '" class="btn btn-icon btn-sm btn-primary-light me-1" title="Edit"><i class="ti ti-edit"></i></a>';
-                    $deleteBtn = '<form action="' . route('product.destroy', $row->product_id) . '" method="POST" class="d-inline" onsubmit="return confirm(\'Are you sure you want to delete this product?\');">
-                                    ' . csrf_field() . '
-                                    ' . method_field('DELETE') . '
+                    $deleteBtn =
+                        '<form action="' .
+                        route('product.destroy', $row->product_id) .
+                        '" method="POST" class="d-inline" onsubmit="return confirm(\'Are you sure you want to delete this product?\');">
+                                    ' .
+                        csrf_field() .
+                        '
+                                    ' .
+                        method_field('DELETE') .
+                        '
                                     <button type="submit" class="btn btn-icon btn-sm btn-danger-light" title="Delete"><i class="ti ti-trash"></i></button>
                                   </form>';
                     return '<div class="btn-list">' . $showBtn . $editBtn . $deleteBtn . '</div>';
@@ -117,10 +122,11 @@ class ProductController extends BaseController
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $index => $image) {
                     $fileId = uploadFile($image, 'products');
+
                     $product->images()->create([
                         'file_id' => $fileId,
                         'is_primary' => $index === 0, // First image is primary
-                        'sort_order' => $index
+                        'sort_order' => $index,
                     ]);
                 }
             }
@@ -134,13 +140,21 @@ class ProductController extends BaseController
 
             // Notify Super Admin and Admins
             $admins = User::role(['super-admin', 'admin'])->get();
-            Notification::send($admins, new ProductApprovalRequestNotification($product));
-
+            sendNotification(
+                $admins,
+                'product_approval',
+                [
+                    'product_name' => $product->product_name,
+                    'vendor_name' => $product->vendor->business_name,
+                ],
+                route('product.show', $product->product_id),
+            );
             DB::commit();
             notify()->success('Product created successfully and submitted for approval.');
             return redirect()->route('product.index');
         } catch (Throwable $e) {
             DB::rollBack();
+            dd($e->getMessage(), $e->getFile(), $e->getLine());
             \Illuminate\Support\Facades\Log::error('Product creation failed: ' . $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine());
             notify()->error('Failed to create product. Please check your inputs or try again.');
             return back()->withInput();
@@ -205,7 +219,11 @@ class ProductController extends BaseController
 
             // Restrict status update to Admins only
             if (isset($data['approval_status']) && $data['approval_status'] !== $oldStatus) {
-                if (!auth()->user()->hasAnyRole(['super-admin', 'admin'])) {
+                if (
+                    !auth()
+                        ->user()
+                        ->hasAnyRole(['super-admin', 'admin'])
+                ) {
                     unset($data['approval_status']); // Vendors cannot approve their own products
                 }
             }
@@ -220,13 +238,13 @@ class ProductController extends BaseController
             // Handle Multiple Image Uploads
             if ($request->hasFile('images')) {
                 $hasPrimary = $product->images()->where('is_primary', true)->exists();
-                
+
                 foreach ($request->file('images') as $index => $image) {
                     $fileId = uploadFile($image, 'products');
                     $product->images()->create([
                         'file_id' => $fileId,
                         'is_primary' => !$hasPrimary && $index === 0,
-                        'sort_order' => $product->images()->count()
+                        'sort_order' => $product->images()->count(),
                     ]);
                 }
             }
@@ -250,7 +268,7 @@ class ProductController extends BaseController
                 $vendorUser = $product->vendor->user; // Assuming Vendor belongsTo User
                 if ($vendorUser) {
                     $vendorUser->notify(new ProductStatusUpdatedNotification($product, $request->admin_message ?? ''));
-                    
+
                     // Also send Email using EmailService for branding
                     EmailService::send('product_status_updated', $vendorUser->email, [
                         'vendor_name' => $product->vendor->owner_name,
@@ -258,7 +276,7 @@ class ProductController extends BaseController
                         'product_code' => $product->product_code,
                         'status' => strtoupper($product->approval_status),
                         'admin_message' => $request->admin_message ?? 'Status has been updated by the administration.',
-                        'view_button' => '<a href="' . route('product.show', $product->product_id) . '" style="background-color: #6B62DD; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">View Product</a>'
+                        'view_button' => '<a href="' . route('product.show', $product->product_id) . '" style="background-color: #6B62DD; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">View Product</a>',
                     ]);
                 }
             }
@@ -295,4 +313,56 @@ class ProductController extends BaseController
             return back();
         }
     }
+
+
+public function approve(Product $product)
+{
+    DB::beginTransaction();
+    try {
+
+        $product->update([
+            'approval_status' => 'approved',
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+        ]);
+
+        // Vendor User
+        $vendorUser = $product->vendor?->user;
+
+        if ($vendorUser) {
+
+            sendNotification(
+                $vendorUser,
+                'product_approved',
+                [
+                    'product_name' => $product->product_name,
+                ],
+                route(
+                    'vendor.products.show',
+                    $product->product_id
+                )
+            );
+        }
+
+        DB::commit();
+
+        notify()->success(
+            'Product approved successfully.'
+        );
+
+        return back();
+
+    } catch (\Throwable $e) {
+
+        DB::rollBack();
+
+        report($e);
+
+        notify()->error(
+            'Failed to approve product.'
+        );
+
+        return back();
+    }
+}
 }

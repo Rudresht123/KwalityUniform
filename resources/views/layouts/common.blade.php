@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Kwality Uniform - Software</title>
-    <link rel="icon" href="{{ asset("assets/icons/fav.png") }}">
+    <link rel="icon" href="{{ asset('assets/icons/fav.png') }}">
 
     {{-- links for the css --}}
 
@@ -39,7 +39,10 @@
     @notifyCss
 
     @stack('styles')
-
+    <script>
+        window.userId = {{ auth()->id() ?? 'null' }};
+    </script>
+    @vite(['resources/js/app.js'])
 </head>
 
 <body>
@@ -103,13 +106,14 @@
     <script src="{{ asset('assets/js/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/datatables/responsive.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
-    
-    @if($errors->any() && !session()->has('notify.message'))
+    <script src="{{ asset('assets/js/notification.js') }}"></script>
+
+    @if ($errors->any() && !session()->has('notify.message'))
         @php
             notify()->error('Please check the form for validation errors.', 'Validation Failed');
         @endphp
     @endif
-    
+
     <x-notify::notify />
     @notifyJs
 

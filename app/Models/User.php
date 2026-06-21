@@ -13,7 +13,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use App\Traits\LogsAllActivity;
-
+use Mckenziearts\Notify\Enums\NotificationModel;
 
 #[Fillable(['name', 'username', 'email', 'avatar', 'phone', 'password', 'is_active'])]
 #[Hidden(['password', 'remember_token'])]
@@ -55,4 +55,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(\App\Models\SuperAdmin\Vendor::class, 'user_id');
     }
+
+    /**
+     * Notification Data Getting
+    */
+
 }
