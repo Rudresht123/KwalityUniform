@@ -50,7 +50,7 @@ class VendorService
                     'data' => $data,
                     'exception' => $e,
                 ]);
-                throw new Exception('Failed to create vendor: ' . $e->getMessage());
+                throw new Exception('Unable to create vendor profile. ' . $e->getMessage());
             }
         });
     }
@@ -93,7 +93,7 @@ class VendorService
                     'vendor_id' => $vendor->vendor_id,
                     'exception' => $e,
                 ]);
-                throw new Exception('Failed to update vendor: ' . $e->getMessage());
+                throw new Exception('Unable to update vendor profile. ' . $e->getMessage());
             }
         });
     }
@@ -119,11 +119,17 @@ class VendorService
     protected function sendRegistrationEmail(Vendor $vendor): void
     {
         try {
+            $setupUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute(
+                'setup-password',
+                now()->addDays(7),
+                ['user' => $vendor->user_id]
+            );
+
             $sent = EmailService::send('vendor_registration', $vendor->email, [
                 'business_name' => $vendor->business_name,
                 'owner_name' => $vendor->owner_name,
                 'status' => ucfirst($vendor->status),
-                'login_button' => emailButton(route('login'), 'Login to your dashboard'),
+                'login_button' => emailButton($setupUrl, 'Setup your account credentials'),
             ]);
 
             if (!$sent) {

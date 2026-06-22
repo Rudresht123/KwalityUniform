@@ -1,11 +1,15 @@
 <?php
 
 use App\Models\File;
+use App\Models\NotificationTemplate;
 use App\Models\RolePermission\Role;
+use App\Notifications\SystemNotification;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Repositories\GlobalSettingRepo;
+use Illuminate\Support\Facades\Notification;
+
 if (!function_exists('formateDate')) {
     /**
      * Format date
@@ -93,14 +97,12 @@ if (!function_exists('deleteFile')) {
     }
 }
 
-
-if(!function_exists('role')){
-    function role($search){
+if (!function_exists('role')) {
+    function role($search)
+    {
         return Role::where($search)->first()->id;
     }
 }
-
-
 
 if (!function_exists('emailButton')) {
     function emailButton(string $url, string $text): string
@@ -119,7 +121,35 @@ if (!function_exists('emailButton')) {
    '>
    {$text} &nbsp;→
 </a>";
-}
+    }
+
+    if (!function_exists('sendNotification')) {
+        function sendNotification($users, string $key, array $placeholders = [], ?string $url = null)
+        {
+            $template = NotificationTemplate::where('key', $key)->firstOrFail();
+
+            $message = $template->message;
+
+            foreach ($placeholders as $placeholder => $value) {
+                $message = str_replace('{' . $placeholder . '}', $value, $message);
+            }
+
+            Notification::send(
+                $users,
+                new SystemNotification(
+                    [
+                        'key' => $key,
+                        'title' => $template->title,
+                        'message' => $message,
+                        'type' => $template->type,
+                        'url' => $url,
+                        'created_at' => now(),
+                    ],
+                    $template->channels,
+                ),
+            );
+        }
+    }
 }
 
 ?>

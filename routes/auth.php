@@ -33,6 +33,20 @@ Route::middleware('guest')->group(function () {
 
     Route::post('reset-password', [NewPasswordController::class, 'store'])
         ->name('password.store');
+
+    Route::get('setup-password/{user}', [App\Http\Controllers\Auth\SetupPasswordController::class, 'show'])
+        ->name('setup-password')
+        ->middleware('signed');
+
+    Route::post('setup-password/{user}', [App\Http\Controllers\Auth\SetupPasswordController::class, 'store'])
+        ->name('setup-password.store')
+        ->middleware('signed');
+
+    Route::post('send-otp', [App\Http\Controllers\Auth\OtpLoginController::class, 'sendOtp'])
+        ->name('otp.send');
+
+    Route::post('otp-login', [App\Http\Controllers\Auth\OtpLoginController::class, 'login'])
+        ->name('otp.login');
 });
 
 Route::middleware('auth')->group(function () {

@@ -1,13 +1,13 @@
 <aside class="app-sidebar sticky" id="sidebar"> <!-- Start::main-sidebar-header -->
     <div class="main-sidebar-header"> 
-        <a href="{{ route('dashboard') }}" class="header-logo"> 
-            <img src="{{ asset('assets/icons/icon.png') }}" class="desktop-white logo-interactive" alt="logo"> 
-            <img src="{{ asset('assets/icons/icon.png') }}" class="toggle-white logo-interactive" alt="logo"> 
-            <img src="{{ asset('assets/icons/icon.png') }}" class="desktop-logo logo-interactive" alt="logo"> 
-            <img src="{{ asset('assets/icons/icon.png') }}" class="toggle-dark logo-interactive" alt="logo"> 
-            <img src="{{ asset('assets/icons/icon.png') }}" class="toggle-logo logo-interactive" alt="logo"> 
-            <img src="{{ asset('assets/icons/icon.png') }}" class="desktop-dark logo-interactive" alt="logo"> 
-        </a> 
+        {{-- <a href="{{ route('dashboard') }}" class="header-logo"> 
+            <img src="{{ asset('assets/icons/favicon.png') }}" class="desktop-white logo-interactive" alt="logo"> 
+            <img src="{{ asset('assets/icons/favicon.png') }}" class="toggle-white logo-interactive" alt="logo"> 
+            <img src="{{ asset('assets/icons/favicon.png') }}" class="desktop-logo logo-interactive" alt="logo"> 
+            <img src="{{ asset('assets/icons/favicon.png') }}" class="toggle-dark logo-interactive" alt="logo"> 
+            <img src="{{ asset('assets/icons/favicon.png') }}" class="toggle-logo logo-interactive" alt="logo"> 
+            <img src="{{ asset('assets/icons/favicon.png') }}" class="desktop-dark logo-interactive" alt="logo"> 
+        </a>  --}}
     </div>
 
     <style>
@@ -79,16 +79,19 @@
                                     <!-- Start::slide__category -->
                                     <li class="slide__category"><span class="category-name">Dashboard</span></li>
                                     <!-- End::slide__category --> <!-- Start::slide -->
-                                    <li class="slide active"> <a href="{{ route("dashboard") }}" class="side-menu__item active"> <span
-                                                class="shape1"></span> <span class="shape2"></span> <i
-                                                class="ti-home side-menu__icon"></i> <span
-                                                class="side-menu__label">Dashboard</span> </a> </li> <!-- End::slide -->
+                                    <li class="slide {{ request()->routeIs('dashboard') ? 'active' : '' }}"> 
+                                        <a href="{{ route("dashboard") }}" class="side-menu__item {{ request()->routeIs('dashboard') ? 'active' : '' }}"> 
+                                            <span class="shape1"></span> <span class="shape2"></span> 
+                                            <i class="ti-home side-menu__icon"></i> 
+                                            <span class="side-menu__label">Dashboard</span> 
+                                        </a> 
+                                    </li> <!-- End::slide -->
                                     <!-- Start::slide -->
-                                    @canany(['vendor-create', 'vendor-list'])
+                                    @canany(['vendor.create', 'vendor.view'])
 
-                                        <li class="slide has-sub">
+                                        <li class="slide has-sub {{ request()->routeIs('vendor.*') ? 'open active' : '' }}">
 
-                                            <a href="javascript:void(0);" class="side-menu__item">
+                                            <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs('vendor.*') ? 'active' : '' }}">
                                                 <i class="ti-wallet side-menu__icon"></i>
                                                 <span class="side-menu__label">
                                                     Vendor Management
@@ -96,19 +99,19 @@
                                                 <i class="fe fe-chevron-right side-menu__angle"></i>
                                             </a>
 
-                                            <ul class="slide-menu child1">
+                                            <ul class="slide-menu child1 {{ request()->routeIs('vendor.*') ? 'double-menu-active' : '' }}">
 
-                                                @can('vendor-create')
+                                                @can('vendor.create')
                                                     <li class="slide">
-                                                        <a href="{{ route('vendor.create') }}" class="side-menu__item">
+                                                        <a href="{{ route('vendor.create') }}" class="side-menu__item {{ request()->routeIs('vendor.create') ? 'active' : '' }}">
                                                             Create
                                                         </a>
                                                     </li>
                                                 @endcan
 
-                                                @can('vendor-list')
+                                                @can('vendor.view')
                                                     <li class="slide">
-                                                        <a href="{{ route('vendor.index') }}" class="side-menu__item">
+                                                        <a href="{{ route('vendor.index') }}" class="side-menu__item {{ request()->routeIs('vendor.index') ? 'active' : '' }}">
                                                             Vendors
                                                         </a>
                                                     </li>
@@ -118,12 +121,101 @@
 
                                         </li>
 
-                                    @endcanany <!-- End::slide --> <!-- Start::slide -->
-                                    @canany(['school_view', 'school_create'])
+                                    @endcanany 
 
-                                        <li class="slide has-sub">
+                                    @if(auth()->user()->hasRole('vendor'))
+                                    @canany(['product.view', 'product.create'])
 
-                                            <a href="javascript:void(0);" class="side-menu__item">
+                                        <li class="slide has-sub {{ request()->routeIs('product.*') ? 'open active' : '' }}">
+
+                                            <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs('product.*') ? 'active' : '' }}">
+                                                <i class="ti-shopping-cart side-menu__icon"></i>
+                                                <span class="side-menu__label">
+                                                    Product Management
+                                                </span>
+                                                <i class="fe fe-chevron-right side-menu__angle"></i>
+                                            </a>
+
+                                            <ul class="slide-menu child1 {{ request()->routeIs('product.*') ? 'double-menu-active' : '' }}">
+
+                                                @can('product.create')
+                                                    <li class="slide">
+                                                        <a href="{{ route('product.create') }}" class="side-menu__item {{ request()->routeIs('product.create') ? 'active' : '' }}">
+                                                            Add Product
+                                                        </a>
+                                                    </li>
+                                                @endcan
+
+                                                @can('product.view')
+                                                    <li class="slide">
+                                                        <a href="{{ route('product.index') }}" class="side-menu__item {{ request()->routeIs('product.index') ? 'active' : '' }}">
+                                                            Manage Products
+                                                        </a>
+                                                    </li>
+                                                @endcan
+
+                                            </ul>
+
+                                        </li>
+
+                                    @endcanany
+                                    @endif
+
+                                    @canany(['category.view', 'category.create', 'size.view', 'color.view'])
+
+                                        <li class="slide has-sub {{ request()->routeIs(['category.*', 'parent-category.*', 'size.*', 'color.*']) ? 'open active' : '' }}">
+
+                                            <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs(['category.*', 'parent-category.*', 'size.*', 'color.*']) ? 'active' : '' }}">
+                                                <i class="ti-package side-menu__icon"></i>
+                                                <span class="side-menu__label">
+                                                    Product Attributes
+                                                </span>
+                                                <i class="fe fe-chevron-right side-menu__angle"></i>
+                                            </a>
+
+                                            <ul class="slide-menu child1 {{ request()->routeIs(['category.*', 'parent-category.*', 'size.*', 'color.*']) ? 'double-menu-active' : '' }}">
+
+                                                @canany(['category.view', 'category.create'])
+                                                    <li class="slide">
+                                                        <a href="{{ route('parent-category.index') }}" class="side-menu__item {{ request()->routeIs('parent-category.*') ? 'active' : '' }}">
+                                                            Parent Categories
+                                                        </a>
+                                                    </li>
+
+                                                    <li class="slide">
+                                                        <a href="{{ route('category.index') }}" class="side-menu__item {{ request()->routeIs('category.*') ? 'active' : '' }}">
+                                                            Sub Categories
+                                                        </a>
+                                                    </li>
+                                                @endcanany
+
+                                                @can('size.view')
+                                                    <li class="slide">
+                                                        <a href="{{ route('size.index') }}" class="side-menu__item {{ request()->routeIs('size.*') ? 'active' : '' }}">
+                                                            Manage Sizes
+                                                        </a>
+                                                    </li>
+                                                @endcan
+
+                                                @can('color.view')
+                                                    <li class="slide">
+                                                        <a href="{{ route('color.index') }}" class="side-menu__item {{ request()->routeIs('color.*') ? 'active' : '' }}">
+                                                            Manage Colors
+                                                        </a>
+                                                    </li>
+                                                @endcan
+
+                                            </ul>
+
+                                        </li>
+
+                                    @endcanany
+                                    
+                                    @canany(['school.view', 'school.create'])
+
+                                        <li class="slide has-sub {{ (request()->routeIs('school.*') && !request()->routeIs('school-class.*')) ? 'open active' : '' }}">
+
+                                            <a href="javascript:void(0);" class="side-menu__item {{ (request()->routeIs('school.*') && !request()->routeIs('school-class.*')) ? 'active' : '' }}">
 
                                                 <span class="shape1"></span>
                                                 <span class="shape2"></span>
@@ -138,19 +230,19 @@
 
                                             </a>
 
-                                            <ul class="slide-menu child1">
+                                            <ul class="slide-menu child1 {{ (request()->routeIs('school.*') && !request()->routeIs('school-class.*')) ? 'double-menu-active' : '' }}">
 
-                                                @can('school_create')
+                                                @can('school.create')
                                                     <li class="slide">
-                                                        <a href="{{ route('school.create') }}" class="side-menu__item">
+                                                        <a href="{{ route('school.create') }}" class="side-menu__item {{ request()->routeIs('school.create') ? 'active' : '' }}">
                                                             Create School
                                                         </a>
                                                     </li>
                                                 @endcan
 
-                                                @can('school_view')
+                                                @can('school.view')
                                                     <li class="slide">
-                                                        <a href="{{ route('school.index') }}" class="side-menu__item">
+                                                        <a href="{{ route('school.index') }}" class="side-menu__item {{ request()->routeIs('school.index') ? 'active' : '' }}">
                                                             Manage Schools
                                                         </a>
                                                     </li>
@@ -164,9 +256,9 @@
 
                                     @canany(['school_class.view', 'school_class.create'])
 
-                                        <li class="slide has-sub">
+                                        <li class="slide has-sub {{ request()->routeIs('school-class.*') ? 'open active' : '' }}">
 
-                                            <a href="javascript:void(0);" class="side-menu__item">
+                                            <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs('school-class.*') ? 'active' : '' }}">
 
                                                 <span class="shape1"></span>
                                                 <span class="shape2"></span>
@@ -181,11 +273,11 @@
 
                                             </a>
 
-                                            <ul class="slide-menu child1">
+                                            <ul class="slide-menu child1 {{ request()->routeIs('school-class.*') ? 'double-menu-active' : '' }}">
 
                                                 @can('school_class.create')
                                                     <li class="slide">
-                                                        <a href="{{ route('school-class.create') }}" class="side-menu__item">
+                                                        <a href="{{ route('school-class.create') }}" class="side-menu__item {{ request()->routeIs('school-class.create') ? 'active' : '' }}">
                                                             Add Class
                                                         </a>
                                                     </li>
@@ -193,7 +285,7 @@
 
                                                 @can('school_class.view')
                                                     <li class="slide">
-                                                        <a href="{{ route('school-class.index') }}" class="side-menu__item">
+                                                        <a href="{{ route('school-class.index') }}" class="side-menu__item {{ request()->routeIs('school-class.index') ? 'active' : '' }}">
                                                             Manage Classes
                                                         </a>
                                                     </li>
@@ -204,39 +296,39 @@
                                         </li>
 
                                     @endcanany
-                                    @canany(['role_view', 'role_create'])
+                                    @canany(['role.view', 'role.create', 'admin.view'])
 
-                                        <li class="slide has-sub">
+                                        <li class="slide has-sub {{ request()->routeIs(['role.*', 'admin.*']) ? 'open active' : '' }}">
 
-                                            <a href="javascript:void(0);" class="side-menu__item">
+                                            <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs(['role.*', 'admin.*']) ? 'active' : '' }}">
 
                                                 <span class="shape1"></span>
                                                 <span class="shape2"></span>
 
-                                                <i class="ti ti-shield-lock side-menu__icon"></i>
+                                                <i class="ti-user side-menu__icon"></i>
 
                                                 <span class="side-menu__label">
-                                                    Role Management
+                                                    Access Control
                                                 </span>
 
                                                 <i class="fe fe-chevron-right side-menu__angle"></i>
 
                                             </a>
 
-                                            <ul class="slide-menu child1">
+                                            <ul class="slide-menu child1 {{ request()->routeIs(['role.*', 'admin.*']) ? 'double-menu-active' : '' }}">
 
-                                                @can('role_create')
+                                                @canany(['role.view', 'role.create'])
                                                     <li class="slide">
-                                                        <a href="{{ route('role.create') }}" class="side-menu__item">
-                                                            Create Role
+                                                        <a href="{{ route('role.index') }}" class="side-menu__item {{ request()->routeIs('role.index') ? 'active' : '' }}">
+                                                            Manage Roles
                                                         </a>
                                                     </li>
-                                                @endcan
+                                                @endcanany
 
-                                                @can('role_view')
+                                                @can('admin.view')
                                                     <li class="slide">
-                                                        <a href="{{ route('role.index') }}" class="side-menu__item">
-                                                            Manage Roles
+                                                        <a href="{{ route('admin.index') }}" class="side-menu__item {{ request()->routeIs('admin.index') ? 'active' : '' }}">
+                                                            Manage Admins
                                                         </a>
                                                     </li>
                                                 @endcan
@@ -246,6 +338,15 @@
                                         </li>
 
                                     @endcanany
+
+                                    @can('audit.view')
+                                        <li class="slide {{ request()->routeIs('audit.*') ? 'active' : '' }}">
+                                            <a href="{{ route('audit.index') }}" class="side-menu__item {{ request()->routeIs('audit.*') ? 'active' : '' }}">
+                                                <i class="ti ti-history side-menu__icon"></i>
+                                                <span class="side-menu__label">Audit Logs</span>
+                                            </a>
+                                        </li>
+                                    @endcan
                                 </ul>
                                 <div class="slide-right d-none" id="slide-right"><svg
                                         xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24"

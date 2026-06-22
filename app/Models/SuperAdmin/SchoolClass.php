@@ -6,6 +6,7 @@ use App\Models\Record;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\LogsAllActivity;
 
 class SchoolClass extends Record
 {
@@ -28,7 +29,8 @@ class SchoolClass extends Record
         'class_name',
         'is_active',
         'created_by',
-        'updated_by'
+        'updated_by',
+        'user_id'
     ];
 
     /**

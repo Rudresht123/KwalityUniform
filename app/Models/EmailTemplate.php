@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\LogsAllActivity;
 
 class EmailTemplate extends Model
 {
+    use LogsAllActivity;
+
     protected $table = 'email_templates';
 
     protected $fillable = [

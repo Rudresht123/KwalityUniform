@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Kwality Uniform - Software</title>
-    <link rel="icon" href="{{ asset("assets/icons/fav.png") }}">
+    <link rel="icon" href="{{ asset('assets/icons/fav.png') }}">
 
     {{-- links for the css --}}
 
@@ -36,37 +36,16 @@
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/datatable.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/toast.css') }}">
+    @notifyCss
 
     @stack('styles')
-
+    <script>
+        window.userId = {{ auth()->id() ?? 'null' }};
+    </script>
+    @vite(['resources/js/app.js'])
 </head>
 
 <body>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    alertify.set('notifier', 'position', 'top-right');
-    alertify.set('notifier', 'delay', 5);
-
-    @if(session('success'))
-        alertify.success(@json(session('success')));
-    @endif
-
-    @if(session('error'))
-        alertify.error(@json(session('error')));
-    @endif
-
-
-    @if(session('warning'))
-        alertify.warning(@json(session('warning')));
-    @endif
-
-    @if(session('info'))
-        alertify.message(@json(session('info')));
-    @endif
-
-});
-</script>
 
     @include('components.loader')
     @include('layouts.off-canvas')
@@ -127,6 +106,16 @@ document.addEventListener('DOMContentLoaded', function () {
     <script src="{{ asset('assets/js/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/datatables/responsive.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
+    <script src="{{ asset('assets/js/notification.js') }}"></script>
+
+    @if ($errors->any() && !session()->has('notify.message'))
+        @php
+            notify()->error('Please check the form for validation errors.', 'Validation Failed');
+        @endphp
+    @endif
+
+    <x-notify::notify />
+    @notifyJs
 
     <script>
         // Show loader on page refresh, navigation, or back/forward navigation

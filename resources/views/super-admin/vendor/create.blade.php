@@ -338,9 +338,9 @@
                                             <span class="text-danger">*</span>
                                         </label>
 
-                                        <select name="status" class="form-select @error('status') is-invalid @enderror"
+                                        <select name="is_active" class="form-select @error('status') is-invalid @enderror"
                                             required>
-                                            <option value="pending" {{ old('status', '1') === '1' ? 'selected' : '' }}>
+                                            <option value="1" {{ old('status', '1') === '1' ? 'selected' : '' }}>
                                                 Active
                                             </option>
                                             <option value="0" {{ old('status') === '0' ? 'selected' : '' }}>
