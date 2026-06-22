@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code — 5-Day Learning Plan · Development Team · NMG Technologies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@800&display=swap">
+<style>
+:root{
+  --ink:#1A1A1F;--bg:#F8F7F4;--surface:#FFFFFF;--red:#FF0000;
+  --text-muted:#6F6B63;--outline:#E5E3DD;
+  --red-soft:#FCEAEA;--surface-variant:#F2F0EB;
+  --success:#1F8B4C;--text-secondary:#3D3A35;
+  --inter:"Inter",system-ui,-apple-system,sans-serif;
+  --mont:"Montserrat","Inter",system-ui,sans-serif;
+  --mono:"JetBrains Mono","Fira Code",Menlo,Consolas,monospace;
+  --r-sm:4px;--r-md:8px;--r-lg:12px;
+  --elev-1:0 1px 2px rgba(0,0,0,.04);--elev-2:0 4px 12px rgba(0,0,0,.06);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--inter);background:var(--bg);color:var(--ink);font-size:15px;font-weight:500;line-height:1.7;-webkit-font-smoothing:antialiased}
+.accent-bar{height:3px;background:var(--red);width:100%;position:fixed;top:0;left:0;z-index:100}
+header{background:var(--surface);border-bottom:1px solid var(--outline);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;position:fixed;top:3px;left:0;right:0;z-index:99;box-shadow:var(--elev-1)}
+.header-logo img{height:32px;display:block}
+.header-meta{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--text-muted)}
+.page-body{padding-top:67px}
+.hero{background:var(--ink);padding:64px 48px 52px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--red)}
+.hero-eyebrow{font-family:var(--inter);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--red);margin-bottom:14px;display:block}
+.hero h1{font-family:var(--mont);font-size:44px;font-weight:800;line-height:1.1;letter-spacing:-.02em;color:var(--bg);margin-bottom:14px;max-width:680px}
+.hero-sub{font-size:15px;font-weight:500;color:rgba(248,247,244,.62);max-width:600px;line-height:1.7}
+.stack-bar{background:#1F1F26;border-bottom:1px solid rgba(255,255,255,.08);padding:11px 48px;display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+.stack-label{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(248,247,244,.45)}
+.stack-badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;letter-spacing:.04em;color:rgba(248,247,244,.82)}
+.stack-badge .eb-dot{width:6px;height:6px;border-radius:50%;background:var(--red);display:inline-block}
+.nav-tabs{background:var(--surface);border-bottom:1px solid var(--outline);padding:0 48px;display:flex;gap:0;overflow-x:auto;position:sticky;top:67px;z-index:98}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{font-size:12px;font-weight:600;color:var(--text-muted);padding:13px 16px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s;text-decoration:none;display:block}
+.nav-tab:hover{color:var(--ink)}
+.nav-tab.active{color:var(--red);border-bottom-color:var(--red)}
+.content{max-width:1160px;margin:0 auto;padding:44px 48px 88px}
+.day-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:40px}
+.day-card{background:var(--surface);border:1px solid var(--outline);border-radius:var(--r-md);padding:12px 10px;text-align:center;text-decoration:none;transition:border-color .15s}
+.day-card:hover{border-color:var(--red)}
+.day-card:hover .dc-num{color:var(--red)}
+.dc-num{font-family:var(--mont);font-size:22px;font-weight:800;color:var(--ink);display:block;line-height:1}
+.dc-label{font-size:10px;font-weight:600;color:var(--text-muted);display:block;margin-top:3px;line-height:1.3}
+.section-block{margin-bottom:52px}
+.section-eyebrow{font-family:var(--inter);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--red);display:block;margin-bottom:8px}
+.section-heading{font-family:var(--mont);font-size:22px;font-weight:800;line-height:1.25;letter-spacing:-.01em;color:var(--ink);margin-bottom:6px}
+.section-accent-bar{width:36px;height:3px;background:var(--red);margin-bottom:14px}
+.section-goal{font-size:13.5px;font-weight:500;color:var(--text-secondary);margin-bottom:14px;padding:11px 14px;background:var(--surface-variant);border-left:3px solid var(--red);border-radius:0 var(--r-sm) var(--r-sm) 0}
+.section-goal strong{color:var(--ink)}
+.task-table-wrap{background:var(--surface);border:1px solid var(--outline);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--elev-1)}
+table{width:100%;border-collapse:collapse}
+thead th{font-family:var(--inter);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted);padding:11px 14px;text-align:left;border-bottom:1px solid var(--outline);background:var(--surface)}
+tbody tr{border-bottom:1px solid var(--outline);transition:background .12s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--bg)}
+tbody td{padding:13px 14px;vertical-align:top;font-size:13px;line-height:1.55;color:var(--ink)}
+td.task-id{font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:.04em;white-space:nowrap;width:46px}
+td.task-desc{color:var(--text-secondary)}
+td.task-desc code,.ref-table code{font-family:var(--mono);font-size:11px;background:var(--surface-variant);padding:1px 5px;border-radius:3px;color:var(--ink)}
+td.task-tag{width:96px}
+.tag{display:inline-block;font-size:10px;font-weight:700;padding:3px 7px;border-radius:999px;letter-spacing:.03em;white-space:nowrap}
+.tag-read{background:#EAF4FF;color:#1A5FA8}
+.tag-setup{background:#EAF4FF;color:#1A5FA8}
+.tag-build{background:var(--surface-variant);color:#3D3A35}
+.tag-skill{background:#F0EBF9;color:#5B21B6}
+.tag-mcp{background:#FFF0E8;color:#8B3A00}
+.tag-check{background:#EAF7ED;color:var(--success)}
+td.task-resource{width:230px}
+.resource-link{display:inline-flex;align-items:flex-start;gap:5px;font-size:11.5px;font-weight:600;color:var(--ink);text-decoration:none;line-height:1.4}
+.resource-link:hover{color:var(--red)}
+.res-icon{width:14px;height:14px;flex-shrink:0;margin-top:1px;border-radius:2px;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700}
+.ri-doc{background:var(--red-soft);color:var(--red)}
+.ri-tut{background:var(--surface-variant);color:#3D3A35}
+.ri-vid{background:#FFF0E8;color:#8B3A00}
+.ri-ref{background:#EAF7ED;color:var(--success)}
+.res-second{display:block;margin-top:6px}
+/* Reference blocks (embedded Word-doc content) */
+.ref-label{font-family:var(--inter);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted);margin:22px 0 10px;display:flex;align-items:center;gap:8px}
+.ref-label::before{content:"";width:16px;height:2px;background:var(--red);display:inline-block;flex-shrink:0}
+.ref-card{background:var(--surface);border:1px solid var(--outline);border-radius:var(--r-md);overflow:hidden;margin-bottom:12px;box-shadow:var(--elev-1)}
+.ref-card-title{font-size:12px;font-weight:700;color:var(--ink);padding:10px 14px;border-bottom:1px solid var(--outline);background:var(--surface-variant)}
+.ref-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.ref-table th{text-align:left;text-transform:uppercase;font-size:10px;letter-spacing:.12em;color:var(--text-muted);font-weight:700;padding:9px 14px;border-bottom:1px solid var(--outline)}
+.ref-table td{padding:9px 14px;border-bottom:1px solid var(--outline);color:var(--text-secondary);vertical-align:top}
+.ref-table tr:last-child td{border-bottom:none}
+.ref-table .mono{font-family:var(--mono);font-size:11.5px;color:var(--ink);white-space:nowrap}
+.ref-table .ok{color:var(--success);font-weight:700}
+.code-block{background:var(--surface-variant);border:1px solid var(--outline);border-left:3px solid var(--red);border-radius:0 var(--r-md) var(--r-md) 0;padding:14px 16px;font-family:var(--mono);font-size:12px;line-height:1.65;color:var(--ink);overflow-x:auto;margin-bottom:12px;white-space:pre-wrap;word-break:break-word}
+.code-block .c{color:var(--text-muted)}
+.code-cap{font-size:11px;font-weight:700;color:var(--ink);margin-bottom:6px;font-family:var(--inter)}
+.resources-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.rc{background:var(--surface);border:1px solid var(--outline);border-radius:var(--r-md);padding:12px 14px;display:flex;align-items:flex-start;gap:10px;text-decoration:none;color:inherit;transition:box-shadow .15s,transform .15s}
+.rc:hover{box-shadow:var(--elev-2);transform:translateY(-1px)}
+.rc-icon{width:28px;height:28px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;font-weight:700}
+.ri-d{background:var(--red-soft);color:var(--red)}
+.ri-v{background:#FFF0E8;color:#8B3A00}
+.ri-t{background:var(--surface-variant);color:#3D3A35}
+.ri-r{background:#EAF7ED;color:var(--success)}
+.rc-title{font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.4;margin-bottom:2px}
+.rc-type{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
+.res-group-label{font-family:var(--inter);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted);margin:22px 0 10px}
+footer{background:var(--ink);padding:36px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.footer-logo img{height:26px}
+.footer-meta{font-size:11.5px;color:rgba(248,247,244,.42);font-weight:500}
+@media(max-width:900px){header,.stack-bar,.nav-tabs,.content{padding-left:20px;padding-right:20px}.hero{padding:44px 20px 36px}.hero h1{font-size:30px}.day-grid{grid-template-columns:repeat(3,1fr)}footer{padding:28px 20px}}
+@media(max-width:600px){.hero h1{font-size:24px}.section-heading{font-size:18px}.day-grid{grid-template-columns:repeat(2,1fr)}table{display:block;overflow-x:auto}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="accent-bar" role="presentation"></div>
+<header>
+  <div class="header-logo">
+    <img src="https://nmg-brand-guidelines.netlify.app/logos/nmg-tech.png" alt="NMG Technologies" height="32">
+  </div>
+  <span class="header-meta">Claude Code &middot; Development Team &middot; 5-Day Plan</span>
+</header>
+<main class="page-body">
+  <section class="hero" aria-label="Plan overview">
+    <span class="hero-eyebrow">NMG Technologies &middot; AI Skill Upliftment &middot; June 2026</span>
+    <h1>Claude Code in 5 Days<br>Development Team</h1>
+    <p class="hero-sub">A structured, hands-on enablement track from installation to a full agent-driven sprint. Each day carries the learning tasks, the matching tutorial/doc links, and the complete reference material from the NMG Claude Code Team Guide &mdash; command tables, CLAUDE.md templates and workflow tables &mdash; embedded inline.</p>
+  </section>
+  <div class="stack-bar" role="note" aria-label="Stacks covered">
+    <span class="stack-label">Covers</span>
+    <span class="stack-badge"><span class="eb-dot"></span>Flutter</span>
+    <span class="stack-badge"><span class="eb-dot"></span>Laravel + MySQL</span>
+    <span class="stack-badge"><span class="eb-dot"></span>Skills &amp; MCP</span>
+    <span class="stack-badge"><span class="eb-dot"></span>GStack &amp; Plugins</span>
+    <span class="stack-badge"><span class="eb-dot"></span>Claude Design</span>
+  </div>
+  <nav class="nav-tabs" aria-label="Day navigation">
+    <a class="nav-tab active" href="#day1">Day 1 &middot; Foundations</a>
+    <a class="nav-tab" href="#day2">Day 2 &middot; Skills · MCP · CLAUDE.md</a>
+    <a class="nav-tab" href="#day3">Day 3 &middot; Workflows &amp; Sessions</a>
+    <a class="nav-tab" href="#day4">Day 4 &middot; NMG Stack</a>
+    <a class="nav-tab" href="#day5">Day 5 &middot; Team Scale &amp; Capstone</a>
+    <a class="nav-tab" href="#resources">Resources</a>
+  </nav>
+  <div class="content">
+    <div class="day-grid" role="list" aria-label="Jump to day">
+      <a class="day-card" href="#day1" role="listitem"><span class="dc-num">1</span><span class="dc-label">Foundations &amp; Setup</span></a>
+      <a class="day-card" href="#day2" role="listitem"><span class="dc-num">2</span><span class="dc-label">Skills · MCP · CLAUDE.md</span></a>
+      <a class="day-card" href="#day3" role="listitem"><span class="dc-num">3</span><span class="dc-label">Workflows &amp; Sessions</span></a>
+      <a class="day-card" href="#day4" role="listitem"><span class="dc-num">4</span><span class="dc-label">NMG Stack Mastery</span></a>
+      <a class="day-card" href="#day5" role="listitem"><span class="dc-num">5</span><span class="dc-label">Team Scale &amp; Capstone</span></a>
+    </div>
+
+    <!-- DAY 1 -->
+    <section class="section-block" id="day1">
+      <span class="section-eyebrow">Day 1</span>
+      <h2 class="section-heading">Foundations &amp; Setup</h2>
+      <div class="section-accent-bar"></div>
+      <p class="section-goal"><strong>Goal:</strong> Everyone has Claude Code installed, authenticated, and has run a first agentic session, and understands the 3-tier model cost strategy and how to monitor spend. Covers guide sections 1, 2, 3 and 15. <strong>Claude Code is NOT a chatbot &mdash; it is an agent that acts on your code.</strong></p>
+      <div class="task-table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Task</th><th>Type</th><th>Learning Resource</th></tr></thead>
+          <tbody>
+            <tr><td class="task-id">1.1</td><td class="task-desc">Understand what Claude Code is &mdash; an agentic CLI that reads your codebase, runs commands, edits files and manages git. It is <em>not</em> a chatbot; it acts on your code <span style="color:var(--text-muted)">(&sect;1)</span></td><td class="task-tag"><span class="tag tag-read">Read</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/watch?v=bqJzIWAEn40" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>Overview &mdash; Watch</a><a class="resource-link res-second" href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener"><span class="res-icon ri-doc">&#8599;</span>Official Docs &mdash; Overview</a></td></tr>
+            <tr><td class="task-id">1.2</td><td class="task-desc">Install Claude Code on your OS &mdash; macOS (<code>curl</code> or <code>brew</code>), Windows native (<code>winget</code>) or WSL2, or Linux (apt/dnf/apk). Native installer ships a self-contained binary; no Node/Python required <span style="color:var(--text-muted)">(&sect;2)</span></td><td class="task-tag"><span class="tag tag-setup">Setup</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/watch?v=kddjxKEeCuM" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>Installation &mdash; Watch</a><a class="resource-link res-second" href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener"><span class="res-icon ri-doc">&#8599;</span>Official Docs &mdash; Setup</a></td></tr>
+            <tr><td class="task-id">1.3</td><td class="task-desc">Authenticate with <code>claude auth login</code> (or <code>ANTHROPIC_API_KEY</code>), then run <code>claude</code> in a real repo and ask it to read &amp; summarise the codebase <span style="color:var(--text-muted)">(&sect;2)</span></td><td class="task-tag"><span class="tag tag-setup">Setup</span></td><td class="task-resource"><a class="resource-link" href="https://code.claude.com/docs/en/quickstart" target="_blank" rel="noopener"><span class="res-icon ri-doc">&#8599;</span>Official Docs &mdash; Quickstart</a><a class="resource-link res-second" href="https://anthropic.skilljar.com/claude-code-101" target="_blank" rel="noopener"><span class="res-icon ri-ref">&#8599;</span>Claude Code 101 course</a></td></tr>
+            <tr><td class="task-id">1.4</td><td class="task-desc">Learn the 3-tier cost strategy: Haiku for simple/fast tasks (saves 60&ndash;70%), Sonnet for ~80% of daily work, Opus for deep reasoning only. Pick a default (see the model table below) <span style="color:var(--text-muted)">(&sect;3)</span></td><td class="task-tag"><span class="tag tag-read">Read</span></td><td class="task-resource"><a class="resource-link" href="https://claude.com/resources/tutorials/choosing-the-right-claude-model" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>Choosing the right model</a><a class="resource-link res-second" href="https://platform.claude.com/docs/en/about-claude/models/choosing-a-model" target="_blank" rel="noopener"><span class="res-icon ri-doc">&#8599;</span>Docs &mdash; Choosing a model</a></td></tr>
+            <tr><td class="task-id">1.5</td><td class="task-desc">Practice switching models mid-session: <code>/model claude-sonnet-4-6</code>, <code>/model claude-haiku-4-5</code>, <code>/model claude-opus-4-8</code> <span style="color:var(--text-muted)">(&sect;3)</span></td><td class="task-tag"><span class="tag tag-build">Build</span></td><td class="task-resource"><a class="resource-link" href="https://code.claude.com/docs/en/model-config" target="_blank" rel="noopener"><span class="res-icon ri-doc">&#8599;</span>Docs &mdash; Model config</a></td></tr>
+            <tr><td class="task-id">1.6</td><td class="task-desc">Set up token &amp; credit monitoring: <code>/usage</code> for the 5-hour window and <code>claude credits status</code> for balance &amp; burn rate. Note programmatic vs interactive pools (table below) <span style="color:var(--text-muted)">(&sect;15)</span></td><td class="task-tag"><span class="tag tag-check">Check</span></td><td class="task-resource"><a class="resource-link" href="https://code.claude.com/docs/en/costs" target="_blank" rel="noopener"><span class="res-icon ri-doc">&#8599;</span>Docs &mdash; Costs</a><a class="resource-link res-second" href="https://support.claude.com/en/articles/12429409-manage-usage-credits-for-paid-claude-plans" target="_blank" rel="noopener"><span class="res-icon ri-ref">&#8599;</span>Manage usage credits</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-label">Reference &middot; Install commands (&sect;2)</div>
+      <div class="code-block"><span class="c"># macOS (13.0+) — Apple Silicon &amp; Intel, auto-detects architecture</span>
+curl -fsSL https://claude.ai/install.sh | sh
+brew install claude-code            <span class="c"># alternative</span>
+
+<span class="c"># Windows (10 1809+)</span>
+winget install Anthropic.ClaudeCode <span class="c"># Option A — native Windows</span>
+curl -fsSL https://claude.ai/install.sh | sh   <span class="c"># Option B — WSL2 (Linux tools/Docker)</span>
+
+<span class="c"># Authentication</span>
+claude auth login
+export ANTHROPIC_API_KEY=your_key_here</div>
+
+      <div class="ref-card">
+        <div class="ref-card-title">Linux install &mdash; Ubuntu 20.04+ / Debian 10+ / Alpine 3.19+ (&sect;2)</div>
+        <table class="ref-table">
+          <thead><tr><th>Distro</th><th>Install command</th></tr></thead>
+          <tbody>
+            <tr><td>Ubuntu / Debian</td><td class="mono">sudo apt install claude-code</td></tr>
+            <tr><td>Fedora / RHEL</td><td class="mono">sudo dnf install claude-code</td></tr>
+            <tr><td>Alpine</td><td class="mono">sudo apk add claude-code</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-card">
+        <div class="ref-card-title">Models &mdash; which to use &amp; when (&sect;3)</div>
+        <table class="ref-table">
+          <thead><tr><th>Model</th><th>Best for</th><th>Cost</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Sonnet 4.6</strong> &nbsp;&#9733; Default</td><td>Everyday coding &mdash; bug fixes, features, refactoring, reviews (80% of tasks)</td><td>Mid</td></tr>
+            <tr><td><strong>Opus 4.8</strong></td><td>Complex multi-file refactoring, architecture decisions, unfamiliar codebases</td><td>High</td></tr>
+            <tr><td><strong>Haiku 4.5</strong></td><td>Code completion, test writing, docs generation, lint reviews</td><td>Low</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-card">
+        <div class="ref-card-title">Two credit meters &mdash; 2026 (&sect;15)</div>
+        <table class="ref-table">
+          <thead><tr><th>Meter</th><th>Used by</th><th>Monthly amount</th></tr></thead>
+          <tbody>
+            <tr><td>Interactive Credits</td><td>Manual Claude.ai chat</td><td>Plan-based</td></tr>
+            <tr><td>Programmatic Credits <span style="color:var(--text-muted)">(new Jun 2026)</span></td><td>Claude Code, Agent SDK, GitHub Actions, headless sessions</td><td>Pro ~$20 &middot; Max 5&times; ~$100 &middot; Max 20&times; ~$200</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:12.5px;color:var(--text-muted);margin-top:4px">Claude Code draws from the programmatic credit pool &mdash; separate from chat limits. Effective June 15, 2026. The dollar figure in <code style="font-family:var(--mono)">/usage</code> is a local estimate; for exact billing see console.anthropic.com.</p>
+    </section>
+
+    <!-- DAY 2 -->
+    <section class="section-block" id="day2">
+      <span class="section-eyebrow">Day 2</span>
+      <h2 class="section-heading">Skills, MCP &amp; the Project Brain</h2>
+      <div class="section-accent-bar"></div>
+      <p class="section-goal"><strong>Goal:</strong> Learn how Claude extends itself. Each dev writes a project CLAUDE.md, builds a custom skill, and connects one MCP server. Covers guide sections 4, 5 and 6.</p>
+      <div class="task-table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Task</th><th>Type</th><th>Learning Resource</th></tr></thead>
+          <tbody>
+            <tr><td class="task-id">2.1</td><td class="task-desc">Understand skills &mdash; a reusable SKILL.md workflow with optional scripts, lazy-loaded (~30&ndash;50 tokens until triggered). Review the built-in skills (table below) <span style="color:var(--text-muted)">(&sect;4)</span></td><td class="task-tag"><span class="tag tag-read">Read</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/watch?v=O_z9vDLgvoY" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>Skills &mdash; Watch</a><a class="resource-link res-second" href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener"><span class="res-icon ri-doc">&#8599;</span>Official Docs &mdash; Skills</a></td></tr>
+            <tr><td class="task-id">2.2</td><td class="task-desc">Create a custom skill for a workflow you've done more than twice (folder layout below). Verify auto-triggering <span style="color:var(--text-muted)">(&sect;4)</span></td><td class="task-tag"><span class="tag tag-skill">Skill</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/watch?v=UpgjdQJShWg" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>Create a skill &mdash; Watch</a><a class="resource-link res-second" href="https://www.youtube.com/watch?v=YkpEX_jlb04" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>Skills deep-dive &mdash; Watch</a></td></tr>
+            <tr><td class="task-id">2.3</td><td class="task-desc">Learn MCP &mdash; servers that give Claude tools for external systems. Study the Skills-vs-MCP and Common MCP Servers tables below <span style="color:var(--text-muted)">(&sect;5)</span></td><td class="task-tag"><span class="tag tag-read">Read</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/watch?v=_MNvUAg8CDg" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>MCP &mdash; Watch</a><a class="resource-link res-second" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener"><span class="res-icon ri-doc">&#8599;</span>Official Docs &mdash; MCP</a></td></tr>
+            <tr><td class="task-id">2.4</td><td class="task-desc">Pin one MCP server to an external system you use, then write a thin skill that orchestrates it &mdash; the recommended pattern <span style="color:var(--text-muted)">(&sect;5)</span></td><td class="task-tag"><span class="tag tag-mcp">MCP</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/watch?v=N-8cVtAl4oI" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>MCP in practice &mdash; Watch</a><a class="resource-link res-second" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener"><span class="res-icon ri-doc">&#8599;</span>Official Docs &mdash; MCP</a></td></tr>
+            <tr><td class="task-id">2.5</td><td class="task-desc">Write a CLAUDE.md for one live project (example below). Keep it &le;200 lines; it auto-loads every session and survives <code>/compact</code>. Commit it so the team shares it <span style="color:var(--text-muted)">(&sect;6)</span></td><td class="task-tag"><span class="tag tag-build">Build</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/playlist?list=PL4cUxeGkcC9g4YJeBqChhFJwKQ9TRiivY" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>CLAUDE.md &mdash; Watch</a><a class="resource-link res-second" href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener"><span class="res-icon ri-doc">&#8599;</span>Official Docs &mdash; Memory</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-card">
+        <div class="ref-card-title">Built-in skills (&sect;4)</div>
+        <table class="ref-table">
+          <thead><tr><th>Skill</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">/batch</td><td>Parallel work across worktrees</td></tr>
+            <tr><td class="mono">/debug</td><td>Structured debugging playbook</td></tr>
+            <tr><td class="mono">/simplify</td><td>Restructures complex prompts</td></tr>
+            <tr><td class="mono">/loop</td><td>Repeats prompts iteratively</td></tr>
+            <tr><td class="mono">/review</td><td>PR / code review workflow</td></tr>
+            <tr><td class="mono">/init</td><td>Reads codebase and generates CLAUDE.md</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-label">Reference &middot; Create a custom skill (&sect;4)</div>
+      <div class="code-block">.claude/skills/my-deploy/
+  SKILL.md        <span class="c">&larr; instructions + trigger conditions</span>
+  deploy.sh       <span class="c">&larr; optional helper script</span>
+<span class="c">&#10003; Rule: if you have done a workflow more than twice, make it a skill.</span></div>
+
+      <div class="ref-card">
+        <div class="ref-card-title">Skills vs MCP (&sect;5)</div>
+        <table class="ref-table">
+          <thead><tr><th></th><th>Skills</th><th>MCP</th></tr></thead>
+          <tbody>
+            <tr><td><strong>What it is</strong></td><td>Instructions &mdash; what to DO</td><td>Tools &mdash; what Claude CAN do</td></tr>
+            <tr><td><strong>Token cost</strong></td><td>~30&ndash;50 tokens until triggered</td><td>50k+ tokens upfront per server</td></tr>
+            <tr><td><strong>Use for</strong></td><td>Workflows &amp; procedures</td><td>External system integration</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-card">
+        <div class="ref-card-title">Common MCP servers (&sect;5)</div>
+        <table class="ref-table">
+          <thead><tr><th>MCP</th><th>Purpose</th><th>Add command</th></tr></thead>
+          <tbody>
+            <tr><td>GitHub</td><td>Repos, PRs, issues</td><td class="mono">claude mcp add github</td></tr>
+            <tr><td>MySQL</td><td>Live schema, queries</td><td class="mono">claude mcp add mysql</td></tr>
+            <tr><td>Playwright</td><td>Browser automation</td><td class="mono">claude mcp add playwright</td></tr>
+            <tr><td>Figma</td><td>Read designs, generate code</td><td class="mono">claude mcp add figma</td></tr>
+            <tr><td>Firebase</td><td>DB + push notifications</td><td class="mono">claude mcp add firebase</td></tr>
+            <tr><td>Sentry</td><td>Error monitoring</td><td class="mono">claude mcp add sentry</td></tr>
+            <tr><td>Linear</td><td>Issue tracking</td><td class="mono">claude mcp add linear</td></tr>
+            <tr><td>Supabase</td><td>Database + auth</td><td class="mono">claude mcp add supabase</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:12.5px;color:var(--text-muted);margin-top:4px">Best practice: pin one MCP per external system, then write thin skills that orchestrate them.</p>
+
+      <div class="ref-label">Reference &middot; CLAUDE.md &mdash; the project brain (&sect;6)</div>
+      <div class="code-block"># Project Rules
+- Run tests before saying done
+- Branch naming: feature/TICKET-description
+- Never use Eloquent in controllers
+- WCAG AA contrast minimum on all UI
+<span class="c">&#10003; Keep CLAUDE.md &le; 200 lines. Long workflows go in Skills, not here.</span>
+<span class="c">  CLAUDE.md survives /compact — re-injected automatically after compression.</span></div>
+    </section>
+
+    <!-- DAY 3 -->
+    <section class="section-block" id="day3">
+      <span class="section-eyebrow">Day 3</span>
+      <h2 class="section-heading">Best Practices, Sessions &amp; Remote Control</h2>
+      <div class="section-accent-bar"></div>
+      <p class="section-goal"><strong>Goal:</strong> Adopt the team's workflow standards &mdash; new vs existing project practices, design patterns, the full slash-command reference, session naming &amp; restore, and remote control. Covers guide sections 7, 8, 9, 16, 17 and 14.</p>
+      <div class="task-table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Task</th><th>Type</th><th>Learning Resource</th></tr></thead>
+          <tbody>
+            <tr><td class="task-id">3.1</td><td class="task-desc">Study best practices for <em>new</em> projects &mdash; CLAUDE.md first, <code>/init</code>, MCP early, first skill, default to Sonnet, <code>/batch</code> for parallel work (steps below) <span style="color:var(--text-muted)">(&sect;7)</span></td><td class="task-tag"><span class="tag tag-read">Read</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/watch?v=LlFgLsffbBs" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>Best Practices &mdash; Watch</a></td></tr>
+            <tr><td class="task-id">3.2</td><td class="task-desc">Study best practices for <em>existing</em> codebases and the design patterns &amp; approaches that keep output consistent (tables below) <span style="color:var(--text-muted)">(&sect;8, &sect;9)</span></td><td class="task-tag"><span class="tag tag-read">Read</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/watch?v=Xg55nTrbYYY" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>Existing projects &mdash; Watch</a></td></tr>
+            <tr><td class="task-id">3.3</td><td class="task-desc">Build a personal cheat-sheet from the complete slash command reference (5 tables below) <span style="color:var(--text-muted)">(&sect;16)</span></td><td class="task-tag"><span class="tag tag-build">Build</span></td><td class="task-resource"><a class="resource-link" href="https://code.claude.com/docs/en/agent-sdk/slash-commands" target="_blank" rel="noopener"><span class="res-icon ri-doc">&#8599;</span>Docs &mdash; Slash commands</a></td></tr>
+            <tr><td class="task-id">3.4</td><td class="task-desc">Adopt the session-naming convention and practice restore (core commands &amp; naming below): <code>--continue</code>, <code>--resume</code>, named sessions <span style="color:var(--text-muted)">(&sect;17)</span></td><td class="task-tag"><span class="tag tag-build">Build</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/shorts/hOC4wM9DFhc" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>Session Restore &mdash; Watch</a><a class="resource-link res-second" href="https://code.claude.com/docs/en/sessions" target="_blank" rel="noopener"><span class="res-icon ri-doc">&#8599;</span>Official Docs &mdash; Sessions</a></td></tr>
+            <tr><td class="task-id">3.5</td><td class="task-desc">Practice the team session workflow &mdash; context strategy, memory types, <code>/compact</code> at 50%, push CLAUDE.md, teammate resumes (tables &amp; flow below) <span style="color:var(--text-muted)">(&sect;17)</span></td><td class="task-tag"><span class="tag tag-build">Build</span></td><td class="task-resource"><a class="resource-link" href="https://claudelab.net/en/articles/claude-code/claude-code-session-management-resume-guide" target="_blank" rel="noopener"><span class="res-icon ri-tut">&#8599;</span>Session management guide</a><a class="resource-link res-second" href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener"><span class="res-icon ri-doc">&#8599;</span>Official Docs &mdash; Memory</a></td></tr>
+            <tr><td class="task-id">3.6</td><td class="task-desc">Start a remote session with <code>claude --remote-control</code> (SPACEBAR for phone QR), enable for all sessions via <code>/config</code>. Use tmux/screen (tables below) <span style="color:var(--text-muted)">(&sect;14)</span></td><td class="task-tag"><span class="tag tag-build">Build</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/watch?v=pvhphecd70Y" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>Remote Control &mdash; Watch</a><a class="resource-link res-second" href="https://code.claude.com/docs/en/remote-control" target="_blank" rel="noopener"><span class="res-icon ri-doc">&#8599;</span>Docs &mdash; Remote control</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-card">
+        <div class="ref-card-title">Best practices &mdash; new projects (&sect;7)</div>
+        <table class="ref-table">
+          <thead><tr><th>Step</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Start with CLAUDE.md &mdash; define stack, conventions, forbidden actions</td></tr>
+            <tr><td>2</td><td>Run <code>/init</code> &mdash; Claude reads codebase and writes CLAUDE.md</td></tr>
+            <tr><td>3</td><td>Set up MCP servers early &mdash; connect GitHub, DB, issue tracker from day 1</td></tr>
+            <tr><td>4</td><td>Write first skill for any repeated workflow (e.g. deploy checklist)</td></tr>
+            <tr><td>5</td><td>Default to Sonnet, escalate to Opus only when needed</td></tr>
+            <tr><td>6</td><td>Use <code>/batch</code> for parallel feature development across worktrees</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-card">
+        <div class="ref-card-title">Best practices &mdash; existing projects (&sect;8)</div>
+        <table class="ref-table">
+          <thead><tr><th>Step</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Run <code>/init</code> first &mdash; Claude analyses codebase and creates CLAUDE.md</td></tr>
+            <tr><td>2</td><td>Add <code>.claude/rules/*.md</code> with path-specific rules (frontend vs API)</td></tr>
+            <tr><td>3</td><td>Start with read-only tasks &mdash; ask Claude to explain codebase before editing</td></tr>
+            <tr><td>4</td><td>Use Opus for first deep-dive into unfamiliar code, then switch to Sonnet</td></tr>
+            <tr><td>5</td><td>Add hooks for safety &mdash; run tests automatically before Claude marks task done</td></tr>
+            <tr><td>6</td><td>Use subagents for isolated research &mdash; won't pollute main context</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-card">
+        <div class="ref-card-title">Design patterns &amp; approaches (&sect;9)</div>
+        <table class="ref-table">
+          <thead><tr><th>Pattern</th><th>When to use</th></tr></thead>
+          <tbody>
+            <tr><td>CLAUDE.md + Skills</td><td>All projects &mdash; the foundation</td></tr>
+            <tr><td>Subagents</td><td>Isolated research, parallel work, context-heavy tasks</td></tr>
+            <tr><td>Hooks</td><td>Auto-run tests, linters, formatters after changes</td></tr>
+            <tr><td>Worktrees + <code>/batch</code></td><td>Multiple features simultaneously</td></tr>
+            <tr><td>MCP + Skills combo</td><td>External tool access with workflow orchestration</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-label">Reference &middot; Complete slash command reference (&sect;16)</div>
+      <div class="ref-card">
+        <div class="ref-card-title">Session management</div>
+        <table class="ref-table"><tbody>
+          <tr><td class="mono">/clear</td><td>Wipe conversation history (file edits stay on disk)</td></tr>
+          <tr><td class="mono">/compact</td><td>Compress history into summary, keep context thread</td></tr>
+          <tr><td class="mono">/recap</td><td>Summary of current session activity</td></tr>
+          <tr><td class="mono">/context</td><td>Show context window percentage used</td></tr>
+          <tr><td class="mono">/usage</td><td>Token breakdown for current 5-hour window</td></tr>
+          <tr><td class="mono">/exit</td><td>End session</td></tr>
+        </tbody></table>
+      </div>
+      <div class="ref-card">
+        <div class="ref-card-title">Config &amp; setup</div>
+        <table class="ref-table"><tbody>
+          <tr><td class="mono">/config</td><td>Open settings (remote control, auto-accept, etc.)</td></tr>
+          <tr><td class="mono">/permissions</td><td>Manage allow/deny rules for tools</td></tr>
+          <tr><td class="mono">/model</td><td>Switch model mid-session</td></tr>
+          <tr><td class="mono">/help</td><td>List every command available in current session</td></tr>
+          <tr><td class="mono">/memory</td><td>View and edit Claude's persistent memory files</td></tr>
+        </tbody></table>
+      </div>
+      <div class="ref-card">
+        <div class="ref-card-title">Tools &amp; plugins</div>
+        <table class="ref-table"><tbody>
+          <tr><td class="mono">/plugin</td><td>Open plugin manager (Discover + Installed)</td></tr>
+          <tr><td class="mono">/reload-plugins</td><td>Reload skills after installing a plugin</td></tr>
+          <tr><td class="mono">/mcp</td><td>Manage MCP server connections and OAuth</td></tr>
+          <tr><td class="mono">/mcp__[server]__[prompt]</td><td>Run a specific MCP server prompt</td></tr>
+        </tbody></table>
+      </div>
+      <div class="ref-card">
+        <div class="ref-card-title">Workflow</div>
+        <table class="ref-table"><tbody>
+          <tr><td class="mono">/plan</td><td>Force Plan Mode &mdash; Claude explains approach before acting</td></tr>
+          <tr><td class="mono">/review</td><td>Code review workflow</td></tr>
+          <tr><td class="mono">/batch</td><td>Parallel work across worktrees</td></tr>
+          <tr><td class="mono">/init</td><td>Analyse codebase and generate CLAUDE.md</td></tr>
+        </tbody></table>
+      </div>
+      <div class="ref-card">
+        <div class="ref-card-title">GStack commands (after install)</div>
+        <table class="ref-table"><tbody>
+          <tr><td class="mono">/plan-ceo-review</td><td>Product strategy review</td></tr>
+          <tr><td class="mono">/plan-eng-review</td><td>Architecture review</td></tr>
+          <tr><td class="mono">/design-review</td><td>UI quality check &mdash; catch AI slop</td></tr>
+          <tr><td class="mono">/security</td><td>OWASP + STRIDE security audit</td></tr>
+          <tr><td class="mono">/ship</td><td>One-command PR creation and release</td></tr>
+          <tr><td class="mono">/qa</td><td>Browser-based E2E testing</td></tr>
+          <tr><td class="mono">/docs</td><td>Documentation generation</td></tr>
+          <tr><td class="mono">/retro</td><td>Engineering retrospective</td></tr>
+        </tbody></table>
+      </div>
+
+      <div class="ref-label">Reference &middot; Session restore (&sect;17)</div>
+      <div class="code-block"><span class="c"># Core commands</span>
+claude --continue          <span class="c"># resume last session (fastest)</span>
+claude -c                  <span class="c"># shorthand</span>
+claude --resume            <span class="c"># interactive session picker</span>
+claude -r                  <span class="c"># shorthand</span>
+claude --resume abc123     <span class="c"># resume specific session by ID</span>
+claude --session-name "x"  <span class="c"># start with a named session</span>
+
+<span class="c"># Team naming convention (standard)</span>
+claude --session-name "feature-user-auth"
+claude --session-name "bugfix-payment-null"
+claude --session-name "refactor-api-layer"
+claude --session-name "qa-checkout-flow"</div>
+
+      <div class="ref-card">
+        <div class="ref-card-title">Context window strategy (&sect;17)</div>
+        <table class="ref-table">
+          <thead><tr><th>Situation</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td>Session reaching 60% context</td><td><code>/compact</code> &mdash; Claude summarizes and continues</td></tr>
+            <tr><td>Switching to a different task</td><td><code>/clear</code> &mdash; fresh start, edits stay</td></tr>
+            <tr><td>Resuming next day, same feature</td><td><code>claude --continue</code> &mdash; full history restored</td></tr>
+            <tr><td>Handing off to a teammate</td><td>Push CLAUDE.md to git + share session ID</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-card">
+        <div class="ref-card-title">Memory types (&sect;17)</div>
+        <table class="ref-table">
+          <thead><tr><th>Type</th><th>Location</th><th>Stores</th><th>Survives /clear?</th></tr></thead>
+          <tbody>
+            <tr><td>CLAUDE.md</td><td>Project root (git)</td><td>Rules, conventions, commands</td><td class="ok">&#10003; Yes</td></tr>
+            <tr><td>Auto Memory</td><td>~/.claude/memory/</td><td>Build insights, style prefs</td><td class="ok">&#10003; Yes</td></tr>
+            <tr><td>Session Transcript</td><td>Local Claude folder</td><td>Full conversation + tool results</td><td class="ok">&#10003; Yes (--resume)</td></tr>
+            <tr><td>Conversation Context</td><td>Active session only</td><td>Current chat window</td><td style="color:var(--red);font-weight:700">&#10007; No</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-label">Reference &middot; Team session workflow (&sect;17)</div>
+      <div class="code-block">Dev A: claude --session-name "feature-checkout-v2"
+       Works on feature &rarr; /compact at 50% &rarr; pushes CLAUDE.md to git
+Dev B: git pull
+       claude -c   <span class="c"># (or claude -r to pick session from picker)</span>
+       &rarr; Full context restored, continues seamlessly</div>
+
+      <div class="ref-card">
+        <div class="ref-card-title">Known limitations (&sect;17)</div>
+        <table class="ref-table">
+          <thead><tr><th>Issue</th><th>Workaround</th></tr></thead>
+          <tbody>
+            <tr><td><code>--continue</code> in <code>-p</code> mode may silently create a new session</td><td>Always verify session ID in scripts</td></tr>
+            <tr><td>Context not always fully restored on <code>--resume</code></td><td>Run <code>/recap</code> after resume to verify state</td></tr>
+            <tr><td>Remote session ends if terminal closes</td><td>Use tmux or screen to keep terminal alive</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-label">Reference &middot; /remote &mdash; remote session (&sect;14)</div>
+      <div class="code-block">claude --remote-control    <span class="c"># full flag</span>
+claude --rc                <span class="c"># shorthand — press SPACEBAR for phone QR</span>
+<span class="c"># Enable for every session:</span> /config &rarr; "Enable Remote Control for all sessions" = true</div>
+      <div class="ref-card">
+        <div class="ref-card-title">Access from anywhere &middot; What works remotely (&sect;14)</div>
+        <table class="ref-table">
+          <thead><tr><th>Capability</th><th>Detail</th></tr></thead>
+          <tbody>
+            <tr><td>Web</td><td>claude.ai/code &mdash; open in any browser</td></tr>
+            <tr><td>Mobile</td><td>Claude iOS app or Claude Android app</td></tr>
+            <tr><td>QR code</td><td>Press spacebar in terminal &mdash; scan with phone</td></tr>
+            <tr><td><code>/compact</code>, <code>/clear</code>, <code>/context</code></td><td class="ok">&#10003; Works remotely</td></tr>
+            <tr><td><code>/usage</code>, <code>/recap</code>, <code>/reload-plugins</code></td><td class="ok">&#10003; Works remotely</td></tr>
+            <tr><td><code>/mcp</code> (v2.1.166+)</td><td class="ok">&#10003; Works remotely</td></tr>
+            <tr><td>File edits &amp; code changes</td><td class="ok">&#10003; Yes &mdash; runs on your machine</td></tr>
+            <tr><td>Your MCP servers &amp; tools</td><td class="ok">&#10003; Yes &mdash; fully local</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:12.5px;color:var(--text-muted);margin-top:4px">Remote Control (Feb 2026) keeps your code, MCP servers and files 100% local. One remote connection per session; if the terminal closes the remote session ends.</p>
+    </section>
+
+    <!-- DAY 4 -->
+    <section class="section-block" id="day4">
+      <span class="section-eyebrow">Day 4</span>
+      <h2 class="section-heading">NMG Stack Mastery &mdash; Flutter, Laravel, MySQL</h2>
+      <div class="section-accent-bar"></div>
+      <p class="section-goal"><strong>Goal:</strong> Apply Claude Code to NMG's actual stacks using the project CLAUDE.md templates, workflow tables and stack-specific MCP servers. Covers guide sections 19 and 20.</p>
+      <div class="task-table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Task</th><th>Type</th><th>Learning Resource</th></tr></thead>
+          <tbody>
+            <tr><td class="task-id">4.1</td><td class="task-desc">Drop the Flutter CLAUDE.md template (below) into a project &mdash; FFCA, Riverpod/GoRouter/Dio, MMKV/Hive, Material 3 <span style="color:var(--text-muted)">(&sect;19)</span></td><td class="task-tag"><span class="tag tag-build">Build</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/watch?v=z6yrAsORlBY" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>Flutter &amp; Mobile &mdash; Watch</a><a class="resource-link res-second" href="https://docs.flutter.dev/ai/create-with-ai" target="_blank" rel="noopener"><span class="res-icon ri-doc">&#8599;</span>Flutter &mdash; Create with AI</a></td></tr>
+            <tr><td class="task-id">4.2</td><td class="task-desc">Run the Flutter workflows (table below) and the cross-platform decision guide &mdash; scaffold a feature with a widget test <span style="color:var(--text-muted)">(&sect;19)</span></td><td class="task-tag"><span class="tag tag-build">Build</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/watch?v=BMMcmmnjrM8" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>Flutter workflows &mdash; Watch</a><a class="resource-link res-second" href="https://claudelab.net/en/articles/claude-code/claude-code-flutter-app-development-complete-guide" target="_blank" rel="noopener"><span class="res-icon ri-tut">&#8599;</span>Flutter dev complete guide</a></td></tr>
+            <tr><td class="task-id">4.3</td><td class="task-desc">Connect the mobile MCP servers (commands below): playwright, firebase, sentry <span style="color:var(--text-muted)">(&sect;19)</span></td><td class="task-tag"><span class="tag tag-mcp">MCP</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/watch?v=FNpQawHnIrI" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>Mobile MCP &mdash; Watch</a></td></tr>
+            <tr><td class="task-id">4.4</td><td class="task-desc">Drop the Laravel CLAUDE.md template (below) &amp; build one endpoint with the 5-step recipe (Laravel workflows table below) <span style="color:var(--text-muted)">(&sect;20)</span></td><td class="task-tag"><span class="tag tag-build">Build</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/watch?v=DALA8fGoYV8" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>Laravel &amp; PHP &mdash; Watch</a><a class="resource-link res-second" href="https://hafiz.dev/blog/the-complete-laravel-claude-code-ecosystem-every-tool-plugin-and-config-you-actually-need" target="_blank" rel="noopener"><span class="res-icon ri-tut">&#8599;</span>Laravel + Claude ecosystem</a></td></tr>
+            <tr><td class="task-id">4.5</td><td class="task-desc">Connect the MySQL MCP and apply the MySQL best practices (table below) &mdash; schema, EXPLAIN, migrations, indexes <span style="color:var(--text-muted)">(&sect;20)</span></td><td class="task-tag"><span class="tag tag-mcp">MCP</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/watch?v=lAL3HF9IxL8" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>MySQL with Claude &mdash; Watch</a><a class="resource-link res-second" href="https://www.falconinternet.net/blog/building-database-application-claude-code-php-mysql" target="_blank" rel="noopener"><span class="res-icon ri-tut">&#8599;</span>PHP + MySQL build guide</a></td></tr>
+            <tr><td class="task-id">4.6</td><td class="task-desc">Adopt the NMG Full-Stack CLAUDE.md and the recommended NMG plugin stack (both below) <span style="color:var(--text-muted)">(&sect;20)</span></td><td class="task-tag"><span class="tag tag-build">Build</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/watch?v=ppZ6oaEuA-8" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>Full-stack setup &mdash; Watch</a><a class="resource-link res-second" href="https://freek.dev/3026-my-claude-code-setup" target="_blank" rel="noopener"><span class="res-icon ri-tut">&#8599;</span>A complete Claude Code setup</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-label">Reference &middot; Flutter CLAUDE.md template (&sect;19)</div>
+      <div class="code-block"># Flutter Project Standards
+## Architecture: Feature-First Clean Architecture (FFCA)
+## State: Riverpod | Navigation: GoRouter | HTTP: Dio
+## Local storage: MMKV or Hive
+## Structure
+lib/
+  features/     <span class="c">&larr; One folder per feature (auth, home, checkout…)</span>
+  core/         <span class="c">&larr; Shared utilities</span>
+  shared/       <span class="c">&larr; Shared widgets</span>
+## Rules
+- No business logic in widgets
+- Every widget gets a test
+- Material 3 design principles always
+- Never use setState for app-wide state
+## Commands
+- flutter run | flutter test
+- flutter build apk --release | flutter build ios --release</div>
+
+      <div class="ref-card">
+        <div class="ref-card-title">Flutter workflows (&sect;19)</div>
+        <table class="ref-table">
+          <thead><tr><th>Task</th><th>Prompt to Claude</th><th>Output</th></tr></thead>
+          <tbody>
+            <tr><td>Scaffold feature</td><td>"Create auth feature: login, register, forgot password (FFCA)"</td><td>Full feature folder (data/domain/presentation)</td></tr>
+            <tr><td>Widget</td><td>"Build reusable ProductCard using Material 3"</td><td>Widget + test file</td></tr>
+            <tr><td>State</td><td>"Add Riverpod cart state with add/remove/total"</td><td>Provider + notifier + tests</td></tr>
+            <tr><td>API</td><td>"Integrate POST /api/orders with Dio + error handling"</td><td>Service + model</td></tr>
+            <tr><td>Navigation</td><td>"Set up GoRouter for bottom nav with 5 tabs"</td><td>Full router config</td></tr>
+            <tr><td>Tests</td><td>"Write widget tests for CheckoutScreen"</td><td>Full test file</td></tr>
+            <tr><td>App Store prep</td><td>"Generate App Store metadata and screenshots checklist"</td><td>Submission checklist</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-card">
+        <div class="ref-card-title">Cross-platform &mdash; when to use what (&sect;19)</div>
+        <table class="ref-table">
+          <thead><tr><th>Framework</th><th>Use when</th><th>CC support</th></tr></thead>
+          <tbody>
+            <tr><td>Flutter</td><td>iOS + Android + Web + Desktop (single codebase)</td><td class="ok">&#10003; Full</td></tr>
+            <tr><td>React Native + Expo</td><td>JS team, OTA updates, large npm ecosystem</td><td class="ok">&#10003; Full</td></tr>
+            <tr><td>Swift / SwiftUI</td><td>iOS-only, max native performance, strict Apple HIG</td><td class="ok">&#10003; Full</td></tr>
+            <tr><td>Kotlin / Jetpack Compose</td><td>Android-only, Google Play, Material You</td><td class="ok">&#10003; Full</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-label">Reference &middot; Mobile MCP servers (&sect;19)</div>
+      <div class="code-block">claude mcp add playwright    <span class="c"># Browser / WebView testing</span>
+claude mcp add firebase      <span class="c"># Auth, Firestore, push notifications</span>
+claude mcp add sentry        <span class="c"># Crash reporting and error monitoring</span></div>
+
+      <div class="ref-label">Reference &middot; Laravel CLAUDE.md template (&sect;20)</div>
+      <div class="code-block"># Laravel Project Standards
+## Stack: PHP 8.3 | Laravel 11 | MySQL 8 | Redis | PEST
+## Architecture
+- Controllers: thin only — no business logic
+- Business logic: app/Services/
+- Database access: app/Repositories/ — never Eloquent in controllers
+- API responses: always via app/Http/Resources/
+- Validation: Form Requests only — no inline $request->validate()
+## For Every New Endpoint
+1. Route in routes/api.php
+2. Form Request class
+3. Service method
+4. API Resource
+5. PEST feature test
+## Commands
+- php artisan serve | php artisan migrate
+- php artisan test | php artisan queue:work</div>
+
+      <div class="ref-card">
+        <div class="ref-card-title">Laravel workflows (&sect;20)</div>
+        <table class="ref-table">
+          <thead><tr><th>Task</th><th>Prompt to Claude</th><th>Output</th></tr></thead>
+          <tbody>
+            <tr><td>New endpoint</td><td>"Create POST /api/orders: validation, service, resource, PEST test"</td><td>All 4 files generated</td></tr>
+            <tr><td>Migration</td><td>"Add status enum to orders table, include rollback"</td><td>Migration up() + down()</td></tr>
+            <tr><td>Query optimise</td><td>"Optimise this query &mdash; EXPLAIN ANALYZE: [paste output]"</td><td>Rewritten query + indexes</td></tr>
+            <tr><td>Auth</td><td>"Add Sanctum token auth with login/logout/refresh"</td><td>Full auth scaffold</td></tr>
+            <tr><td>Queue job</td><td>"Create SendOrderConfirmationEmail job with retry logic"</td><td>Job class + mail class</td></tr>
+            <tr><td>Security audit</td><td>"Audit this controller for SQL injection and CSRF"</td><td>Vulnerability report + fixes</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-card">
+        <div class="ref-card-title">MySQL best practices (&sect;20)</div>
+        <table class="ref-table">
+          <thead><tr><th>Task</th><th>Key rule</th></tr></thead>
+          <tbody>
+            <tr><td>Schema design</td><td>Ask Claude to normalise &mdash; then review before applying</td></tr>
+            <tr><td>Migration safety</td><td>Always provide row count &mdash; batch operations for tables &gt; 500k rows</td></tr>
+            <tr><td>Query optimisation</td><td>Always paste EXPLAIN ANALYZE output &mdash; without it Claude is guessing</td></tr>
+            <tr><td>Rollback first</td><td>Ask for rollback migration before the forward migration</td></tr>
+            <tr><td>Indexing</td><td>"Audit schema for missing indexes based on these queries"</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:12.5px;color:var(--text-muted);margin-top:4px"><code style="font-family:var(--mono)">claude mcp add mysql</code> connects a live database &mdash; Claude reads your schema, writes queries against real tables, analyses slow queries via EXPLAIN, generates migrations, and detects missing indexes automatically.</p>
+
+      <div class="ref-label">Reference &middot; NMG Full-Stack CLAUDE.md (&sect;20)</div>
+      <div class="code-block"># NMG Technologies — Full Stack
+## Backend: PHP 8.3 + Laravel 11 | MySQL 8 + Redis
+## Mobile: Flutter | Riverpod | GoRouter | Dio
+## Testing: PEST | Flutter Integration Tests | Playwright
+## QA Gates
+- All endpoints → PEST feature test
+- All Flutter screens → widget test
+- /qa must pass before merge
+- /security audit on every release
+## Database
+- Migrations always include rollback
+- Batch on tables > 500k rows
+- EXPLAIN all slow queries before optimising</div>
+
+      <div class="ref-card">
+        <div class="ref-card-title">Recommended plugin stack for NMG (&sect;20)</div>
+        <table class="ref-table">
+          <thead><tr><th>Plugin</th><th>Purpose</th><th>Install command</th></tr></thead>
+          <tbody>
+            <tr><td>Laravel Boost</td><td>Schema, routes, Artisan commands</td><td class="mono">/plugin install laravel-boost@claude-plugins-official</td></tr>
+            <tr><td>Playwright</td><td>E2E browser testing</td><td class="mono">/plugin install playwright@claude-plugins-official</td></tr>
+            <tr><td>Firebase</td><td>Push notifications and auth</td><td class="mono">/plugin install firebase@claude-plugins-official</td></tr>
+            <tr><td>Sentry</td><td>Error monitoring and crash reports</td><td class="mono">/plugin install sentry@claude-plugins-official</td></tr>
+            <tr><td>GitHub</td><td>PR reviews and issue tracking</td><td class="mono">/plugin install github@claude-plugins-official</td></tr>
+            <tr><td>GStack</td><td>Full QA + Security + Review workflow</td><td class="mono">git clone github.com/garrytan/gstack</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- DAY 5 -->
+    <section class="section-block" id="day5">
+      <span class="section-eyebrow">Day 5</span>
+      <h2 class="section-heading">Team Scale &amp; Capstone &mdash; GStack, Plugins, Design</h2>
+      <div class="section-accent-bar"></div>
+      <p class="section-goal"><strong>Goal:</strong> Run the complete agent-driven sprint workflow end-to-end and ship a small feature using the virtual engineering team. Covers guide sections 10, 11, 12, 13 and 21.</p>
+      <div class="task-table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Task</th><th>Type</th><th>Learning Resource</th></tr></thead>
+          <tbody>
+            <tr><td class="task-id">5.1</td><td class="task-desc">Install GStack &mdash; the 23-role virtual engineering team (install + roles table below) <span style="color:var(--text-muted)">(&sect;10)</span></td><td class="task-tag"><span class="tag tag-setup">Setup</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/watch?v=wkv2ifxPpF8" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>GStack &mdash; Watch</a><a class="resource-link res-second" href="https://github.com/garrytan/gstack" target="_blank" rel="noopener"><span class="res-icon ri-doc">&#8599;</span>GStack &mdash; GitHub</a></td></tr>
+            <tr><td class="task-id">5.2</td><td class="task-desc">Learn the GStack 8-step sprint workflow (below): plan-ceo &rarr; plan-eng &rarr; build &rarr; design-review &rarr; review &rarr; qa &rarr; security &rarr; ship <span style="color:var(--text-muted)">(&sect;10)</span></td><td class="task-tag"><span class="tag tag-read">Read</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/watch?v=kLq5p43huYQ" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>GStack sprint &mdash; Watch</a><a class="resource-link res-second" href="https://www.sitepoint.com/gstack-claude-code-setup/" target="_blank" rel="noopener"><span class="res-icon ri-tut">&#8599;</span>GStack setup &mdash; SitePoint</a></td></tr>
+            <tr><td class="task-id">5.3</td><td class="task-desc">Install the recommended NMG plugin stack &mdash; Plugins = Skills + MCP + Hooks (marketplaces, install commands, top plugins &amp; mgmt below) <span style="color:var(--text-muted)">(&sect;13)</span></td><td class="task-tag"><span class="tag tag-mcp">Plugins</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/watch?v=qYqIhX9hTQk" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>Plugins &mdash; Watch</a><a class="resource-link res-second" href="https://code.claude.com/docs/en/plugins" target="_blank" rel="noopener"><span class="res-icon ri-doc">&#8599;</span>Official Docs &mdash; Plugins</a></td></tr>
+            <tr><td class="task-id">5.4</td><td class="task-desc">Explore the design marketplace &amp; Claude Design, and set up a DESIGN.md (tables + template below) <span style="color:var(--text-muted)">(&sect;11, &sect;12)</span></td><td class="task-tag"><span class="tag tag-build">Build</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/watch?v=j_ZPV10bu54" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>Claude Design &mdash; Watch</a><a class="resource-link res-second" href="https://support.claude.com/en/articles/14604397-set-up-your-design-system-in-claude-design" target="_blank" rel="noopener"><span class="res-icon ri-ref">&#8599;</span>Set up your design system</a></td></tr>
+            <tr><td class="task-id">5.5</td><td class="task-desc"><strong>Capstone:</strong> pick a small real feature, write its DESIGN.md, run the full sprint plan &rarr; ship. Demo to the team. Never merge AI code blindly: human sign-off required <span style="color:var(--text-muted)">(&sect;10, &sect;18)</span></td><td class="task-tag"><span class="tag tag-check">Capstone</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/watch?v=kyB68hS-vco" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>End-to-end build &mdash; Watch</a></td></tr>
+            <tr><td class="task-id">5.6</td><td class="task-desc">Bookmark the complete learning resources (official channels + master video &amp; doc references in the Resources section) <span style="color:var(--text-muted)">(&sect;21)</span></td><td class="task-tag"><span class="tag tag-read">Read</span></td><td class="task-resource"><a class="resource-link" href="https://www.youtube.com/playlist?list=PLYQsp-tXX9w4TPApr97et876K9bbDBO5Q" target="_blank" rel="noopener"><span class="res-icon ri-vid">&#9654;</span>Master video playlist</a><a class="resource-link res-second" href="https://docs.anthropic.com" target="_blank" rel="noopener"><span class="res-icon ri-doc">&#8599;</span>Master docs reference</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-label">Reference &middot; GStack &mdash; virtual engineering team (&sect;10)</div>
+      <div class="code-block"><span class="c"># Install — 23 specialist skills, by Garry Tan (YC CEO). 208,500+ GitHub stars.</span>
+git clone https://github.com/garrytan/gstack ~/.claude/skills/gstack
+
+<span class="c"># Sprint workflow</span>
+1. /plan-ceo-review     &rarr; Product sanity check
+2. /plan-eng-review     &rarr; Architecture sign-off
+3. Build with Claude Code (Sonnet)
+4. /design-review       &rarr; UI quality check
+5. /review              &rarr; Code review
+6. /qa                  &rarr; Browser testing
+7. /security            &rarr; Security audit
+8. /ship                &rarr; Merge and release</div>
+      <div class="ref-card">
+        <div class="ref-card-title">The 23 roles &mdash; key commands (&sect;10)</div>
+        <table class="ref-table">
+          <thead><tr><th>Command</th><th>Role</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">/plan-ceo-review</td><td>CEO</td><td>Rethinks product strategy, challenges assumptions</td></tr>
+            <tr><td class="mono">/plan-eng-review</td><td>Eng Manager</td><td>Locks architecture, reviews system design</td></tr>
+            <tr><td class="mono">/design-review</td><td>Designer</td><td>Catches AI slop in UI, enforces design system</td></tr>
+            <tr><td class="mono">/review</td><td>Code Reviewer</td><td>Finds production bugs, logic and edge cases</td></tr>
+            <tr><td class="mono">/qa</td><td>QA Lead</td><td>Opens real browser, runs E2E tests</td></tr>
+            <tr><td class="mono">/security</td><td>Security Officer</td><td>OWASP + STRIDE security audits</td></tr>
+            <tr><td class="mono">/ship</td><td>Release Engineer</td><td>One-command PR creation and shipping</td></tr>
+            <tr><td class="mono">/docs</td><td>Doc Engineer</td><td>Writes and maintains documentation</td></tr>
+            <tr><td class="mono">/retro</td><td>Retrospective</td><td>Engineering retrospective workflow</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-card">
+        <div class="ref-card-title">Design marketplace &mdash; which tool (&sect;11)</div>
+        <table class="ref-table">
+          <thead><tr><th>Tool</th><th>Best for</th></tr></thead>
+          <tbody>
+            <tr><td>Claude Design</td><td>Prototyping, working HTML/CSS/JS from prompts, quick UI exploration</td></tr>
+            <tr><td>Figma AI</td><td>Production UI, design systems, component libraries, team collaboration</td></tr>
+            <tr><td>Canva AI 2.0</td><td>Brand-consistent marketing assets, social media, decks</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="ref-label">Reference &middot; Design integration workflow (&sect;11)</div>
+      <div class="code-block">Claude Design  &rarr;  quick prototype (working HTML/CSS/JS)
+     &darr; Export
+Canva AI 2.0   &rarr;  polish, brand-consistent publishing
+     &darr; OR
+Figma AI       &rarr;  production design system components
+     &darr;
+Claude Code    &rarr;  implement in production codebase
+<span class="c">&#10003; Exploration &rarr; Claude Design | Marketing &rarr; Canva | Production UI &rarr; Figma | Implementation &rarr; Claude Code</span></div>
+
+      <div class="ref-label">Reference &middot; DESIGN.md template (&sect;12)</div>
+      <div class="code-block"># Design System
+## Colors
+- Primary: #1A1A2E | Accent: #E94560
+## Typography
+- Heading: Inter Bold 32px | Body: Inter Regular 16px
+## Spacing
+- Base unit: 8px | Card padding: 24px | Border radius: 8px
+## Constraints
+- No gradients unless explicitly requested
+- WCAG AA contrast minimum always
+<span class="c">Every unconstrained decision reverts to generic AI defaults — silence equals AI slop.</span></div>
+      <div class="ref-card">
+        <div class="ref-card-title">Claude Design &mdash; prompting best practices (&sect;12)</div>
+        <table class="ref-table">
+          <thead><tr><th>Do this</th><th>Instead of</th></tr></thead>
+          <tbody>
+            <tr><td>Specify font, hex, spacing explicitly</td><td>"Create a login page"</td></tr>
+            <tr><td>Ask for 3 variations, then compare</td><td>Guess and iterate one at a time</td></tr>
+            <tr><td>"Audit for WCAG AA violations"</td><td>Eyeballing contrast</td></tr>
+            <tr><td>"Match DESIGN.md spacing conventions"</td><td>Hoping Claude remembers</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-label">Reference &middot; Plugins (&sect;13)</div>
+      <div class="code-block"><span class="c"># Plugin = Skills + MCP Servers + Hooks, bundled and versioned together.</span>
+<span class="c"># From official marketplace (built-in)</span>
+/plugin install frontend-design@claude-plugins-official
+/plugin install context7@claude-plugins-official
+/plugin install superpowers@claude-plugins-official
+<span class="c"># Add community marketplace / install from GitHub repo</span>
+/plugin marketplace add anthropics/claude-plugins-community
+/plugin install owner/repo-name
+/reload-plugins          <span class="c"># after any install</span></div>
+      <div class="ref-card">
+        <div class="ref-card-title">Marketplaces (&sect;13)</div>
+        <table class="ref-table">
+          <thead><tr><th>Marketplace</th><th>Contents</th><th>Access</th></tr></thead>
+          <tbody>
+            <tr><td>Official (Anthropic)</td><td>33 Anthropic-built + 68 partner plugins</td><td>Built-in, auto-available</td></tr>
+            <tr><td>Community</td><td>Community plugins (safety-screened)</td><td>Add manually</td></tr>
+            <tr><td>claude.com/plugins</td><td>Browse all via web</td><td>Web browser</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="ref-card">
+        <div class="ref-card-title">Top plugins &mdash; June 2026 (&sect;13)</div>
+        <table class="ref-table">
+          <thead><tr><th>Plugin</th><th>Installs</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td>Frontend Design</td><td>829,316</td><td>AI-assisted UI component generation</td></tr>
+            <tr><td>Superpowers</td><td>752,120</td><td>Extended Claude Code capabilities bundle</td></tr>
+            <tr><td>Context7</td><td>348,660</td><td>Live docs fetching from any library/framework</td></tr>
+            <tr><td>GitHub</td><td>Partner</td><td>PR management, issues, code review</td></tr>
+            <tr><td>Playwright</td><td>Partner</td><td>Browser automation and E2E testing</td></tr>
+            <tr><td>Figma</td><td>Partner</td><td>Read Figma designs, generate matching code</td></tr>
+            <tr><td>Supabase</td><td>Partner</td><td>Database queries and schema management</td></tr>
+            <tr><td>Vercel</td><td>Partner</td><td>Deploy and manage Vercel projects</td></tr>
+            <tr><td>Laravel Boost</td><td>Partner</td><td>Schema inspection, routes, Artisan commands</td></tr>
+            <tr><td>Firebase</td><td>Partner</td><td>Realtime DB and auth management</td></tr>
+            <tr><td>Sentry</td><td>Partner</td><td>Error monitoring and crash reports</td></tr>
+            <tr><td>Stripe</td><td>Partner</td><td>Payments integration and testing</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="ref-card">
+        <div class="ref-card-title">Plugin management commands (&sect;13)</div>
+        <table class="ref-table"><tbody>
+          <tr><td class="mono">/plugin</td><td>Open plugin manager (Discover + Installed tabs)</td></tr>
+          <tr><td class="mono">/plugin list</td><td>See all installed plugins</td></tr>
+          <tr><td class="mono">/plugin remove &lt;name&gt;</td><td>Uninstall a plugin</td></tr>
+          <tr><td class="mono">/plugin update</td><td>Update all installed plugins</td></tr>
+          <tr><td class="mono">/reload-plugins</td><td>Reload skills after any install</td></tr>
+        </tbody></table>
+      </div>
+    </section>
+
+    <!-- RESOURCES APPENDIX -->
+    <section class="section-block" id="resources">
+      <span class="section-eyebrow">Reference &middot; &sect;21</span>
+      <h2 class="section-heading">Complete Learning Resources</h2>
+      <div class="section-accent-bar"></div>
+
+      <div class="ref-card">
+        <div class="ref-card-title">Official YouTube channels (&sect;21)</div>
+        <table class="ref-table"><tbody>
+          <tr><td>Anthropic (Official)</td><td class="mono">youtube.com/@anthropic-ai</td></tr>
+          <tr><td>Claude (Official)</td><td class="mono">youtube.com/@claude</td></tr>
+        </tbody></table>
+      </div>
+
+      <div class="res-group-label">Tutorial Videos (by guide section)</div>
+      <div class="resources-grid">
+        <a class="rc" href="https://www.youtube.com/watch?v=bqJzIWAEn40" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">What is Claude Code &mdash; Overview</div><div class="rc-type">&sect;1 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=kddjxKEeCuM" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Installation walkthrough</div><div class="rc-type">&sect;2 &middot; Video</div></div></a>
+        <a class="rc" href="https://claude.com/resources/tutorials/choosing-the-right-claude-model" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Choosing the right Claude model</div><div class="rc-type">&sect;3 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=O_z9vDLgvoY" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Skills &mdash; overview</div><div class="rc-type">&sect;4 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=UpgjdQJShWg" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Skills &mdash; building one</div><div class="rc-type">&sect;4 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=YkpEX_jlb04" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Skills &mdash; deep dive</div><div class="rc-type">&sect;4 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=_MNvUAg8CDg" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">MCP &mdash; explained</div><div class="rc-type">&sect;5 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=N-8cVtAl4oI" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">MCP &mdash; in practice</div><div class="rc-type">&sect;5 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/playlist?list=PL4cUxeGkcC9g4YJeBqChhFJwKQ9TRiivY" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">CLAUDE.md &mdash; playlist</div><div class="rc-type">&sect;6 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=LlFgLsffbBs" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Best practices I</div><div class="rc-type">&sect;7&ndash;8 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=Xg55nTrbYYY" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Best practices II</div><div class="rc-type">&sect;7&ndash;8 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=wkv2ifxPpF8" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">GStack &mdash; intro</div><div class="rc-type">&sect;10 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=kLq5p43huYQ" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">GStack &mdash; sprint workflow</div><div class="rc-type">&sect;10 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=yR39Pk98yRk" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">GStack &mdash; roles</div><div class="rc-type">&sect;10 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=j_ZPV10bu54" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Claude Design I</div><div class="rc-type">&sect;12 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=csSkNs8n_B4" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Claude Design II</div><div class="rc-type">&sect;12 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=g1ip5LmiZMQ" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Claude Design III</div><div class="rc-type">&sect;12 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=qYqIhX9hTQk" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Plugins</div><div class="rc-type">&sect;13 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=pvhphecd70Y" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Remote control</div><div class="rc-type">&sect;14 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/shorts/hOC4wM9DFhc" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Session restore I</div><div class="rc-type">&sect;17 &middot; Short</div></div></a>
+        <a class="rc" href="https://www.youtube.com/shorts/_O1iAVDxUfc" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Session restore II</div><div class="rc-type">&sect;17 &middot; Short</div></div></a>
+        <a class="rc" href="https://www.youtube.com/shorts/vrgYh3M-wm0" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Session restore III</div><div class="rc-type">&sect;17 &middot; Short</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=z6yrAsORlBY" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Flutter &amp; mobile I</div><div class="rc-type">&sect;19 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=BMMcmmnjrM8" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Flutter &amp; mobile II</div><div class="rc-type">&sect;19 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=FNpQawHnIrI" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Flutter &amp; mobile III</div><div class="rc-type">&sect;19 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=DALA8fGoYV8" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Laravel &amp; PHP I</div><div class="rc-type">&sect;20 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=lAL3HF9IxL8" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Laravel &amp; PHP II</div><div class="rc-type">&sect;20 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=ppZ6oaEuA-8" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Laravel &amp; PHP III</div><div class="rc-type">&sect;20 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=QNW83oNvMOo" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Laravel &amp; PHP IV</div><div class="rc-type">&sect;20 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/watch?v=liTNN8KuqGg" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Laravel &amp; PHP V</div><div class="rc-type">&sect;20 &middot; Video</div></div></a>
+        <a class="rc" href="https://www.youtube.com/playlist?list=PLYQsp-tXX9w4TPApr97et876K9bbDBO5Q" target="_blank" rel="noopener"><div class="rc-icon ri-v">&#9654;</div><div><div class="rc-title">Master video reference (35 videos)</div><div class="rc-type">&sect;21 &middot; Playlist</div></div></a>
+      </div>
+
+      <div class="res-group-label">Official Docs &amp; Articles (by guide section)</div>
+      <div class="resources-grid">
+        <a class="rc" href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener"><div class="rc-icon ri-d">&#8599;</div><div><div class="rc-title">Claude Code &mdash; Overview</div><div class="rc-type">&sect;1 &middot; Official Docs</div></div></a>
+        <a class="rc" href="https://anthropic.skilljar.com/claude-code-101" target="_blank" rel="noopener"><div class="rc-icon ri-r">&#8599;</div><div><div class="rc-title">Claude Code 101</div><div class="rc-type">&sect;1 &middot; Course</div></div></a>
+        <a class="rc" href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener"><div class="rc-icon ri-d">&#8599;</div><div><div class="rc-title">Setup / Installation</div><div class="rc-type">&sect;2 &middot; Official Docs</div></div></a>
+        <a class="rc" href="https://code.claude.com/docs/en/quickstart" target="_blank" rel="noopener"><div class="rc-icon ri-d">&#8599;</div><div><div class="rc-title">Quickstart</div><div class="rc-type">&sect;2 &middot; Official Docs</div></div></a>
+        <a class="rc" href="https://docs.anthropic.com/en/docs/about-claude/models" target="_blank" rel="noopener"><div class="rc-icon ri-d">&#8599;</div><div><div class="rc-title">About Claude models</div><div class="rc-type">&sect;3 &middot; Official Docs</div></div></a>
+        <a class="rc" href="https://platform.claude.com/docs/en/about-claude/models/choosing-a-model" target="_blank" rel="noopener"><div class="rc-icon ri-d">&#8599;</div><div><div class="rc-title">Choosing a model</div><div class="rc-type">&sect;3 &middot; Official Docs</div></div></a>
+        <a class="rc" href="https://code.claude.com/docs/en/model-config" target="_blank" rel="noopener"><div class="rc-icon ri-d">&#8599;</div><div><div class="rc-title">Model configuration</div><div class="rc-type">&sect;3 &middot; Official Docs</div></div></a>
+        <a class="rc" href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener"><div class="rc-icon ri-d">&#8599;</div><div><div class="rc-title">Skills</div><div class="rc-type">&sect;4 &middot; Official Docs</div></div></a>
+        <a class="rc" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener"><div class="rc-icon ri-d">&#8599;</div><div><div class="rc-title">MCP</div><div class="rc-type">&sect;5 &middot; Official Docs</div></div></a>
+        <a class="rc" href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener"><div class="rc-icon ri-d">&#8599;</div><div><div class="rc-title">Memory / CLAUDE.md</div><div class="rc-type">&sect;6 &middot; Official Docs</div></div></a>
+        <a class="rc" href="https://github.com/garrytan/gstack" target="_blank" rel="noopener"><div class="rc-icon ri-d">&#8599;</div><div><div class="rc-title">GStack &mdash; GitHub</div><div class="rc-type">&sect;10 &middot; Repo</div></div></a>
+        <a class="rc" href="https://www.sitepoint.com/gstack-claude-code-setup/" target="_blank" rel="noopener"><div class="rc-icon ri-t">&#8599;</div><div><div class="rc-title">GStack setup guide</div><div class="rc-type">&sect;10 &middot; Tutorial</div></div></a>
+        <a class="rc" href="https://support.claude.com/en/articles/14604397-set-up-your-design-system-in-claude-design" target="_blank" rel="noopener"><div class="rc-icon ri-r">&#8599;</div><div><div class="rc-title">Set up your design system</div><div class="rc-type">&sect;12 &middot; Support</div></div></a>
+        <a class="rc" href="https://www.figma.com/blog/introducing-claude-code-to-figma/" target="_blank" rel="noopener"><div class="rc-icon ri-t">&#8599;</div><div><div class="rc-title">Claude Code &times; Figma</div><div class="rc-type">&sect;12 &middot; Article</div></div></a>
+        <a class="rc" href="https://code.claude.com/docs/en/plugins" target="_blank" rel="noopener"><div class="rc-icon ri-d">&#8599;</div><div><div class="rc-title">Plugins</div><div class="rc-type">&sect;13 &middot; Official Docs</div></div></a>
+        <a class="rc" href="https://code.claude.com/docs/en/discover-plugins" target="_blank" rel="noopener"><div class="rc-icon ri-d">&#8599;</div><div><div class="rc-title">Discover plugins</div><div class="rc-type">&sect;13 &middot; Official Docs</div></div></a>
+        <a class="rc" href="https://github.com/anthropics/claude-plugins-official" target="_blank" rel="noopener"><div class="rc-icon ri-d">&#8599;</div><div><div class="rc-title">Official plugins marketplace</div><div class="rc-type">&sect;13 &middot; Repo</div></div></a>
+        <a class="rc" href="https://code.claude.com/docs/en/remote-control" target="_blank" rel="noopener"><div class="rc-icon ri-d">&#8599;</div><div><div class="rc-title">Remote control</div><div class="rc-type">&sect;14 &middot; Official Docs</div></div></a>
+        <a class="rc" href="https://www.datacamp.com/tutorial/claude-code-remote-control" target="_blank" rel="noopener"><div class="rc-icon ri-t">&#8599;</div><div><div class="rc-title">Remote control tutorial</div><div class="rc-type">&sect;14 &middot; Tutorial</div></div></a>
+        <a class="rc" href="https://code.claude.com/docs/en/costs" target="_blank" rel="noopener"><div class="rc-icon ri-d">&#8599;</div><div><div class="rc-title">Costs</div><div class="rc-type">&sect;15 &middot; Official Docs</div></div></a>
+        <a class="rc" href="https://support.claude.com/en/articles/12429409-manage-usage-credits-for-paid-claude-plans" target="_blank" rel="noopener"><div class="rc-icon ri-r">&#8599;</div><div><div class="rc-title">Manage usage credits</div><div class="rc-type">&sect;15 &middot; Support</div></div></a>
+        <a class="rc" href="https://code.claude.com/docs/en/agent-sdk/slash-commands" target="_blank" rel="noopener"><div class="rc-icon ri-d">&#8599;</div><div><div class="rc-title">Slash command reference</div><div class="rc-type">&sect;16 &middot; Official Docs</div></div></a>
+        <a class="rc" href="https://code.claude.com/docs/en/sessions" target="_blank" rel="noopener"><div class="rc-icon ri-d">&#8599;</div><div><div class="rc-title">Sessions</div><div class="rc-type">&sect;17 &middot; Official Docs</div></div></a>
+        <a class="rc" href="https://claudelab.net/en/articles/claude-code/claude-code-session-management-resume-guide" target="_blank" rel="noopener"><div class="rc-icon ri-t">&#8599;</div><div><div class="rc-title">Session management &amp; resume</div><div class="rc-type">&sect;17 &middot; Tutorial</div></div></a>
+        <a class="rc" href="https://claudelab.net/en/articles/claude-code/claude-code-flutter-app-development-complete-guide" target="_blank" rel="noopener"><div class="rc-icon ri-t">&#8599;</div><div><div class="rc-title">Flutter app dev &mdash; complete guide</div><div class="rc-type">&sect;19 &middot; Tutorial</div></div></a>
+        <a class="rc" href="https://docs.flutter.dev/ai/create-with-ai" target="_blank" rel="noopener"><div class="rc-icon ri-d">&#8599;</div><div><div class="rc-title">Flutter &mdash; Create with AI</div><div class="rc-type">&sect;19 &middot; Official Docs</div></div></a>
+        <a class="rc" href="https://hafiz.dev/blog/the-complete-laravel-claude-code-ecosystem-every-tool-plugin-and-config-you-actually-need" target="_blank" rel="noopener"><div class="rc-icon ri-t">&#8599;</div><div><div class="rc-title">Laravel + Claude Code ecosystem</div><div class="rc-type">&sect;20 &middot; Tutorial</div></div></a>
+        <a class="rc" href="https://www.falconinternet.net/blog/building-database-application-claude-code-php-mysql" target="_blank" rel="noopener"><div class="rc-icon ri-t">&#8599;</div><div><div class="rc-title">PHP + MySQL with Claude Code</div><div class="rc-type">&sect;20 &middot; Tutorial</div></div></a>
+        <a class="rc" href="https://freek.dev/3026-my-claude-code-setup" target="_blank" rel="noopener"><div class="rc-icon ri-t">&#8599;</div><div><div class="rc-title">A complete Claude Code setup</div><div class="rc-type">&sect;20 &middot; Tutorial</div></div></a>
+        <a class="rc" href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices" target="_blank" rel="noopener"><div class="rc-icon ri-d">&#8599;</div><div><div class="rc-title">Prompting best practices</div><div class="rc-type">&sect;21 &middot; Official Docs</div></div></a>
+        <a class="rc" href="https://docs.anthropic.com" target="_blank" rel="noopener"><div class="rc-icon ri-d">&#8599;</div><div><div class="rc-title">Master documentation reference (19 docs)</div><div class="rc-type">&sect;21 &middot; Official Docs</div></div></a>
+      </div>
+    </section>
+  </div>
+</main>
+<footer role="contentinfo">
+  <div class="footer-logo">
+    <img src="https://nmg-brand-guidelines.netlify.app/logos/nmg-tech-dark.png" alt="NMG Technologies" height="26">
+  </div>
+  <span class="footer-meta">NMG Technologies &middot; Claude Code Enablement &middot; Development Team &middot; v1.0 &middot; June 2026</span>
+</footer>
+<script>
+const tabs=document.querySelectorAll(".nav-tab");
+const secs=document.querySelectorAll(".section-block[id]");
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const id=e.target.getAttribute("id");
+      tabs.forEach(t=>t.classList.remove("active"));
+      const a=document.querySelector('.nav-tab[href="#'+id+'"]');
+      if(a)a.classList.add("active");
+    }
+  });
+},{rootMargin:"-20% 0px -70% 0px"});
+secs.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>

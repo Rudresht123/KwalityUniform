@@ -8,4 +8,22 @@
         <button type="button" class="pcr-button" role="button" aria-label="toggle color picker dialog" style="--pcr-color: rgba(98, 89, 202, 1);"></button>
 
         
-      </div></div> </div> </div> </div> <div class="menu-image mb-3"> <p class="switcher-style-head">Menu With Background Image:</p><div class="d-flex flex-wrap align-items-center switcher-style"> <div class="form-check switch-select m-2"> <input class="form-check-input bgimage-input bg-img1" type="radio" name="theme-background" id="switcher-bg-img"> </div> <div class="form-check switch-select m-2"> <input class="form-check-input bgimage-input bg-img2" type="radio" name="theme-background" id="switcher-bg-img1"> </div> <div class="form-check switch-select m-2"> <input class="form-check-input bgimage-input bg-img3" type="radio" name="theme-background" id="switcher-bg-img2"> </div> <div class="form-check switch-select m-2"> <input class="form-check-input bgimage-input bg-img4" type="radio" name="theme-background" id="switcher-bg-img3"> </div> <div class="form-check switch-select m-2"> <input class="form-check-input bgimage-input bg-img5" type="radio" name="theme-background" id="switcher-bg-img4"> </div> </div> </div> </div> </div> <div class="d-flex justify-content-between canvas-footer flex-wrap"> <a href="https://1.envato.market/RA3qN" target="_blank" class="btn btn-primary m-1">Buy Now</a> <a href="https://1.envato.market/MGEaN" target="_blank" class="btn btn-info m-1">Our Portfolio</a> <a href="javascript:void(0);" id="reset-all" class="btn btn-secondary m-1">Reset</a> </div> </div> </div> </div>
+      </div></div> </div> </div> </div> <div class="menu-image mb-3"> <p class="switcher-style-head">Menu With Background Image:</p><div class="d-flex flex-wrap align-items-center switcher-style"> <div class="form-check switch-select m-2"> <input class="form-check-input bgimage-input bg-img1" type="radio" name="theme-background" id="switcher-bg-img"> </div> <div class="form-check switch-select m-2"> <input class="form-check-input bgimage-input bg-img2" type="radio" name="theme-background" id="switcher-bg-img1"> </div> <div class="form-check switch-select m-2"> <input class="form-check-input bgimage-input bg-img3" type="radio" name="theme-background" id="switcher-bg-img2"> </div> <div class="form-check switch-select m-2"> <input class="form-check-input bgimage-input bg-img4" type="radio" name="theme-background" id="switcher-bg-img3"> </div> <div class="form-check switch-select m-2"> <input class="form-check-input bgimage-input bg-img5" type="radio" name="theme-background" id="switcher-bg-img4"> </div> </div> </div> </div> </div> <div class="d-flex justify-content-between canvas-footer flex-wrap"> <a href="javascript:void(0);" id="reset-all" class="btn btn-secondary m-1 flex-grow-1">Reset All</a> </div> </div> </div> </div>
+<style>
+    /* Safe CSS Additions */
+    .bgimage-input {
+        width: 45px !important;
+        height: 45px !important;
+        border: 2px solid #fff !important;
+        box-shadow: 0 0 0 1px #e2e8f0 !important;
+        border-radius: 8px !important;
+        background-size: cover !important;
+        background-position: center !important;
+        cursor: pointer !important;
+    }
+    .bg-img1 { background-image: url("https://picsum.photos/id/1018/100/100") !important; }
+    .bg-img2 { background-image: url("https://picsum.photos/id/1019/100/100") !important; }
+    .bg-img3 { background-image: url("https://picsum.photos/id/1021/100/100") !important; }
+    .bg-img4 { background-image: url("https://picsum.photos/id/1022/100/100") !important; }
+    .bg-img5 { background-image: url("https://picsum.photos/id/1025/100/100") !important; }
+</style>

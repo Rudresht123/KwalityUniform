@@ -354,167 +354,151 @@
                         </div>
                     </div>
                 </div> <!-- End::main-header-dropdown -->
-            </div> <!-- End::header-element --> <!-- Start::header-element -->
-            <div class="header-element notifications-dropdown"> <!-- Start::header-link|dropdown-toggle --> <a
-                    href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-toggle="dropdown"
-                    data-bs-auto-close="outside" id="messageDropdown" aria-expanded="false"> <i
-                        class="fe fe-bell header-link-icon"></i> <span
-                        class="badge bg-secondary header-icon-badge pulse pulse-secondary"
-                        id="notification-icon-badge">5</span> </a> <!-- End::header-link|dropdown-toggle -->
-                <!-- Start::main-header-dropdown -->
-                <div class="main-header-dropdown dropdown-menu dropdown-menu-end" data-popper-placement="none">
+            </div>
+            <div class="header-element notifications-dropdown">
+
+                <!-- Bell Icon -->
+                <a href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-toggle="dropdown"
+                    data-bs-auto-close="outside" id="messageDropdown">
+
+                    <i class="fe fe-bell header-link-icon"></i>
+
+                    <span
+                        class="badge bg-secondary header-icon-badge pulse pulse-secondary {{ auth()->user()->unreadNotifications()->count() ? '' : 'd-none' }}"
+                        id="notification-icon-badge">
+
+                        {{ auth()->user()->unreadNotifications()->count() }}
+
+                    </span>
+
+                </a>
+
+                <!-- Notification Dropdown -->
+                <div class="main-header-dropdown dropdown-menu dropdown-menu-end">
+
+                    <!-- Header -->
                     <div class="p-3">
                         <div class="d-flex align-items-center justify-content-between">
-                            <p class="mb-0 fs-17 fw-semibold">Notifications</p><span
-                                class="badge bg-secondary rounded-pill" id="notifiation-data">5 Unread</span>
+
+                            <div>
+                                <h6 class="mb-0 fw-semibold">
+                                    Notifications
+                                </h6>
+
+                                <small class="text-muted">
+                                    Latest updates
+                                </small>
+                            </div>
+
+                            <span class="badge bg-secondary rounded-pill" id="notifiation-data">
+
+                                {{ auth()->user()->unreadNotifications()->count() }}
+                                Unread
+
+                            </span>
+
                         </div>
                     </div>
+
                     <div class="dropdown-divider"></div>
-                    <ul class="list-unstyled mb-0" id="header-notification-scroll" data-simplebar="init">
-                        <div class="simplebar-wrapper" style="margin: 0px;">
-                            <div class="simplebar-height-auto-observer-wrapper">
-                                <div class="simplebar-height-auto-observer"></div>
+
+                    <!-- Notification List -->
+                    <ul class="list-unstyled mb-0" id="header-notification-scroll" data-simplebar
+                        style="max-height:350px;">
+
+                        @forelse(auth()->user()
+                    ->unreadNotifications()
+                    ->latest()
+                    ->take(5)
+                    ->get()
+                as $notification)
+                       <li class="dropdown-item border-bottom py-3 notification-item"
+    id="notification-{{ $notification->id }}">
+
+    <div class="d-flex align-items-start">
+
+        <div class="pe-3">
+            <span class="avatar avatar-md bg-primary-transparent br-5">
+                <i class="ti ti-bell fs-18 text-primary"></i>
+            </span>
+        </div>
+
+        <div class="flex-grow-1">
+
+            <p class="mb-1">
+                <a href="javascript:void(0);"
+                    onclick="markNotificationAsRead(
+                        '{{ $notification->id }}',
+                        '{{ $notification->data['url'] ?? '#' }}'
+                    )"
+                    class="text-dark text-decoration-none fw-semibold">
+
+                    {{ $notification->data['message'] ?? 'New Notification' }}
+
+                </a>
+            </p>
+
+            <small class="text-muted">
+                {{ $notification->created_at->diffForHumans() }}
+            </small>
+
+        </div>
+
+        <div>
+            <a href="javascript:void(0);"
+                onclick="hideNotification('{{ $notification->id }}')"
+                class="text-muted">
+
+                <i class="ti ti-x fs-16"></i>
+
+            </a>
+        </div>
+
+    </div>
+
+</li>
+
+                        @empty
+
+                            <div class="p-5 text-center">
+
+                                <span class="avatar avatar-xl avatar-rounded bg-secondary-transparent">
+
+                                    <i class="ri-notification-off-line fs-2"></i>
+
+                                </span>
+
+                                <h6 class="fw-semibold mt-3">
+                                    No New Notifications
+                                </h6>
+
+                                <p class="text-muted mb-0">
+                                    You're all caught up.
+                                </p>
+
                             </div>
-                            <div class="simplebar-mask">
-                                <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
-                                    <div class="simplebar-content-wrapper" tabindex="0" role="region"
-                                        aria-label="scrollable content" style="height: auto; overflow: hidden;">
-                                        <div class="simplebar-content" style="padding: 0px;">
-                                            <li class="dropdown-item">
-                                                <div class="d-flex align-items-start">
-                                                    <div class="pe-2"> <span
-                                                            class="avatar avatar-md online bg-primary-transparent br-5"><img
-                                                                alt="avatar"
-                                                                src="../assets/images/faces/5.jpg"></span> </div>
-                                                    <div
-                                                        class="flex-grow-1 d-flex align-items-center justify-content-between">
-                                                        <div>
-                                                            <p class="mb-0"><a href="notifications-list.html"
-                                                                    class="text-dark">Congratulate <strong>Olivia
-                                                                        James</strong> for New template start</a></p>
-                                                            <span
-                                                                class="text-muted fw-normal fs-12 header-notification-text">Oct
-                                                                15 12:32pm</span>
-                                                        </div>
-                                                        <div> <a href="javascript:void(0);"
-                                                                class="min-w-fit-content text-muted me-1 dropdown-item-close1"><i
-                                                                    class="ti ti-x fs-16"></i></a> </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="dropdown-item">
-                                                <div class="d-flex align-items-start">
-                                                    <div class="pe-2"> <span
-                                                            class="avatar avatar-md offline bg-secondary-transparent br-5"><img
-                                                                alt="avatar"
-                                                                src="../assets/images/faces/2.jpg"></span> </div>
-                                                    <div
-                                                        class="flex-grow-1 d-flex align-items-center justify-content-between">
-                                                        <div>
-                                                            <p class="mb-0"><a href="notifications-list.html"
-                                                                    class="text-dark"><strong>Joshua Gray</strong> New
-                                                                    Message Received</a></p><span
-                                                                class="text-muted fw-normal fs-12 header-notification-text">Oct
-                                                                13 02:56am</span>
-                                                        </div>
-                                                        <div> <a href="javascript:void(0);"
-                                                                class="min-w-fit-content text-muted me-1 dropdown-item-close1"><i
-                                                                    class="ti ti-x fs-16"></i></a> </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="dropdown-item">
-                                                <div class="d-flex align-items-start">
-                                                    <div class="pe-2"> <span
-                                                            class="avatar avatar-md online bg-pink-transparent br-5"><img
-                                                                alt="avatar"
-                                                                src="../assets/images/faces/3.jpg"></span> </div>
-                                                    <div
-                                                        class="flex-grow-1 d-flex align-items-center justify-content-between">
-                                                        <div>
-                                                            <p class="mb-0"><a href="notifications-list.html"
-                                                                    class="text-dark"><strong>Elizabeth Lewis</strong>
-                                                                    added new schedule realease</a></p><span
-                                                                class="text-muted fw-normal fs-12 header-notification-text">Oct
-                                                                12 10:40pm</span>
-                                                        </div>
-                                                        <div> <a href="javascript:void(0);"
-                                                                class="min-w-fit-content text-muted me-1 dropdown-item-close1"><i
-                                                                    class="ti ti-x fs-16"></i></a> </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="dropdown-item">
-                                                <div class="d-flex align-items-start">
-                                                    <div class="pe-2"> <span
-                                                            class="avatar avatar-md online bg-warning-transparent br-5"><img
-                                                                alt="avatar"
-                                                                src="../assets/images/faces/5.jpg"></span> </div>
-                                                    <div
-                                                        class="flex-grow-1 d-flex align-items-center justify-content-between">
-                                                        <div>
-                                                            <p class="mb-0 fw-normal"><a
-                                                                    href="notifications-list.html"
-                                                                    class="text-dark">Delivered Successful to
-                                                                    <strong>Micky</strong> </a></p><span
-                                                                class="text-muted fw-normal fs-12 header-notification-text">Order
-                                                                <span class="text-warning">ID: #005428</span> had been
-                                                                placed</span>
-                                                        </div>
-                                                        <div> <a href="javascript:void(0);"
-                                                                class="min-w-fit-content text-muted me-1 dropdown-item-close1"><i
-                                                                    class="ti ti-x fs-16"></i></a> </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="dropdown-item">
-                                                <div class="d-flex align-items-start">
-                                                    <div class="pe-2"> <span
-                                                            class="avatar avatar-md offline bg-success-transparent br-5"><img
-                                                                alt="avatar"
-                                                                src="../assets/images/faces/1.jpg"></span> </div>
-                                                    <div
-                                                        class="flex-grow-1 d-flex align-items-center justify-content-between">
-                                                        <div>
-                                                            <p class="mb-0 fw-normal"><a
-                                                                    href="notifications-list.html"
-                                                                    class="text-dark">You got 22 requests form
-                                                                    <strong>Facebook</strong></a></p><span
-                                                                class="text-muted fw-normal fs-12 header-notification-text">Today
-                                                                at 08:08pm</span>
-                                                        </div>
-                                                        <div> <a href="javascript:void(0);"
-                                                                class="min-w-fit-content text-muted me-1 dropdown-item-close1"><i
-                                                                    class="ti ti-x fs-16"></i></a> </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="simplebar-placeholder" style="width: 0px; height: 0px;"></div>
-                        </div>
-                        <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
-                            <div class="simplebar-scrollbar" style="width: 0px; display: none;"></div>
-                        </div>
-                        <div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
-                            <div class="simplebar-scrollbar" style="height: 0px; display: none;"></div>
-                        </div>
+                        @endforelse
+
                     </ul>
-                    <div class="p-3 empty-header-item1 border-top">
-                        <div class="d-grid"> <a href="notifications-list.html" class="btn btn-primary">View All</a>
+
+                    <!-- Footer -->
+                    <div class="p-3 border-top">
+
+                        <div class="d-grid">
+
+                            <a href="{{ route('notifications.index') }}" class="btn btn-primary">
+
+                                View All Notifications
+
+                            </a>
+
                         </div>
+
                     </div>
-                    <div class="p-5 empty-item1 d-none">
-                        <div class="text-center"> <span
-                                class="avatar avatar-xl avatar-rounded bg-secondary-transparent"> <i
-                                    class="ri-notification-off-line fs-2"></i> </span>
-                            <h6 class="fw-semibold mt-3">No New Notifications</h6>
-                        </div>
-                    </div>
-                </div> <!-- End::main-header-dropdown -->
-            </div> <!-- End::header-element --> <!-- Start::header-element -->
+
+                </div>
+
+            </div>
             <div class="header-element header-shortcuts-dropdown d-xl-flex d-none">
                 <!-- Start::header-link|dropdown-toggle --> <a href="javascript:void(0);"
                     class="header-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside"
@@ -626,11 +610,12 @@
                     class="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown"
                     data-bs-auto-close="outside" aria-expanded="false">
                     <div class="d-flex align-items-center">
-                        <div class="header-link-icon"> <img src="../assets/images/faces/1.jpg" alt="img"
-                                width="32" height="32" class="rounded-circle"> </div>
+                        <div class="header-link-icon">
+                            <img src="{{ auth()->user()->avatar_url }}" alt="img" width="32" height="32"
+                                class="rounded-circle border">
+                        </div>
                         <div class="d-none">
-                            <p class="fw-semibold mb-0">Angelica</p><span class="op-7 fw-normal d-block fs-11">Web
-                                Designer</span>
+                            <p class="fw-semibold mb-0">{{ auth()->user()->name }}</p>
                         </div>
                     </div>
                 </a> <!-- End::header-link|dropdown-toggle -->
@@ -638,24 +623,23 @@
                     aria-labelledby="mainHeaderProfile">
                     <li>
                         <div class="header-navheading border-bottom">
-                            <h6 class="main-notification-title">Sonia Taylor</h6>
-                            <p class="main-notification-text mb-0">Web Designer</p>
+                            <h6 class="main-notification-title text-dark">{{ auth()->user()->name }}</h6>
+                            <p class="main-notification-text mb-0 text-muted small">{{ auth()->user()->email }}</p>
                         </div>
                     </li>
-                    <li><a class="dropdown-item d-flex border-bottom" href="profile.html"><i
+                    <li><a class="dropdown-item d-flex border-bottom" href="{{ route('profile.edit') }}"><i
                                 class="fe fe-user fs-16 align-middle me-2"></i>Profile</a></li>
-                    <li><a class="dropdown-item d-flex border-bottom" href="mail-inbox.html"><i
-                                class="fe fe-inbox fs-16 align-middle me-2"></i>Inbox <span
-                                class="badge bg-success ms-auto">25</span></a></li>
-                    <li><a class="dropdown-item d-flex border-bottom border-block-end"
-                            href="notifications-list.html"><i
-                                class="fe fe-compass fs-16 align-middle me-2"></i>Activity</a></li>
-                    <li><a class="dropdown-item d-flex border-bottom" href="settings.html"><i
-                                class="fe fe-settings fs-16 align-middle me-2"></i>Settings</a></li>
-                    <li><a class="dropdown-item d-flex border-bottom" href="chat.html"><i
-                                class="fe fe-headphones fs-16 align-middle me-2"></i>Support</a></li>
-                    <li><a class="dropdown-item d-flex" onclick="logout()" ><i
-                                class="fe fe-power fs-16 align-middle me-2"></i>Log Out</a></li>
+                    <li><a class="dropdown-item d-flex border-bottom" href="{{ route('lockscreen.lock') }}"><i
+                                class="fe fe-lock fs-16 align-middle me-2"></i>Lock Screen</a></li>
+                    <li>
+                        <form method="POST" action="{{ route('logout') }}" id="logout-header-form">
+                            @csrf
+                            <a class="dropdown-item d-flex" href="javascript:void(0);" onclick="confirmLogout();"
+                                style="cursor: pointer !important;">
+                                <i class="fe fe-power fs-16 align-middle me-2"></i>Log Out
+                            </a>
+                        </form>
+                    </li>
                 </ul>
             </div> <!-- End::header-element --> <!-- Start::header-element -->
             <div class="header-element right-sidebar d-xl-flex d-none"> <a href="javascript:void(0);"
@@ -670,3 +654,54 @@
         </div> <!-- End::header-content-right -->
     </div> <!-- End::main-header-container -->
 </header>
+
+<script>
+    function markNotificationAsRead(id, redirectUrl = null) {
+        fetch('{{ route('notifications.markAsRead') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    id: id
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (redirectUrl) {
+                        window.location.href = redirectUrl;
+                    } else {
+                        location.reload();
+                    }
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be logged out of your session!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#6B62DD',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Log Out!',
+            cancelButtonText: 'Stay Logged In',
+            customClass: {
+                confirmButton: 'btn btn-primary rounded-pill px-4',
+                cancelButton: 'btn btn-light rounded-pill px-4 ms-2'
+            },
+            buttonsStyling: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('logout-header-form').submit();
+            }
+        })
+    }
+</script>
+<script>
+    window.userId = {{ auth()->id() }};
+</script>

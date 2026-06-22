@@ -4,8 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Traits\LogsAllActivity;
+
 class MailSetting extends Model
 {
+    use LogsAllActivity;
+
     protected $table = 'mail_settings';
 
     protected $fillable = [

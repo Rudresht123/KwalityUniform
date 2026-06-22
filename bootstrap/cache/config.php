@@ -1,60 +1,4 @@
 <?php return array (
-  'broadcasting' => 
-  array (
-    'default' => 'log',
-    'connections' => 
-    array (
-      'reverb' => 
-      array (
-        'driver' => 'reverb',
-        'key' => NULL,
-        'secret' => NULL,
-        'app_id' => NULL,
-        'options' => 
-        array (
-          'host' => NULL,
-          'port' => 443,
-          'scheme' => 'https',
-          'useTLS' => true,
-        ),
-        'client_options' => 
-        array (
-        ),
-      ),
-      'pusher' => 
-      array (
-        'driver' => 'pusher',
-        'key' => NULL,
-        'secret' => NULL,
-        'app_id' => NULL,
-        'options' => 
-        array (
-          'cluster' => NULL,
-          'host' => 'api-mt1.pusher.com',
-          'port' => 443,
-          'scheme' => 'https',
-          'encrypted' => true,
-          'useTLS' => true,
-        ),
-        'client_options' => 
-        array (
-        ),
-      ),
-      'ably' => 
-      array (
-        'driver' => 'ably',
-        'key' => NULL,
-      ),
-      'log' => 
-      array (
-        'driver' => 'log',
-      ),
-      'null' => 
-      array (
-        'driver' => 'null',
-      ),
-    ),
-  ),
   'concurrency' => 
   array (
     'default' => 'process',
@@ -112,6 +56,27 @@
       0 => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\resources\\views',
     ),
     'compiled' => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\storage\\framework\\views',
+  ),
+  'activitylog' => 
+  array (
+    'enabled' => true,
+    'clean_after_days' => 365,
+    'default_log_name' => 'default',
+    'default_auth_driver' => NULL,
+    'include_soft_deleted_subjects' => false,
+    'activity_model' => 'Spatie\\Activitylog\\Models\\Activity',
+    'default_except_attributes' => 
+    array (
+    ),
+    'buffer' => 
+    array (
+      'enabled' => false,
+    ),
+    'actions' => 
+    array (
+      'log_activity' => 'Spatie\\Activitylog\\Actions\\LogActivityAction',
+      'clean_log' => 'Spatie\\Activitylog\\Actions\\CleanActivityLogAction',
+    ),
   ),
   'app' => 
   array (
@@ -246,6 +211,62 @@
       ),
     ),
     'password_timeout' => 10800,
+  ),
+  'broadcasting' => 
+  array (
+    'default' => 'reverb',
+    'connections' => 
+    array (
+      'reverb' => 
+      array (
+        'driver' => 'reverb',
+        'key' => 'pq3s0zcqrojaposva9l7',
+        'secret' => 'cjoglkh4koiqa5kbrd0v',
+        'app_id' => '989071',
+        'options' => 
+        array (
+          'host' => 'localhost',
+          'port' => '8080',
+          'scheme' => 'http',
+          'useTLS' => false,
+        ),
+        'client_options' => 
+        array (
+        ),
+      ),
+      'pusher' => 
+      array (
+        'driver' => 'pusher',
+        'key' => NULL,
+        'secret' => NULL,
+        'app_id' => NULL,
+        'options' => 
+        array (
+          'cluster' => NULL,
+          'host' => 'api-mt1.pusher.com',
+          'port' => 443,
+          'scheme' => 'https',
+          'encrypted' => true,
+          'useTLS' => true,
+        ),
+        'client_options' => 
+        array (
+        ),
+      ),
+      'ably' => 
+      array (
+        'driver' => 'ably',
+        'key' => NULL,
+      ),
+      'log' => 
+      array (
+        'driver' => 'log',
+      ),
+      'null' => 
+      array (
+        'driver' => 'null',
+      ),
+    ),
   ),
   'cache' => 
   array (
@@ -605,7 +626,7 @@
   ),
   'mail' => 
   array (
-    'default' => 'smtp',
+    'default' => 'log',
     'mailers' => 
     array (
       'smtp' => 
@@ -681,6 +702,34 @@
       ),
       'extensions' => 
       array (
+      ),
+    ),
+  ),
+  'notify' => 
+  array (
+    'timeout' => 5000,
+    'direction' => 'auto',
+    'preset-messages' => 
+    array (
+      'success' => 
+      array (
+        'type' => 
+        \Mckenziearts\Notify\Enums\NotificationType::Success,
+        'model' => 
+        \Mckenziearts\Notify\Enums\NotificationModel::Toast,
+        'title' => 'Success',
+        'message' => 'The action has been successfully.',
+        'duration' => 3000,
+      ),
+      'error' => 
+      array (
+        'type' => 
+        \Mckenziearts\Notify\Enums\NotificationType::Error,
+        'model' => 
+        \Mckenziearts\Notify\Enums\NotificationModel::Toast,
+        'title' => 'Error',
+        'message' => 'An error occurred.',
+        'duration' => 5000,
       ),
     ),
   ),
@@ -805,6 +854,80 @@
       'table' => 'failed_jobs',
     ),
   ),
+  'reverb' => 
+  array (
+    'default' => 'reverb',
+    'servers' => 
+    array (
+      'reverb' => 
+      array (
+        'host' => '0.0.0.0',
+        'port' => 8080,
+        'path' => '',
+        'hostname' => 'localhost',
+        'options' => 
+        array (
+          'tls' => 
+          array (
+          ),
+        ),
+        'max_request_size' => 10000,
+        'scaling' => 
+        array (
+          'enabled' => false,
+          'channel' => 'reverb',
+          'server' => 
+          array (
+            'url' => NULL,
+            'host' => '127.0.0.1',
+            'port' => '6379',
+            'username' => NULL,
+            'password' => NULL,
+            'database' => '0',
+            'timeout' => 60,
+          ),
+        ),
+        'pulse_ingest_interval' => 15,
+        'telescope_ingest_interval' => 15,
+      ),
+    ),
+    'apps' => 
+    array (
+      'provider' => 'config',
+      'apps' => 
+      array (
+        0 => 
+        array (
+          'key' => 'pq3s0zcqrojaposva9l7',
+          'secret' => 'cjoglkh4koiqa5kbrd0v',
+          'app_id' => '989071',
+          'options' => 
+          array (
+            'host' => 'localhost',
+            'port' => '8080',
+            'scheme' => 'http',
+            'useTLS' => false,
+          ),
+          'allowed_origins' => 
+          array (
+            0 => '*',
+          ),
+          'ping_interval' => 60,
+          'activity_timeout' => 30,
+          'max_connections' => NULL,
+          'max_message_size' => 10000,
+          'accept_client_events_from' => 'members',
+          'rate_limiting' => 
+          array (
+            'enabled' => false,
+            'max_attempts' => 60,
+            'decay_seconds' => 60,
+            'terminate_on_limit' => false,
+          ),
+        ),
+      ),
+    ),
+  ),
   'services' => 
   array (
     'postmark' => 
@@ -853,6 +976,281 @@
     'same_site' => 'lax',
     'partitioned' => false,
     'serialization' => 'json',
+  ),
+  'blade-icons' => 
+  array (
+    'sets' => 
+    array (
+    ),
+    'class' => '',
+    'attributes' => 
+    array (
+    ),
+    'fallback' => '',
+    'components' => 
+    array (
+      'disabled' => false,
+      'default' => 'icon',
+    ),
+  ),
+  'livewire' => 
+  array (
+    'component_locations' => 
+    array (
+      0 => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\resources\\views/components',
+      1 => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\resources\\views/livewire',
+    ),
+    'component_namespaces' => 
+    array (
+      'layouts' => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\resources\\views/layouts',
+      'pages' => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\resources\\views/pages',
+    ),
+    'component_layout' => 'layouts::app',
+    'component_placeholder' => NULL,
+    'make_command' => 
+    array (
+      'type' => 'sfc',
+      'emoji' => true,
+      'with' => 
+      array (
+        'js' => false,
+        'css' => false,
+        'test' => false,
+      ),
+    ),
+    'class_namespace' => 'App\\Livewire',
+    'class_path' => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\app\\Livewire',
+    'view_path' => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\resources\\views/livewire',
+    'temporary_file_upload' => 
+    array (
+      'disk' => NULL,
+      'rules' => NULL,
+      'directory' => NULL,
+      'middleware' => NULL,
+      'preview_mimes' => 
+      array (
+        0 => 'png',
+        1 => 'gif',
+        2 => 'bmp',
+        3 => 'svg',
+        4 => 'wav',
+        5 => 'mp4',
+        6 => 'mov',
+        7 => 'avi',
+        8 => 'wmv',
+        9 => 'mp3',
+        10 => 'm4a',
+        11 => 'jpg',
+        12 => 'jpeg',
+        13 => 'mpga',
+        14 => 'webp',
+        15 => 'wma',
+      ),
+      'max_upload_time' => 5,
+      'cleanup' => true,
+    ),
+    'render_on_redirect' => false,
+    'legacy_model_binding' => false,
+    'inject_assets' => true,
+    'navigate' => 
+    array (
+      'show_progress_bar' => true,
+      'progress_bar_color' => '#2299dd',
+    ),
+    'inject_morph_markers' => true,
+    'smart_wire_keys' => true,
+    'pagination_theme' => 'tailwind',
+    'release_token' => 'a',
+    'csp_safe' => false,
+    'payload' => 
+    array (
+      'max_size' => 1048576,
+      'max_nesting_depth' => 10,
+      'max_calls' => 50,
+      'max_components' => 200,
+    ),
+  ),
+  'datatables-buttons' => 
+  array (
+    'namespace' => 
+    array (
+      'base' => 'DataTables',
+      'model' => 'App\\Models',
+    ),
+    'pdf_generator' => 'snappy',
+    'snappy' => 
+    array (
+      'options' => 
+      array (
+        'no-outline' => true,
+        'margin-left' => '0',
+        'margin-right' => '0',
+        'margin-top' => '10mm',
+        'margin-bottom' => '10mm',
+      ),
+      'orientation' => 'landscape',
+    ),
+    'parameters' => 
+    array (
+      'dom' => 'Bfrtip',
+      'order' => 
+      array (
+        0 => 
+        array (
+          0 => 0,
+          1 => 'desc',
+        ),
+      ),
+      'buttons' => 
+      array (
+        0 => 'excel',
+        1 => 'csv',
+        2 => 'pdf',
+        3 => 'print',
+        4 => 'reset',
+        5 => 'reload',
+      ),
+    ),
+    'generator' => 
+    array (
+      'columns' => 'id,add your columns,created_at,updated_at',
+      'buttons' => 'excel,csv,pdf,print,reset,reload',
+      'dom' => 'Bfrtip',
+    ),
+  ),
+  'datatables-html' => 
+  array (
+    'namespace' => 'LaravelDataTables',
+    'table' => 
+    array (
+      'class' => 'table',
+      'id' => 'dataTableBuilder',
+    ),
+    'script' => 'datatables::script',
+    'editor' => 'datatables::editor',
+  ),
+  'datatables-export' => 
+  array (
+    'method' => 'lazy',
+    'chunk' => 1000,
+    'disk' => 'local',
+    's3_disk' => '',
+    'mail_from' => 'rudershtiwari8@gmail.com',
+    'default_date_format' => 'yyyy-mm-dd',
+    'date_formats' => 
+    array (
+      0 => 'mm/dd/yyyy',
+      1 => 'yyyy-mm-dd',
+      2 => 'dd/mm/yyyy',
+      3 => 'd"/"m"/"yy',
+      4 => 'd-m-yy',
+      5 => 'd-m',
+      6 => 'm-yy',
+      7 => 'mm-dd-yy',
+      8 => 'm/d/yyyy',
+      9 => 'd-mmm-yy',
+      10 => 'd-mmm',
+      11 => 'mmm-yy',
+      12 => 'm/d/yy h:mm',
+      13 => 'm/d/yyyy h:mm',
+      14 => 'd/m/yy h:mm',
+      15 => 'yyyy-mm-dd hh:mm',
+      16 => 'h:mm AM/PM',
+      17 => 'h:mm:ss AM/PM',
+      18 => 'h:mm',
+      19 => 'h:mm:ss',
+      20 => 'mm:ss',
+      21 => 'h:mm:ss',
+      22 => 'i:s.S',
+      23 => 'h:mm:ss;@',
+      24 => '[hh]:mm:ss',
+      25 => 'yyyy"/"mm"/"dd;@',
+      26 => 'dddd, mmmm d, yyyy',
+      27 => 'm/d/yy h:mm',
+      28 => 'd/m/yy h:mm',
+      29 => 'yyyy-mm-dd hh:mm',
+      30 => 'h:mm AM/PM',
+      31 => 'h:mm:ss AM/PM',
+      32 => 'h:mm',
+      33 => 'h:mm:ss',
+      34 => 'mm:ss',
+      35 => 'h:mm:ss',
+      36 => 'i:s.S',
+      37 => 'h:mm:ss;@',
+      38 => '[hh]:mm:ss',
+    ),
+    'text_formats' => 
+    array (
+      0 => '@',
+      1 => 'General',
+    ),
+    'purge' => 
+    array (
+      'days' => 1,
+    ),
+    'queue' => NULL,
+  ),
+  'datatables' => 
+  array (
+    'search' => 
+    array (
+      'smart' => true,
+      'multi_term' => true,
+      'case_insensitive' => true,
+      'use_wildcards' => false,
+      'starts_with' => false,
+    ),
+    'index_column' => 'DT_RowIndex',
+    'engines' => 
+    array (
+      'eloquent' => 'Yajra\\DataTables\\EloquentDataTable',
+      'query' => 'Yajra\\DataTables\\QueryDataTable',
+      'collection' => 'Yajra\\DataTables\\CollectionDataTable',
+      'paginator' => 'Yajra\\DataTables\\PaginatorDataTable',
+      'resource' => 'Yajra\\DataTables\\ApiResourceDataTable',
+    ),
+    'builders' => 
+    array (
+    ),
+    'nulls_last_sql' => ':column :direction NULLS LAST',
+    'error' => NULL,
+    'columns' => 
+    array (
+      'excess' => 
+      array (
+        0 => 'rn',
+        1 => 'row_num',
+      ),
+      'escape' => '*',
+      'raw' => 
+      array (
+        0 => 'action',
+      ),
+      'blacklist' => 
+      array (
+        0 => 'password',
+        1 => 'remember_token',
+      ),
+      'whitelist' => '*',
+    ),
+    'json' => 
+    array (
+      'header' => 
+      array (
+      ),
+      'options' => 0,
+    ),
+    'callback' => 
+    array (
+      0 => '$',
+      1 => '$.',
+      2 => 'function',
+    ),
+  ),
+  'datatables-fractal' => 
+  array (
+    'includes' => 'include',
+    'serializer' => 'League\\Fractal\\Serializer\\DataArraySerializer',
   ),
   'tinker' => 
   array (

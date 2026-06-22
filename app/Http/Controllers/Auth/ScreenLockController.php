@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+
+class ScreenLockController extends Controller
+{
+    /**
+     * Lock the user's screen.
+     */
+    public function lock(Request $request)
+    {
+        Session::put('screen_locked', true);
+        
+        return redirect()->route('lockscreen');
+    }
+
+    /**
+     * Show the lock screen.
+     */
+    public function show()
+    {
+        if (!Session::get('screen_locked')) {
+            return redirect()->route('dashboard');
+        }
+
+        return view('auth.lockscreen');
+    }
+
+    /**
+     * Unlock the screen.
+     */
+    public function unlock(Request $request)
+    {
+        $request->validate([
+            'password' => ['required', 'string'],
+        ]);
+
+        if (Hash::check($request->password, $request->user()->password)) {
+            Session::forget('screen_locked');
+            return redirect()->intended(route('dashboard'));
+        }
+
+        return back()->withErrors([
+            'password' => 'The provided password does not match our records.',
+        ]);
+    }
+}

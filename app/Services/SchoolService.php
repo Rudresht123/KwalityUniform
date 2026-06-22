@@ -151,11 +151,17 @@ class SchoolService
     protected function sendRegistrationEmail(School $school): void
     {
         try {
+            $setupUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute(
+                'setup-password',
+                now()->addDays(7),
+                ['user' => $school->user_id]
+            );
+
             $sent = EmailService::send('school_registration', $school->email, [
                 'school_name' => $school->school_name,
                 'principal_name' => $school->principal_name,
                 'status' => $school->is_active ? 'Active' : 'Inactive',
-                'login_button' => emailButton(route('login'), 'Login to your dashboard'),
+                'login_button' => emailButton($setupUrl, 'Setup your account credentials'),
             ]);
 
             if (!$sent) {
