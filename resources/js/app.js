@@ -5,42 +5,57 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
-
-
 document.addEventListener('DOMContentLoaded', () => {
 
+    console.log('🚀 App JS Loaded');
+
     if (!window.userId) {
-        console.warn('User ID not found');
+        console.warn('❌ User ID not found');
         return;
     }
 
     if (!window.Echo) {
-        console.warn('Laravel Echo not loaded');
+        console.warn('❌ Laravel Echo not loaded');
         return;
     }
 
-    // Ask Browser Permission
-    if ("Notification" in window &&
-        Notification.permission !== "granted") {
-
+    // Browser Notification Permission
+    if ("Notification" in window && Notification.permission !== "granted") {
         Notification.requestPermission();
     }
 
-    // Listen User Notifications
-if (window.userId) {
+    // Notification Sound
+    let audioEnabled = true;
 
-    Echo.private(`App.Models.User.${window.userId}`)
+    function playNotificationSound() {
+        if (!audioEnabled) {
+            return;
+        }
+
+        const audio = new Audio('/assets/mixkit-positive-notification-951.wav');
+
+        audio.play().catch(error => {
+            console.warn('🔇 Audio blocked:', error);
+        });
+    }
+
+    const channelName = `App.Models.User.${window.userId}`;
+
+    console.log('📡 Subscribing to:', channelName);
+
+    const channel = Echo.private(channelName);
+
+    console.log('✅ Channel Object:', channel);
+
+    channel
         .notification((notification) => {
-alert(JSON.stringify(notification, null, 2));
-            console.group('📢 Notification Received');
-            console.log(notification);
-            console.groupEnd();
-             console.log('RAW Notification:', notification);
-        console.log('Title:', notification?.title);
-        console.log('Message:', notification?.message);
-        console.log('Data:', notification?.data);
 
-            // Laravel notification payload normalize
+            console.log('====================================');
+            console.log('📢 NOTIFICATION RECEIVED');
+            console.log('====================================');
+
+            console.log('Raw Payload:', notification);
+
             const data = notification.data || notification;
 
             const notificationData = {
@@ -50,45 +65,44 @@ alert(JSON.stringify(notification, null, 2));
                 url: data.url || null,
             };
 
-            safeExecute(
-                () => updateNotificationBadge(),
-                'updateNotificationBadge'
-            );
+            console.log('Final Notification Data:', notificationData);
 
-            safeExecute(
-                () => updateUnreadText(),
-                'updateUnreadText'
-            );
+            // Browser Notification
+            if (
+                "Notification" in window &&
+                Notification.permission === "granted"
+            ) {
+                new Notification(notificationData.title, {
+                    body: notificationData.message,
+                });
+            }
 
-            safeExecute(
-                () => playNotificationSound(),
-                'playNotificationSound'
-            );
+            // Existing functions
+            if (typeof updateNotificationBadge === 'function') {
+                updateNotificationBadge();
+            }
 
-            safeExecute(
-                () => showBrowserNotification(notificationData),
-                'showBrowserNotification'
-            );
+            if (typeof updateUnreadText === 'function') {
+                updateUnreadText();
+            }
 
-            safeExecute(
-                () => showToast(notificationData),
-                'showToast'
-            );
+            playNotificationSound();
 
-            safeExecute(
-                () => animateBell(),
-                'animateBell'
-            );
+            if (typeof showToast === 'function') {
+                showToast(notificationData);
+            }
 
-            safeExecute(
-                () => loadLatestNotifications(),
-                'loadLatestNotifications'
-            );
+            if (typeof animateBell === 'function') {
+                animateBell();
+            }
+
+            if (typeof loadLatestNotifications === 'function') {
+                loadLatestNotifications();
+            }
         })
-
         .error((error) => {
             console.error('❌ Echo Channel Error:', error);
         });
-}
-});
 
+    console.log('🎯 Notification Listener Registered');
+});

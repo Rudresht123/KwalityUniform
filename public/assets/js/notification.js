@@ -71,7 +71,7 @@ function hideNotification(notificationId)
 
 function showToast({
     title = 'Notification',
-    message = 'Your message is not comming',
+    message = 'You have a new notification',
     type = 'info',
     url = null
 }) {
@@ -87,42 +87,97 @@ function showToast({
     const toast = document.createElement('div');
     toast.className = `custom-toast custom-toast-${type}`;
 
+    const toastId = Date.now();
+
     toast.innerHTML = `
-        <div class="toast-status"></div>
+        <div class="toast-progress"></div>
+
+        <div class="toast-unread-dot"></div>
 
         <div class="toast-icon">
             ${getToastIcon(type)}
         </div>
 
-       <div class="toast-content">
-    <div class="toast-header">
-        <div class="toast-title">${title}</div>
-        <div class="toast-time">just now</div>
-    </div>
+        <div class="toast-content">
 
-    <div class="toast-message">
-        ${message}
-    </div>
+            <div class="toast-header">
+                <div class="toast-title">
+                    ${title}
+                </div>
 
-    ${
-        url
-            ? `<a href="${url}" class="toast-link">
-                View details →
-               </a>`
-            : ''
-    }
-</div>
+                <div class="toast-actions">
+                    <span class="toast-time">
+                        just now
+                    </span>
+
+                    <button class="toast-close">
+                        ✕
+                    </button>
+                </div>
+            </div>
+
+            <div class="toast-message">
+                ${message}
+            </div>
+
+            ${
+                url
+                    ? `
+                    <div class="toast-footer">
+                        <span class="toast-link">
+                            View Details →
+                        </span>
+                    </div>
+                `
+                    : ''
+            }
+
+        </div>
     `;
 
-    container.appendChild(toast);
+    container.prepend(toast);
 
     setTimeout(() => {
         toast.classList.add('show');
-    }, 10);
+    }, 50);
 
-    setTimeout(() => {
+    let removeTimer = setTimeout(() => {
         removeToast(toast);
-    }, 5000);
+    }, 7000);
+
+    // Pause auto close on hover
+    toast.addEventListener('mouseenter', () => {
+        clearTimeout(removeTimer);
+    });
+
+    toast.addEventListener('mouseleave', () => {
+        removeTimer = setTimeout(() => {
+            removeToast(toast);
+        }, 3000);
+    });
+
+    // Click anywhere to open
+    if (url) {
+        toast.style.cursor = 'pointer';
+
+        toast.addEventListener('click', (e) => {
+
+            if (
+                e.target.classList.contains('toast-close')
+            ) {
+                return;
+            }
+
+            window.location.href = url;
+        });
+    }
+
+    // Close Button
+    toast.querySelector('.toast-close')
+        ?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            removeToast(toast);
+        });
 }
 
 function removeToast(toast) {
