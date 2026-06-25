@@ -18,33 +18,21 @@ class Product extends Record
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $fillable = [
-        'product_id',
-        'vendor_id',
-        'category_id',
-        'product_code',
-        'product_name',
-        'description',
-        'fabric_composition',
-        'gender_type',
-        'approval_status',
-        'is_active',
-        'created_by',
-        'updated_by',
-        'deleted_by'
-    ];
+    protected $fillable = ['product_id', 'vendor_id', 'category_id', 'product_code', 'product_name', 'description', 'fabric_composition', 'gender_type', 'approval_status', 'approved_by', 'approved_at', 'rejected_by', 'rejected_at', 'rejection_reason', 'is_active', 'created_by', 'updated_by', 'deleted_by'];
 
     protected $casts = [
         'is_active' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
+        'approved_at' => 'datetime',
+        'rejected_at' => 'datetime',
     ];
 
     protected static function boot()
     {
         parent::boot();
-        
+
         static::creating(function ($model) {
             if (!$model->product_id) {
                 $model->product_id = (string) Str::uuid();
@@ -84,6 +72,11 @@ class Product extends Record
         return $this->hasMany(ProductImage::class, 'product_id', 'product_id');
     }
 
+    public function approvalHistories()
+    {
+        return $this->hasMany(ProductApprovalHistory::class, 'product_id', 'product_id')->latest();
+    }
+
     public function primaryImage()
     {
         return $this->hasOne(ProductImage::class, 'product_id', 'product_id')->where('is_primary', true);
@@ -107,5 +100,10 @@ class Product extends Record
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    public function firstImage()
+    {
+        return $this->primaryImage ? getFileUrl($this->primaryImage->file_id) : asset("assets/images/no_image.jpg");
     }
 }

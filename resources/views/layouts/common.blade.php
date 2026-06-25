@@ -36,6 +36,9 @@
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/datatable.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/toast.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/select2.css') }}">
+
+
     @notifyCss
 
     @stack('styles')
@@ -107,6 +110,7 @@
     <script src="{{ asset('assets/js/datatables/responsive.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
     <script src="{{ asset('assets/js/notification.js') }}"></script>
+    <script src="{{ asset('assets/js/select2.js') }}"></script>
 
     @if ($errors->any() && !session()->has('notify.message'))
         @php
@@ -348,6 +352,21 @@
             });
 
         });
+
+        $(document).ready(function() {
+
+            $('.select2').select2();
+        });
+        document.querySelectorAll('.dropdown-toggle').forEach(el => {
+    new bootstrap.Dropdown(el, {
+        popperConfig(defaults) {
+            return {
+                ...defaults,
+                strategy: 'fixed'
+            };
+        }
+    });
+});
     </script>
 
     @stack('scripts')

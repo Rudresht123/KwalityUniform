@@ -1,7 +1,7 @@
 <?php return array (
   'untitledui-icons' => 
   array (
-    'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\vendor\\mckenziearts\\blade-untitledui-icons\\src/../resources/svg' => 
+    'C:\\Users\\ruder\\Projects\\QualityUniform\\vendor\\mckenziearts\\blade-untitledui-icons\\src/../resources/svg' => 
     array (
       0 => 'activity',
       1 => 'activity-heart',

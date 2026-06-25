@@ -162,6 +162,106 @@
 
                     </div>
 
+                    {{-- Approval History Audit Trail --}}
+                    <div class="mt-5">
+                        <h5 class="mb-3">Approval History</h5>
+
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover border">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Date & Time</th>
+                                        <th>Action</th>
+                                        <th>From Status</th>
+                                        <th>To Status</th>
+                                        <th>Performed By</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($product->approvalHistories as $history)
+                                        <tr>
+                                            <td>{{ $history->created_at->format('d M Y, h:i A') }}</td>
+                                            <td>
+                                                @php
+                                                    $badgeClass = match($history->action_type) {
+                                                        'approved' => 'success',
+                                                        'rejected' => 'danger',
+                                                        'resubmitted' => 'info',
+                                                        default => 'secondary',
+                                                    };
+                                                @endphp
+                                                <span class="badge bg-{{ $badgeClass }}">
+                                                    {{ ucfirst($history->action_type) }}
+                                                </span>
+                                            </td>
+                                            <td>{{ $history->old_status ?? 'N/A' }}</td>
+                                            <td>{{ $history->new_status }}</td>
+                                            <td>{{ $history->performer->name ?? 'System' }}</td>
+                                            <td>{{ $history->remarks }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted">No approval history available.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {{-- Stock History for Variants --}}
+                    <div class="mt-5">
+                        <h5 class="mb-3">Variant Stock History</h5>
+                        
+                        <div class="accordion" id="stockHistoryAccordion">
+                            @foreach($product->variants as $variant)
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="heading-{{ $variant->variant_id }}">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ $variant->variant_id }}" aria-expanded="false" aria-controls="collapse-{{ $variant->variant_id }}">
+                                            <strong>SKU: {{ $variant->sku }}</strong> - {{ $variant->size->size_name ?? 'N/A' }} / {{ $variant->color->color_name ?? 'N/A' }} 
+                                            <span class="badge bg-secondary ms-2">Current Stock: {{ $variant->stock_qty }}</span>
+                                        </button>
+                                    </h2>
+                                    <div id="collapse-{{ $variant->variant_id }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ $variant->variant_id }}" data-bs-parent="#stockHistoryAccordion">
+                                        <div class="accordion-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-sm table-hover border">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th>Date & Time</th>
+                                                            <th>Old Stock</th>
+                                                            <th>Added</th>
+                                                            <th>New Stock</th>
+                                                            <th>Updated By</th>
+                                                            <th>Remarks</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @forelse($variant->stockAdjustments as $adj)
+                                                            <tr>
+                                                                <td>{{ $adj->created_at->format('d M Y, h:i A') }}</td>
+                                                                <td>{{ $adj->old_stock }}</td>
+                                                                <td><span class="text-success">+{{ $adj->added_quantity }}</span></td>
+                                                                <td>{{ $adj->new_stock }}</td>
+                                                                <td>{{ $adj->user->name ?? 'System' }}</td>
+                                                                <td>{{ $adj->remarks ?? 'N/A' }}</td>
+                                                            </tr>
+                                                        @empty
+                                                            <tr>
+                                                                <td colspan="6" class="text-center text-muted">No stock adjustments recorded.</td>
+                                                            </tr>
+                                                        @endforelse
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

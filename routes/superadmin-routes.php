@@ -97,6 +97,18 @@ Route::prefix('admins')->name('admin.')->group(function () {
     Route::delete('/delete/{admin}', [\App\Http\Controllers\SuperAdmin\AdminController::class, 'destroy'])->name('destroy')->middleware('permission:admin.delete');
 });
 
+Route::prefix('stock')->name('stock.')->group(function () {
+    Route::get('/low-stock', [\App\Http\Controllers\SuperAdmin\StockController::class, 'index'])->name('index')->middleware('permission:stock_view');
+    Route::post('/adjust', [\App\Http\Controllers\SuperAdmin\StockController::class, 'adjust'])->name('adjust')->middleware('permission:stock_adjust');
+});
+
+Route::prefix('product-approvals')->name('product-approval.')->group(function () {
+    Route::get('/index', [\App\Http\Controllers\SuperAdmin\ProductApprovalController::class, 'index'])->name('index')->middleware('permission:product_approval_view');
+    Route::get('/preview/{productId}', [\App\Http\Controllers\SuperAdmin\ProductApprovalController::class, 'preview'])->name('preview')->middleware('permission:product_approval_view');
+    Route::post('/approve/{productId}', [\App\Http\Controllers\SuperAdmin\ProductApprovalController::class, 'approve'])->name('approve')->middleware('permission:product_approval_action');
+    Route::post('/reject/{productId}', [\App\Http\Controllers\SuperAdmin\ProductApprovalController::class, 'reject'])->name('reject')->middleware('permission:product_approval_action');
+});
+
 Route::prefix('products')->name('product.')->group(function () {
     Route::get('/index', [\App\Http\Controllers\SuperAdmin\ProductController::class, 'index'])->name('index')->middleware('permission:product.view');
     Route::get('/create', [\App\Http\Controllers\SuperAdmin\ProductController::class, 'create'])->name('create')->middleware('permission:product.create');

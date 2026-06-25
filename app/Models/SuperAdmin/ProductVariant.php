@@ -28,6 +28,7 @@ class ProductVariant extends Record
         'selling_price',
         'stock_qty',
         'low_stock_alert',
+        'low_stock_notified_at',
         'barcode',
         'is_active',
         'created_by',
@@ -40,6 +41,7 @@ class ProductVariant extends Record
         'selling_price' => 'decimal:2',
         'stock_qty' => 'integer',
         'low_stock_alert' => 'integer',
+        'low_stock_notified_at' => 'datetime',
         'is_active' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
@@ -92,5 +94,10 @@ class ProductVariant extends Record
     public function updater()
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    public function stockAdjustments()
+    {
+        return $this->hasMany(StockAdjustment::class, 'variant_id', 'variant_id')->latest();
     }
 }

@@ -620,6 +620,47 @@
     color: #0d6efd;
     background: rgba(13, 110, 253, 0.12);
 }
+/* Primary */
+.primary-badge {
+    color: #0d6efd;
+    background: rgba(13, 110, 253, 0.12);
+}
+
+/* Success */
+.success-badge {
+    color: #198754;
+    background: rgba(25, 135, 84, 0.12);
+}
+
+/* Danger */
+.danger-badge {
+    color: #dc3545;
+    background: rgba(220, 53, 69, 0.12);
+}
+
+/* Warning */
+.warning-badge {
+    color: #fd7e14;
+    background: rgba(253, 126, 20, 0.12);
+}
+
+/* Info */
+.info-badge {
+    color: #0dcaf0;
+    background: rgba(13, 202, 240, 0.12);
+}
+
+/* Purple */
+.purple-badge {
+    color: #6f42c1;
+    background: rgba(111, 66, 193, 0.12);
+}
+
+/* Dark */
+.dark-badge {
+    color: #212529;
+    background: rgba(33, 37, 41, 0.08);
+}
 
 .view-badge:hover {
     color: #fff;
@@ -1379,4 +1420,108 @@ box-shadow:
     0 15px 40px rgba(34,197,94,.12);
 
 
+}
+.action-badge{
+    border:none;
+    border-radius:10px;
+    padding:6px 10px;
+}
+
+.dropdown-menu{
+    min-width:220px;
+    border-radius:14px;
+    padding:8px;
+}
+
+.dropdown-item{
+    border-radius:10px;
+    padding:10px 12px;
+
+    display:flex;
+    align-items:center;
+
+    font-size:14px;
+    font-weight:500;
+}
+
+.dropdown-item:hover{
+    background:#f8fafc;
+}
+
+.dropdown-item i{
+    font-size:16px;
+}
+
+.dropdown-toggle::after{
+    display:none;
+}
+.pa-filter-bar{
+    padding: 5px;
+}
+
+.pa-filter-label{
+    font-size:12px;
+    font-weight:600;
+    color:#64748b;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+}
+
+.pa-btn-filter{
+    height:42px;
+    border:none;
+    border-radius:12px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #6259ca,
+        #7c71ff
+    );
+
+    color:#fff;
+    font-weight:600;
+
+    box-shadow:
+    0 8px 20px rgba(98,89,202,.25);
+}
+
+.pa-btn-filter:hover{
+    color:#fff;
+
+    background:
+    linear-gradient(
+        135deg,
+        #564dc2,
+        #6e63ff
+    );
+}
+
+.pa-btn-reset{
+    width:42px;
+    height:42px;
+
+    border-radius:12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.pa-btn-reset:hover{
+    background:#f8fafc;
+}
+
+.form-select,
+.form-control{
+    height:42px;
+    border-radius:12px;
+}
+
+.input-group-text{
+    border-radius:12px 0 0 12px;
+}
+
+.input-group .form-control{
+    border-radius:0 12px 12px 0;
 }

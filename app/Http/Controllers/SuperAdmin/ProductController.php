@@ -41,7 +41,7 @@ class ProductController extends BaseController
             return DataTables::of($products)
                 ->addIndexColumn()
                 ->addColumn('image', function ($row) {
-                    $url = $row->primaryImage ? $row->primaryImage->url : asset('images/no_image.png');
+                    $url = $row->firstImage();
                     return '<img src="' . $url . '" alt="Product Image" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">';
                 })
                 ->addColumn('vendor_name', function ($row) {
@@ -62,7 +62,7 @@ class ProductController extends BaseController
                     return $row->is_active ? '<span class="badge bg-success">ACTIVE</span>' : '<span class="badge bg-danger">INACTIVE</span>';
                 })
                 ->addColumn('options', function ($row) {
-                    $showBtn = '<a href="' . route('product.show', $row->product_id) . '" class="btn btn-icon btn-sm btn-info-light me-1" title="View"><i class="ti ti-eye"></i></a>';
+                    $showBtn = '<a href="' . route('product.show', $row->product_id) . '" class="btn btn-icon btn-sm btn-info-light me-1" title="View"><i class="ti-eye"></i></a>';
                     $editBtn = '<a href="' . route('product.edit', $row->product_id) . '" class="btn btn-icon btn-sm btn-primary-light me-1" title="Edit"><i class="ti ti-edit"></i></a>';
                     $deleteBtn =
                         '<form action="' .
@@ -74,7 +74,7 @@ class ProductController extends BaseController
                                     ' .
                         method_field('DELETE') .
                         '
-                                    <button type="submit" class="btn btn-icon btn-sm btn-danger-light" title="Delete"><i class="ti ti-trash"></i></button>
+                                    <button type="submit" class="btn btn-icon btn-sm btn-danger-light" title="Delete"><i class="ti-trash"></i></button>
                                   </form>';
                     return '<div class="btn-list">' . $showBtn . $editBtn . $deleteBtn . '</div>';
                 })
@@ -234,6 +234,11 @@ class ProductController extends BaseController
             }
 
             $product->update($data);
+
+            // Handle resubmission: if a rejected product is updated by vendor, set it back to pending
+            if (auth()->user()->hasRole('vendor') && $oldStatus === 'rejected') {
+                app(\App\Services\ProductApprovalService::class)->resubmit($product, 'Product updated by vendor and resubmitted for approval.');
+            }
 
             // Handle Multiple Image Uploads
             if ($request->hasFile('images')) {

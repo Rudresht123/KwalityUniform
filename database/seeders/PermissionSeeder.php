@@ -76,7 +76,14 @@ class PermissionSeeder extends Seeder
                 'product.create' => 'Create Product',
                 'product.edit'   => 'Edit Product',
                 'product.delete' => 'Delete Product',
+                'product_approval_view'   => 'View Approval Queue',
+                'product_approval_action' => 'Perform Approval Actions',
+                'product.stock_update'    => 'Update Product Stock',
+                'stock_view'              => 'View Stock Levels',
+                'stock_adjust'            => 'Adjust Stock',
+                'stock_history_view'      => 'View Stock History',
             ],
+
 
         ];
 

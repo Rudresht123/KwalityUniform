@@ -4,6 +4,7 @@ use App\Models\File;
 use App\Models\NotificationTemplate;
 use App\Models\RolePermission\Role;
 use App\Notifications\SystemNotification;
+use App\Repositories\GlobalRepository;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -63,7 +64,7 @@ if (!function_exists('formateDate')) {
     }
 
     if (!function_exists('getFileUrl')) {
-        function getFileUrl($fileId, string $default = 'images/no_image.png'): string
+        function getFileUrl($fileId, string $default = 'assets/images/no_image.jpg'): string
         {
             if (!$fileId) {
                 return asset($default);
@@ -150,6 +151,24 @@ if (!function_exists('emailButton')) {
             );
         }
     }
+
+if(!function_exists('vendors')){
+    function vendors($search = null){
+        return (new GlobalRepository())->vendors($search);
+    }
+}
+
+if(!function_exists('category')){
+    function category($search = null){
+        return (new GlobalRepository())->category($search);
+    }
+}
+
+if(!function_exists('subCategory')){
+    function subCategory($search = null){
+        return (new GlobalRepository())->subcategory($search);
+    }
+}
 }
 
 ?>

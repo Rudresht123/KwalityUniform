@@ -31,6 +31,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call([ColorSeeder::class]);
 
+        $this->call([PermissionSeeder::class]);
+
         // Fake Schools
 
         School::factory()->count(100)->create();
