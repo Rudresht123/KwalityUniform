@@ -54,7 +54,7 @@
 
                             <div class="row g-0">
                                 {{-- Sidebar --}}
-                                <div class="col-lg-3 border-end bg-light-subtle">
+                                <div class="col-lg-3 border-end bg-light-subtle" style="max-height:450px;overflow:scroll;">
                                     <div class="p-4 sticky-top" style="top: 0;">
                                         <h6 class="text-uppercase fw-bold text-muted small mb-3">Module Groups</h6>
                                         <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
@@ -81,7 +81,7 @@
                                                  id="group_{{ Str::slug($group) }}" 
                                                  role="tabpanel">
                                                 
-                                                <div class="d-flex align-items-center justify-content-between mb-4 pb-2 border-bottom">
+                                                <div class="d-flex align-items-center justify-content-between mb-4 pb-2 border-bottom" >
                                                     <div>
                                                         <h5 class="fw-bold mb-1">{{ $group }} Module</h5>
                                                         <p class="text-muted small mb-0">Manage specific capabilities for this module.</p>
@@ -92,7 +92,9 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="list-group list-group-flush border rounded overflow-hidden shadow-sm">
+                                                <div class="list-group list-group-flush border rounded overflow-hidden shadow-sm" 
+                                                
+                                                >
                                                     @foreach($permissions as $permission)
                                                         <label class="list-group-item d-flex align-items-center justify-content-between p-3" for="perm_{{ $permission->id }}">
                                                             <div class="d-flex align-items-center">

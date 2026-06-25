@@ -53,9 +53,9 @@
   array (
     'paths' => 
     array (
-      0 => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\resources\\views',
+      0 => 'C:\\Users\\ruder\\Projects\\QualityUniform\\resources\\views',
     ),
-    'compiled' => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\storage\\framework\\views',
+    'compiled' => 'C:\\Users\\ruder\\Projects\\QualityUniform\\storage\\framework\\views',
   ),
   'activitylog' => 
   array (
@@ -294,8 +294,8 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\storage\\framework/cache/data',
-        'lock_path' => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\storage\\framework/cache/data',
+        'path' => 'C:\\Users\\ruder\\Projects\\QualityUniform\\storage\\framework/cache/data',
+        'lock_path' => 'C:\\Users\\ruder\\Projects\\QualityUniform\\storage\\framework/cache/data',
       ),
       'storage' => 
       array (
@@ -493,7 +493,7 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\storage\\app/private',
+        'root' => 'C:\\Users\\ruder\\Projects\\QualityUniform\\storage\\app/private',
         'serve' => true,
         'throw' => false,
         'report' => false,
@@ -501,7 +501,7 @@
       'public' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\storage\\app/public',
+        'root' => 'C:\\Users\\ruder\\Projects\\QualityUniform\\storage\\app/public',
         'url' => 'http://localhost:8000/storage',
         'visibility' => 'public',
         'throw' => false,
@@ -523,7 +523,7 @@
     ),
     'links' => 
     array (
-      'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\public\\storage' => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\storage\\app/public',
+      'C:\\Users\\ruder\\Projects\\QualityUniform\\public\\storage' => 'C:\\Users\\ruder\\Projects\\QualityUniform\\storage\\app/public',
     ),
   ),
   'logging' => 
@@ -548,14 +548,14 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\storage\\logs/laravel.log',
+        'path' => 'C:\\Users\\ruder\\Projects\\QualityUniform\\storage\\logs/laravel.log',
         'level' => 'debug',
         'replace_placeholders' => true,
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\storage\\logs/laravel.log',
+        'path' => 'C:\\Users\\ruder\\Projects\\QualityUniform\\storage\\logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
         'replace_placeholders' => true,
@@ -620,7 +620,7 @@
       ),
       'emergency' => 
       array (
-        'path' => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\storage\\logs/laravel.log',
+        'path' => 'C:\\Users\\ruder\\Projects\\QualityUniform\\storage\\logs/laravel.log',
       ),
     ),
   ),
@@ -698,7 +698,7 @@
       'theme' => 'default',
       'paths' => 
       array (
-        0 => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\resources\\views/vendor/mail',
+        0 => 'C:\\Users\\ruder\\Projects\\QualityUniform\\resources\\views/vendor/mail',
       ),
       'extensions' => 
       array (
@@ -959,7 +959,7 @@
     'lifetime' => 120,
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\storage\\framework/sessions',
+    'files' => 'C:\\Users\\ruder\\Projects\\QualityUniform\\storage\\framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -997,13 +997,13 @@
   array (
     'component_locations' => 
     array (
-      0 => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\resources\\views/components',
-      1 => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\resources\\views/livewire',
+      0 => 'C:\\Users\\ruder\\Projects\\QualityUniform\\resources\\views/components',
+      1 => 'C:\\Users\\ruder\\Projects\\QualityUniform\\resources\\views/livewire',
     ),
     'component_namespaces' => 
     array (
-      'layouts' => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\resources\\views/layouts',
-      'pages' => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\resources\\views/pages',
+      'layouts' => 'C:\\Users\\ruder\\Projects\\QualityUniform\\resources\\views/layouts',
+      'pages' => 'C:\\Users\\ruder\\Projects\\QualityUniform\\resources\\views/pages',
     ),
     'component_layout' => 'layouts::app',
     'component_placeholder' => NULL,
@@ -1019,8 +1019,8 @@
       ),
     ),
     'class_namespace' => 'App\\Livewire',
-    'class_path' => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\app\\Livewire',
-    'view_path' => 'C:\\Users\\ruder\\OneDrive\\Desktop\\LearningProjects\\QualityUniform\\resources\\views/livewire',
+    'class_path' => 'C:\\Users\\ruder\\Projects\\QualityUniform\\app\\Livewire',
+    'view_path' => 'C:\\Users\\ruder\\Projects\\QualityUniform\\resources\\views/livewire',
     'temporary_file_upload' => 
     array (
       'disk' => NULL,
