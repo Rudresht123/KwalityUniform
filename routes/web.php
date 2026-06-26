@@ -26,9 +26,13 @@ Route::middleware(['auth', CheckScreenLock::class])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/hide', [NotificationController::class, 'hide'])->name('notifications.hide');
 
-    Route::get('/school-products', [\App\Http\Controllers\School\SchoolProductController::class, 'index'])->name('school.products.index');
+    Route::get('/school-products', [\App\Http\Controllers\School\SchoolProductController::class, 'index'])
+        ->middleware('can:school.product.view')
+        ->name('school.products.index');
 
     require __DIR__ . '/superadmin-routes.php';
+
+
 });
 
 

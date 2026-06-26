@@ -89,6 +89,17 @@ class PermissionSeeder extends Seeder
                 'user.edit' => 'Manage User Status',
             ],
 
+            'School Product Access' => [
+                'school.product.view' => 'View Approved Products',
+            ],
+
+            'Parent User Management' => [
+                'parent.view'   => 'View Parents',
+                'parent.create' => 'Create Parent',
+                'parent.edit'   => 'Edit Parent',
+                'parent.delete' => 'Delete Parent',
+            ],
+
         ];
 
         foreach ($modules as $group => $permissions) {

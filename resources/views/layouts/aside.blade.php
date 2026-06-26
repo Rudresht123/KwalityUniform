@@ -185,14 +185,14 @@
                                         </li>
                                     @endcan
 
-                                    @if(auth()->user()->school)
+                                    @can('school.product.view')
                                         <li class="slide {{ request()->routeIs('school.products.index') ? 'active' : '' }}">
                                             <a href="{{ route('school.products.index') }}" class="side-menu__item {{ request()->routeIs('school.products.index') ? 'active' : '' }}">
                                                 <i class="ti-shopping-cart side-menu__icon"></i>
                                                 <span class="side-menu__label">My Approved Products</span>
                                             </a>
                                         </li>
-                                    @endif
+                                    @endcan
 
                                     @canany(['category.view', 'category.create', 'size.view', 'color.view'])
 

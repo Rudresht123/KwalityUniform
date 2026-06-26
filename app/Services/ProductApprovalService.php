@@ -182,12 +182,19 @@ class ProductApprovalService
     protected function notifyVendor(Product $product, string $status, ?string $reason = null): void
     {
         $vendorUser = $product->vendor?->user;
-        if (!$vendorUser) return;
+        if (!$vendorUser) {
+            return;
+        }
 
         // 1. System Notification
-        $notificationKey = ($status === 'approved') ? 'product_approved' : 'product_status_updated';
-        
-        // We can use the existing helper from helpers.php if we want, 
+        $notificationKey = match ($status) {
+            'approved' => 'product_approved',
+            'rejected' => 'product_rejected',
+            'pending' => 'product_resubmitted',
+            default => 'product_status_updated',
+        };
+
+        // We can use the existing helper from helpers.php if we want,
         // but let's be explicit here for the service.
         $placeholders = [
             'product_name' => $product->product_name,
