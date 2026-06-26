@@ -30,7 +30,7 @@ class StockManagementController extends BaseController
                     return $row->product->product_name ?? 'N/A';
                 })
                 ->addColumn('product_image', function ($row) {
-                    return '<img src="'.($row->product->firstImage() ?? asset("assets/images/no_image.jpg")).'" class="img-fluid rounded" width="40">';
+                    return '<img src="' . ($row->product->firstImage() ?? asset('assets/images/no_image.jpg')) . '" class="img-fluid rounded" width="40">';
                 })
                 ->addColumn('sku', function ($row) {
                     return $row->sku;
@@ -53,21 +53,25 @@ class StockManagementController extends BaseController
                     }
                     return '<span class="badge bg-success">Healthy</span>';
                 })
-              ->addColumn('options', function ($row) {
-    return '
+                ->addColumn('options', function ($row) {
+                    return '
         <button class="btn btn-icon btn-sm btn-primary-light"
-            onclick="viewStockHistory(\'' . $row->variant_id . '\')"
+            onclick="viewStockHistory(\'' .
+                        $row->variant_id .
+                        '\')"
             title="History">
             <i class="ti ti-eye"></i>
         </button>
 
         <button class="btn btn-icon btn-sm btn-success-light"
-            onclick="adjustStock(\'' . $row->variant_id . '\')"
+            onclick="adjustStock(\'' .
+                        $row->variant_id .
+                        '\')"
             title="Adjust">
             <i class="ti ti-plus"></i>
         </button>
     ';
-})
+                })
                 ->rawColumns(['product_image', 'status', 'options'])
                 ->make(true);
         }

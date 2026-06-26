@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\LogsAllActivity;
+use Illuminate\Support\Facades\Schema;
 
 class Record extends Model
 {
@@ -13,12 +14,16 @@ class Record extends Model
     protected static function booted(): void
     {
         static::creating(function ($model) {
-            if (Auth::check() && empty($model->created_by)) {
-                $model->created_by = Auth::id();
-            }
+            $table = $model->getTable();
 
-            if (Auth::check() && empty($model->updated_by)) {
-                $model->updated_by = Auth::id();
+            if (Auth::check()) {
+                if (Schema::hasColumn($table, 'created_by') && empty($model->created_by)) {
+                    $model->created_by = Auth::id();
+                }
+
+                if (Schema::hasColumn($table, 'updated_by') && empty($model->updated_by)) {
+                    $model->updated_by = Auth::id();
+                }
             }
         });
 

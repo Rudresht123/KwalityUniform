@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('remarks')->nullable();
             $table->unsignedBigInteger('performed_by');
             $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
 
             $table->foreign('product_id')->references('product_id')->on('products')->onDelete('cascade');
             $table->foreign('performed_by')->references('id')->on('users');

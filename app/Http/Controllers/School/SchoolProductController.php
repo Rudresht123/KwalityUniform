@@ -40,7 +40,7 @@ class SchoolProductController extends BaseController
                     return '<img src="'.($row->firstImage() ?? asset("assets/images/no_image.jpg")).'" class="img-fluid rounded" width="40">';
                 })->addColumn('actions', function ($row) {
     return '<button class="btn btn-sm btn-primary" onclick="previewProduct(\'' . $row->product_id . '\')">Preview</button>';
-})
+}
                 ->rawColumns(['product_image', 'actions'])
                 ->make(true);
         }
