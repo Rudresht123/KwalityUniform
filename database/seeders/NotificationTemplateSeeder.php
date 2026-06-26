@@ -20,6 +20,14 @@ class NotificationTemplateSeeder extends Seeder
             ],
 
             [
+                'key' => 'product_approval_request',
+                'title' => 'Approval Successful',
+                'message' => 'The product "{product_name}" has been reviewed and approved. It is now visible to authorized users.',
+                'type' => 'success',
+                'icon' => 'ti-circle-check-filled',
+                'channels' => json_encode(['database', 'broadcast', 'mail']),
+            ],
+            [
                 'key' => 'low_stock',
                 'title' => 'Low Stock Alert',
                 'message' => '{product_name} stock is below minimum level.',

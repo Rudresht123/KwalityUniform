@@ -1,4 +1,4 @@
-    $(document).ready(function() {
+    <script>$(document).ready(function() {
         // Variant Logic
     let variantIndex = window.productConfig.variantIndex;
 
@@ -8,19 +8,19 @@
                 <tr class="variant-row">
                     <td><input type="text" name="variants[${variantIndex}][sku]" class="form-control form-control-sm" placeholder="e.g. SKU-01" required></td>
                     <td>
-                        <select name="variants[${variantIndex}][size_id]" class="form-select form-select-sm">
+                        <select name="variants[${variantIndex}][size_id]" class="form-control select2 ">
                             <option value="">N/A</option>
                             @foreach($sizes as $size) <option value="{{ $size->size_id }}">{{ $size->size_name }}</option> @endforeach
                         </select>
                     </td>
                     <td>
-                        <select name="variants[${variantIndex}][color_id]" class="form-select form-select-sm">
+                        <select name="variants[${variantIndex}][color_id]" class="form-control select2">
                             <option value="">N/A</option>
                             @foreach($colors as $color) <option value="{{ $color->color_id }}">{{ $color->color_name }}</option> @endforeach
                         </select>
                     </td>
-                    <td><input type="number" step="0.01" name="variants[${variantIndex}][mrp]" class="form-control form-control-sm" placeholder="0.00" required></td>
-                    <td><input type="number" step="0.01" name="variants[${variantIndex}][selling_price]" class="form-control form-control-sm" placeholder="0.00" required></td>
+                    <td><input type="number" step="0.01" name="variants[${variantIndex}][mrp]" class="form-control form-control-sm mrp" placeholder="0.00" required></td>
+                    <td><input type="number" step="0.01" name="variants[${variantIndex}][selling_price]" class="form-control form-control-sm selling_price" placeholder="0.00" required></td>
                     <td><input type="number" name="variants[${variantIndex}][stock_qty]" class="form-control form-control-sm" placeholder="0" required></td>
                     <td><input type="number" name="variants[${variantIndex}][low_stock_alert]" class="form-control form-control-sm" value="5" placeholder="5"></td>
                     <td><input type="text" name="variants[${variantIndex}][barcode]" class="form-control form-control-sm" placeholder="UPC/EAN"></td>
@@ -83,3 +83,28 @@
             $(this).parent().remove();
         });
     });
+$(document).on('input', '.selling_price', function () {
+
+    const row = $(this).closest('tr');
+
+    const mrp = parseFloat(row.find('.mrp').val()) || 0;
+    const sellingPrice = parseFloat($(this).val()) || 0;
+
+    if (mrp <= 0) {
+
+        $(this).val('');
+
+        alertify.warning('Please enter the MRP first.');
+
+        return;
+    }
+
+    if (sellingPrice > mrp) {
+
+        $(this).val(mrp);
+
+        alertify.warning('Selling Price cannot be greater than MRP.');
+    }
+
+});
+</script>

@@ -97,8 +97,23 @@ class CategoryController extends BaseController
     {
         try {
             $category->delete();
+            
+            if (request()->ajax()) {
+                return response()->json([
+                    'status' => true, 
+                    'message' => 'Sub category deleted successfully.'
+                ]);
+            }
+            
             return redirect()->route('category.index')->with('success', 'Sub category deleted successfully.');
         } catch (Throwable $e) {
+            if (request()->ajax()) {
+                return response()->json([
+                    'status' => false, 
+                    'message' => 'Failed to delete sub category: ' . $e->getMessage()
+                ], 500);
+            }
+            
             return back()->with('error', 'Failed to delete sub category: ' . $e->getMessage());
         }
     }

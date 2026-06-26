@@ -97,8 +97,23 @@ class ColorController extends BaseController
     {
         try {
             $color->delete();
+            
+            if (request()->ajax()) {
+                return response()->json([
+                    'status' => true, 
+                    'message' => 'Color deleted successfully.'
+                ]);
+            }
+            
             return redirect()->route('color.index')->with('success', 'Color deleted successfully.');
         } catch (Throwable $e) {
+            if (request()->ajax()) {
+                return response()->json([
+                    'status' => false, 
+                    'message' => 'Failed to delete color: ' . $e->getMessage()
+                ], 500);
+            }
+            
             return back()->with('error', 'Failed to delete color: ' . $e->getMessage());
         }
     }

@@ -35,10 +35,10 @@ class DatabaseSeeder extends Seeder
 
         // Fake Schools
 
-        School::factory()->count(100)->create();
+        School::factory()->count(150)->create();
 
-        // Fake Vendors
+        // Fake Vendorss
 
-        Vendor::factory()->count(100)->create();
+        Vendor::factory()->count(180)->create();
     }
 }

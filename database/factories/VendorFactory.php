@@ -21,6 +21,7 @@ class VendorFactory extends Factory
         $user = User::factory()->create([
             'name' => $businessName,
         ]);
+        $admin = User::first();
 
         $vendorRole = Role::findByName('vendor');
         $user->assignRole($vendorRole);
@@ -31,9 +32,8 @@ class VendorFactory extends Factory
             'email' => $this->faker->unique()->safeEmail(),
 
             'business_name' => $businessName,
-            
-            'phone' => $this->faker->unique()->numerify('##########'),
 
+            'phone' => $this->faker->unique()->numerify('##########'),
 
             'owner_name' => $this->faker->name(),
 
@@ -59,9 +59,8 @@ class VendorFactory extends Factory
 
             'logo_url' => null,
 
-            'created_by' => 1,
-
-            'updated_by' => 1,
+            'created_by' => $admin?->id,
+            'updated_by' => $admin?->id,
         ];
     }
 }

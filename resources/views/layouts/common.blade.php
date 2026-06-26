@@ -24,7 +24,6 @@
     <link rel="stylesheet" href="{{ asset('assets/css/style.scss') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/sweetalert2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/alertify.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/alerti.css') }}">
 
 
     <link href="{{ asset('assets/libs/node-waves/waves.min.css') }}" rel="stylesheet">
@@ -37,22 +36,23 @@
     <link rel="stylesheet" href="{{ asset('assets/css/datatable.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/toast.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/select2.css') }}">
+    <script src="{{ asset('assets/js/alertify.js') }}"></script>
 
 
     @notifyCss
+
 
     @stack('styles')
     <script>
         window.userId = {{ auth()->id() ?? 'null' }};
     </script>
-    @vite(['resources/js/app.js'])
+
 </head>
 
 <body>
-
     @include('components.loader')
     @include('layouts.off-canvas')
-
+         @include('components.alerts')
     <div class="page">
         {{-- Header Include --}}
         @include('layouts.header')
@@ -71,6 +71,7 @@
             </div>
         </div>
 
+
         {{-- Footer section --}}
         {{-- @include('layouts.footer') --}}
     </div>
@@ -82,7 +83,7 @@
     {{-- Toast Notifications --}}
     <script src="{{ asset('assets/js/toast.js') }}"></script>
     <script src="{{ asset('assets/js/sweetalert2.min.js') }}"></script>
-    <script src="{{ asset('assets/js/alertify.js') }}"></script>
+    
 
     <script src="{{ asset('assets/js/defaultmenu.min.js') }}"></script>
     <script src="{{ asset('assets/libs/node-waves/waves.min.js') }}"></script>
@@ -118,8 +119,6 @@
         @endphp
     @endif
 
-    <x-notify::notify />
-    @notifyJs
 
     <script>
         // Show loader on page refresh, navigation, or back/forward navigation
@@ -212,13 +211,16 @@
 
         });
         // Delete Button Confirmation Section
-        $(document).on('click', '.deleteBtn', function() {
-            let url = $(this).data('url');
-            let title = $(this).data('title') ?? 'Record';
+   $(document).on('click', '.deleteBtn', function (e) {
 
-            Swal.fire({
-                title: `Delete ${title}?`,
-                html: `
+    e.preventDefault();
+
+    const url = $(this).data('url');
+    const title = $(this).data('title') || 'Record';
+
+    Swal.fire({
+        title: `Delete ${title}?`,
+        html: `
             <div class="delete-modal-content">
                 <div class="delete-icon-wrapper">
                     <i class="ti ti-trash"></i>
@@ -230,146 +232,122 @@
                 </p>
             </div>
         `,
-                showCancelButton: true,
-                reverseButtons: true,
-                focusCancel: true,
-                confirmButtonText: `
+        icon: 'warning',
+        showCancelButton: true,
+        reverseButtons: true,
+        focusCancel: true,
+        confirmButtonText: `
             <i class="ti ti-trash me-1"></i>
             Delete
         `,
-                cancelButtonText: `
+        cancelButtonText: `
             <i class="ti ti-x me-1"></i>
             Cancel
         `,
-                customClass: {
-                    popup: 'custom-delete-popup',
-                    confirmButton: 'btn btn-danger delete-confirm-btn',
-                    cancelButton: 'btn btn-light delete-cancel-btn'
-                },
-                buttonsStyling: false
-            }).then((result) => {
+        customClass: {
+            popup: 'custom-delete-popup',
+            confirmButton: 'btn btn-danger delete-confirm-btn',
+            cancelButton: 'btn btn-light delete-cancel-btn'
+        },
+        buttonsStyling: false
 
-                if (!result.isConfirmed) return;
+    }).then((result) => {
 
-                $.ajax({
-                    url: url,
-                    type: 'DELETE',
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content')
-                    },
+        if (!result.isConfirmed) return;
 
-                    beforeSend: function() {
+        $.ajax({
 
-                        Swal.fire({
-                            title: `Delete ${title}?`,
-                            html: `
-        <div class="delete-modal-content">
-            <div class="delete-icon-wrapper">
-                <i class="ti ti-trash"></i>
-            </div>
+            url: url,
 
-            <p class="delete-description">
-                This action cannot be undone.<br>
-                The selected ${title.toLowerCase()} will be permanently removed.
-            </p>
-        </div>
-    `,
-                            showCancelButton: true,
-                            reverseButtons: true,
-                            focusCancel: true,
+            type: 'DELETE',
 
-                            confirmButtonText: `
-        <span class="btn-content">
-            <i class="ti ti-trash"></i>
-            <span>Yes, Delete</span>
-        </span>
-    `,
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
 
-                            cancelButtonText: `
-        <span class="btn-content">
-            <i class="ti ti-x"></i>
-            <span>Cancel</span>
-        </span>
-    `,
+            beforeSend: function () {
 
-                            customClass: {
-                                popup: 'custom-delete-popup',
-                                actions: 'swal-action-buttons',
-                                confirmButton: 'delete-confirm-btn',
-                                cancelButton: 'delete-cancel-btn'
-                            },
-
-                            buttonsStyling: false
-                        });
-                    },
-
-                    success: function(response) {
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Deleted Successfully',
-                            text: response.message,
-                            confirmButtonText: 'Continue',
-                            customClass: {
-                                confirmButton: 'btn btn-success'
-                            },
-                            buttonsStyling: false
-                        }).then(() => {
-
-                            if ($.fn.DataTable.isDataTable('#datatable')) {
-
-                                $('#datatable')
-                                    .DataTable()
-                                    .ajax
-                                    .reload(null, false);
-
-                            } else {
-
-                                location.reload();
-
-                            }
-
-                        });
-
-                    },
-
-                    error: function(xhr) {
-
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Deletion Failed',
-                            text: xhr.responseJSON?.message || 'Something went wrong.',
-                            confirmButtonText: 'Close',
-                            customClass: {
-                                confirmButton: 'btn btn-danger'
-                            },
-                            buttonsStyling: false
-                        });
-
+                Swal.fire({
+                    title: 'Deleting...',
+                    text: `Please wait while we delete the ${title.toLowerCase()}.`,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
                     }
                 });
 
-            });
+            },
+
+            success: function (response) {
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Deleted Successfully',
+                    text: response.message || `${title} deleted successfully.`,
+                    confirmButtonText: 'Continue',
+                    customClass: {
+                        confirmButton: 'btn btn-success'
+                    },
+                    buttonsStyling: false
+
+                }).then(() => {
+
+                    if ($.fn.DataTable.isDataTable('#datatable')) {
+
+                        $('#datatable').DataTable().ajax.reload(null, false);
+
+                    } else {
+
+                        location.reload();
+
+                    }
+
+                });
+
+            },
+
+            error: function (xhr) {
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Deletion Failed',
+                    text: xhr.responseJSON?.message || 'Something went wrong.',
+                    confirmButtonText: 'Close',
+                    customClass: {
+                        confirmButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                });
+
+            }
 
         });
 
+    });
+
+});
         $(document).ready(function() {
 
             $('.select2').select2();
         });
         document.querySelectorAll('.dropdown-toggle').forEach(el => {
-    new bootstrap.Dropdown(el, {
-        popperConfig(defaults) {
-            return {
-                ...defaults,
-                strategy: 'fixed'
-            };
-        }
-    });
-});
+            new bootstrap.Dropdown(el, {
+                popperConfig(defaults) {
+                    return {
+                        ...defaults,
+                        strategy: 'fixed'
+                    };
+                }
+            });
+        });
     </script>
 
     @stack('scripts')
+            @notifyJs
+<x-notify::notify />
+    @vite(['resources/js/app.js'])
 </body>
 
 </html>

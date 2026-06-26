@@ -84,6 +84,10 @@ class PermissionSeeder extends Seeder
                 'stock_history_view'      => 'View Stock History',
             ],
 
+            'User Status Management' => [
+                'user.view' => 'View User Status Report',
+                'user.edit' => 'Manage User Status',
+            ],
 
         ];
 

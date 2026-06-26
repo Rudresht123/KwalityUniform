@@ -6,6 +6,7 @@
 <button type="button"
         class="deleteBtn action-badge delete-badge"
         data-url="{{ $url }}"
+        data-title="{{ $title }}"
         data-bs-toggle="tooltip"
         title="{{ $title }}">
 

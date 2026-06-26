@@ -68,8 +68,23 @@ class ParentCategoryController extends BaseController
     {
         try {
             $parentCategory->delete();
+            
+            if (request()->ajax()) {
+                return response()->json([
+                    'status' => true, 
+                    'message' => 'Parent category deleted successfully.'
+                ]);
+            }
+            
             return redirect()->route('parent-category.index')->with('success', 'Parent category deleted successfully.');
         } catch (Throwable $e) {
+            if (request()->ajax()) {
+                return response()->json([
+                    'status' => false, 
+                    'message' => 'Failed to delete parent category: ' . $e->getMessage()
+                ], 500);
+            }
+            
             return back()->with('error', 'Failed to delete parent category: ' . $e->getMessage());
         }
     }

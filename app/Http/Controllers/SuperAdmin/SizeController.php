@@ -94,8 +94,23 @@ class SizeController extends BaseController
     {
         try {
             $size->delete();
+            
+            if (request()->ajax()) {
+                return response()->json([
+                    'status' => true, 
+                    'message' => 'Size deleted successfully.'
+                ]);
+            }
+            
             return redirect()->route('size.index')->with('success', 'Size deleted successfully.');
         } catch (Throwable $e) {
+            if (request()->ajax()) {
+                return response()->json([
+                    'status' => false, 
+                    'message' => 'Failed to delete size: ' . $e->getMessage()
+                ], 500);
+            }
+            
             return back()->with('error', 'Failed to delete size: ' . $e->getMessage());
         }
     }

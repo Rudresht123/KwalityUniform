@@ -13,6 +13,7 @@ class SchoolFactory extends Factory
     public function definition(): array
     {
         $schoolName = $this->faker->unique()->company() . ' School';
+    $admin = User::first();
 
        
         return [
@@ -51,9 +52,8 @@ class SchoolFactory extends Factory
                 '0',
             ]),
 
-            'created_by' => 1,
-
-            'updated_by' => 1,
+            'created_by' => $admin?->id,
+        'updated_by' => $admin?->id,
         ];
     }
        public function configure(): static

@@ -64,18 +64,7 @@ class ProductController extends BaseController
                 ->addColumn('options', function ($row) {
                     $showBtn = '<a href="' . route('product.show', $row->product_id) . '" class="btn btn-icon btn-sm btn-info-light me-1" title="View"><i class="ti-eye"></i></a>';
                     $editBtn = '<a href="' . route('product.edit', $row->product_id) . '" class="btn btn-icon btn-sm btn-primary-light me-1" title="Edit"><i class="ti ti-edit"></i></a>';
-                    $deleteBtn =
-                        '<form action="' .
-                        route('product.destroy', $row->product_id) .
-                        '" method="POST" class="d-inline" onsubmit="return confirm(\'Are you sure you want to delete this product?\');">
-                                    ' .
-                        csrf_field() .
-                        '
-                                    ' .
-                        method_field('DELETE') .
-                        '
-                                    <button type="submit" class="btn btn-icon btn-sm btn-danger-light" title="Delete"><i class="ti-trash"></i></button>
-                                  </form>';
+                    $deleteBtn = view('super-admin.product.actions', compact('row'))->render();
                     return '<div class="btn-list">' . $showBtn . $editBtn . $deleteBtn . '</div>';
                 })
                 ->rawColumns(['image', 'approval_status', 'status', 'options'])
@@ -142,7 +131,7 @@ class ProductController extends BaseController
             $admins = User::role(['super-admin', 'admin'])->get();
             sendNotification(
                 $admins,
-                'product_approval',
+                'product_approval_request',
                 [
                     'product_name' => $product->product_name,
                     'vendor_name' => $product->vendor->business_name,
@@ -150,14 +139,11 @@ class ProductController extends BaseController
                 route('product.show', $product->product_id),
             );
             DB::commit();
-            notify()->success('Product created successfully and submitted for approval.');
-            return redirect()->route('product.index');
+            return redirect()->route('product.index')->with('success', 'Your product has been created successfully and submitted for admin approval.');
         } catch (Throwable $e) {
             DB::rollBack();
-            dd($e->getMessage(), $e->getFile(), $e->getLine());
             \Illuminate\Support\Facades\Log::error('Product creation failed: ' . $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine());
-            notify()->error('Failed to create product. Please check your inputs or try again.');
-            return back()->withInput();
+            return back()->withInput()->with('error', 'Failed to create product. Please check your inputs and try again.');
         }
     }
 
@@ -287,12 +273,12 @@ class ProductController extends BaseController
             }
 
             DB::commit();
-            notify()->success('Product updated successfully.');
-            return redirect()->route('product.index');
+            return redirect()->route('product.index')->with('success', 'Product updated successfully.');
         } catch (Throwable $e) {
             DB::rollBack();
-            notify()->error('Failed to update product: ' . $e->getMessage());
-            return back()->withInput();
+            return back()
+                ->withInput()
+                ->with('error', 'Failed to update product: ' . $e->getMessage());
         }
     }
 
@@ -311,63 +297,63 @@ class ProductController extends BaseController
             }
 
             $product->delete();
-            notify()->success('Product deleted successfully.');
-            return redirect()->route('product.index');
+            
+            if (request()->ajax()) {
+                return response()->json([
+                    'status' => true, 
+                    'message' => 'Product deleted successfully.'
+                ]);
+            }
+
+            return redirect()
+                ->route('product.index')
+                ->with(['success', 'Product deleted successfully.']);
         } catch (Throwable $e) {
-            notify()->error('Failed to delete product: ' . $e->getMessage());
+            if (request()->ajax()) {
+                return response()->json([
+                    'status' => false, 
+                    'message' => 'Failed to delete product: ' . $e->getMessage()
+                ], 500);
+            }
+
+            return back()->with('error','Failed to delete product: ' . $e->getMessage());
+        }
+    }
+
+    public function approve(Product $product)
+    {
+        DB::beginTransaction();
+        try {
+            $product->update([
+                'approval_status' => 'approved',
+                'approved_by' => auth()->id(),
+                'approved_at' => now(),
+            ]);
+
+            // Vendor User
+            $vendorUser = $product->vendor?->user;
+
+            if ($vendorUser) {
+                sendNotification(
+                    $vendorUser,
+                    'product_approved',
+                    [
+                        'product_name' => $product->product_name,
+                    ],
+                    route('vendor.products.show', $product->product_id),
+                );
+            }
+
+            DB::commit();
+            return back()->with(['success', 'Product approved successfully.']);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            report($e);
+
+            notify()->error('Failed to approve product.');
+
             return back();
         }
     }
-
-
-public function approve(Product $product)
-{
-    DB::beginTransaction();
-    try {
-
-        $product->update([
-            'approval_status' => 'approved',
-            'approved_by' => auth()->id(),
-            'approved_at' => now(),
-        ]);
-
-        // Vendor User
-        $vendorUser = $product->vendor?->user;
-
-        if ($vendorUser) {
-
-            sendNotification(
-                $vendorUser,
-                'product_approved',
-                [
-                    'product_name' => $product->product_name,
-                ],
-                route(
-                    'vendor.products.show',
-                    $product->product_id
-                )
-            );
-        }
-
-        DB::commit();
-
-        notify()->success(
-            'Product approved successfully.'
-        );
-
-        return back();
-
-    } catch (\Throwable $e) {
-
-        DB::rollBack();
-
-        report($e);
-
-        notify()->error(
-            'Failed to approve product.'
-        );
-
-        return back();
-    }
-}
 }

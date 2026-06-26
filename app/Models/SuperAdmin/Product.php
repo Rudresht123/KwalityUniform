@@ -77,7 +77,13 @@ class Product extends Record
         return $this->hasMany(ProductApprovalHistory::class, 'product_id', 'product_id')->latest();
     }
 
+    public function schoolApprovals()
+    {
+        return $this->hasMany(SchoolProductApproval::class, 'product_id', 'product_id');
+    }
+
     public function primaryImage()
+
     {
         return $this->hasOne(ProductImage::class, 'product_id', 'product_id')->where('is_primary', true);
     }

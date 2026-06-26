@@ -102,7 +102,33 @@ Route::prefix('stock')->name('stock.')->group(function () {
     Route::post('/adjust', [\App\Http\Controllers\SuperAdmin\StockController::class, 'adjust'])->name('adjust')->middleware('permission:stock_adjust');
 });
 
+Route::prefix('stock-management')->name('stock-management.')->group(function () {
+    Route::get('/index', [\App\Http\Controllers\SuperAdmin\StockManagementController::class, 'index'])->name('index')->middleware('permission:stock_view');
+});
+
+Route::prefix('stock-adjustments')->name('stock-adjustment.')->group(function () {
+    Route::post('/adjust', [\App\Http\Controllers\SuperAdmin\StockAdjustmentController::class, 'adjust'])->name('adjust')->middleware('permission:stock_adjust');
+    Route::get('/history', [\App\Http\Controllers\SuperAdmin\StockAdjustmentController::class, 'history'])->name('history')->middleware('permission:stock_history_view');
+});
+
+Route::prefix('school-product-approvals')->name('school-product-approval.')->group(function () {
+    Route::get('/index', [\App\Http\Controllers\SuperAdmin\SchoolProductApprovalController::class, 'index'])->name('index')->middleware('permission:product_approval_view');
+    Route::post('/approve', [\App\Http\Controllers\SuperAdmin\SchoolProductApprovalController::class, 'approve'])->name('approve')->middleware('permission:product_approval_action');
+    Route::post('/reject', [\App\Http\Controllers\SuperAdmin\SchoolProductApprovalController::class, 'reject'])->name('reject')->middleware('permission:product_approval_action');
+});
+
+Route::prefix('product-previews')->name('product-preview.')->group(function () {
+    Route::get('/{id}', [\App\Http\Controllers\SuperAdmin\ProductPreviewController::class, 'show'])->name('show')->middleware('permission:product.view');
+});
+
+Route::prefix('user-status-report')->name('user-status-report.')->group(function () {
+    Route::get('/index', [\App\Http\Controllers\SuperAdmin\UserStatusReportController::class, 'index'])->name('index')->middleware('permission:user.view');
+    Route::post('/toggle', [\App\Http\Controllers\SuperAdmin\UserStatusReportController::class, 'toggleStatus'])->name('toggle')->middleware('permission:user.edit');
+});
+
 Route::prefix('product-approvals')->name('product-approval.')->group(function () {
+
+
     Route::get('/index', [\App\Http\Controllers\SuperAdmin\ProductApprovalController::class, 'index'])->name('index')->middleware('permission:product_approval_view');
     Route::get('/preview/{productId}', [\App\Http\Controllers\SuperAdmin\ProductApprovalController::class, 'preview'])->name('preview')->middleware('permission:product_approval_view');
     Route::post('/approve/{productId}', [\App\Http\Controllers\SuperAdmin\ProductApprovalController::class, 'approve'])->name('approve')->middleware('permission:product_approval_action');

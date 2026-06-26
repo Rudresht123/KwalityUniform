@@ -34,6 +34,8 @@
                             @if(!auth()->user()->hasRole('vendor'))
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold fs-13">Vendor Account</label>
+
+                                
                                 <select name="vendor_id" class="form-select form-select-sm @error('vendor_id') is-invalid @enderror" required>
                                     <option value="" disabled selected>Select Vendor</option>
                                     @foreach($vendors as $vendor)
@@ -48,14 +50,13 @@
 
                             <div class="col-md-{{ auth()->user()->hasRole('vendor') ? '12' : '6' }}">
                                 <label class="form-label fw-semibold fs-13">Sub Category</label>
-                                <select name="category_id" class="form-select form-select-sm @error('category_id') is-invalid @enderror" required>
-                                    <option value="" disabled selected>Select Category</option>
-                                    @foreach($categories as $category)
-                                        <option value="{{ $category->category_id }}" {{ old('category_id') == $category->category_id ? 'selected' : '' }}>
-                                            {{ $category->category_name }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                @include('custom-component.subCategory',[
+                                    "name"=>"category_id",
+                                    "id"=>"category_id",
+                                    "placeholder"=>"Select Category",
+                                    "selected"=>old('category_id')
+                                ])
+
                                 @error('category_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
 
@@ -210,8 +211,8 @@
                                                         @endforeach
                                                     </select>
                                                 </td>
-                                                <td><input type="number" step="0.01" name="variants[{{ $index }}][mrp]" class="form-control form-control-sm" value="{{ $variant['mrp'] }}" required></td>
-                                                <td><input type="number" step="0.01" name="variants[{{ $index }}][selling_price]" class="form-control form-control-sm" value="{{ $variant['selling_price'] }}" required></td>
+                                                <td><input type="number" step="0.01" name="variants[{{ $index }}][mrp]" class="form-control form-control-sm mrp" value="{{ $variant['mrp'] }}" required></td>
+                                                <td><input type="number" step="0.01" name="variants[{{ $index }}][selling_price]" class="form-control form-control-sm selling_price" value="{{ $variant['selling_price'] }}" required></td>
                                                 <td><input type="number" name="variants[{{ $index }}][stock_qty]" class="form-control form-control-sm" value="{{ $variant['stock_qty'] }}" required></td>
                                                 <td><input type="number" name="variants[{{ $index }}][low_stock_alert]" class="form-control form-control-sm" value="{{ $variant['low_stock_alert'] ?? 5 }}"></td>
                                                 <td><input type="text" name="variants[{{ $index }}][barcode]" class="form-control form-control-sm" value="{{ $variant['barcode'] }}"></td>
@@ -228,7 +229,7 @@
                                         <tr class="variant-row">
                                             <td><input type="text" name="variants[0][sku]" class="form-control form-control-sm" placeholder="SKU" required></td>
                                             <td>
-                                                <select name="variants[0][size_id]" class="form-select form-select-sm">
+                                                <select name="variants[0][size_id]" class="form-control select2">
                                                     <option value="">N/A</option>
                                                     @foreach($sizes as $size)
                                                         <option value="{{ $size->size_id }}">{{ $size->size_name }}</option>
@@ -236,15 +237,15 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <select name="variants[0][color_id]" class="form-select form-select-sm">
+                                                <select name="variants[0][color_id]" class="form-control select2">
                                                     <option value="">N/A</option>
                                                     @foreach($colors as $color)
                                                         <option value="{{ $color->color_id }}">{{ $color->color_name }}</option>
                                                     @endforeach
                                                 </select>
                                             </td>
-                                            <td><input type="number" step="0.01" name="variants[0][mrp]" class="form-control form-control-sm" placeholder="0.00" required></td>
-                                            <td><input type="number" step="0.01" name="variants[0][selling_price]" class="form-control form-control-sm" placeholder="0.00" required></td>
+                                            <td><input type="number" step="0.01" name="variants[0][mrp]" class="form-control form-control-sm mrp" placeholder="0.00" required></td>
+                                            <td><input type="number" step="0.01" name="variants[0][selling_price]" class="form-control form-control-sm selling_price" placeholder="0.00" required></td>
                                             <td><input type="number" name="variants[0][stock_qty]" class="form-control form-control-sm" placeholder="0" required></td>
                                             <td><input type="number" name="variants[0][low_stock_alert]" class="form-control form-control-sm" value="5"></td>
                                             <td><input type="text" name="variants[0][barcode]" class="form-control form-control-sm" placeholder="Barcode"></td>
@@ -266,6 +267,8 @@
         </div>
     </form>
 </div>
+
+@include("super-admin.product.product-form")
 @endsection
 <script>
 window.productConfig = {
@@ -273,6 +276,3 @@ window.productConfig = {
 };
 </script>
 
-@push('scripts')
-<script src="{{ asset('assets/js/custom/product-form.js') }}"></script>
-@endpush
