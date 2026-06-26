@@ -57,6 +57,15 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the school associated with the user.
+     */
+    public function school()
+    {
+        return $this->hasOne(\App\Models\SuperAdmin\School::class, 'user_id');
+    }
+
+
+    /**
      * Notification Data Getting
     */
 

@@ -26,8 +26,11 @@ Route::middleware(['auth', CheckScreenLock::class])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/hide', [NotificationController::class, 'hide'])->name('notifications.hide');
 
+    Route::get('/school-products', [\App\Http\Controllers\School\SchoolProductController::class, 'index'])->name('school.products.index');
+
     require __DIR__ . '/superadmin-routes.php';
 });
+
 
 // Screen Lock specialized routes
 Route::middleware(['auth'])->group(function () {
@@ -39,6 +42,7 @@ Route::delete('/delete-record/{table}/{id}', [DeleteRecord::class, 'deleteRecord
 
 // Notification read
 Route::middleware('auth')->get('/notifications/latest', function () {
+
 
     $notifications = auth()->user()
         ->unreadNotifications()

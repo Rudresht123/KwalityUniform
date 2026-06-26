@@ -135,12 +135,27 @@ class SchoolClassController extends BaseController
     /**
      * Remove the specified school class from storage.
      */
-    public function destroy(SchoolClass $schoolClass): RedirectResponse
+    public function destroy(SchoolClass $schoolClass)
     {
         try {
             $schoolClass->delete();
+            
+            if (request()->ajax()) {
+                return response()->json([
+                    'status' => true, 
+                    'message' => 'School class deleted successfully.'
+                ]);
+            }
+            
             return redirect()->route('school-class.index')->with('success', 'School class deleted successfully.');
         } catch (Throwable $e) {
+            if (request()->ajax()) {
+                return response()->json([
+                    'status' => false, 
+                    'message' => 'Failed to delete school class: ' . $e->getMessage()
+                ], 500);
+            }
+            
             return back()->with('error', 'Failed to delete school class: ' . $e->getMessage());
         }
     }

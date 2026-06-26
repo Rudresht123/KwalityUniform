@@ -58,8 +58,21 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        // Check if the user is active
+        $user = Auth::user();
+        if (!$user || !$user->is_active) {
+            Auth::logout();
+            
+            RateLimiter::clear($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'email' => 'Your account is currently inactive or suspended. Please contact the administrator.',
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
+
 
     /**
      * Ensure the login request is not rate limited.

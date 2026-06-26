@@ -11,9 +11,9 @@
                         <p class="card-subtitle">Manage and refill stock for variants that have reached their low stock threshold.</p>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="stock-table" class="table table-striped table-bordered" style="width:100%">
-                                <thead>
+                       <div class="table-responsive">
+                            <table id="stock-table" class="table datatable" style="width:100%">
+                                 <thead>
                                     <tr>
                                         <th>#</th>
                                         <th>Product</th>

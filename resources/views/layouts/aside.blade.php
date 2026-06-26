@@ -185,7 +185,17 @@
                                         </li>
                                     @endcan
 
+                                    @if(auth()->user()->school)
+                                        <li class="slide {{ request()->routeIs('school.products.index') ? 'active' : '' }}">
+                                            <a href="{{ route('school.products.index') }}" class="side-menu__item {{ request()->routeIs('school.products.index') ? 'active' : '' }}">
+                                                <i class="ti-shopping-cart side-menu__icon"></i>
+                                                <span class="side-menu__label">My Approved Products</span>
+                                            </a>
+                                        </li>
+                                    @endif
+
                                     @canany(['category.view', 'category.create', 'size.view', 'color.view'])
+
 
                                         <li class="slide has-sub {{ request()->routeIs(['category.*', 'parent-category.*', 'size.*', 'color.*']) ? 'open active' : '' }}">
 
@@ -236,13 +246,46 @@
                                     @endcanany
 
                                     @can('stock_view')
-                                        <li class="slide {{ request()->routeIs('stock.*') ? 'active' : '' }}">
-                                            <a href="{{ route('stock.index') }}" class="side-menu__item {{ request()->routeIs('stock.*') ? 'active' : '' }}">
+                                        <li class="slide has-sub {{ request()->routeIs(['stock.*', 'stock-management.*', 'stock-adjustment.*', 'school-product-approval.*']) ? 'open active' : '' }}">
+                                            <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs(['stock.*', 'stock-management.*', 'stock-adjustment.*', 'school-product-approval.*']) ? 'active' : '' }}">
                                                 <i class="ti-dropbox side-menu__icon"></i>
-                                                <span class="side-menu__label">Stock Management</span>
+                                                <span class="side-menu__label">
+                                                    Inventory Management
+                                                </span>
+                                                <i class="fe fe-chevron-right side-menu__angle"></i>
+                                            </a>
+                                            <ul class="slide-menu child1 {{ request()->routeIs(['stock.*', 'stock-management.*', 'stock-adjustment.*', 'school-product-approval.*']) ? 'double-menu-active' : '' }}">
+                                                <li class="slide">
+                                                    <a href="{{ route('stock-management.index') }}" class="side-menu__item {{ request()->routeIs('stock-management.index') ? 'active' : '' }}">
+                                                        Stock Management
+                                                    </a>
+                                                </li>
+                                                <li class="slide">
+                                                    <a href="{{ route('stock.index') }}" class="side-menu__item {{ request()->routeIs('stock.index') ? 'active' : '' }}">
+                                                        Low Stock Alert
+                                                    </a>
+                                                </li>
+                                                @can('product_approval_view')
+                                                    <li class="slide">
+                                                        <a href="{{ route('school-product-approval.index') }}" class="side-menu__item {{ request()->routeIs('school-product-approval.index') ? 'active' : '' }}">
+                                                            School Product Approval
+                                                        </a>
+                                                    </li>
+                                                @endcan
+                                            </ul>
+                                        </li>
+                                    @endcan
+
+                                    @can('user.view')
+                                        <li class="slide {{ request()->routeIs('user-status-report.*') ? 'active' : '' }}">
+                                            <a href="{{ route('user-status-report.index') }}" class="side-menu__item {{ request()->routeIs('user-status-report.index') ? 'active' : '' }}">
+                                                <i class="ti ti-user-check side-menu__icon"></i>
+                                                <span class="side-menu__label">User Status Report</span>
                                             </a>
                                         </li>
                                     @endcan
+
+
                                     
                                     @canany(['school.view', 'school.create'])
 

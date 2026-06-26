@@ -108,8 +108,23 @@ class AdminController extends BaseController
     {
         try {
             $admin->delete();
+            
+            if (request()->ajax()) {
+                return response()->json([
+                    'status' => true, 
+                    'message' => 'Admin deleted successfully.'
+                ]);
+            }
+            
             return redirect()->route('admin.index')->with('success', 'Admin deleted successfully.');
         } catch (Throwable $e) {
+            if (request()->ajax()) {
+                return response()->json([
+                    'status' => false, 
+                    'message' => 'Failed to delete admin: ' . $e->getMessage()
+                ], 500);
+            }
+            
             return back()->with('error', 'Failed to delete admin: ' . $e->getMessage());
         }
     }

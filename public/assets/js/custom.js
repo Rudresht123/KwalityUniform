@@ -641,36 +641,7 @@ function logout() {
 
 
 
-// Server Side Datatable
-$(function () {
 
-    $('.serversideDatatable').each(function () {
 
-        let table = $(this);
-
-        table.DataTable({
-
-            processing: true,
-            serverSide: true,
-
-            ajax: table.data('url'),
-
-            columns: table.data('columns'),
-
-            pageLength: 10,
-
-            lengthMenu: [
-                [10, 25, 50, 100],
-                [10, 25, 50, 100]
-            ],
-
-            responsive: true,
-            autoWidth: false
-
-        });
-
-    });
-
-});
 
 
