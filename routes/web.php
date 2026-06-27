@@ -8,9 +8,12 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Middleware\CheckScreenLock;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return redirect()->to('login');
-});
+// Route::get('/', function () {
+//     return redirect()->to('login');
+// });
+
+
+
 
 // Protect all main routes with CheckScreenLock
 Route::middleware(['auth', CheckScreenLock::class])->group(function () {
@@ -80,4 +83,7 @@ Route::get('/test-notification', function () {
 
 
 
+
+
 require __DIR__ . '/auth.php';
+require __DIR__ . '/website-routes.php';
