@@ -1,0 +1,80 @@
+/*
+ * eSchool Cart - Responsive Styling (Geometric Balance)
+ * Responsive adaptations for different screen sizes.
+ */
+
+@media (max-width: 1024px) {
+  .hero-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px 0;
+  }
+  
+  .hero-main-card {
+    grid-column: span 12;
+    padding: 36px;
+  }
+  
+  .hero-side-panel {
+    grid-column: span 12;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-actions .search-mini-wrap {
+    display: none; /* Hide desktop mini search bar on tablet/mobile */
+  }
+  
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .footer-inner {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+  
+  .footer-links-geo {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .auth-card {
+    margin: 30px 15px;
+    padding: 24px;
+  }
+  
+  .table-geo th {
+    padding: 10px;
+    font-size: 10px;
+  }
+  
+  .table-geo td {
+    padding: 10px;
+  }
+  
+  .table-responsive-geo {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 991px) {
+  .nav-links {
+    display: none !important; /* Mobile menu should be handled via drawer */
+  }
+  
+  .mobile-menu-toggle {
+    display: flex !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-main-card {
+    padding: 24px;
+  }
+}
