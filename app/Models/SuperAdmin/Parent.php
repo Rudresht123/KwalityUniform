@@ -20,6 +20,12 @@ class Parent extends Model
         'state',
         'zip_code',
         'alternate_phone',
+        'gender',
+        'date_of_birth',
+        'national_id',
+        'emergency_contact_name',
+        'emergency_contact_phone',
+        'emergency_contact_relationship',
         'notes',
     ];
 

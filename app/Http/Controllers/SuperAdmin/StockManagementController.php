@@ -19,10 +19,22 @@ class StockManagementController extends BaseController
 
     public function index(Request $request)
     {
-        $this->authorize('viewAny', \App\Policies\StockPolicy::class);
+        \Illuminate\Support\Facades\Gate::authorize('viewAnyStock');
 
         if ($request->ajax()) {
-            $variants = $this->stockRepo->getVariantsQuery();
+            $query = $this->stockRepo->getVariantsQuery()
+                ->join('products', 'product_variants.product_id', '=', 'products.product_id')
+                ->join('vendors', 'products.vendor_id', '=', 'vendors.vendor_id')
+                ->join('categories', 'products.category_id', '=', 'categories.category_id')
+                ->select('product_variants.*');
+
+            // Filter by vendor if the user is a vendor
+            if (auth()->user()->hasRole('vendor')) {
+                $vendorId = auth()->user()->vendor?->vendor_id;
+                $query->where('products.vendor_id', $vendorId);
+            }
+
+            $variants = $query;
 
             return DataTables::of($variants)
                 ->addIndexColumn()
@@ -60,7 +72,7 @@ class StockManagementController extends BaseController
                         $row->variant_id .
                         '\')"
             title="History">
-            <i class="ti ti-eye"></i>
+            <i class="ti-eye"></i>
         </button>
 
         <button class="btn btn-icon btn-sm btn-success-light"
@@ -68,9 +80,15 @@ class StockManagementController extends BaseController
                         $row->variant_id .
                         '\')"
             title="Adjust">
-            <i class="ti ti-plus"></i>
+            <i class="ti-plus"></i>
         </button>
     ';
+                })
+                ->orderColumn('vendor', function ($query, $order) {
+                    $query->orderBy('vendors.business_name', $order);
+                })
+                ->orderColumn('category', function ($query, $order) {
+                    $query->orderBy('categories.category_name', $order); // Note: This requires joining categories table too
                 })
                 ->rawColumns(['product_image', 'status', 'options'])
                 ->make(true);

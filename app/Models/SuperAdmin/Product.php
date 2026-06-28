@@ -18,7 +18,8 @@ class Product extends Record
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $fillable = ['product_id', 'vendor_id', 'category_id', 'product_code', 'product_name', 'description', 'fabric_composition', 'gender_type', 'approval_status', 'approved_by', 'approved_at', 'rejected_by', 'rejected_at', 'rejection_reason', 'is_active', 'created_by', 'updated_by', 'deleted_by'];
+    protected $fillable = ['product_id', 'vendor_id', 'category_id', 'product_code', 'product_name', 'slug', 'meta_title', 'meta_description', 'meta_keywords', 'description', 'fabric_composition', 'gender_type', 'approval_status', 'approved_by', 'approved_at', 'rejected_by', 'rejected_at', 'rejection_reason', 'is_active', 'created_by', 'updated_by', 'deleted_by'];
+
 
     protected $casts = [
         'is_active' => 'boolean',
@@ -80,6 +81,14 @@ class Product extends Record
     public function schoolApprovals()
     {
         return $this->hasMany(SchoolProductApproval::class, 'product_id', 'product_id');
+    }
+
+    /**
+     * Get the assignments for this product.
+     */
+    public function productAssignments()
+    {
+        return $this->hasMany(ProductAssignment::class, 'product_id', 'product_id');
     }
 
     public function primaryImage()

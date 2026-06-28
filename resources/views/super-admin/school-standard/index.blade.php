@@ -10,7 +10,7 @@
                         <p class="mb-0 fs-12 mb-3 text-muted">Manage class mappings by school</p>
                     </div>
                     <div>
-                        <a href="{{ route('school-class.create') }}" class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm">
+                        <a href="{{ route('school-standard.create') }}" class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm">
                             <i class="ti ti-plus me-1"></i>
                             Bulk Add Classes
                         </a>
@@ -47,7 +47,7 @@
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-list justify-content-center">
-                                            <a href="{{ route('school-class.edit', $school->school_id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-none">
+                                            <a href="{{ route('school-standard.edit', $school->school_id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-none">
                                                 <i class="ti ti-edit me-1"></i> Manage Classes
                                             </a>
                                         </div>

@@ -14,7 +14,7 @@ class StockPolicy
      */
     public function viewAny(User $user): bool
     {
-        if ($user->hasRole('super-admin')) {
+        if ($user->hasAnyRole(['super-admin', 'vendor'])) {
             return true;
         }
 
@@ -26,7 +26,7 @@ class StockPolicy
      */
     public function adjust(User $user): bool
     {
-        if ($user->hasRole('super-admin')) {
+        if ($user->hasAnyRole(['super-admin', 'vendor'])) {
             return true;
         }
 
@@ -38,7 +38,7 @@ class StockPolicy
      */
     public function viewHistory(User $user): bool
     {
-        if ($user->hasRole('super-admin')) {
+        if ($user->hasAnyRole(['super-admin', 'vendor'])) {
             return true;
         }
 

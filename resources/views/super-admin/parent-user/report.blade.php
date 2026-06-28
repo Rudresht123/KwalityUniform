@@ -94,7 +94,7 @@
                 { data: 'email', name: 'email' },
                 { data: 'username', name: 'username' },
                 { data: 'registration_date', name: 'created_at' },
-                { data: 'status', name: 'status', orderable: false, searchable: false },
+                { data: 'status', name: 'status', searchable: false },
                 { data: 'options', name: 'options', orderable: false, searchable: false },
             ]
         });

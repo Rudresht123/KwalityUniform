@@ -3,53 +3,33 @@
 namespace App\Models\SuperAdmin;
 
 use App\Models\Record;
-use App\Models\User;
-use Database\Factories\SchoolFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Str;
-use App\Traits\LogsAllActivity;
 
 class School extends Record
 {
     use HasFactory, SoftDeletes;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
     protected $table = 'schools';
-
-    /**
-     * The primary key associated with the table.
-     *
-     * @var string
-     */
     protected $primaryKey = 'school_id';
-
-    /**
-     * The "type" of the primary key ID.
-     *
-     * @var string
-     */
     protected $keyType = 'string';
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
     public $incrementing = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->school_id)) {
+                $model->school_id = (string) \Illuminate\Support\Str::uuid();
+            }
+        });
+    }
+
     protected $fillable = [
         'school_id',
-        'user_id',
         'school_name',
         'principal_name',
         'email',
@@ -58,100 +38,42 @@ class School extends Record
         'city',
         'state',
         'pincode',
-        'affiliation_no',
-        'logo_url',
         'is_active',
+        'user_id',
+        'school_type_id',
+        'school_board_id',
         'created_by',
-        'updated_by'
+        'updated_by',
+        'image_id',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function file()
     {
-        return [
-            'is_active' => 'boolean',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
+        return $this->belongsTo(\App\Models\File::class, 'image_id');
     }
 
-    /**
-     * Boot function from Laravel.
-     */
-    protected static function boot()
+    public function schoolType()
     {
-        parent::boot();
-
-        /**
-         * Generate UUID for new schools.
-         */
-        static::creating(function ($model) {
-            if (!$model->school_id) {
-                $model->school_id = (string) Str::uuid();
-            }
-        });
+        return $this->belongsTo(SchoolType::class, 'school_type_id');
     }
 
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName()
+    public function board()
     {
-        return 'school_id';
+        return $this->belongsTo(SchoolBoard::class, 'school_board_id');
     }
 
-    /**
-     * Factory instance for the model.
-     */
-    protected static function newFactory()
+    public function standards(): HasMany
     {
-        return SchoolFactory::new();
+        return $this->hasMany(SchoolStandard::class, 'school_id', 'school_id');
     }
 
-    /**
-     * Get the classes for the school.
-     */
-    public function classes()
+    public function user()
     {
-        return $this->hasMany(SchoolClass::class, 'school_id', 'school_id');
+        return $this->belongsTo(\App\Models\User::class, 'user_id');
     }
 
-    /**
-     * Scope a query to only include active schools.
-     */
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
-    }
-
-    /**
-     * Get the user associated with the school.
-     */
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Get the user who created the school.
-     */
-    public function creator()
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
-    /**
-     * Get the user who updated the school.
-     */
-    public function updater()
-    {
-        return $this->belongsTo(User::class, 'updated_by');
     }
 }

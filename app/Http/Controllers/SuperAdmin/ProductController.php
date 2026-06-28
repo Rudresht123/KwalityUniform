@@ -21,6 +21,7 @@ use App\Notifications\ProductStatusUpdatedNotification;
 use App\Models\User;
 use Illuminate\Support\Facades\Notification;
 use App\Services\EmailService;
+use Laravel\Reverb\Loggers\Log;
 
 class ProductController extends BaseController
 {
@@ -62,10 +63,8 @@ class ProductController extends BaseController
                     return $row->is_active ? '<span class="badge bg-success">ACTIVE</span>' : '<span class="badge bg-danger">INACTIVE</span>';
                 })
                 ->addColumn('options', function ($row) {
-                    $showBtn = '<a href="' . route('product.show', $row->product_id) . '" class="btn btn-icon btn-sm btn-info-light me-1" title="View"><i class="ti-eye"></i></a>';
-                    $editBtn = '<a href="' . route('product.edit', $row->product_id) . '" class="btn btn-icon btn-sm btn-primary-light me-1" title="Edit"><i class="ti ti-edit"></i></a>';
-                    $deleteBtn = view('super-admin.product.actions', compact('row'))->render();
-                    return '<div class="btn-list">' . $showBtn . $editBtn . $deleteBtn . '</div>';
+                    $actions = view('super-admin.product.actions', compact('row'))->render();
+                    return '<div class="d-flex justify-content-center">' . $actions . '</div>';
                 })
                 ->rawColumns(['image', 'approval_status', 'status', 'options'])
                 ->make(true);
@@ -79,6 +78,7 @@ class ProductController extends BaseController
      */
     public function create()
     {
+
         $vendors = Vendor::approved()->get();
         $categories = Category::active()->get();
         $sizes = Size::active()->orderBy('sort_order')->get();
@@ -91,6 +91,7 @@ class ProductController extends BaseController
      */
     public function store(StoreProductRequest $request)
     {
+     
         DB::beginTransaction();
         try {
             $data = $request->validated();
@@ -105,7 +106,10 @@ class ProductController extends BaseController
                 $data['approval_status'] = 'pending';
             }
 
+            
+          
             $product = Product::create($data);
+
 
             // Handle Multiple Image Uploads
             if ($request->hasFile('images')) {
@@ -138,6 +142,15 @@ class ProductController extends BaseController
                 ],
                 route('product.show', $product->product_id),
             );
+
+            // Also send branded email for New Product Request
+            foreach ($admins as $admin) {
+                EmailService::send('product_approval_request', $admin->email, [
+                    'product_name' => $product->product_name,
+                    'vendor_name' => $product->vendor->business_name,
+                    'view_button' => '<a href="' . route('product.show', $product->product_id) . '" style="background-color: #6B62DD; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Review Product</a>',
+                ]);
+            }
             DB::commit();
             return redirect()->route('product.index')->with('success', 'Your product has been created successfully and submitted for admin approval.');
         } catch (Throwable $e) {
@@ -231,6 +244,7 @@ class ProductController extends BaseController
                 $hasPrimary = $product->images()->where('is_primary', true)->exists();
 
                 foreach ($request->file('images') as $index => $image) {
+                   
                     $fileId = uploadFile($image, 'products');
                     $product->images()->create([
                         'file_id' => $fileId,
@@ -256,16 +270,17 @@ class ProductController extends BaseController
 
             // If status changed to approved/rejected, notify Vendor
             if (isset($data['approval_status']) && $data['approval_status'] !== $oldStatus) {
-                $vendorUser = $product->vendor->user; // Assuming Vendor belongsTo User
+                $vendorUser = $product->vendor->user;
                 if ($vendorUser) {
+                    // 1. System Notification
                     $vendorUser->notify(new ProductStatusUpdatedNotification($product, $request->admin_message ?? ''));
 
-                    // Also send Email using EmailService for branding
+                    // 2. Branded Email
                     EmailService::send('product_status_updated', $vendorUser->email, [
                         'vendor_name' => $product->vendor->owner_name,
                         'product_name' => $product->product_name,
                         'product_code' => $product->product_code,
-                        'status' => strtoupper($product->approval_status),
+                        'status' => strtoupper($data['approval_status']),
                         'admin_message' => $request->admin_message ?? 'Status has been updated by the administration.',
                         'view_button' => '<a href="' . route('product.show', $product->product_id) . '" style="background-color: #6B62DD; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">View Product</a>',
                     ]);
@@ -276,6 +291,7 @@ class ProductController extends BaseController
             return redirect()->route('product.index')->with('success', 'Product updated successfully.');
         } catch (Throwable $e) {
             DB::rollBack();
+            Log::info($e);
             return back()
                 ->withInput()
                 ->with('error', 'Failed to update product: ' . $e->getMessage());
@@ -334,6 +350,7 @@ class ProductController extends BaseController
             $vendorUser = $product->vendor?->user;
 
             if ($vendorUser) {
+                // 1. System Notification
                 sendNotification(
                     $vendorUser,
                     'product_approved',
@@ -342,6 +359,15 @@ class ProductController extends BaseController
                     ],
                     route('vendor.products.show', $product->product_id),
                 );
+
+                // 2. Branded Email
+                EmailService::send('product_approved', $vendorUser->email, [
+                    'vendor_name' => $product->vendor->owner_name,
+                    'product_name' => $product->product_name,
+                    'product_code' => $product->product_code,
+                    'status' => 'APPROVED',
+                    'view_button' => '<a href="' . route('product.show', $product->product_id) . '" style="background-color: #6B62DD; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">View Product</a>',
+                ]);
             }
 
             DB::commit();

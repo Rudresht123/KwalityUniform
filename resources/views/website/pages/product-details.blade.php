@@ -25,7 +25,7 @@
           <!-- Left Col: Product Image (Zoom styling) -->
           <div class="col-md-6">
             <div style="background: #F3F4F6; border-radius: var(--qu-radius); overflow: hidden; aspect-ratio: 4/5; border: 1px solid var(--qu-border-color);">
-              <img id="details-image" src="" alt="" style="width: 100%; height: 100%; object-fit: cover;" />
+              <img id="details-image" src="{{ $product->firstImage() }}" alt="{{ $product->product_name }}" style="width: 100%; height: 100%; object-fit: cover;" />
             </div>
           </div>
 
@@ -33,49 +33,51 @@
           <div class="col-md-6 d-flex flex-column justify-content-center">
             
             <div id="details-school" class="fw-bold text-uppercase mb-2" style="font-size: 12px; letter-spacing: 1px; color: var(--qu-primary);">
-              <!-- Injected by JS -->
+              {{ $product->schoolApprovals->first()?->school?->school_name ?? 'General Wear' }}
             </div>
             
             <h1 id="details-name" class="display-6 fw-extrabold text-dark mb-3">
-              <!-- Injected by JS -->
+              {{ $product->product_name }}
             </h1>
 
             <!-- Ratings -->
             <div class="d-flex align-items-center gap-2 mb-4 pb-3 border-bottom">
               <div class="rating-stars-container">
-                <svg width="14" height="14" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                <svg width="14" height="14" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                <svg width="14" height="14" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                <svg width="14" height="14" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                <svg width="14" height="14" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                @for($i=0; $i<5; $i++)
+                    <svg width="14" height="14" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                @endfor
               </div>
-              <span id="details-rating" class="small fw-bold text-dark">0.0</span>
-              <span id="details-reviews" class="small text-muted"></span>
+              <span id="details-rating" class="small fw-bold text-dark">4.5</span>
+              <span id="details-reviews" class="small text-muted">(Customer Reviews)</span>
             </div>
 
             <!-- Price -->
             <div id="details-price" class="display-5 fw-bold text-primary mb-4" style="font-family: var(--font-display);">
-              $0.00
+              ${{ number_format($product->price, 2) }}
             </div>
 
             <!-- Description -->
             <p id="details-description" class="text-secondary mb-4 small" style="line-height: 1.6;">
-              <!-- Injected by JS -->
+              {{ $product->description }}
             </p>
 
             <!-- Color Options -->
             <div class="mb-4">
               <label class="form-label small fw-semibold d-block mb-2">Available Colors</label>
-              <div id="details-colors-container">
-                <!-- Injected by JS -->
+              <div id="details-colors-container" class="d-flex gap-2">
+                @foreach($product->variants->pluck('color')->unique() as $color)
+                    <span class="color-swatch" style="background-color: #CCC; cursor: pointer;" data-color="{{ $color }}" title="{{ $color }}"></span>
+                @endforeach
               </div>
             </div>
 
             <!-- Size Options -->
             <div class="mb-4">
               <label class="form-label small fw-semibold d-block mb-2">Select Sizing</label>
-              <div id="details-sizes-container">
-                <!-- Injected by JS -->
+              <div id="details-sizes-container" class="d-flex flex-wrap gap-2">
+                @foreach($product->variants->pluck('size')->unique() as $size)
+                    <span class="size-badge" data-size="{{ $size }}" style="cursor: pointer;">{{ $size }}</span>
+                @endforeach
               </div>
               <span class="text-muted" style="font-size: 11px;">Complies with academic sizing board tolerances (+/- 0.5 in)</span>
             </div>

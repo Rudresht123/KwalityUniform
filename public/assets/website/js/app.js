@@ -649,20 +649,29 @@ const State = {
     const finderInput = document.getElementById('home-finder-input');
     const finderBtn = document.getElementById('home-finder-btn');
     if (finderInput && finderBtn) {
-      const searchAction = () => {
-        const query = finderInput.value.trim().toLowerCase();
+      const searchAction = async () => {
+        const query = finderInput.value.trim();
         if (query) {
-          // Find matching school or go to general shop
-          const match = DB.schools.find(s => s.name.toLowerCase().includes(query) || s.location.toLowerCase().includes(query));
-          if (match) {
-            window.location.href = `shop.html?school=${match.id}`;
-          } else {
-            window.location.href = `shop.html?search=${encodeURIComponent(query)}`;
+          try {
+            const response = await fetch(`/api/schools/search?q=${encodeURIComponent(query)}`);
+            const schools = await response.json();
+
+            if (schools.length > 0) {
+              // Redirect to the first match
+              window.location.href = `/shop?school=${schools[0].school_id}`;
+            } else {
+              // Redirect to general search
+              window.location.href = `/shop?search=${encodeURIComponent(query)}`;
+            }
+          } catch (error) {
+            console.error('School search error:', error);
+            window.location.href = `/shop?search=${encodeURIComponent(query)}`;
           }
         } else {
-          window.location.href = `shop.html`;
+          window.location.href = `/shop`;
         }
       };
+
       finderBtn.addEventListener('click', searchAction);
       finderInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') searchAction();

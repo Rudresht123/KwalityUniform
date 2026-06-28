@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 120" width="100%" height="100%">
+  <!-- Definitions for gradients and drop shadows -->
+  <defs>
+    <linearGradient id="bookCoverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E3A8A" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <linearGradient id="brandBlueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0066CC" />
+      <stop offset="100%" stop-color="#004499" />
+    </linearGradient>
+    <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F97316" />
+      <stop offset="100%" stop-color="#EA580C" />
+    </linearGradient>
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.1" />
+    </filter>
+  </defs>
+
+  <!-- 1. Emblem Group (Left Side) -->
+  <g transform="translate(15, 6)" id="logo-emblem" filter="url(#subtleShadow)">
+    
+    <!-- Blue Ruler (Rising in background right) -->
+    <rect x="74" y="10" width="12" height="52" rx="1.5" fill="#3B82F6" transform="rotate(18 80 36)" />
+    <!-- Ruler markings -->
+    <line x1="81" y1="16" x2="85" y2="14.5" stroke="#FFFFFF" stroke-width="1.2" transform="rotate(18 80 36)" />
+    <line x1="81" y1="21" x2="84" y2="20" stroke="#FFFFFF" stroke-width="1" transform="rotate(18 80 36)" />
+    <line x1="81" y1="26" x2="85" y2="24.5" stroke="#FFFFFF" stroke-width="1.2" transform="rotate(18 80 36)" />
+    <line x1="81" y1="31" x2="84" y2="30" stroke="#FFFFFF" stroke-width="1" transform="rotate(18 80 36)" />
+    <line x1="81" y1="36" x2="85" y2="34.5" stroke="#FFFFFF" stroke-width="1.2" transform="rotate(18 80 36)" />
+    <line x1="81" y1="41" x2="84" y2="40" stroke="#FFFFFF" stroke-width="1" transform="rotate(18 80 36)" />
+    <line x1="81" y1="46" x2="85" y2="44.5" stroke="#FFFFFF" stroke-width="1.2" transform="rotate(18 80 36)" />
+    <line x1="81" y1="51" x2="84" y2="50" stroke="#FFFFFF" stroke-width="1" transform="rotate(18 80 36)" />
+
+    <!-- Green Pencil (Rising in background right, left of ruler) -->
+    <g transform="rotate(6 65 35)">
+      <!-- Pencil body -->
+      <rect x="62" y="12" width="9" height="42" fill="#10B981" />
+      <!-- Pencil collar -->
+      <rect x="62" y="10" width="9" height="2" fill="#F3F4F6" />
+      <!-- Pencil wooden tip -->
+      <polygon points="62,10 66.5,3 71,10" fill="#FCD34D" />
+      <!-- Pencil lead point -->
+      <polygon points="65,3 66.5,3 68,5.5 65,5.5" fill="#374151" />
+      <!-- Pencil stripes -->
+      <line x1="65" y1="12" x2="65" y2="54" stroke="#059669" stroke-width="1" />
+    </g>
+
+    <!-- Yellow Pencil (Rising in background left) -->
+    <g transform="rotate(-15 42 35)">
+      <!-- Pencil body -->
+      <rect x="38" y="15" width="9" height="38" fill="#F59E0B" />
+      <!-- Pencil collar -->
+      <rect x="38" y="13" width="9" height="2" fill="#F3F4F6" />
+      <!-- Pencil wooden tip -->
+      <polygon points="38,13 42.5,6 47,13" fill="#FCD34D" />
+      <!-- Pencil lead point -->
+      <polygon points="41,6 42.5,6 44,8.5 41,8.5" fill="#374151" />
+      <!-- Pencil stripes -->
+      <line x1="41" y1="15" x2="41" y2="53" stroke="#D97706" stroke-width="1" />
+    </g>
+
+    <!-- White School Shirt (Base background for tie) -->
+    <path d="M 38,45 L 53,28 L 68,45 L 61,65 L 45,65 Z" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="1.5" />
+    <!-- Blue Collar Left -->
+    <polygon points="38,45 53,38 48,46" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2" />
+    <!-- Blue Collar Right -->
+    <polygon points="68,45 53,38 58,46" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2" />
+    
+    <!-- Dark Blue Tie -->
+    <polygon points="51,41 55,41 57,64 53,68 49,64" fill="#0066CC" stroke="#1E3A8A" stroke-width="1" />
+    <!-- Tie knot -->
+    <polygon points="50,38 56,38 54,42 52,42" fill="#1E3A8A" />
+
+    <!-- Open Book (Foreground overlay) -->
+    <!-- Left pages -->
+    <path d="M 53,88 C 30,81 12,94 12,94 L 12,54 C 12,54 28,42 53,49 Z" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="1.5" stroke-linejoin="round" />
+    <!-- Right pages -->
+    <path d="M 53,88 C 76,81 94,94 94,94 L 94,54 C 94,54 78,42 53,49 Z" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="1.5" stroke-linejoin="round" />
+    
+    <!-- Book Cover Background (Left & Right outer) -->
+    <path d="M 53,91 C 28,84 10,97 10,97 L 10,56 C 10,56 26,44 53,51 Z" fill="url(#bookCoverGrad)" stroke="#0F172A" stroke-width="1.5" stroke-linejoin="round" />
+    <path d="M 53,91 C 78,84 96,97 96,97 L 96,56 C 96,56 80,44 53,51 Z" fill="url(#bookCoverGrad)" stroke="#0F172A" stroke-width="1.5" stroke-linejoin="round" />
+
+    <!-- Paper sheets layering effect (Multiple inner page strokes) -->
+    <path d="M 14,92 C 14,92 29,81 53,87" fill="none" stroke="#E2E8F0" stroke-width="1" />
+    <path d="M 16,90 C 16,90 30,79 53,85" fill="none" stroke="#E2E8F0" stroke-width="1" />
+    <path d="M 92,92 C 92,92 77,81 53,87" fill="none" stroke="#E2E8F0" stroke-width="1" />
+    <path d="M 90,90 C 90,90 76,79 53,85" fill="none" stroke="#E2E8F0" stroke-width="1" />
+
+    <!-- White Circle and Letter 'e' on the Book Spine -->
+    <circle cx="53" cy="71" r="16" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="1.5" />
+    <circle cx="53" cy="71" r="12" fill="url(#brandBlueGrad)" />
+    <text x="53" y="76" font-family="'Inter', -apple-system, sans-serif" font-weight="900" font-size="16" fill="#FFFFFF" text-anchor="middle">e</text>
+  </g>
+
+  <!-- 2. Brand Name Typography Group (Right Side) -->
+  <g transform="translate(132, 10)" id="logo-text">
+    <!-- Inline tspans to auto-calculate layout and avoid character overlaps -->
+    <text x="0" y="55" font-family="'Outfit', 'Inter', -apple-system, sans-serif" font-weight="800" font-size="52" letter-spacing="-1">
+      <tspan fill="#0066CC">e</tspan><tspan fill="#1E3A8A">School</tspan><tspan fill="url(#orangeGrad)">Kart</tspan><tspan font-weight="600" font-size="28" fill="#1E3A8A" letter-spacing="-0.5" dx="2">.com</tspan>
+    </text>
+
+    <!-- Line Divider top -->
+    <line x1="0" y1="70" x2="366" y2="70" stroke="#1E3A8A" stroke-width="1.2" opacity="0.85" />
+    
+    <!-- Tagline (Subtext) -->
+    <text x="183" y="84" font-family="'Inter', -apple-system, sans-serif" font-weight="800" font-size="10" fill="#1E3A8A" letter-spacing="1.8" text-anchor="middle">EVERY SCHOOL NEEDS, DELIVERED TO SCHOOL</text>
+    
+    <!-- Line Divider bottom -->
+    <line x1="0" y1="92" x2="366" y2="92" stroke="#1E3A8A" stroke-width="1.2" opacity="0.85" />
+  </g>
+</svg>

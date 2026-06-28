@@ -4,7 +4,7 @@ namespace App\Http\Requests\SuperAdmin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreSchoolClassRequest extends FormRequest
+class StoreSchoolStandardRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +23,8 @@ class StoreSchoolClassRequest extends FormRequest
     {
         return [
             'school_id' => 'required|exists:schools,school_id',
-            'class_names' => 'required|array|min:1',
-            'class_names.*' => 'required|string|max:255',
+            'standard_names' => 'required|array|min:1',
+            'standard_names.*' => 'required|string|max:255',
             'is_active' => 'nullable|boolean',
         ];
     }

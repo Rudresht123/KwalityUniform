@@ -6,19 +6,27 @@ use App\Http\Controllers\BaseController;
 use App\Http\Requests\SuperAdmin\StoreSizeRequest;
 use App\Http\Requests\SuperAdmin\UpdateSizeRequest;
 use App\Models\SuperAdmin\Size;
+use App\Services\SizeService;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Throwable;
 
 class SizeController extends BaseController
 {
+    protected SizeService $sizeService;
+
+    public function __construct(SizeService $sizeService)
+    {
+        $this->sizeService = $sizeService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $sizes = Size::latest();
+            $sizes = $this->sizeService->getAllSizes();
 
             return DataTables::of($sizes)
                 ->addIndexColumn()
@@ -51,7 +59,7 @@ class SizeController extends BaseController
     public function store(StoreSizeRequest $request)
     {
         try {
-            Size::create($request->validated());
+            $this->sizeService->createSize($request->validated());
             return redirect()->route('size.index')->with('success', 'Size created successfully.');
         } catch (Throwable $e) {
             return back()->withInput()->with('error', 'Failed to create size: ' . $e->getMessage());
@@ -80,7 +88,7 @@ class SizeController extends BaseController
     public function update(UpdateSizeRequest $request, Size $size)
     {
         try {
-            $size->update($request->validated());
+            $this->sizeService->updateSize($size, $request->validated());
             return redirect()->route('size.index')->with('success', 'Size updated successfully.');
         } catch (Throwable $e) {
             return back()->withInput()->with('error', 'Failed to update size: ' . $e->getMessage());
@@ -93,7 +101,7 @@ class SizeController extends BaseController
     public function destroy(Size $size)
     {
         try {
-            $size->delete();
+            $this->sizeService->deleteSize($size);
             
             if (request()->ajax()) {
                 return response()->json([

@@ -12,7 +12,7 @@
             default => 'warning',
         };
 
-        $lowStockCount = $product->variants->sum("low_stock_alert");
+        $lowStockCount = $product->variants->sum('low_stock_alert');
     @endphp
 
     {{-- ── Hero ── --}}
@@ -122,12 +122,65 @@
             <div class="card custom-card h-100">
                 <div class="card-header">
                     <div class="card-title">
-                        <i class="ti ti-photo me-2 text-muted"></i>Primary Image
+                        <i class="ti ti-photo me-2 text-muted"></i>
+                        Product Images
                     </div>
                 </div>
-                <div class="card-body text-center">
-                    <img src="{{ $imageUrl }}" alt="{{ $product->product_name }}" class="img-fluid rounded-3"
-                        style="max-height:300px; object-fit:contain; width:100%;">
+
+                <div class="card-body p-2">
+
+                    @if ($product->images->count())
+                        <div id="productImageSlider" class="carousel slide" data-bs-ride="carousel">
+
+                            <div class="carousel-inner rounded-3">
+
+                                @foreach ($product->images as $index => $image)
+                                    <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                        <img src="{{ getFileUrl($image->file_id) }}" class="d-block w-100 rounded-3"
+                                            alt="Product Image" style="height:320px;object-fit:contain;background:#f8f9fa;">
+                                    </div>
+                                @endforeach
+
+                            </div>
+
+                            @if ($product->images->count() > 1)
+                                <button class="carousel-control-prev" type="button" data-bs-target="#productImageSlider"
+                                    data-bs-slide="prev">
+
+                                    <span class="carousel-control-prev-icon"></span>
+
+                                </button>
+
+                                <button class="carousel-control-next" type="button" data-bs-target="#productImageSlider"
+                                    data-bs-slide="next">
+
+                                    <span class="carousel-control-next-icon"></span>
+
+                                </button>
+
+                                <div class="carousel-indicators position-static mt-3">
+
+                                    @foreach ($product->images as $index => $image)
+                                        <button type="button" data-bs-target="#productImageSlider"
+                                            data-bs-slide-to="{{ $index }}"
+                                            class="{{ $index == 0 ? 'active' : '' }}">
+                                        </button>
+                                    @endforeach
+
+                                </div>
+                            @endif
+
+                        </div>
+                    @else
+                        <div class="text-center py-5">
+                            <img src="{{ asset('assets/images/no-image.png') }}" width="150" class="opacity-50">
+                            <p class="text-muted mt-3 mb-0">
+                                No Image Available
+                            </p>
+                        </div>
+
+                    @endif
+
                 </div>
             </div>
         </div>

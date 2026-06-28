@@ -51,4 +51,33 @@ class ProductRepository
     {
         return Product::destroy($id);
     }
+
+    public function getFeaturedProducts($limit = 8)
+    {
+        return Product::approved()->active()->latest()->take($limit)->get();
+    }
+
+    public function searchProducts(array $filters = [])
+    {
+        $query = Product::approved()->active();
+
+        if (!empty($filters['school'])) {
+            $query->whereHas('schoolApprovals', function ($q) use ($filters) {
+                $q->where('school_id', $filters['school']);
+            });
+        }
+
+        if (!empty($filters['category'])) {
+            $query->where('category_id', $filters['category']);
+        }
+
+        if (!empty($filters['search'])) {
+            $query->where(function ($q) use ($filters) {
+                $q->where('product_name', 'like', '%' . $filters['search'] . '%')
+                  ->orWhere('description', 'like', '%' . $filters['search'] . '%');
+            });
+        }
+
+        return $query->latest()->paginate(12);
+    }
 }

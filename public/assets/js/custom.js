@@ -429,11 +429,32 @@ function removeSearchResult(event){
 /* full screen */
 var elem = document.documentElement;
 function openFullscreen() {
-  if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
-    requestFullscreen();
-  } else {
-    exitFullscreen();
-  }
+
+    const elem = document.documentElement;
+
+    if (!elem) return;
+
+    if (!document.fullscreenElement) {
+
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen();
+        }
+
+    } else {
+
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+
+    }
 }
 function requestFullscreen() {
   if (elem.requestFullscreen) {
