@@ -6,19 +6,27 @@ use App\Http\Controllers\BaseController;
 use App\Http\Requests\SuperAdmin\StoreColorRequest;
 use App\Http\Requests\SuperAdmin\UpdateColorRequest;
 use App\Models\SuperAdmin\Color;
+use App\Services\ColorService;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Throwable;
 
 class ColorController extends BaseController
 {
+    protected ColorService $colorService;
+
+    public function __construct(ColorService $colorService)
+    {
+        $this->colorService = $colorService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $colors = Color::latest();
+            $colors = $this->colorService->getAllColors();
 
             return DataTables::of($colors)
                 ->addIndexColumn()
@@ -54,7 +62,7 @@ class ColorController extends BaseController
     public function store(StoreColorRequest $request)
     {
         try {
-            Color::create($request->validated());
+            $this->colorService->createColor($request->validated());
             return redirect()->route('color.index')->with('success', 'Color created successfully.');
         } catch (Throwable $e) {
             return back()->withInput()->with('error', 'Failed to create color: ' . $e->getMessage());
@@ -83,7 +91,7 @@ class ColorController extends BaseController
     public function update(UpdateColorRequest $request, Color $color)
     {
         try {
-            $color->update($request->validated());
+            $this->colorService->updateColor($color, $request->validated());
             return redirect()->route('color.index')->with('success', 'Color updated successfully.');
         } catch (Throwable $e) {
             return back()->withInput()->with('error', 'Failed to update color: ' . $e->getMessage());
@@ -96,7 +104,7 @@ class ColorController extends BaseController
     public function destroy(Color $color)
     {
         try {
-            $color->delete();
+            $this->colorService->deleteColor($color);
             
             if (request()->ajax()) {
                 return response()->json([

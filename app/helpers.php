@@ -73,7 +73,6 @@ if (!function_exists('formateDate')) {
             if (!$file) {
                 return asset($default);
             }
-
             return $file->url;
         }
     }
@@ -135,6 +134,10 @@ if (!function_exists('emailButton')) {
                 $message = str_replace('{' . $placeholder . '}', $value, $message);
             }
 
+            $channels = is_array($template->channels)
+    ? $template->channels
+    : json_decode($template->channels, true);
+
             Notification::send(
                 $users,
                 new SystemNotification(
@@ -146,29 +149,70 @@ if (!function_exists('emailButton')) {
                         'url' => $url,
                         'created_at' => now(),
                     ],
-                    $template->channels,
+                    $channels,
                 ),
             );
         }
     }
 
-if(!function_exists('vendors')){
-    function vendors($search = null){
-        return (new GlobalRepository())->vendors($search);
+    if (!function_exists('vendors')) {
+        function vendors($search = null)
+        {
+            return new GlobalRepository()->vendors($search);
+        }
     }
-}
 
-if(!function_exists('category')){
-    function category($search = null){
-        return (new GlobalRepository())->category($search);
+    if (!function_exists('category')) {
+        function category($search = null)
+        {
+            return new GlobalRepository()->category($search);
+        }
     }
-}
 
-if(!function_exists('subCategory')){
-    function subCategory($search = null){
-        return (new GlobalRepository())->subcategory($search);
+    if (!function_exists('subCategory')) {
+        function subCategory($search = null)
+        {
+            return new GlobalRepository()->subcategory($search);
+        }
     }
-}
+
+    if (!function_exists('featuredSchools')) {
+        function featuredSchools($limit = 4)
+        {
+            return new GlobalRepository()->featuredSchools($limit);
+        }
+    }
+
+       if (!function_exists('schools')) {
+        function schools($search = [])
+        {
+            return new GlobalRepository()->schools($search);
+        }
+    }
+
+    if (!function_exists('featuredCategories')) {
+        function featuredCategories($limit = 6)
+        {
+            return new GlobalRepository()->featuredCategories($limit);
+        }
+    }
+
+    if (!function_exists('featuredProducts')) {
+        function featuredProducts($limit = 8)
+        {
+            return new \App\Repositories\ProductRepository()->getFeaturedProducts($limit);
+        }
+    }
+    if (!function_exists('userRole')) {
+        function userRole(): string
+        {
+            if (!auth()->check()) {
+                return '';
+            }
+
+            return auth()->user()?->roles()->first()?->name ?? '';
+        }
+    }
 }
 
 ?>

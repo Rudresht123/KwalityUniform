@@ -1,7 +1,6 @@
 @extends('layouts.common')
 
 @section('content')
-
     @if (auth()->user()->hasRole('super-admin') || auth()->user()->hasRole('admin'))
         @include('dashboard.super-admin')
     @elseif(auth()->user()->hasRole('vendor'))

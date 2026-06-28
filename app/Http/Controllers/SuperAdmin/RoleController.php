@@ -97,7 +97,7 @@ class RoleController extends BaseController
     public function edit(Role $role): View
     {
         $role->load('permissions');
-        $groupedPermissions = $this->roleService->getGroupedPermissions();
+        $groupedPermissions = $this->roleService->getGroupedPermissions($role->name);
         return view('super-admin.role.edit', compact('role', 'groupedPermissions'), $this->pageData('Edit Role', 'Home|Access Control|Roles|Edit'));
     }
 

@@ -13,9 +13,45 @@ class RoleService
         return Role::whereNot("name","super-admin")->get();
     }
 
-    public function getGroupedPermissions()
+    public function getGroupedPermissions(?string $roleName = null)
     {
-        return Permission::all()->groupBy('group_name');
+        $permissions = Permission::all();
+
+        if ($roleName) {
+            $roleName = strtolower($roleName);
+            
+            $mapping = [
+                'school' => [
+                    'School Management', 
+                    'Parent Management',
+                ],
+                'vendor' => [
+                    'Vendor Management', 
+                    'Product Management', 
+                ],
+                'admin' => [
+                    'Vendor Management',
+                    'School Management',
+                    'School Board Management',
+                    'User Management',
+                    'Parent Management',
+                    'Product Management',
+                    'System Management',
+                ],
+                'parent' => [
+                    'School Management',
+                ],
+            ];
+
+            foreach ($mapping as $keyword => $allowedGroups) {
+                if (str_contains($roleName, $keyword)) {
+                    $permissions = $permissions->whereIn('group_name', $allowedGroups);
+                    break;
+                }
+            }
+        }
+
+        return $permissions->groupBy('group_name');
     }
 
     public function createRole(array $data): Role

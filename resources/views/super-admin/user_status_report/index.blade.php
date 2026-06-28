@@ -1,12 +1,12 @@
 @extends('layouts.common')
 
 @section('content')
-<div class="page-content">
-    <div class="container-fluid">
 
+<div class="col-lg-12">
+    
         <div class="card custom-card">
                <div class="card-body">
-                 <div class="rowand why ">
+                 <div class="row ">
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="form-label">User Type</label>
@@ -65,13 +65,12 @@
                 </div>
             </div>
         </div>
-    </div>
 </div>
 
 @push('scripts')
 <script>
     $(document).ready(function() {
-        const table = $('#user-status-table').DataTable({
+        const table = initDataTable('#user-status-table',{
             destroy: true,
             processing: true,
             serverSide: true,
@@ -88,11 +87,10 @@
                 { data: 'email', name: 'email' },
                 { data: 'user_type', name: 'user_type' },
                 { data: 'entity_name', name: 'entity_name' },
-                { data: 'status_badge', name: 'status_badge', orderable: false, searchable: false },
+                { data: 'status_badge', name: 'status_badge', searchable: false },
                 { data: 'actions', name: 'actions', orderable: false, searchable: false },
             ],
         });
-
 
         $('#filter-btn').on('click', function() {
             table.ajax.reload();
@@ -135,7 +133,6 @@
                 }
             });
         });
-
     });
 </script>
 @endpush

@@ -575,20 +575,22 @@
                     class="row g-3 align-items-end pa-filter-bar">
                     <input type="hidden" name="is_search" value="1">
                     {{-- Vendor --}}
-                    <div class="col-md-3">
-                        <label class="pa-filter-label mb-2">
-                            Vendor
-                        </label>
+                    @if(!auth()->user()->hasRole('vendor'))
+                        <div class="col-md-3">
+                            <label class="pa-filter-label mb-2">
+                                Vendor
+                            </label>
 
-                        @include('custom-component.vendor', [
-                            'id' => 'vendor_id',
-                            'name' => 'vendor_id',
-                            'valueField' => 'vendor_id',
-                            'textField' => 'business_name',
-                            'selected' => request('vendor_id'),
-                            'placeholder' => 'All Vendors',
-                        ])
-                    </div>
+                            @include('custom-component.vendor', [
+                                'id' => 'vendor_id',
+                                'name' => 'vendor_id',
+                                'valueField' => 'vendor_id',
+                                'textField' => 'business_name',
+                                'selected' => request('vendor_id'),
+                                'placeholder' => 'All Vendors',
+                            ])
+                        </div>
+                    @endif
 
                     {{-- Category --}}
                     <div class="col-md-3">

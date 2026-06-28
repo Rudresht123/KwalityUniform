@@ -1,168 +1,266 @@
-@if(!$school)
-    <div class="alert alert-warning mt-4">
-        <h5 class="fw-bold"><i class="ti ti-alert-triangle me-2"></i>School Not Found</h5>
-        <p class="mb-0">Your account is not currently linked to a registered school. Please contact the administrator.</p>
-    </div>
-@else
-    <div class="row mt-4">
-        {{-- Welcome Card --}}
-        <div class="col-lg-12 mb-4">
-            <div class="card custom-card shadow-sm border-0 bg-primary text-white overflow-hidden">
-                <div class="card-body p-4 position-relative">
-                    <div class="row align-items-center">
-                        <div class="col-md-8">
-                            <h3 class="fw-bold mb-1">Welcome back, {{ $school->school_name }}!</h3>
-                            <p class="mb-0 text-white-50">Here's an overview of your school's current configuration and class status.</p>
-                        </div>
-                        <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                            <span class="badge bg-white text-primary rounded-pill px-4 py-2 fs-14 fw-bold shadow-sm">
-                                <i class="ti ti-calendar-event me-1"></i> {{ now()->format('l, d M Y') }}
-                            </span>
-                        </div>
+@php
+    $breadcrumb = 'School Dashboard';
+    $title = 'School Management Overview';
+@endphp
+
+<style>
+    /* Matching Vendor Dashboard Aesthetics */
+    .g-root {
+        color: var(--text-primary, #1e293b);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    .section-label {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        color: #6c757d;
+        margin: 1.5rem 0 .75rem;
+    }
+    .kpi-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px;
+        margin-bottom: 1.5rem;
+    }
+    .kpi-card {
+        background: #fff;
+        border: 1px solid #edf2f9;
+        border-radius: 12px;
+        padding: 14px 16px;
+        transition: border-color .2s, transform .2s;
+    }
+    .kpi-card:hover {
+        border-color: #6259ca;
+        transform: translateY(-2px);
+    }
+    .kpi-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+    }
+    .kpi-label {
+        font-size: 11px;
+        color: #6c757d;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .3px;
+    }
+    .kpi-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+    }
+    .kpi-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: #1e293b;
+        line-height: 1;
+    }
+    .kpi-sub {
+        font-size: 11px;
+        margin-top: 5px;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+    }
+    .icon-blue { background: rgba(42, 120, 214, .1); color: #2a78d6; }
+    .icon-teal { background: rgba(27, 175, 122, .1); color: #1baf7a; }
+    .icon-violet { background: rgba(74, 58, 167, .1); color: #4a3aa7; }
+    .panel {
+        background: #fff;
+        border: 1px solid #edf2f9;
+        border-radius: 12px;
+        padding: 18px 20px;
+        margin-bottom: 12px;
+    }
+    .panel-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: #1e293b;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 14px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    .charts-2col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+    @media (max-width: 992px) {
+        .charts-2col { grid-template-columns: 1fr; }
+    }
+    .act-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    .act-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .act-body { flex-grow: 1; }
+    .act-name { font-size: 13px; font-weight: 600; color: #1e293b; }
+    .act-meta { font-size: 11px; color: #6c757d; }
+</style>
+
+<div class="g-root">
+    @if(!$school)
+        <div class="alert alert-warning border-0 shadow-sm">
+            <div class="d-flex align-items-center">
+                <i class="ti ti-alert-triangle fs-2 me-3"></i>
+                <div>
+                    <h6 class="fw-bold mb-1">School Not Found</h6>
+                    <p class="mb-0 small">Your account is not currently linked to a registered school. Please contact the administrator.</p>
+                </div>
+            </div>
+        </div>
+    @else
+        {{-- WELCOME BANNER --}}
+        <div class="card custom-card shadow-sm border-0 bg-primary text-white mb-4 overflow-hidden"
+            style="background: linear-gradient(135deg, #2a78d6 0%, #4a3aa7 100%) !important;">
+            <div class="card-body p-4 position-relative">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h3 class="fw-bold mb-1">Welcome, {{ $school->school_name }}!</h3>
+                        <p class="mb-0 text-white-50">Manage your school's uniform catalogue and classes with real-time insights.</p>
                     </div>
-                    {{-- Decorative SVG --}}
-                    <div class="position-absolute end-0 bottom-0 opacity-10 mb-n4 me-n4">
-                        <i class="ti ti-school" style="font-size: 15rem;"></i>
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <span class="badge bg-white text-primary rounded-pill px-4 py-2 fs-14 fw-bold shadow-sm">
+                            <i class="ti ti-calendar-event me-1"></i> {{ now()->format('l, d M Y') }}
+                        </span>
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- Stats Cards --}}
-        <div class="col-xl-4 col-md-6">
-            <div class="card custom-card shadow-sm border-0">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1">
-                            <p class="text-muted small fw-bold text-uppercase mb-1">Total Classes</p>
-                            <h3 class="fw-bold mb-0 text-dark">{{ $totalClasses }}</h3>
-                        </div>
-                        <div class="bg-primary-subtle text-primary p-3 rounded-circle">
-                            <i class="ti ti-book fs-3"></i>
-                        </div>
-                    </div>
+        {{-- KPI TILES --}}
+        <div class="section-label">School Metrics</div>
+        <div class="kpi-row">
+            <div class="kpi-card">
+                <div class="kpi-top">
+                    <span class="kpi-label">Total Classes</span>
+                    <span class="kpi-icon icon-violet"><i class="ti ti-book"></i></span>
                 </div>
+                <div class="kpi-value">{{ $kpis['total_classes'] ?? 0 }}</div>
+                <div class="kpi-sub text-mute">Total defined classes</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-top">
+                    <span class="kpi-label">Active Classes</span>
+                    <span class="kpi-icon icon-teal"><i class="ti ti-circle-check"></i></span>
+                </div>
+                <div class="kpi-value">{{ $kpis['active_classes'] ?? 0 }}</div>
+                <div class="kpi-sub text-ok">Currently operational</div>
             </div>
         </div>
 
-        <div class="col-xl-4 col-md-6">
-            <div class="card custom-card shadow-sm border-0">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1">
-                            <p class="text-muted small fw-bold text-uppercase mb-1">Active Classes</p>
-                            <h3 class="fw-bold mb-0 text-success">{{ $activeClasses }}</h3>
-                        </div>
-                        <div class="bg-success-subtle text-success p-3 rounded-circle">
-                            <i class="ti ti-circle-check fs-3"></i>
-                        </div>
-                    </div>
-                </div>
+        {{-- GROWTH & TRENDS --}}
+        <div class="section-label">Insights & Trends</div>
+        <div class="panel mb-4">
+            <div class="panel-title">
+                <i class="ti ti-chart-line" style="color:#6259ca"></i>
+                Class Setup Trend
             </div>
+            <div id="classTrendChart"></div>
         </div>
 
-        <div class="col-xl-4 col-md-12">
-            <div class="card custom-card shadow-sm border-0">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1">
-                            <p class="text-muted small fw-bold text-uppercase mb-1">School Status</p>
-                            <div class="mt-1">
-                                <x-status-badge :value="$school->is_active" :active="true" :inactive="false" />
+        <div class="charts-2col">
+            <div class="panel">
+                <div class="panel-title">
+                    <i class="ti ti-bell" style="color:#f59e0b"></i>
+                    Notifications
+                </div>
+                <div class="notification-list" style="max-height:400px;overflow:scroll;">
+                    @forelse($notifications ?? [] as $note)
+                        <div class="act-row">
+                            <div class="act-avatar" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
+                                <i class="ti ti-bell"></i>
+                            </div>
+                            <div class="act-body">
+                                <div class="act-name">{{ $note['description'] }}</div>
+                                <div class="act-meta">{{ \Carbon\Carbon::parse($note['created_at'])->diffForHumans() }}</div>
                             </div>
                         </div>
-                        <div class="bg-info-subtle text-info p-3 rounded-circle">
-                            <i class="ti ti-building-broadcast-tower fs-3"></i>
+                    @empty
+                        <div class="text-center py-3 text-muted small">No notifications at this time.</div>
+                    @endforelse
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">
+                    <i class="ti ti-activity" style="color:#1baf7a"></i>
+                    Recent Activity
+                </div>
+                <div class="activity-list" style="max-height:400px;overflow:scroll;">
+                    @foreach($recentActivity ?? [] as $act)
+                        <div class="act-row">
+                            <div class="act-avatar" style="background:{{ $act['bg'] ?? '#eee' }};color:{{ $act['color'] ?? '#333' }}">
+                                <i class="ti {{ $act['icon'] ?? 'ti-info' }}"></i>
+                            </div>
+                            <div class="act-body">
+                                <div class="act-name">{{ $act['name'] ?? 'No details' }}</div>
+                                <div class="act-meta">{{ $act['meta'] ?? 'System' }} &middot; {{ $act['time'] ?? 'N/A' }}</div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mt-4">
-        {{-- Class Status Chart --}}
-        <div class="col-xl-12 mb-4">
-            <div class="card custom-card shadow-sm border-0">
-                <div class="card-header bg-white border-bottom py-3">
-                    <h6 class="mb-0 fw-bold"><i class="ti ti-chart-bar me-2 text-primary"></i>Class Status Distribution</h6>
-                </div>
-                <div class="card-body">
-                    <div id="class-status-chart" style="min-height: 200px;"></div>
+                    @endforeach
                 </div>
             </div>
         </div>
 
-        {{-- Recent Classes --}}
-        <div class="col-lg-8">
-            <div class="card custom-card shadow-sm border-0">
-                <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0 fw-bold"><i class="ti ti-list-details me-2 text-primary"></i>Your Recent Classes</h6>
-                    <a href="{{ route('school-class.edit', $school->school_id) }}" class="btn btn-sm btn-light text-primary fw-bold">Manage All</a>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table align-middle mb-0">
-                            <thead class="bg-light">
-                                <tr>
-                                    <th class="ps-4 border-0 small text-uppercase fw-bold text-muted">Class Name</th>
-                                    <th class="border-0 small text-uppercase fw-bold text-muted">Status</th>
-                                    <th class="border-0 small text-uppercase fw-bold text-muted">Created At</th>
+        {{-- RECENT CLASSES --}}
+        <div class="section-label">Your Recent Classes</div>
+        <div class="panel">
+            <div class="panel-title d-flex justify-content-between align-items-center">
+                <span><i class="ti ti-list-details me-2 text-primary"></i>Class List</span>
+                <a href="{{ route('school-standard.edit', $school->school_id) }}" class="btn btn-sm btn-light text-primary fw-bold py-0 px-2" style="font-size: 11px;">Manage All</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4 border-0 small text-uppercase fw-bold text-muted">Class Name</th>
+                            <th class="border-0 small text-uppercase fw-bold text-muted">Status</th>
+                            <th class="border-0 small text-uppercase fw-bold text-muted">Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($recentClasses ?? [] as $rClass)
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="fw-semibold text-dark">{{ $rClass->class_name }}</div>
+                                </td>
+                                <td>
+                                    <x-status-badge :value="$rClass->is_active" :active="true" :inactive="false" />
+                                </td>
+                                <td>
+                                    <div class="small text-muted">{{ $rClass->created_at->format('M d, Y') }}</div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" class="text-center py-4 text-muted small italic">No classes defined yet.</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($recentClasses as $rClass)
-                                    <tr>
-                                        <td class="ps-4">
-                                            <div class="fw-semibold text-dark">{{ $rClass->class_name }}</div>
-                                        </td>
-                                        <td>
-                                            <x-status-badge :value="$rClass->is_active" :active="true" :inactive="false" />
-                                        </td>
-                                        <td>
-                                            <div class="small text-muted">{{ $rClass->created_at->format('M d, Y') }}</div>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="3" class="text-center py-4 text-muted small italic">No classes defined yet.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- Quick Actions --}}
-        <div class="col-lg-4">
-            <div class="card custom-card shadow-sm border-0">
-                <div class="card-header bg-white border-bottom py-3">
-                    <h6 class="mb-0 fw-bold"><i class="ti ti-bolt me-2 text-warning"></i>Quick Links</h6>
-                </div>
-                <div class="card-body">
-                    <div class="list-group list-group-flush">
-                        <a href="{{ route('school-class.edit', $school->school_id) }}" class="list-group-item list-group-item-action d-flex align-items-center border-0 rounded-3 mb-2 bg-light-subtle py-3">
-                            <div class="bg-primary text-white p-2 rounded-circle me-3">
-                                <i class="ti ti-settings-automation fs-6"></i>
-                            </div>
-                            <div>
-                                <p class="mb-0 fw-semibold small">Manage Class List</p>
-                                <small class="text-muted">Add or remove classes for your school</small>
-                            </div>
-                        </a>
-                        <a href="{{ route('profile.edit') }}" class="list-group-item list-group-item-action d-flex align-items-center border-0 rounded-3 bg-light-subtle py-3">
-                            <div class="bg-info text-white p-2 rounded-circle me-3">
-                                <i class="ti ti-user-edit fs-6"></i>
-                            </div>
-                            <div>
-                                <p class="mb-0 fw-semibold small">Update Profile</p>
-                                <small class="text-muted">Change your password or email</small>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -170,15 +268,20 @@
 
 @push('scripts')
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        initDashboardChart("#class-status-chart", "bar", 
-            [{{ $activeClasses }}, {{ $inactiveClasses }}], 
-            ['Active', 'Inactive'], 
-            { 
-                colors: ['#28a745', '#dc3545'],
-                height: 250
-            }
-        );
+    document.addEventListener('DOMContentLoaded', function() {
+        new ApexCharts(document.querySelector('#classTrendChart'), {
+            chart: { type: 'line', height: 300, toolbar: { show: false }, zoom: { enabled: false } },
+            series: [{
+                name: 'Classes Added',
+                data: [1, 3, 2, 5, 4, 6, 8, 5, 7, 9, 4, 6] // Placeholder data
+            }],
+            xaxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] },
+            colors: ['#6259ca'],
+            stroke: { curve: 'smooth', width: 3 },
+            markers: { size: 4 },
+            dataLabels: { enabled: false },
+            tooltip: { theme: 'light' }
+        }).render();
     });
 </script>
 @endpush

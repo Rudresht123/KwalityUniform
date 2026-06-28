@@ -1,13 +1,13 @@
 <aside class="app-sidebar sticky" id="sidebar"> <!-- Start::main-sidebar-header -->
     <div class="main-sidebar-header"> 
-        {{-- <a href="{{ route('dashboard') }}" class="header-logo"> 
-            <img src="{{ asset('assets/icons/favicon.png') }}" class="desktop-white logo-interactive" alt="logo"> 
-            <img src="{{ asset('assets/icons/favicon.png') }}" class="toggle-white logo-interactive" alt="logo"> 
-            <img src="{{ asset('assets/icons/favicon.png') }}" class="desktop-logo logo-interactive" alt="logo"> 
-            <img src="{{ asset('assets/icons/favicon.png') }}" class="toggle-dark logo-interactive" alt="logo"> 
-            <img src="{{ asset('assets/icons/favicon.png') }}" class="toggle-logo logo-interactive" alt="logo"> 
-            <img src="{{ asset('assets/icons/favicon.png') }}" class="desktop-dark logo-interactive" alt="logo"> 
-        </a>  --}}
+        <a href="{{ route('dashboard') }}" class="header-logo"> 
+            <img src="{{ asset('assets/images/logo.svg') }}" class="desktop-white logo-interactive" alt="logo"> 
+            <img src="{{ asset('assets/images/logo.svg') }}" class="toggle-white logo-interactive" alt="logo"> 
+            <img src="{{ asset('assets/images/logo.svg') }}" class="desktop-logo logo-interactive" alt="logo"> 
+            <img src="{{ asset('assets/images/logo.svg') }}" class="toggle-dark logo-interactive" alt="logo"> 
+            <img src="{{ asset('assets/images/logo.svg') }}" class="toggle-logo logo-interactive" alt="logo"> 
+            <img src="{{ asset('assets/images/logo.svg') }}" class="desktop-dark logo-interactive" alt="logo"> 
+        </a> 
     </div>
 
     <style>
@@ -61,7 +61,9 @@
     <div class="main-sidebar" id="sidebar-scroll" data-simplebar="init">
         <div class="simplebar-wrapper" style="margin: -14.4px 0px -80px;">
             <div class="simplebar-height-auto-observer-wrapper">
-                <div class="simplebar-height-auto-observer"></div>
+                <div class="simplebar-height-auto-observer">
+                    
+                </div>
             </div>
             <div class="simplebar-mask">
                 <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
@@ -123,6 +125,10 @@
 
                                     @endcanany 
 
+                                    <!-- Start::slide__category -->
+                                    <li class="slide__category"><span class="category-name">Product Management</span></li>
+                                    <!-- End::slide__category -->
+
                                     @if(auth()->user()->hasRole('vendor'))
                                     @canany(['product.view', 'product.create'])
 
@@ -154,12 +160,21 @@
                                                     </li>
                                                 @endcan
 
+                                                @can('product_assignment.view')
+                                                    <li class="slide">
+                                                        <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs('product-assignment.*') ? 'active' : '' }}">
+                                                            Product Assignments
+                                                        </a>
+                                                    </li>
+                                                @endcan
+
                                             </ul>
 
                                         </li>
 
                                     @endcanany
                                     @endif
+
 
                                     @can('product_approval_view')
                                         <li class="slide has-sub {{ request()->routeIs('product-approval.*') ? 'open active' : '' }}">
@@ -179,11 +194,37 @@
                                                         Approval Queue
                                                     </a>
                                                 </li>
+                                                <li class="slide">
+                                                    <a href="{{ route('product-approval.approved') }}" class="side-menu__item {{ request()->routeIs('product-approval.approved') ? 'active' : '' }}">
+                                                        Approved Products
+                                                    </a>
+                                                </li>
 
                                             </ul>
 
                                         </li>
                                     @endcan
+
+                                    @if(!auth()->user()->hasRole('vendor'))
+                                    @can('product_approval_view')
+                                        <li class="slide {{ request()->routeIs('school-product-approval.approved') ? 'active' : '' }}">
+                                            <a href="{{ route('school-product-approval.approved') }}" class="side-menu__item {{ request()->routeIs('school-product-approval.approved') ? 'active' : '' }}">
+                                                <i class="ti-shopping-cart side-menu__icon"></i>
+                                                <span class="side-menu__label">Approved Products</span>
+                                            </a>
+                                        </li>
+                                        <li class="slide {{ request()->routeIs('school-product-approval.school_approved') ? 'active' : '' }}">
+                                            <a href="{{ route('school-product-approval.school_approved') }}" class="side-menu__item {{ request()->routeIs('school-product-approval.school_approved') ? 'active' : '' }}">
+                                                <i class="ti-shopping-cart side-menu__icon"></i>
+                                                <span class="side-menu__label">School Approved Products</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @endif
+ 
+
+                                
+                                    @if(userRole() !== 'super-admin' && !auth()->user()->hasRole('vendor'))
 
                                     @can('school.product.view')
                                         <li class="slide {{ request()->routeIs('school.products.index') ? 'active' : '' }}">
@@ -193,6 +234,7 @@
                                             </a>
                                         </li>
                                     @endcan
+                                    @endif
 
                                     @canany(['category.view', 'category.create', 'size.view', 'color.view'])
 
@@ -265,14 +307,16 @@
                                                         Low Stock Alert
                                                     </a>
                                                 </li>
-                                                @can('product_approval_view')
-                                                    <li class="slide">
-                                                        <a href="{{ route('school-product-approval.index') }}" class="side-menu__item {{ request()->routeIs('school-product-approval.index') ? 'active' : '' }}">
-                                                            School Product Approval
-                                                        </a>
-                                                    </li>
-                                                @endcan
                                             </ul>
+                                        </li>
+                                    @endcan
+
+                                    @can('global_settings.view')
+                                        <li class="slide {{ request()->routeIs('global-settings.*') ? 'active' : '' }}">
+                                            <a href="{{ route('global-settings.index') }}" class="side-menu__item {{ request()->routeIs('global-settings.index') ? 'active' : '' }}">
+                                                <i class="ti-settings side-menu__icon"></i>
+                                                <span class="side-menu__label">Global Settings</span>
+                                            </a>
                                         </li>
                                     @endcan
 
@@ -285,13 +329,36 @@
                                         </li>
                                     @endcan
 
+                                    @if(!auth()->user()->hasRole('vendor'))
+                                    @can('parent.view')
+                                        <li class="slide has-sub {{ request()->routeIs('parent-user.*') ? 'open active' : '' }}">
+                                            <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs('parent-user.*') ? 'active' : '' }}">
+                                                <i class="ti ti-users side-menu__icon"></i>
+                                                <span class="side-menu__label">Parent Management</span>
+                                                <i class="fe fe-chevron-right side-menu__angle"></i>
+                                            </a>
+                                            <ul class="slide-menu child1 {{ request()->routeIs('parent-user.*') ? 'double-menu-active' : '' }}">
+                                                <li class="slide">
+                                                    <a href="{{ route('parent-user.index') }}" class="side-menu__item {{ request()->routeIs('parent-user.index') ? 'active' : '' }}">
+                                                        Manage Parents
+                                                    </a>
+                                                </li>
+                                                <li class="slide">
+                                                    <a href="{{ route('parent-user.report') }}" class="side-menu__item {{ request()->routeIs('parent-user.report') ? 'active' : '' }}">
+                                                        Parent Report
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    @endcan
+                                    @endif
 
-                                    
                                     @canany(['school.view', 'school.create'])
 
-                                        <li class="slide has-sub {{ (request()->routeIs('school.*') && !request()->routeIs('school-class.*')) ? 'open active' : '' }}">
 
-                                            <a href="javascript:void(0);" class="side-menu__item {{ (request()->routeIs('school.*') && !request()->routeIs('school-class.*')) ? 'active' : '' }}">
+                                        <li class="slide has-sub {{ (request()->routeIs('school.*') && !request()->routeIs('school-standard.*')) ? 'open active' : '' }}">
+
+                                            <a href="javascript:void(0);" class="side-menu__item {{ (request()->routeIs('school.*') && !request()->routeIs('school-standard.*')) ? 'active' : '' }}">
 
                                                 <span class="shape1"></span>
                                                 <span class="shape2"></span>
@@ -330,11 +397,41 @@
 
                                     @endcanany
 
-                                    @canany(['school_class.view', 'school_class.create'])
+                                    @canany(['school_board.view', 'school_board.create'])
+                                        <li class="slide has-sub {{ request()->routeIs('school-boards.*') ? 'open active' : '' }}">
+                                            <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs('school-boards.*') ? 'active' : '' }}">
+                                                <span class="shape1"></span>
+                                                <span class="shape2"></span>
+                                                <i class="ti ti-list-details side-menu__icon"></i>
+                                                <span class="side-menu__label">
+                                                    School Board Management
+                                                </span>
+                                                <i class="fe fe-chevron-right side-menu__angle"></i>
+                                            </a>
+                                            <ul class="slide-menu child1 {{ request()->routeIs('school-boards.*') ? 'double-menu-active' : '' }}">
+                                                @can('school_board.create')
+                                                    <li class="slide">
+                                                        <a href="{{ route('school-boards.create') }}" class="side-menu__item {{ request()->routeIs('school-boards.create') ? 'active' : '' }}">
+                                                            Add Board
+                                                        </a>
+                                                    </li>
+                                                @endcan
+                                                @can('school_board.view')
+                                                    <li class="slide">
+                                                        <a href="{{ route('school-boards.index') }}" class="side-menu__item {{ request()->routeIs('school-boards.index') ? 'active' : '' }}">
+                                                            Manage Boards
+                                                        </a>
+                                                    </li>
+                                                @endcan
+                                            </ul>
+                                        </li>
+                                    @endcanany
 
-                                        <li class="slide has-sub {{ request()->routeIs('school-class.*') ? 'open active' : '' }}">
+                                    @canany(['school_standard.view', 'school_standard.create'])
 
-                                            <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs('school-class.*') ? 'active' : '' }}">
+                                        <li class="slide has-sub {{ request()->routeIs('school-standard.*') ? 'open active' : '' }}">
+
+                                            <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs('school-standard.*') ? 'active' : '' }}">
 
                                                 <span class="shape1"></span>
                                                 <span class="shape2"></span>
@@ -342,27 +439,35 @@
                                                 <i class="ti-book side-menu__icon"></i>
 
                                                 <span class="side-menu__label">
-                                                    Class Management
+                                                    Standard Management
                                                 </span>
 
                                                 <i class="fe fe-chevron-right side-menu__angle"></i>
 
                                             </a>
 
-                                            <ul class="slide-menu child1 {{ request()->routeIs('school-class.*') ? 'double-menu-active' : '' }}">
+                                            <ul class="slide-menu child1 {{ request()->routeIs('school-standard.*') ? 'double-menu-active' : '' }}">
 
-                                                @can('school_class.create')
+                                                @can('school_standard.create')
                                                     <li class="slide">
-                                                        <a href="{{ route('school-class.create') }}" class="side-menu__item {{ request()->routeIs('school-class.create') ? 'active' : '' }}">
-                                                            Add Class
+                                                        <a href="{{ route('school-standard.create') }}" class="side-menu__item {{ request()->routeIs('school-standard.create') ? 'active' : '' }}">
+                                                            Add Standard
                                                         </a>
                                                     </li>
                                                 @endcan
 
-                                                @can('school_class.view')
+                                                @can('school_standard.view')
                                                     <li class="slide">
-                                                        <a href="{{ route('school-class.index') }}" class="side-menu__item {{ request()->routeIs('school-class.index') ? 'active' : '' }}">
-                                                            Manage Classes
+                                                        <a href="{{ route('school-standard.index') }}" class="side-menu__item {{ request()->routeIs('school-standard.index') ? 'active' : '' }}">
+                                                            Manage Standards
+                                                        </a>
+                                                    </li>
+                                                @endcan
+
+                                                @can('school_section.view')
+                                                    <li class="slide">
+                                                        <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs('school-section.*') ? 'active' : '' }}">
+                                                            Manage Sections
                                                         </a>
                                                     </li>
                                                 @endcan

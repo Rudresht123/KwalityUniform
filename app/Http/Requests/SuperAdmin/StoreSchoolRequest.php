@@ -26,6 +26,11 @@ class StoreSchoolRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'school_board_id' => [
+                'required',
+                'exists:school_boards,id',
+            ],
+
             'school_name' => [
                 'required',
                 'string',

@@ -1,10 +1,7 @@
 @extends('layouts.common')
 
 @section('content')
-<div class="page-content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-12">
+   <div class="col-lg-12">
                 <div class="card custom-card mg-b-20 tasks">
                     <div class="card-body">
                         <div class="card-header border-bottom-0 pt-0 ps-0 pe-0 pb-2 d-flex justify-content-between">
@@ -14,7 +11,7 @@
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <table id="stock-mgmt-table" class="table datatable" style="width:100%">
+                            <table id="stock-mgmt-table" class="table w-100">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -34,9 +31,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
 
 
 <!-- Adjust Stock Modal -->
@@ -107,22 +101,20 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
-        const table = $('#stock-mgmt-table').DataTable({
-            destroy: true,
-            processing: true,
+        const table = initDataTable('#stock-mgmt-table', {
             serverSide: true,
-            ajax: '{{ route("stock-management.index") }}',
+            ajax: "{{ route('stock-management.index') }}",
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-                { data: 'product_image', name: 'product_image', orderable: false, searchable: false },
+                { data: 'product_image', name: 'product_image', searchable: false },
                 { data: 'product_name', name: 'product.product_name' },
                 { data: 'sku', name: 'sku' },
                 { data: 'vendor', name: 'product.vendor.business_name' },
                 { data: 'category', name: 'product.category.category_name' },
-                { data: 'stock_info', name: 'stock_info', orderable: false, searchable: false },
-                { data: 'status', name: 'status', orderable: false, searchable: false },
-                { data: 'options', name: 'options', orderable: false, searchable: false },
-            ],
+                { data: 'stock_info', name: 'stock_info', searchable: false },
+                { data: 'status', name: 'status', searchable: false },
+                { data: 'options', name: 'options', orderable: false, searchable: false }
+            ]
         });
 
 
@@ -145,10 +137,12 @@
                 data: formData + '&_token={{ csrf_token() }}',
                 success: function(response) {
                     toastr.success(response.message);
+                    $("#preloader").hide();
                     $('#adjustStockModal').modal('hide');
                     table.ajax.reload();
                 },
                 error: function(xhr) {
+                    $("#preloader").hide();
                     toastr.error(xhr.responseJSON.message || 'Something went wrong');
                 }
             });

@@ -23,7 +23,7 @@ class ProductApprovalRequestNotification extends Notification implements ShouldQ
 
     public function via($notifiable): array
     {
-        return ['database', 'broadcast'];
+        return ['database', 'broadcast', 'mail'];
     }
 
     public function toMail($notifiable): MailMessage

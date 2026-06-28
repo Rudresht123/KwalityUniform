@@ -19,7 +19,7 @@ class StockAdjustmentController extends BaseController
 
     public function adjust(AdjustStockRequest $request)
     {
-        $this->authorize('adjust', \App\Policies\StockPolicy::class);
+        \Illuminate\Support\Facades\Gate::authorize('adjustStock');
 
         try {
             $this->stockService->adjustStock(

@@ -35,7 +35,7 @@
             ajax: "{{ route('product.index') }}",
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
-                {data: 'image', name: 'image', orderable: false, searchable: false},
+                {data: 'image', name: 'image', searchable: false},
                 {data: 'product_code', name: 'product_code'},
                 {data: 'product_name', name: 'product_name'},
                 @if(!auth()->user()->hasRole('vendor'))

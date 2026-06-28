@@ -194,8 +194,6 @@ class ProductApprovalService
             default => 'product_status_updated',
         };
 
-        // We can use the existing helper from helpers.php if we want,
-        // but let's be explicit here for the service.
         $placeholders = [
             'product_name' => $product->product_name,
             'vendor_name' => $product->vendor->owner_name,
@@ -203,24 +201,23 @@ class ProductApprovalService
             'admin_message' => $reason ?? 'Your product status has been updated.',
         ];
 
-        // Using the provided SystemNotification and template system
-        // We assume 'product_approved' and 'product_status_updated' exist in notification_templates
         try {
             sendNotification($vendorUser, $notificationKey, $placeholders, route('product.show', $product->product_id));
         } catch (\Throwable $e) {
-            // Log notification failure but don't fail the whole transaction
             \Illuminate\Support\Facades\Log::error("Notification failed for product {$product->product_id}: " . $e->getMessage());
         }
 
         // 2. Branded Email via EmailService
         try {
-            EmailService::send('product_status_updated', $vendorUser->email, [
+            $templateKey = ($status === 'approved') ? 'product_approved' : 'product_rejected';
+            
+            EmailService::send($templateKey, $vendorUser->email, [
                 'vendor_name' => $product->vendor->owner_name,
                 'product_name' => $product->product_name,
                 'product_code' => $product->product_code,
                 'status' => strtoupper($status),
                 'admin_message' => $reason ?? 'Your product status has been updated by the administration.',
-                'view_button' => '<a href="' . route('product.show', $product->product_id) . '" style="background-color: #6B62DD; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">View Product</a>',
+                'view_url' => route('product.show', $product->product_id),
             ]);
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::error("Email failed for product {$product->product_id}: " . $e->getMessage());

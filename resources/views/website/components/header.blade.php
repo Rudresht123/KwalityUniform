@@ -1,13 +1,13 @@
     <!-- 2. Sticky Header -->
     <header class="qu-navbar sticky-top shadow-sm">
       <div class="container d-flex align-items-center justify-content-between">
-        <a href="index.html" class="logo d-flex align-items-center"><img src="{{ asset('assets/website/images/logo.svg') }}" alt="eSchoolKart Logo" style="height: 42px; width: auto;" referrerPolicy="no-referrer"></a>
+        <a href="{{ url('/') }}" class="logo d-flex align-items-center"><img src="{{ asset('assets/website/images/logoas.svg') }}" alt="eSchoolKart Logo" style="height: 42px; width: auto;" referrerPolicy="no-referrer"></a>
         
         <nav class="nav-links">
-          <a href="index.html" class="nav-item-link active">Home / Schools</a>
-          <a href="shop.html" class="nav-item-link">Catalogue</a>
-          <a href="about.html" class="nav-item-link">About Us</a>
-          <a href="contact.html" class="nav-item-link">Contact</a>
+          <a href="{{ url('/') }}" class="nav-item-link {{ request()->is('/') ? 'active' : '' }}">Home / Schools</a>
+          <a href="{{ route('website.shop') }}" class="nav-item-link {{ request()->routeIs('website.shop') ? 'active' : '' }}">Catalogue</a>
+          <a href="{{ route('website.about') }}" class="nav-item-link {{ request()->routeIs('website.about') ? 'active' : '' }}">About Us</a>
+          <a href="{{ route('website.contact') }}" class="nav-item-link {{ request()->routeIs('website.contact') ? 'active' : '' }}">Contact</a>
         </nav>
         
         <div class="header-actions">
