@@ -46,7 +46,6 @@ class PermissionSeeder extends Seeder
                 'product_assignment.view'   => 'View Product Assignments',
                 'product_assignment.create' => 'Create Product Assignment',
                 'product_assignment.delete' => 'Delete Product Assignment',
-                'school.product.view' => 'View Approved Products',
             ],
 
             'School Board Management' => [
@@ -79,6 +78,8 @@ class PermissionSeeder extends Seeder
                 'color.create' => 'Create Color',
                 'color.edit'   => 'Edit Color',
                 'color.delete' => 'Delete Color',
+                'school.product.approve' => 'Approve Products',
+                'school.product.report' => 'View Approved Products Report',
             ],
 
             'Vendor Management' => [
