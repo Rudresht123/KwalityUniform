@@ -54,7 +54,7 @@
     <!-- Detailed Table -->
     <div class="row">
         <div class="col-12">
-            <div class="card">
+            <div class="card custom-card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">Parent User Detailed Report</h4>
                     <button class="btn btn-light btn-sm" onclick="window.print()">
@@ -62,7 +62,7 @@
                     </button>
                 </div>
                 <div class="card-body">
-                    <table id="parentReportTable" class="table table-striped table-bordered" style="width:100%">
+                    <table id="parentReportTable" class="table datatable" style="width:100%">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -84,7 +84,7 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
-        $('#parentReportTable').DataTable({
+        initializeDatatable('#parentReportTable',{
             processing: true,
             serverSide: true,
             ajax: "{{ route('parent-user.report') }}",

@@ -4,14 +4,29 @@
             <div class="header-element">
                 <div class="horizontal-logo">
                     <a href="{{ route('dashboard') }}" class="header-logo">
-                        <img src="{{ asset('assets/images/logo.svg') }}" alt="logo" class="desktop-logo">
-                        <img src="{{ asset('assets/images/logo.svg') }}" alt="logo" class="toggle-logo">
-                        <img src="{{ asset('assets/images/logo.svg') }}" alt="logo" class="desktop-dark">
-                        <img src="{{ asset('assets/images/logo.svg') }}" alt="logo" class="toggle-dark">
-                        <img src="{{ asset('assets/images/logo.svg') }}" alt="logo" class="desktop-white">
-                        <img src="{{ asset('assets/images/logo.svg') }}" alt="logo" class="toggle-white">
+                        <img src="{{ asset('assets/images/logo.svg') }}" alt="logo" class="logo-fixed-header">
                     </a>
                 </div>
+
+                <style>
+                    .logo-fixed-header {
+                        display: block !important;
+                        max-height: 35px;
+                        width: auto;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                        object-fit: contain;
+                        /* White background effect */
+                        background-color: #ffffff;
+                        padding: 4px 10px;
+                        border-radius: 6px;
+                        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                    }
+                    .header-logo {
+                        display: flex !important;
+                        align-items: center;
+                    }
+                </style>
             </div> <!-- End::header-element --> <!-- Start::header-element -->
             <div class="header-element"> <!-- Start::header-link --> <a aria-label="Hide Sidebar"
                     class="sidemenu-toggle header-link animated-arrow hor-toggle horizontal-navtoggle"

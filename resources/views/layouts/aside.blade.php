@@ -1,59 +1,49 @@
 <aside class="app-sidebar sticky" id="sidebar"> <!-- Start::main-sidebar-header -->
     <div class="main-sidebar-header"> 
         <a href="{{ route('dashboard') }}" class="header-logo"> 
-            <img src="{{ asset('assets/images/logo.svg') }}" class="desktop-white logo-interactive" alt="logo"> 
-            <img src="{{ asset('assets/images/logo.svg') }}" class="toggle-white logo-interactive" alt="logo"> 
-            <img src="{{ asset('assets/images/logo.svg') }}" class="desktop-logo logo-interactive" alt="logo"> 
-            <img src="{{ asset('assets/images/logo.svg') }}" class="toggle-dark logo-interactive" alt="logo"> 
-            <img src="{{ asset('assets/images/logo.svg') }}" class="toggle-logo logo-interactive" alt="logo"> 
-            <img src="{{ asset('assets/images/logo.svg') }}" class="desktop-dark logo-interactive" alt="logo"> 
+            <img src="{{ asset('assets/images/logo.svg') }}" class="logo-fixed" alt="logo"> 
         </a> 
     </div>
 
     <style>
         .header-logo {
-            display: flex;
+            display: flex !important;
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
-            padding: 10px;
+            padding: 15px 10px;
+            width: 100%;
         }
 
-        .logo-interactive {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            filter: drop-shadow(0 0 0 rgba(0,0,0,0));
-        }
-
-        .header-logo:hover .logo-interactive {
-            transform: scale(1.1) rotate(2deg);
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)) brightness(1.1);
-        }
-
-        .header-logo:active .logo-interactive {
-            transform: scale(0.95);
-        }
-
-        /* Responsive Logo Sizing */
-        [data-toggled="close"] .desktop-logo,
-        [data-toggled="close"] .desktop-white,
-        [data-toggled="close"] .desktop-dark {
+        .logo-fixed {
+            display: block !important;
             max-height: 40px;
             width: auto;
+            max-width: 80%;
+            object-fit: contain;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+            visibility: visible !important;
+            opacity: 1 !important;
+            /* White background effect */
+            background-color: #ffffff;
+            padding: 5px 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
-        [data-toggled="open"] .toggle-logo,
-        [data-toggled="open"] .toggle-white,
-        [data-toggled="open"] .toggle-dark {
-            max-height: 35px;
-            width: auto;
+        .header-logo:hover .logo-fixed {
+            transform: scale(1.05);
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)) brightness(1.1);
         }
 
         @media (max-width: 991.98px) {
             .main-sidebar-header {
-                padding: 15px;
+                padding: 10px;
             }
-            .logo-interactive {
-                max-height: 32px !important;
+            .logo-fixed {
+                max-height: 30px !important;
+                padding: 4px 10px;
             }
         }
     </style>
@@ -225,16 +215,32 @@
 
                                 
                                     @if(userRole() !== 'super-admin' && !auth()->user()->hasRole('vendor'))
-
-                                    @can('school.product.view')
-                                        <li class="slide {{ request()->routeIs('school.products.index') ? 'active' : '' }}">
-                                            <a href="{{ route('school.products.index') }}" class="side-menu__item {{ request()->routeIs('school.products.index') ? 'active' : '' }}">
+                                    @canany(['school.product.approve', 'school.product.report'])
+                                        <li class="slide has-sub {{ request()->routeIs('school.products.*') ? 'open active' : '' }}">
+                                            <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs('school.products.*') ? 'active' : '' }}">
                                                 <i class="ti-shopping-cart side-menu__icon"></i>
-                                                <span class="side-menu__label">My Approved Products</span>
+                                                <span class="side-menu__label">Product Management</span>
+                                                <i class="fe fe-chevron-right side-menu__angle"></i>
                                             </a>
+                                            <ul class="slide-menu child1 {{ request()->routeIs('school.products.*') ? 'double-menu-active' : '' }}">
+                                                @can('school.product.approve')
+                                                    <li class="slide">
+                                                        <a href="{{ route('school.products.index') }}" class="side-menu__item {{ request()->routeIs('school.products.index') ? 'active' : '' }}">
+                                                            Approve Products
+                                                        </a>
+                                                    </li>
+                                                @endcan
+                                                @can('school.product.report')
+                                                    <li class="slide">
+                                                        <a href="{{ route('school.products.approved') }}" class="side-menu__item {{ request()->routeIs('school.products.approved') ? 'active' : '' }}">
+                                                            Approved Products
+                                                        </a>
+                                                    </li>
+                                                @endcan
+                                            </ul>
                                         </li>
                                     @endcan
-                                    @endif
+                                @endif
 
                                     @canany(['category.view', 'category.create', 'size.view', 'color.view'])
 

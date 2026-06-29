@@ -17,6 +17,12 @@ class RoleService
     {
         $permissions = Permission::all();
 
+        // Filter out unimplemented permissions
+        $permissions = $permissions->filter(function ($permission) {
+            return !str_starts_with($permission->name, 'product_assignment.') && 
+                   !str_starts_with($permission->name, 'school_section.');
+        });
+
         if ($roleName) {
             $roleName = strtolower($roleName);
             
@@ -24,6 +30,7 @@ class RoleService
                 'school' => [
                     'School Management', 
                     'Parent Management',
+                    'Product Management',
                 ],
                 'vendor' => [
                     'Vendor Management', 
@@ -45,7 +52,16 @@ class RoleService
 
             foreach ($mapping as $keyword => $allowedGroups) {
                 if (str_contains($roleName, $keyword)) {
-                    $permissions = $permissions->whereIn('group_name', $allowedGroups);
+                    if ($keyword === 'school') {
+                        $permissions = $permissions->filter(function ($permission) use ($allowedGroups) {
+                            return (in_array($permission->group_name, $allowedGroups) && 
+                                   ($permission->name === 'school.product.approve' || 
+                                    $permission->name === 'school.product.report' || 
+                                    $permission->group_name !== 'School Management'));
+                        });
+                    } else {
+                        $permissions = $permissions->whereIn('group_name', $allowedGroups);
+                    }
                     break;
                 }
             }
@@ -77,7 +93,37 @@ class RoleService
                 'name' => $data['name'],
             ]);
 
-            $role->syncPermissions($data['permissions'] ?? []);
+            // Filter permissions based on role name to prevent unauthorized permissions
+            $permissions = $data['permissions'] ?? [];
+            $roleName = strtolower($role->name);
+            
+            $allowedGroups = [];
+            if (str_contains($roleName, 'school')) {
+                $allowedGroups = ['School Management', 'Parent Management', 'Product Management'];
+            } elseif (str_contains($roleName, 'vendor')) {
+                $allowedGroups = ['Vendor Management', 'Product Management'];
+            } elseif (str_contains($roleName, 'parent')) {
+                $allowedGroups = ['School Management'];
+            } elseif (str_contains($roleName, 'admin')) {
+                $allowedGroups = [
+                    'Vendor Management',
+                    'School Management',
+                    'School Board Management',
+                    'User Management',
+                    'Parent Management',
+                    'Product Management',
+                    'System Management',
+                ];
+            }
+
+            if (!empty($allowedGroups)) {
+                $permissions = Permission::whereIn('group_name', $allowedGroups)
+                    ->whereIn('name', $permissions)
+                    ->pluck('name')
+                    ->toArray();
+            }
+
+            $role->syncPermissions($permissions);
 
             return $role;
         });
