@@ -34,7 +34,10 @@ class ProductApprovalController extends BaseController
                 ])
                 ->withCount('variants')
                 ->where('approval_status', 'pending')
-                ->when($request->filled('vendor_id'), function ($query) use ($request) {
+                ->when(auth()->user()->hasRole('vendor'), function ($query) {
+                    $query->where('vendor_id', auth()->user()->vendor?->vendor_id);
+                })
+                ->when(!auth()->user()->hasRole('vendor') && $request->filled('vendor_id'), function ($query) use ($request) {
                     $query->where('vendor_id', $request->vendor_id);
                 })
                 ->when($request->filled('category_id'), function ($query) use ($request) {
@@ -66,8 +69,39 @@ class ProductApprovalController extends BaseController
     }
 
     /**
+     * Display products that have already been approved.
+     */
+    public function approved(Request $request)
+    {
+        $this->authorize('viewAnyApprovalQueue', Product::class);
+
+        $products = Product::query()
+            ->with([
+                'vendor',
+                'category',
+                'primaryImage.file',
+            ])
+            ->withCount('variants')
+            ->where('approval_status', 'approved')
+            ->when(auth()->user()->hasRole('vendor'), function ($query) {
+                $query->where('vendor_id', auth()->user()->vendor?->vendor_id);
+            })
+            ->latest()
+            ->paginate(15);
+
+        return view('super-admin.product_approvals.approved', [
+            'products' => $products,
+            ...$this->pageData(
+                'Approved Products',
+                'Home|Products|Approved Products'
+            ),
+        ]);
+    }
+
+    /**
      * Return product details for the preview drawer.
      */
+
     public function preview(string $productId)
     {
         $product = Product::with([

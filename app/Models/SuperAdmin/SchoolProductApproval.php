@@ -74,4 +74,12 @@ class SchoolProductApproval extends Record
     {
         return $this->belongsTo(\App\Models\User::class, 'actioned_by');
     }
+
+    /**
+     * Get the classes this product is approved for within the school.
+     */
+    public function classApprovals()
+    {
+        return $this->hasMany(SchoolProductClassApproval::class, 'school_product_approval_id', 'school_product_approval_id');
+    }
 }

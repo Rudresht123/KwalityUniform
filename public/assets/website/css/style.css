@@ -1596,3 +1596,938 @@ body.loader-transition-active {
 
 
 
+.eschool-about{
+
+    background:#fff;
+
+}
+
+.about-image{
+
+    overflow:hidden;
+
+    border-radius:24px;
+
+}
+
+.about-image img{
+
+    width:100%;
+
+    border-radius:24px;
+
+    transition:.5s;
+
+}
+
+.about-image:hover img{
+
+    transform:scale(1.04);
+
+}
+
+.section-badge{
+
+    display:inline-block;
+
+    background:#EEF4FF;
+
+    color:#2563EB;
+
+    padding:10px 18px;
+
+    border-radius:40px;
+
+    font-weight:600;
+
+    margin-bottom:20px;
+
+}
+
+.section-title{
+
+    font-size:48px;
+
+    font-weight:800;
+
+    color:#1f2937;
+
+    line-height:1.2;
+
+    margin-bottom:20px;
+
+}
+
+.section-desc{
+
+    color:#6B7280;
+
+    line-height:1.9;
+
+    font-size:17px;
+
+    margin-bottom:35px;
+
+}
+
+.about-list{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:25px;
+
+}
+
+.about-item{
+
+    display:flex;
+
+    gap:15px;
+
+}
+
+.about-item i{
+
+    width:55px;
+
+    height:55px;
+
+    background:#2563EB;
+
+    color:#fff;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:16px;
+
+    font-size:20px;
+
+    flex-shrink:0;
+
+}
+
+.about-item h6{
+
+    font-weight:700;
+
+    margin-bottom:5px;
+
+}
+
+.about-item p{
+
+    margin:0;
+
+    color:#6B7280;
+
+    font-size:14px;
+
+}
+
+@media(max-width:991px){
+
+    .section-title{
+
+        font-size:34px;
+
+    }
+
+    .about-list{
+
+        grid-template-columns:1fr;
+
+    }
+
+}/* Custom Bootstrap / CSS utility mappings for high-fidelity replication */
+.text-navy-deep {
+  color: #0d1e3d;
+}
+
+.text-royal-blue {
+  color: #1352ec;
+}
+
+
+
+/* Badge Styling */
+.badge-school-partner {
+  background-color: #f0f6ff;
+  border: 1px solid #dbeafe;
+  color: #104ee6;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 50px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 4px rgba(16, 78, 230, 0.04);
+}
+
+/* Circular Icon Wrappers */
+.icon-circle-blue {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  padding: 10px;
+  border-radius: 40px;
+}
+
+.icon-circle-green {
+  background-color: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #dcfce7;
+    padding: 10px;
+  border-radius: 40px;
+}
+
+.icon-circle-purple {
+  background-color: #faf5ff;
+  color: #7e22ce;
+  border: 1px solid #f3e8ff;
+    padding: 10px;
+  border-radius: 40px;
+}
+
+.icon-circle-orange {
+  background-color: #fffaf0;
+  color: #ea580c;
+  border: 1px solid #ffedd5;
+    padding: 10px;
+  border-radius: 40px;
+}
+
+/* Card Trusted Schools */
+.card-trusted-schools {
+  background-color: #f3f8ff;
+  border: 1px solid #e0ecff;
+  border-radius: 12px;
+  padding: 14px 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 4px 12px rgba(16, 78, 230, 0.03);
+}
+
+/* Custom Gradient Fader overlay on Desktop */
+@media (min-width: 992px) {
+  .hero-gradient-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+    background: linear-gradient(to right, #ffffff 0%, rgba(255, 255, 255, 0.8) 40%, rgba(255, 255, 255, 0) 100%);
+    z-index: 2;
+    pointer-events: none;
+  }
+  
+  .hero-left-col {
+    padding-right: 4rem;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: .8;
+    transform: translateY(4px);
+  }
+}
+
+.category-hero-section{
+
+    padding:120px 0;
+
+    background:white;
+
+}
+
+.category-badge{
+
+    display:inline-block;
+
+    padding:10px 20px;
+
+    background:#eef4ff;
+
+    color:#2563eb;
+
+    border-radius:50px;
+
+    font-weight:600;
+
+}
+
+.category-heading{
+
+    font-size:60px;
+
+    font-weight:800;
+
+    margin-top:25px;
+
+}
+
+.category-heading span{
+
+    color:#2563eb;
+
+}
+
+.category-description{
+
+    max-width:650px;
+
+    margin:25px auto;
+
+    font-size:18px;
+
+    color:#6b7280;
+
+    line-height:1.9;
+
+}
+
+.category-card-new{
+
+    display:block;
+
+    text-align:center;
+
+    padding:35px 20px;
+
+    background:#fff;
+
+    border-radius:24px;
+
+    text-decoration:none;
+
+    transition:.4s;
+
+    border:1px solid #eef2f7;
+
+    height:100%;
+
+}
+
+.category-card-new:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 20px 50px rgba(0,0,0,.08);
+
+}
+
+.category-card-new h6{
+
+    margin-top:18px;
+
+    color:#111827;
+
+    font-weight:700;
+
+}
+
+.category-card-new span{
+
+    color:#6b7280;
+
+    font-size:14px;
+
+}
+
+/*==========================================
+        FEATURED SCHOOLS SECTION
+===========================================*/
+
+.schools-section{
+    background:linear-gradient(180deg,#f8fbff 0%,#ffffff 100%);
+    position:relative;
+}
+
+.school-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:#eaf2ff;
+    color:#2563eb;
+    padding:10px 18px;
+    border-radius:50px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.school-title{
+    font-size:48px;
+    font-weight:800;
+    color:#111827;
+    margin-bottom:18px;
+}
+
+.school-description{
+    max-width:650px;
+    font-size:17px;
+    line-height:1.8;
+    color:#6b7280;
+}
+
+.school-view-btn{
+    padding:14px 28px;
+    border-radius:14px;
+    font-weight:600;
+}
+
+/*==========================================
+                CARD
+===========================================*/
+
+.partner-school-card{
+
+    position:relative;
+
+    background:#fff;
+
+    border-radius:24px;
+
+    overflow:hidden;
+
+    border:1px solid #edf2f7;
+
+    transition:.35s;
+
+    height:100%;
+
+    box-shadow:0 8px 25px rgba(15,23,42,.05);
+
+}
+
+.partner-school-card:hover{
+
+    transform:translateY(-10px);
+
+    box-shadow:0 25px 60px rgba(37,99,235,.15);
+
+}
+
+/*==========================================
+            TOP STRIP
+===========================================*/
+
+.card-strip{
+
+    height:75px;
+
+    background:linear-gradient(135deg,#2563eb,#4f8dfd);
+
+}
+
+/*==========================================
+            LOGO
+===========================================*/
+
+.school-logo-wrapper{
+
+    width:95px;
+
+    height:95px;
+
+    background:#fff;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    margin:auto;
+
+    margin-top:-48px;
+
+    border:5px solid #fff;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.08);
+
+}
+
+.school-logo{
+
+    width:60px;
+
+    height:60px;
+
+    object-fit:contain;
+
+}
+
+/*==========================================
+            BODY
+===========================================*/
+
+.partner-school-body{
+
+    padding:25px;
+
+    text-align:center;
+
+}
+
+.partner-status{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    background:#ecfdf5;
+
+    color:#059669;
+
+    padding:7px 14px;
+
+    border-radius:30px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    margin-bottom:18px;
+
+}
+
+.partner-school-body h4{
+
+    font-size:21px;
+
+    font-weight:700;
+
+    color:#111827;
+
+    margin-bottom:10px;
+
+    min-height:52px;
+
+}
+
+.location{
+
+    color:#6b7280;
+
+    font-size:15px;
+
+    margin-bottom:22px;
+
+}
+
+.location i{
+
+    color:#2563eb;
+
+    margin-right:5px;
+
+}
+
+.school-divider{
+
+    width:100%;
+
+    height:1px;
+
+    background:#edf2f7;
+
+    margin:18px 0;
+
+}
+
+/*==========================================
+            FOOTER
+===========================================*/
+
+.school-footer{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+}
+
+.school-footer small{
+
+    display:block;
+
+    color:#9ca3af;
+
+    font-size:12px;
+
+}
+
+.school-footer strong{
+
+    display:block;
+
+    font-size:15px;
+
+    color:#111827;
+
+    margin-top:2px;
+
+}
+
+.explore-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    text-decoration:none;
+
+    font-weight:700;
+
+    color:#2563eb;
+
+    transition:.3s;
+
+}
+
+.explore-btn i{
+
+    transition:.3s;
+
+}
+
+.partner-school-card:hover .explore-btn i{
+
+    transform:translateX(6px);
+
+}
+
+/*==========================================
+            HOVER EFFECT
+===========================================*/
+
+.partner-school-card::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    bottom:0;
+
+    width:0;
+
+    height:4px;
+
+    background:#2563eb;
+
+    transition:.35s;
+
+}
+
+.partner-school-card:hover::after{
+
+    width:100%;
+
+}
+
+/*==========================================
+            RESPONSIVE
+===========================================*/
+
+@media(max-width:991px){
+
+    .school-title{
+
+        font-size:36px;
+
+    }
+
+}
+
+@media(max-width:767px){
+
+    .school-footer{
+
+        flex-direction:column;
+
+        gap:18px;
+
+    }
+
+}
+
+.category-section{
+
+    background:#fff;
+
+}
+
+.category-card{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+
+    height:220px;
+
+    background:#fff;
+
+    border-radius:24px;
+
+    border:1px solid #eef2f7;
+
+    transition:.35s;
+
+    text-decoration:none;
+
+    color:#111827;
+
+}
+
+.category-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 18px 40px rgba(0,0,0,.08);
+
+}
+
+.category-icon{
+
+    width:82px;
+
+    height:82px;
+
+    border-radius:50%;
+
+    background:#f4f8ff;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    margin-bottom:22px;
+
+    transition:.35s;
+
+}
+
+.category-card:hover .category-icon{
+
+    background:#2563eb;
+
+    color:#fff;
+
+}
+
+.category-icon svg{
+
+    width:36px;
+
+    height:36px;
+
+    stroke:currentColor;
+
+}
+
+.category-card h6{
+
+    font-weight:700;
+
+    margin-bottom:6px;
+
+}
+
+.category-card span{
+
+    color:#6b7280;
+
+    font-size:14px;
+
+}
+.how-section{
+
+    background:#fff;
+
+    position:relative;
+
+}
+
+.how-badge{
+
+    display:inline-block;
+
+    background:#eef4ff;
+
+    color:#2563eb;
+
+    padding:10px 20px;
+
+    border-radius:50px;
+
+    font-weight:600;
+
+}
+
+.how-title{
+
+    margin-top:20px;
+
+    font-size:52px;
+
+    font-weight:800;
+
+}
+
+.how-title span{
+
+    color:#2563eb;
+
+}
+
+.how-desc{
+
+    color:#6b7280;
+
+    max-width:650px;
+
+    margin:auto;
+
+    margin-top:20px;
+
+}
+
+.timeline-line{
+
+    position:absolute;
+
+    left:0;
+
+    right:0;
+
+    margin:auto;
+
+    width:65%;
+
+    height:3px;
+
+    background:#dbeafe;
+
+    margin-top:120px;
+
+}
+
+.step-card{
+
+    position:relative;
+
+    text-align:center;
+
+    background:#fff;
+
+    border:1px solid #eef2f7;
+
+    border-radius:24px;
+
+    padding:40px 30px;
+
+    transition:.35s;
+
+    z-index:2;
+
+}
+
+.step-card:hover{
+
+    transform:translateY(-10px);
+
+    box-shadow:0 20px 50px rgba(0,0,0,.08);
+
+}
+
+.step-number{
+
+    position:absolute;
+
+    right:25px;
+
+    top:20px;
+
+    color:#dbeafe;
+
+    font-size:42px;
+
+    font-weight:800;
+
+}
+
+.step-icon{
+
+    width:90px;
+
+    height:90px;
+
+    background:#eef4ff;
+
+    color:#2563eb;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:50%;
+
+    margin:auto;
+
+    margin-bottom:25px;
+
+    font-size:34px;
+
+}
+
+.step-card h4{
+
+    font-weight:700;
+
+    margin-bottom:15px;
+
+}
+
+.step-card p{
+
+    color:#6b7280;
+
+    margin:0;
+
+}

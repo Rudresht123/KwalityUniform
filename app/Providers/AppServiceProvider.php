@@ -29,5 +29,18 @@ class AppServiceProvider extends ServiceProvider
 
             return $user->hasRole('super-admin') ? true : null;
         });
+
+        // Stock Management Gates
+        Gate::define('viewAnyStock', function ($user) {
+            return (new \App\Policies\StockPolicy())->viewAny($user);
+        });
+
+        Gate::define('adjustStock', function ($user) {
+            return (new \App\Policies\StockPolicy())->adjust($user);
+        });
+
+        Gate::define('viewHistoryStock', function ($user) {
+            return (new \App\Policies\StockPolicy())->viewHistory($user);
+        });
     }
 }

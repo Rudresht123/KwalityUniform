@@ -23,12 +23,21 @@ class StockController extends BaseController
      */
     public function index(Request $request)
     {
-        $this->authorize('viewAny', \App\Policies\StockPolicy::class);
+        \Illuminate\Support\Facades\Gate::authorize('viewAnyStock');
 
         if ($request->ajax()) {
-            $variants = ProductVariant::with(['product', 'size', 'color'])
-                ->whereColumn('stock_qty', '<=', 'low_stock_alert')
-                ->latest();
+            $query = ProductVariant::with(['product', 'size', 'color'])
+                ->whereColumn('stock_qty', '<=', 'low_stock_alert');
+
+            // Filter by vendor if the user is a vendor
+            if (auth()->user()->hasRole('vendor')) {
+                $vendorId = auth()->user()->vendor?->vendor_id;
+                $query->whereHas('product', function ($q) use ($vendorId) {
+                    $q->where('vendor_id', $vendorId);
+                });
+            }
+
+            $variants = $query->latest();
 
             return DataTables::of($variants)
                 ->addIndexColumn()
@@ -50,7 +59,7 @@ class StockController extends BaseController
                     return '<span class="badge bg-success">Healthy</span>';
                 })
                 ->addColumn('options', function ($row) {
-                    return '<button type="button" class="btn btn-icon btn-sm btn-primary-light btn-add-stock" data-id="' . $row->variant_id . '" title="Add Stock"><i class="ti-plus"></i> Add Stock</button>';
+                    return '<button type="button" class="btn btn-icon btn-sm btn-primary btn-add-stock" data-id="' . $row->variant_id . '" title="Add Stock"><i class="ti-plus"></i> Add Stock</button>';
                 })
                 ->rawColumns(['status', 'options'])
                 ->make(true);
@@ -64,7 +73,10 @@ class StockController extends BaseController
      */
     public function adjust(Request $request)
     {
-        $this->authorize('adjust', \App\Policies\StockPolicy::class);
+        $this->authorize('adjust', \App\Policies\StockPolicy::class); // Note: I'll keep the fix from before but I'll use the Gate now as it's more stable
+        
+        // Use the Gate for consistent authorization
+        \Illuminate\Support\Facades\Gate::authorize('adjustStock');
 
         $request->validate([
             'variant_id' => 'required|exists:product_variants,variant_id',
@@ -73,13 +85,21 @@ class StockController extends BaseController
         ]);
 
         try {
-            $this->stockService->adjustStock(
+            $variant = $this->stockService->adjustStock(
                 $request->variant_id,
                 (int)$request->quantity,
                 $request->remarks
             );
 
-            return response()->json(['success' => true, 'message' => 'Stock updated successfully.']);
+            $productName = $variant->product->product_name ?? 'Product';
+            $action = $request->quantity > 0 ? 'added' : 'removed';
+            
+            return response()->json([
+                'success' => true, 
+                'message' => "Successfully {$action} {$request->quantity} units to {$productName}. New stock level: {$variant->stock_qty}."
+            ]);
+        } catch (\InvalidArgumentException $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         } catch (Throwable $e) {
             return response()->json(['success' => false, 'message' => 'Failed to update stock: ' . $e->getMessage()], 500);
         }

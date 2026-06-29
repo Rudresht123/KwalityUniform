@@ -21,9 +21,36 @@ class SchoolProductApprovalController extends BaseController
     {
         $this->authorize('viewAny', \App\Policies\ProductPolicy::class);
 
-        // For simplicity, we assume the logged-in user is associated with a school or is super-admin.
-        // In a real scenario, you'd determine the school_id from the user's profile.
         $schoolId = $request->user()->school?->school_id; 
+
+        if (!$schoolId && !$request->user()->hasRole('super-admin')) {
+            return redirect()->route('dashboard')->with('error', 'No school associated with your account.');
+        }
+
+        $products = \App\Models\SuperAdmin\Product::approved()
+            ->with(['vendor', 'category', 'schoolApprovals'])
+            ->when($schoolId, function($q) use ($schoolId) {
+                return $q->whereHas('schoolApprovals', function($sq) use ($schoolId) {
+                    $sq->where('school_id', $schoolId);
+                });
+            })
+            ->paginate(12);
+
+        return view('super-admin.school_product_approval.index', [
+            'products' => $products,
+            'pageData' => $this->pageData('School Product Approval', 'Home|Inventory|School Approval'),
+            'schoolId' => $schoolId
+        ]);
+    }
+
+    /**
+     * Display the School Approved Products report with dynamic filters.
+     */
+    public function schoolApproved(Request $request)
+    {
+        $this->authorize('viewAny', \App\Policies\ProductPolicy::class);
+
+        $schoolId = $request->user()->school?->school_id;
 
         if (!$schoolId && !$request->user()->hasRole('super-admin')) {
             return redirect()->route('dashboard')->with('error', 'No school associated with your account.');
@@ -31,20 +58,61 @@ class SchoolProductApprovalController extends BaseController
 
         if ($request->ajax()) {
             $products = \App\Models\SuperAdmin\Product::approved()
-                ->with(['vendor', 'category'])
-                ->when($schoolId, function($q) use ($schoolId) {
-                    return $q->whereHas('schoolApprovals', function($sq) use ($schoolId) {
-                        $sq->where('school_id', $schoolId);
+                ->with(['vendor', 'category', 'schoolApprovals'])
+                ->when($request->filled('category_id'), function($q) use ($request) {
+                    return $q->where('category_id', $request->category_id);
+                })
+                ->when($request->filled('vendor_id'), function($q) use ($request) {
+                    return $q->where('vendor_id', $request->vendor_id);
+                })
+                ->when($request->filled('search'), function($q) use ($request) {
+                    $search = $request->search;
+                    return $q->where(function($sq) use ($search) {
+                        $sq->where('product_name', 'like', "%{$search}%")
+                          ->orWhere('product_code', 'like', "%{$search}%");
                     });
+                })
+                ->paginate(12);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'html' => view('super-admin.school_product_approval.partials.product_cards', compact('products'))->render(),
+                    'pagination' => $products->links(),
+                ]);
+            }
+        }
+
+        return view('super-admin.school_product_approval.school_approved', [
+            'pageData' => $this->pageData('School Approved Products', 'Home|Inventory|School Approval|School Approved'),
+            'schoolId' => $schoolId
+        ]);
+    }
+
+    public function approved(Request $request)
+    {
+        $this->authorize('viewAny', \App\Policies\ProductPolicy::class);
+
+        $schoolId = $request->user()->school?->school_id;
+
+        if (!$schoolId && !$request->user()->hasRole('super-admin')) {
+            return redirect()->route('dashboard')->with('error', 'No school associated with your account.');
+        }
+
+        if ($request->ajax()) {
+            $products = \App\Models\SuperAdmin\Product::approved()
+                ->with(['vendor', 'category', 'schoolApprovals'])
+                ->whereHas('schoolApprovals', function($q) use ($schoolId) {
+                    $q->where('school_id', $schoolId)->where('status', 'approved');
                 });
 
             return DataTables::of($products)
                 ->addIndexColumn()
                 ->addColumn('product_image', function ($row) {
-                    return '<img src="'.($row->product->firstImage() ?? asset("assets/images/no_image.jpg")).'" class="img-fluid rounded" width="40">';
+                    return '<img src="'.($row->firstImage() ?? asset("assets/images/no_image.jpg")).'" class="img-fluid rounded" width="40">';
                 })
                 ->addColumn('product_name', function ($row) {
-                    return $row->product->product_name ?? 'N/A';
+                    return $row->product_name ?? 'N/A';
                 })
                 ->addColumn('vendor_name', function ($row) {
                     return $row->vendor->business_name ?? 'N/A';
@@ -59,41 +127,19 @@ class SchoolProductApprovalController extends BaseController
                     $approval = $row->schoolApprovals()->where('school_id', $schoolId)->first();
                     return $approval && $approval->actioned_at ? $approval->actioned_at->format('d M Y, h:i A') : 'N/A';
                 })
-                ->addColumn('school_approval_status', function ($row) use ($schoolId) {
-                    $approval = $row->schoolApprovals()->where('school_id', $schoolId)->first();
-                    if (!$approval) return '<span class="badge bg-secondary">Pending</span>';
-
-                    $color = $approval->status === 'approved' ? 'success' : 'danger';
-                    return '<span class="badge bg-'.$color.'">'.ucfirst($approval->status).'</span>';
+                ->addColumn('status', function ($row) {
+                    return '<span class="badge bg-success">Approved</span>';
                 })
                 ->addColumn('actions', function ($row) {
-
-                    return '
-                        <button class="btn btn-sm btn-primary btn-preview" data-id="'.$row->product_id.'">Preview</button>
-                        <button class="btn btn-sm btn-success btn-approve" data-id="'.$row->product_id.'">Approve</button>
-                        <button class="btn btn-sm btn-danger btn-reject" data-id="'.$row->product_id.'">Reject</button>
-                    ';
+                    return '<button class="btn btn-sm btn-primary btn-preview" data-id="'.$row->product_id.'">View Details</button>';
                 })
-                ->rawColumns(['product_image', 'school_approval_status', 'actions'])
-
+                ->rawColumns(['product_image', 'status', 'actions'])
                 ->make(true);
         }
 
-        return view('super-admin.school_product_approval.index', $this->pageData('School Product Approval', 'Home|Inventory|School Approval'));
+        return view('super-admin.school_product_approval.approved', $this->pageData('Approved School Products', 'Home|Inventory|School Approval|Approved'));
     }
 
-    public function approve(Request $request)
-    {
-        $this->authorize('actionApproval', \App\Policies\ProductPolicy::class);
-        
-        try {
-            $schoolId = $request->user()->school?->school_id;
-            $this->schoolApprovalService->approveProductForSchool($schoolId, $request->product_id);
-            return response()->json(['success' => true, 'message' => 'Product approved for school.']);
-        } catch (Throwable $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
-        }
-    }
 
     public function reject(Request $request)
     {

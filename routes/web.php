@@ -5,52 +5,65 @@ use App\Http\Controllers\DeleteRecord;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\ScreenLockController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\School\SchoolProductController;
 use App\Http\Middleware\CheckScreenLock;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return redirect()->to('login');
-// });
+// Protect all administrative routes with auth and prefix 'super-admin'
+Route::prefix('super-admin')->group(function () {
+    Route::middleware(['auth', CheckScreenLock::class])->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+        Route::get('/lock-screen-action', [ScreenLockController::class, 'lock'])->name('lockscreen.lock');
 
+        Route::get('/notifications/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+        Route::post('/notifications/hide', [NotificationController::class, 'hide'])->name('notifications.hide');
 
-// Protect all main routes with CheckScreenLock
-Route::middleware(['auth', CheckScreenLock::class])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        require __DIR__ . '/superadmin-routes.php';
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        Route::resource('parents', \App\Http\Controllers\Parent\WebUserController::class);
 
-    Route::get('/lock-screen-action', [ScreenLockController::class, 'lock'])->name('lockscreen.lock');
+        Route::get('global-settings', [\App\Http\Controllers\SuperAdmin\GlobalSettingController::class, 'index'])->name('global-settings.index');
+        Route::put('global-settings', [\App\Http\Controllers\SuperAdmin\GlobalSettingController::class, 'update'])->name('global-settings.update');
+        });
+        });
 
-    Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
-    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
-    Route::post('/notifications/hide', [NotificationController::class, 'hide'])->name('notifications.hide');
+        // School Product Routes
+        Route::middleware(['auth'])->group(function () {
+            Route::get('/school-products', [SchoolProductController::class, 'index'])
+                ->middleware('can:school.product.view')
+                ->name('school.products.index');
 
-    Route::get('/school-products', [\App\Http\Controllers\School\SchoolProductController::class, 'index'])
-        ->middleware('can:school.product.view')
-        ->name('school.products.index');
+            Route::get('/school-products/approved', [SchoolProductController::class, 'approved'])
+                ->middleware('can:school.product.view')
+                ->name('school.products.approved');
 
-    require __DIR__ . '/superadmin-routes.php';
+            Route::get('/school-products/{productId}', [SchoolProductController::class, 'show'])
+                ->middleware('can:school.product.view')
+                ->name('school.products.show');
 
+            Route::post('/school-products/{productId}/approve', [SchoolProductController::class, 'approveProduct'])
+                ->middleware('can:school.product.view');
 
-});
+            Route::post('/school-products/{productId}/unapprove', [SchoolProductController::class, 'unapproveProduct'])
+                ->middleware('can:school.product.view');
+        });
 
-
-// Screen Lock specialized routes
-Route::middleware(['auth'])->group(function () {
-    Route::get('/screen-lock', [ScreenLockController::class, 'show'])->name('lockscreen');
-    Route::post('/screen-unlock', [ScreenLockController::class, 'unlock'])->name('lockscreen.unlock');
-});
+        // Screen Lock specialized routes within super-admin prefix
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/screen-lock', [ScreenLockController::class, 'show'])->name('lockscreen');
+        Route::post('/screen-unlock', [ScreenLockController::class, 'unlock'])->name('lockscreen.unlock');
+    });
 
 Route::delete('/delete-record/{table}/{id}', [DeleteRecord::class, 'deleteRecord'])->name('deleteRecord');
 
-// Notification read
+// Notification read (kept outside prefix if used by website, but if it's admin-only, it should be inside)
 Route::middleware('auth')->get('/notifications/latest', function () {
-
-
     $notifications = auth()->user()
         ->unreadNotifications()
         ->latest()
@@ -61,14 +74,10 @@ Route::middleware('auth')->get('/notifications/latest', function () {
         'partials.notifications',
         compact('notifications')
     );
-
 });
 
-
 Route::get('/test-notification', function () {
-
     $user = \App\Models\User::findOrFail(1);
-
     sendNotification(
         $user,
         'product_approved',
@@ -77,13 +86,8 @@ Route::get('/test-notification', function () {
         ],
         url('/products')
     );
-
     return 'Notification Sent';
 });
-
-
-
-
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/website-routes.php';

@@ -56,6 +56,27 @@
                                 @enderror
                             </div>
 
+                            {{-- School Board --}}
+                            <div class="col-md-6 mb-3">
+                                <label for="school_board_id" class="form-label">
+                                    School Board <span class="text-danger">*</span>
+                                </label>
+
+                                <select id="school_board_id" name="school_board_id"
+                                    class="form-select @error('school_board_id') is-invalid @enderror">
+                                    <option value="" selected disabled>Select School Board</option>
+                                    @foreach($boards as $board)
+                                        <option value="{{ $board->id }}" {{ old('school_board_id') == $board->id ? 'selected' : '' }}>
+                                            {{ $board->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                @error('school_board_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                             {{-- Principal Name --}}
                             <div class="col-md-6 mb-3">
                                 <label for="principal_name" class="form-label">

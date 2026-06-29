@@ -76,6 +76,37 @@
                                 @error('product_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                         </div>
+
+                        <!-- SEO Section -->
+                        <div class="row g-4 mt-2">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold fs-13">URL Slug</label>
+                                <input type="text" name="slug" value="{{ old('slug') }}" 
+                                       class="form-control form-control-sm @error('slug') is-invalid @enderror" 
+                                       placeholder="e.g. white-formal-shirt">
+                                @error('slug') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold fs-13">Meta Title</label>
+                                <input type="text" name="meta_title" value="{{ old('meta_title') }}" 
+                                       class="form-control form-control-sm @error('meta_title') is-invalid @enderror" 
+                                       placeholder="SEO Title">
+                                @error('meta_title') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label fw-semibold fs-13">Meta Description</label>
+                                <textarea name="meta_description" class="form-control form-control-sm @error('meta_description') is-invalid @enderror" 
+                                          rows="2" placeholder="Brief SEO description...">{{ old('meta_description') }}</textarea>
+                                @error('meta_description') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label fw-semibold fs-13">Meta Keywords</label>
+                                <input type="text" name="meta_keywords" value="{{ old('meta_keywords') }}" 
+                                       class="form-control form-control-sm @error('meta_keywords') is-invalid @enderror" 
+                                       placeholder="keyword1, keyword2, ...">
+                                @error('meta_keywords') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                        </div>
                     </div>
                 </div>
 

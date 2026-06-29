@@ -25,6 +25,11 @@ class UpdateSchoolRequest extends FormRequest
             : $this->route('school');
 
         return [
+            'school_board_id' => [
+                'required',
+                'exists:school_boards,id',
+            ],
+
             'school_name' => [
                 'required',
                 'string',

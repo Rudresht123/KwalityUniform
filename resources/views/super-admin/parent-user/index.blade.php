@@ -1,9 +1,9 @@
 @extends('layouts.common')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
+
+
+  <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">Parent User Management</h4>
@@ -12,7 +12,7 @@
                     </a>
                 </div>
                 <div class="card-body">
-                    <table id="parentTable" class="table table-striped table-bordered" style="width:100%">
+                    <table id="parentTable" class="table datatable" style="width:100%">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -27,13 +27,11 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
 @push('scripts')
 <script>
     $(document).ready(function() {
-        $('#parentTable').DataTable({
+        initializeDatatable('#parentTable',{
             processing: true,
             serverSide: true,
             ajax: "{{ route('parent-user.index') }}",
@@ -42,7 +40,7 @@
                 { data: 'name', name: 'name' },
                 { data: 'username', name: 'username' },
                 { data: 'email', name: 'email' },
-                { data: 'status', name: 'status', orderable: false, searchable: false },
+                { data: 'status', name: 'status', searchable: false },
                 { data: 'options', name: 'options', orderable: false, searchable: false },
             ]
         });

@@ -36,10 +36,14 @@
     <link rel="stylesheet" href="{{ asset('assets/css/datatable.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/toast.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/select2.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/apex.css') }}">
     <script src="{{ asset('assets/js/alertify.js') }}"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="{{ asset('assets/js/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('assets/js/chartsfunctions.js') }}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     @notifyCss
 
@@ -54,7 +58,7 @@
 <body>
     @include('components.loader')
     @include('layouts.off-canvas')
-         @include('components.alerts')
+    @include('components.alerts')
     <div class="page">
         {{-- Header Include --}}
         @include('layouts.header')
@@ -85,7 +89,7 @@
     {{-- Toast Notifications --}}
     <script src="{{ asset('assets/js/toast.js') }}"></script>
     <script src="{{ asset('assets/js/sweetalert2.min.js') }}"></script>
-    
+
 
     <script src="{{ asset('assets/js/defaultmenu.min.js') }}"></script>
     <script src="{{ asset('assets/libs/node-waves/waves.min.js') }}"></script>
@@ -203,7 +207,7 @@
 
                 form.addEventListener("submit", function() {
 
-                    if (loader) {
+                    if (loader && !form.classList.contains('no-loader')) {
                         loader.style.display = "flex";
                         loader.style.opacity = "1";
                     }
@@ -213,16 +217,16 @@
 
         });
         // Delete Button Confirmation Section
-   $(document).on('click', '.deleteBtn', function (e) {
+        $(document).on('click', '.deleteBtn', function(e) {
 
-    e.preventDefault();
+            e.preventDefault();
 
-    const url = $(this).data('url');
-    const title = $(this).data('title') || 'Record';
+            const url = $(this).data('url');
+            const title = $(this).data('title') || 'Record';
 
-    Swal.fire({
-        title: `Delete ${title}?`,
-        html: `
+            Swal.fire({
+                title: `Delete ${title}?`,
+                html: `
             <div class="delete-modal-content">
                 <div class="delete-icon-wrapper">
                     <i class="ti ti-trash"></i>
@@ -234,102 +238,102 @@
                 </p>
             </div>
         `,
-        icon: 'warning',
-        showCancelButton: true,
-        reverseButtons: true,
-        focusCancel: true,
-        confirmButtonText: `
+                icon: 'warning',
+                showCancelButton: true,
+                reverseButtons: true,
+                focusCancel: true,
+                confirmButtonText: `
             <i class="ti ti-trash me-1"></i>
             Delete
         `,
-        cancelButtonText: `
+                cancelButtonText: `
             <i class="ti ti-x me-1"></i>
             Cancel
         `,
-        customClass: {
-            popup: 'custom-delete-popup',
-            confirmButton: 'btn btn-danger delete-confirm-btn',
-            cancelButton: 'btn btn-light delete-cancel-btn'
-        },
-        buttonsStyling: false
+                customClass: {
+                    popup: 'custom-delete-popup',
+                    confirmButton: 'btn btn-danger delete-confirm-btn',
+                    cancelButton: 'btn btn-light delete-cancel-btn'
+                },
+                buttonsStyling: false
 
-    }).then((result) => {
+            }).then((result) => {
 
-        if (!result.isConfirmed) return;
+                if (!result.isConfirmed) return;
 
-        $.ajax({
+                $.ajax({
 
-            url: url,
+                    url: url,
 
-            type: 'DELETE',
+                    type: 'DELETE',
 
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content')
-            },
-
-            beforeSend: function () {
-
-                Swal.fire({
-                    title: 'Deleting...',
-                    text: `Please wait while we delete the ${title.toLowerCase()}.`,
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    showConfirmButton: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-
-            },
-
-            success: function (response) {
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Deleted Successfully',
-                    text: response.message || `${title} deleted successfully.`,
-                    confirmButtonText: 'Continue',
-                    customClass: {
-                        confirmButton: 'btn btn-success'
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content')
                     },
-                    buttonsStyling: false
 
-                }).then(() => {
+                    beforeSend: function() {
 
-                    if ($.fn.DataTable.isDataTable('#datatable')) {
+                        Swal.fire({
+                            title: 'Deleting...',
+                            text: `Please wait while we delete the ${title.toLowerCase()}.`,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            showConfirmButton: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
 
-                        $('#datatable').DataTable().ajax.reload(null, false);
+                    },
 
-                    } else {
+                    success: function(response) {
 
-                        location.reload();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted Successfully',
+                            text: response.message || `${title} deleted successfully.`,
+                            confirmButtonText: 'Continue',
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            },
+                            buttonsStyling: false
+
+                        }).then(() => {
+
+                            if ($.fn.DataTable.isDataTable('#datatable')) {
+
+                                $('#datatable').DataTable().ajax.reload(null, false);
+
+                            } else {
+
+                                location.reload();
+
+                            }
+
+                        });
+
+                    },
+
+                    error: function(xhr) {
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Deletion Failed',
+                            text: xhr.responseJSON?.message || 'Something went wrong.',
+                            confirmButtonText: 'Close',
+                            customClass: {
+                                confirmButton: 'btn btn-danger'
+                            },
+                            buttonsStyling: false
+                        });
 
                     }
 
                 });
 
-            },
-
-            error: function (xhr) {
-
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Deletion Failed',
-                    text: xhr.responseJSON?.message || 'Something went wrong.',
-                    confirmButtonText: 'Close',
-                    customClass: {
-                        confirmButton: 'btn btn-danger'
-                    },
-                    buttonsStyling: false
-                });
-
-            }
+            });
 
         });
-
-    });
-
-});
         $(document).ready(function() {
 
             $('.select2').select2();
@@ -347,8 +351,8 @@
     </script>
 
     @stack('scripts')
-            @notifyJs
-<x-notify::notify />
+    @notifyJs
+    <x-notify::notify />
     @vite(['resources/js/app.js'])
 </body>
 

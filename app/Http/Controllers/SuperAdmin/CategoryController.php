@@ -6,20 +6,27 @@ use App\Http\Controllers\BaseController;
 use App\Http\Requests\SuperAdmin\StoreCategoryRequest;
 use App\Http\Requests\SuperAdmin\UpdateCategoryRequest;
 use App\Models\SuperAdmin\Category;
-use App\Models\SuperAdmin\ParentCategory;
+use App\Services\CategoryService;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Throwable;
 
 class CategoryController extends BaseController
 {
+    protected CategoryService $categoryService;
+
+    public function __construct(CategoryService $categoryService)
+    {
+        $this->categoryService = $categoryService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $categories = Category::with('parentCategory')->latest();
+            $categories = $this->categoryService->getAllCategories();
 
             return DataTables::of($categories)
                 ->addIndexColumn()
@@ -51,7 +58,7 @@ class CategoryController extends BaseController
      */
     public function create()
     {
-        $parents = ParentCategory::active()->get();
+        $parents = $this->categoryService->getActiveParents();
         return view('super-admin.category.create', compact('parents'), $this->pageData('Create Sub Category', 'Home|Product Attributes|Sub Categories|Create'));
     }
 
@@ -61,7 +68,7 @@ class CategoryController extends BaseController
     public function store(StoreCategoryRequest $request)
     {
         try {
-            Category::create($request->validated());
+            $this->categoryService->createCategory($request->validated());
             return redirect()->route('category.index')->with('success', 'Sub category created successfully.');
         } catch (Throwable $e) {
             return back()->withInput()->with('error', 'Failed to create sub category: ' . $e->getMessage());
@@ -73,7 +80,7 @@ class CategoryController extends BaseController
      */
     public function edit(Category $category)
     {
-        $parents = ParentCategory::active()->get();
+        $parents = $this->categoryService->getActiveParents();
         return view('super-admin.category.edit', compact('category', 'parents'), $this->pageData('Edit Sub Category', 'Home|Product Attributes|Sub Categories|Edit'));
     }
 
@@ -83,7 +90,7 @@ class CategoryController extends BaseController
     public function update(UpdateCategoryRequest $request, Category $category)
     {
         try {
-            $category->update($request->validated());
+            $this->categoryService->updateCategory($category, $request->validated());
             return redirect()->route('category.index')->with('success', 'Sub category updated successfully.');
         } catch (Throwable $e) {
             return back()->withInput()->with('error', 'Failed to update sub category: ' . $e->getMessage());
@@ -96,7 +103,7 @@ class CategoryController extends BaseController
     public function destroy(Category $category)
     {
         try {
-            $category->delete();
+            $this->categoryService->deleteCategory($category);
             
             if (request()->ajax()) {
                 return response()->json([

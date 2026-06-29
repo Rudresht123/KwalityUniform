@@ -58,4 +58,8 @@ class Category extends Record
     {
         return $query->where('is_active', true);
     }
+
+    public function products(){
+        return $this->hasMany(Product::class,"category_id","category_id");
+    }
 }

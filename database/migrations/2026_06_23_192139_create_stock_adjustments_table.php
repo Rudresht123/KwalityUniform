@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('remarks')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
 
             $table->foreign('variant_id')->references('variant_id')->on('product_variants')->onDelete('cascade');
             $table->foreign('created_by')->references('id')->on('users');

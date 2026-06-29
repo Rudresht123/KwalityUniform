@@ -43,7 +43,7 @@
             ajax: "{{ route('color.index') }}",
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
-                {data: 'color_preview', name: 'color_preview', orderable: false, searchable: false},
+                {data: 'color_preview', name: 'color_preview', searchable: false},
                 {data: 'color_name', name: 'color_name'},
                 {data: 'hex_code', name: 'hex_code'},
                 {data: 'status', name: 'is_active'},

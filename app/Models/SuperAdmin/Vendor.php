@@ -13,10 +13,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use App\Traits\LogsAllActivity;
 
-#[Fillable(['user_id', 'business_name', 'owner_name', 'email', 'phone', 'address', 'city', 'state', 'pincode', 'gstin', 'pan_number', 'bank_account_no', 'ifsc_code', 'commission_rate', 'status', 'logo_url', 'is_active', 'created_by', 'updated_by'])]
+#[Fillable(['user_id', 'business_name', 'owner_name', 'email', 'phone', 'address', 'city', 'state', 'pincode', 'gstin', 'pan_number', 'bank_account_no', 'ifsc_code', 'commission_rate', 'status', 'logo_url', 'is_active', 'created_by', 'updated_by', 'image_id'])]
 class Vendor extends Record
 {
     use HasFactory, SoftDeletes;
+
+    public function file()
+    {
+        return $this->belongsTo(\App\Models\File::class, 'image_id');
+    }
 
       protected static function newFactory()
     {
@@ -128,5 +133,10 @@ class Vendor extends Record
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+
+    public function products(){
+        return $this->hasMany(Product::class,"vendor_id","vendor_id");
     }
 }

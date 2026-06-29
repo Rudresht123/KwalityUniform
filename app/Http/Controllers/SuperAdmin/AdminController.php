@@ -6,13 +6,20 @@ use App\Http\Controllers\BaseController;
 use App\Http\Requests\SuperAdmin\StoreAdminRequest;
 use App\Http\Requests\SuperAdmin\UpdateAdminRequest;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\Hash;
 use Throwable;
 
 class AdminController extends BaseController
 {
+    protected UserService $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -53,10 +60,9 @@ class AdminController extends BaseController
     {
         try {
             $data = $request->validated();
-            $data['password'] = Hash::make($data['password']);
+            $data['role'] = 'admin';
             
-            $user = User::create($data);
-            $user->assignRole('admin');
+            $this->userService->create($data);
 
             return redirect()->route('admin.index')->with('success', 'Admin created successfully.');
         } catch (Throwable $e) {
@@ -86,14 +92,7 @@ class AdminController extends BaseController
     public function update(UpdateAdminRequest $request, User $admin)
     {
         try {
-            $data = $request->validated();
-            if ($request->filled('password')) {
-                $data['password'] = Hash::make($data['password']);
-            } else {
-                unset($data['password']);
-            }
-
-            $admin->update($data);
+            $this->userService->update($admin, $request->validated());
 
             return redirect()->route('admin.index')->with('success', 'Admin updated successfully.');
         } catch (Throwable $e) {
@@ -113,7 +112,7 @@ class AdminController extends BaseController
                 return response()->json([
                     'status' => true, 
                     'message' => 'Admin deleted successfully.'
-                ]);
+                ], 200);
             }
             
             return redirect()->route('admin.index')->with('success', 'Admin deleted successfully.');
