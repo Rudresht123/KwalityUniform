@@ -2,9 +2,18 @@
 namespace App\Http\Controllers\Website;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\SuperAdmin\SchoolPartnershipRequest;
+use App\Services\EmailService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
-class WebsiteController extends Controller{
-    public function index(){
+
+class WebsiteController extends Controller
+{
+    public function index()
+    {
         return view('website.index', [
             'featuredSchools' => featuredSchools(),
             'featuredCategories' => featuredCategories(),
@@ -12,14 +21,15 @@ class WebsiteController extends Controller{
         ]);
     }
 
-    public function shop(Request $request) {
+    public function shop(Request $request)
+    {
         $filters = [
             'school' => $request->query('school'),
             'category' => $request->query('category'),
             'search' => $request->query('search'),
         ];
 
-        $products = (new \App\Repositories\ProductRepository())->searchProducts($filters);
+        $products = new \App\Repositories\ProductRepository()->searchProducts($filters);
         $schools = \App\Models\SuperAdmin\School::active()->get();
         $categories = \App\Models\SuperAdmin\ParentCategory::active()->get();
 
@@ -31,24 +41,218 @@ class WebsiteController extends Controller{
             'products' => $products,
             'schools' => $schools,
             'categories' => $categories,
-            'filters' => $filters
+            'filters' => $filters,
         ]);
     }
 
-    public function show($id) {
-        $product = \App\Models\SuperAdmin\Product::approved()->active()->with(['variants', 'images', 'schoolApprovals.school'])->findOrFail($id);
+    public function show($id)
+    {
+        $product = \App\Models\SuperAdmin\Product::approved()
+            ->active()
+            ->with(['variants', 'images', 'schoolApprovals.school'])
+            ->findOrFail($id);
 
         return view('website.pages.product-details', [
-            'product' => $product
+            'product' => $product,
         ]);
     }
 
-    public function about() {
-
+    public function about()
+    {
         return view('website.pages.about');
     }
 
-    public function contact() {
+    public function contact()
+    {
         return view('website.pages.contact');
+    }
+
+    public function storeSchoolPartnership(Request $request)
+    {
+        try {
+            $validated = $request->validate(
+                [
+                    'school_name' => 'required|string|max:255',
+                    'contact_person' => 'required|string|max:255',
+                    'email' => 'required|email|max:255|unique:school_partnership_requests,email',
+                    'phone' => 'required|string|max:20',
+                    'address' => 'required|string|max:500',
+                    'city' => 'required|string|max:100',
+                    'state' => 'required|string|max:100',
+                    'pincode' => 'required|string|max:20',
+                    'document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+                ],
+                [
+                    'email.unique' => 'This email has already submitted a partnership request.',
+                ],
+            );
+
+            if (User::where('email', $validated['email'])->exists()) {
+                return response()->json(
+                    [
+                        'success' => false,
+                        'message' => 'This email is already registered.',
+                        'errors' => [
+                            'email' => ['This email is already registered. Please login instead.'],
+                        ],
+                    ],
+                    422,
+                );
+            }
+
+            DB::beginTransaction();
+
+            $documentId = null;
+
+            if ($request->hasFile('document')) {
+                $documentId = uploadFile($request->file('document'), 'partnership/schools');
+            }
+
+            $partnership = SchoolPartnershipRequest::create([
+                'school_name' => $validated['school_name'],
+                'contact_person' => $validated['contact_person'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'],
+                'address' => $validated['address'],
+                'city' => $validated['city'],
+                'state' => $validated['state'],
+                'pincode' => $validated['pincode'],
+                'document_path' => $documentId,
+            ]);
+
+            DB::commit();
+
+            try {
+                EmailService::send('partnership_request_admin', 'admin@qualityuniform.com', [
+                    'school_name' => $validated['school_name'],
+                    'contact_person' => $validated['contact_person'],
+                    'email' => $validated['email'],
+                    'phone' => $validated['phone'],
+                    'address' => $validated['address'],
+                    'city' => $validated['city'],
+                    'state' => $validated['state'],
+                    'pincode' => $validated['pincode'],
+                    'document' => $documentId ? getFileUrl($documentId) : 'No document uploaded',
+                ]);
+
+                EmailService::send('partnership_request_user', $validated['email'], [
+                    'school_name' => $validated['school_name'],
+                    'contact_person' => $validated['contact_person'],
+                ]);
+            } catch (\Throwable $mailException) {
+                Log::error('School Partnership Mail Error', [
+                    'message' => $mailException->getMessage(),
+                    'trace' => $mailException->getTraceAsString(),
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'title' => 'Success',
+                'message' => 'Your partnership request has been submitted successfully.',
+                'data' => $partnership,
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Validation failed.',
+                    'errors' => $e->errors(),
+                ],
+                422,
+            );
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            Log::error('School Partnership Error', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => app()->environment('production') ? 'Something went wrong.' : $e->getMessage(),
+                ],
+                500,
+            );
+        }
+    }
+
+    public function storeVendorPartnership(Request $request)
+    {
+        $validated = $request->validate(
+            [
+                'company_name' => 'required|string|max:255',
+                'category' => 'required|string|max:255',
+                'email' => 'required|email|max:255|unique:vendor_partnership_requests,email',
+                'gstin' => 'required|string|max:50',
+                'address' => 'required|string|max:500',
+                'city' => 'required|string|max:100',
+                'state' => 'required|string|max:100',
+                'pincode' => 'required|string|max:20',
+                'pan_number' => 'required|string|max:50',
+                'bank_account_no' => 'required|string|max:50',
+                'ifsc_code' => 'required|string|max:50',
+                'document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            ],
+            [
+                'email.unique' => 'This email has already submitted a partnership request.',
+            ],
+        );
+
+        // Proactively check if email exists in users table to show a clean warning alert
+        if (\App\Models\User::where('email', $validated['email'])->exists()) {
+            return response()->json(
+                [
+                    'message' => 'This email is already registered in our system. Please log in or contact support.',
+                    'errors' => ['email' => ['This email is already registered.']],
+                ],
+                422,
+            );
+        }
+
+        try {
+            $documentId = null;
+            if ($request->hasFile('document')) {
+                $documentId = uploadFile($request->file('document'), 'partnership/vendors');
+            }
+
+            // Save to database
+            \App\Models\SuperAdmin\VendorPartnershipRequest::create(
+                array_merge($validated, [
+                    'document_path' => $documentId,
+                ]),
+            );
+
+            \App\Services\EmailService::send('vendor_request_admin', 'admin@qualityuniform.com', [
+                'company_name' => $validated['company_name'],
+                'category' => $validated['category'],
+                'email' => $validated['email'],
+                'gstin' => $validated['gstin'],
+                'address' => $validated['address'],
+                'city' => $validated['city'],
+                'state' => $validated['state'],
+                'pincode' => $validated['pincode'],
+                'pan_number' => $validated['pan_number'],
+                'bank_account_no' => $validated['bank_account_no'],
+                'ifsc_code' => $validated['ifsc_code'],
+                'document' => $documentId ? getFileUrl($documentId) : 'No document provided',
+            ]);
+
+            \App\Services\EmailService::send('vendor_request_user', $validated['email'], [
+                'company_name' => $validated['company_name'],
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Supplier Application Received!']);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Vendor Partnership Submission Error: ' . $e->getMessage(), [
+                'exception' => $e,
+                'request' => $request->all(),
+            ]);
+            return response()->json(['success' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
+        }
     }
 }

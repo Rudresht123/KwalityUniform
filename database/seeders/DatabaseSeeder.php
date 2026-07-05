@@ -3,12 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\SuperAdmin\School;
-use App\Models\User;
-use App\Models\SuperAdmin\Schools;
 use App\Models\SuperAdmin\Vendor;
-use Database\Factories\SchoolFactory;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,28 +13,26 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Super Admin
+    //     // 1. Core Access Control
+    //     $this->call([
+    //         RoleSeeder::class,
+    //         PermissionSeeder::class,
+    //         SuperAdminSeeder::class,
+    //     ]);
 
-        $this->call([RoleSeeder::class]);
+    //     // 2. Product Attributes
+    //     $this->call([
+    //         SizeSeeder::class,
+    //         ColorSeeder::class,
+    //     ]);
 
-        $this->call([SuperAdminSeeder::class]);
+    //     // 3. Entities
+    //     School::factory()->count(150)->create();
+      //  Vendor::factory()->count(180)->create();
 
-        $this->call([RoleSeeder::class]);
-
-        $this->call([PermissionSeeder::class]);
-
-        $this->call([SizeSeeder::class]);
-
-        $this->call([ColorSeeder::class]);
-
-        $this->call([PermissionSeeder::class]);
-
-        // Fake Schools
-
-        School::factory()->count(150)->create();
-
-        // Fake Vendorss
-
-        Vendor::factory()->count(180)->create();
+        // 4. Products and Variants
+        $this->call([
+            ProductSeeder::class,
+        ]);
     }
 }

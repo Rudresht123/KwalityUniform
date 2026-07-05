@@ -359,128 +359,139 @@
 
 
     <!-- =========================
-                 Featured Partner Schools
-            ========================== -->
-    <section class="schools-section  py-5">
-
+                         Featured Partner Schools
+                    ========================== -->
+    <section class="schools-section py-5">
         <div class="container">
-
             <div class="row align-items-end mb-5">
-
                 <div class="col-lg-8">
-
                     <span class="school-badge">
                         <i class="bi bi-patch-check-fill"></i>
                         Trusted School Network
                     </span>
-
                     <h2 class="school-title mt-3">
                         Official Partner Schools
                     </h2>
-
                     <p class="school-description">
                         Explore our growing network of partner schools across India.
                         Every school has its own dedicated catalogue with officially
                         approved uniforms, accessories and a seamless shopping experience.
                     </p>
-
                 </div>
-
-
-
-            </div>
-
-
-            <div class="row g-4">
-
-                @foreach ($featuredSchools as $school)
-                    <div class="col-md-6 col-xl-3">
-
-                        <div class="partner-school-card">
-
-                            <!-- Top Strip -->
-
-                            <div class="card-strip"></div>
-
-                            <!-- Logo -->
-
-                            <div class="school-logo-wrapper">
-
-                                <img src="{{ $school->logo_url ? asset($school->logo_url) : asset('assets/images/no_image.jpg') }}"
-                                    class="school-logo" alt="{{ $school->school_name }}">
-
-                            </div>
-
-                            <!-- Body -->
-
-                            <div class="partner-school-body">
-
-                                <span class="partner-status">
-
-                                    <i class="bi bi-patch-check-fill"></i>
-
-                                    Official Partner
-
-                                </span>
-
-                                <h4>
-
-                                    {{ $school->school_name }}
-
-                                </h4>
-
-                                <p class="location">
-
-                                    <i class="bi bi-geo-alt-fill"></i>
-
-                                    {{ $school->city }},
-                                    {{ $school->state }}
-
-                                </p>
-
-                                <div class="school-divider"></div>
-
-                                <div class="school-footer">
-
-                                    <div>
-
-                                        <small>Available</small>
-
-                                        <strong>
-
-                                            {{ $school->products_count ?? '50+' }}
-
-                                            Products
-
-                                        </strong>
-
-                                    </div>
-
-                                    <a href="{{ route('website.shop', ['school' => $school->school_id]) }}"
-                                        class="explore-btn">
-
-                                        Explore
-
-                                        <i class="bi bi-arrow-right"></i>
-
-                                    </a>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
+                <div class="col-lg-4 text-end">
+                    <div class="slider-nav">
+                        <div class="swiper-prev"><i class="bi bi-chevron-left"></i></div>
+                        <div class="swiper-next"><i class="bi bi-chevron-right"></i></div>
                     </div>
-                @endforeach
-
+                </div>
             </div>
 
+            <!-- Swiper Slider -->
+            <div class="swiper schoolSwiper">
+                <div class="swiper-wrapper">
+                    @foreach ($featuredSchools as $school)
+                        <div class="swiper-slide">
+                            <div class="partner-school-card" onclick="openSchoolDetails(event, '{{ $school->school_id }}', '{{ addslashes($school->school_name) }}', '{{ addslashes($school->city) }}', '{{ addslashes($school->state) }}', '{{ $school->products_count ?? '50+' }}')">
+                                <div class="card-strip"></div>
+                                <div class="school-logo-wrapper">
+                                    <img src="{{ $school->logo_url ? asset($school->logo_url) : asset('assets/images/no_image.jpg') }}"
+                                        class="school-logo" alt="{{ $school->school_name }}">
+                                </div>
+                                <div class="partner-school-body">
+                                    <span class="partner-status">
+                                        <i class="bi bi-patch-check-fill"></i>
+                                        Official Partner
+                                    </span>
+                                    <h4>{{ $school->school_name }}</h4>
+                                    <p class="location">
+                                        <i class="bi bi-geo-alt-fill"></i>
+                                        {{ $school->city }}, {{ $school->state }}
+                                    </p>
+                                    <div class="school-divider"></div>
+                                    <div class="school-footer">
+                                        <div>
+                                            <small>Available</small>
+                                            <strong>{{ $school->products_count ?? '50+' }} Products</strong>
+                                        </div>
+                                        <span class="explore-btn">
+                                            Explore <i class="bi bi-arrow-right"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
         </div>
-
     </section>
 
-    <section class="category-section py-5">
+    <!-- School Details Modal -->
+    <div class="modal fade" id="schoolDetailsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="modal-header border-0 bg-primary text-white p-4">
+                    <h5 class="modal-title fw-bold" id="modalSchoolName">School Name</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <div class="school-logo-wrapper mb-4" style="margin-top: -60px; position: relative; z-index: 2;">
+                        <img id="modalSchoolLogo" src="" class="school-logo" style="width: 80px; height: 80px;" alt="School Logo">
+                    </div>
+                    <p class="location fs-5 mb-3">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <span id="modalSchoolLocation">Location</span>
+                    </p>
+                    <p class="text-secondary mb-4">
+                        This official partner school provides premium uniforms with strictly approved designs and high-quality fabrics.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a id="modalExploreLink" href="#" class="btn btn-primary px-4 py-2 rounded-pill fw-bold">
+                            Browse Catalogue <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const swiper = new Swiper('.schoolSwiper', {
+                slidesPerView: 1,
+                spaceBetween: 24,
+                loop: true,
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false,
+                },
+                navigation: {
+                    nextEl: '.swiper-next',
+                    prevEl: '.swiper-prev',
+                },
+                breakpoints: {
+                    640: { slidesPerView: 2 },
+                    1024: { slidesPerView: 4 },
+                },
+            });
+        });
+
+        function openSchoolDetails(event, id, name, city, state, count) {
+            document.getElementById('modalSchoolName').innerText = name;
+            document.getElementById('modalSchoolLocation').innerText = city + ', ' + state;
+            document.getElementById('modalExploreLink').href = "{{ route('website.shop') }}?school=" + id;
+
+            const card = event.currentTarget;
+            const logoSrc = card.querySelector('.school-logo').src;
+            document.getElementById('modalSchoolLogo').src = logoSrc;
+
+            const modal = new bootstrap.Modal(document.getElementById('schoolDetailsModal'));
+            modal.show();
+        }
+    </script>
+
+
+    <section class="category-section bg-light py-5">
 
         <div class="container">
 
@@ -515,9 +526,14 @@
                             class="category-card">
 
                             <div class="category-icon">
-
-                                {{-- SVG HERE --}}
-
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                                    <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                                    <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                                    <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                                </svg>
                             </div>
 
                             <h6>{{ $category->name }}</h6>
@@ -554,51 +570,6 @@
     </section>
 
 
-
-    <!-- 8. Featured Products -->
-    <section class="py-5" style="background-color: #F8FAFC; border-bottom: 1px solid var(--qu-border-color);">
-        <div class="container">
-            <div class="d-flex align-items-end justify-content-between mb-5">
-                <div>
-                    <span class="badge-geo mb-2">Core Campus Styles</span>
-                    <h2 class="display-6 fw-bold text-dark mb-1">Featured Campus Styles</h2>
-                    <p class="text-muted mb-0">Discover our highest-rated everyday shirts, polos, and scholastic
-                        accessories.</p>
-                </div>
-                <a href="shop.html" class="btn btn-outline-primary d-none d-md-block"
-                    style="border-radius: 10px; font-weight: 600;">View All Catalogue &rarr;</a>
-            </div>
-
-            <div class="row g-4" id="featured-products-grid">
-                @foreach ($featuredProducts as $product)
-                    <div class="col-lg-3 col-md-6">
-                        <div class="product-card-geo">
-                            <div class="product-thumb-geo" style="cursor: pointer;"
-                                onclick="window.location.href='{{ route('website.shop') }}?id={{ $product->id }}">
-                                <img src="{{ $product->image_url ? asset($product->image_url) : asset('assets/images/no_image.jpg') }}"
-                                    alt="{{ $product->name }}">
-                            </div>
-                            <div class="product-school-geo">{{ $product->school?->school_name ?? 'General Wear' }}</div>
-                            <h4 class="product-name-geo" style="cursor: pointer;"
-                                onclick="window.location.href='{{ route('website.shop') }}?id={{ $product->id }}">
-                                {{ $product->name }}</h4>
-                            <div class="product-price-geo">${{ number_format($product->price, 2) }}</div>
-                            <button class="btn btn-primary btn-sm mt-3 w-100"
-                                onclick="State.addToCart({{ json_encode([
-                                    'id' => $product->id,
-                                    'name' => $product->name,
-                                    'price' => $product->price,
-                                    'image' => $product->image_url ? asset($product->image_url) : asset('assets/images/no_image.jpg'),
-                                    'sizes' => $product->variants->pluck('size')->unique()->toArray(),
-                                    'colors' => $product->variants->pluck('color')->unique()->map(fn($c) => ['name' => $c, 'value' => '#CCC'])->toArray(),
-                                ]) }}, 1, 'M', 'Default Color')">Add
-                                to Basket</button>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
 
 
     <section class="how-section py-5">
@@ -647,8 +618,21 @@
 
                         <div class="step-icon">
 
-                            <i class="bi bi-buildings"></i>
-
+                            <div class="step-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 21h18" />
+                                    <path d="M5 21V7a2 2 0 0 1 2-2h4v16" />
+                                    <path d="M11 21V3h6a2 2 0 0 1 2 2v16" />
+                                    <path d="M7 9h2" />
+                                    <path d="M7 13h2" />
+                                    <path d="M7 17h2" />
+                                    <path d="M15 7h2" />
+                                    <path d="M15 11h2" />
+                                    <path d="M15 15h2" />
+                                </svg>
+                            </div>
                         </div>
 
                         <h4>
@@ -682,8 +666,15 @@
 
                         <div class="step-icon">
 
-                            <i class="bi bi-bag-check"></i>
-
+                            <div class="step-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M6 7h12l-1 13H7L6 7z" />
+                                    <path d="M9 7a3 3 0 0 1 6 0" />
+                                    <path d="M9 11l2 2 4-4" />
+                                </svg>
+                            </div>
                         </div>
 
                         <h4>
@@ -717,8 +708,17 @@
 
                         <div class="step-icon">
 
-                            <i class="bi bi-truck"></i>
-
+                            <div class="step-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M10 17H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h9v12z" />
+                                    <path d="M10 9h5l3 3v5h-2" />
+                                    <circle cx="7.5" cy="17.5" r="1.5" />
+                                    <circle cx="16.5" cy="17.5" r="1.5" />
+                                    <path d="M10 17h5" />
+                                </svg>
+                            </div>
                         </div>
 
                         <h4>
@@ -745,7 +745,7 @@
     </section>
 
     <!-- 11. Why Choose eSchool Cart -->
-    <section class="py-5 bg-white">
+    <section class="py-5 bg-light">
         <div class="container">
             <div class="text-center mb-5">
                 <span class="badge-geo mb-2">Unparalleled Standards</span>
@@ -803,148 +803,7 @@
         </div>
     </section>
 
-    <!-- 12. Trending Products -->
-    <section class="py-5 bg-light border-top border-bottom">
-        <div class="container">
-            <div class="d-flex align-items-end justify-content-between mb-5">
-                <div>
-                    <span class="badge-geo mb-2">High Demand Uniforms</span>
-                    <h2 class="display-6 fw-bold text-dark mb-1">Trending School Wear</h2>
-                    <p class="text-muted mb-0">These active school products have high seasonal demand and custom reviews.
-                    </p>
-                </div>
-                <a href="shop.html" class="btn btn-outline-primary" style="border-radius: 10px; font-weight: 600;">Shop
-                    Full Selection</a>
-            </div>
 
-            <div class="row g-4">
-                <!-- Item 1: Chinos -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="product-card-geo">
-                        <div class="product-thumb-geo" style="cursor: pointer;"
-                            onclick="window.location.href='product-details.html?id=pants-chino'">
-                            <img src="https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&q=80&w=600"
-                                alt="Smart Regular-Fit School Pleated Shorts">
-                        </div>
-                        <div class="product-school-geo">Essential Wear</div>
-                        <h4 class="product-name-geo" style="cursor: pointer;"
-                            onclick="window.location.href='product-details.html?id=pants-chino'">Smart Regular-Fit School
-                            Pleated Shorts</h4>
-                        <div class="product-price-geo">$18.00</div>
-                        <button class="btn btn-primary btn-sm mt-3 w-100"
-                            onclick="State.addToCart({id: 'pants-chino', name: 'Smart Regular-Fit School Pleated Shorts', price: 18.00, image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&q=80&w=600', sizes: ['XS','S','M','L','XL'], colors: [{name: 'Charcoal Grey', value:'#374151'}]}, 1, 'M', 'Charcoal Grey')">Add
-                            to Basket</button>
-                    </div>
-                </div>
-                <!-- Item 2: Gym Set -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="product-card-geo">
-                        <div class="product-thumb-geo" style="cursor: pointer;"
-                            onclick="window.location.href='product-details.html?id=sportswear-pe-set'">
-                            <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&q=80&w=600"
-                                alt="DryFit School House Gym Uniform Set">
-                        </div>
-                        <div class="product-school-geo">Official Gym Bundle</div>
-                        <h4 class="product-name-geo" style="cursor: pointer;"
-                            onclick="window.location.href='product-details.html?id=sportswear-pe-set'">DryFit School House
-                            Gym Uniform Set</h4>
-                        <div class="product-price-geo">$22.00 <span
-                                class="text-muted small text-decoration-line-through fs-7">$30.00</span></div>
-                        <button class="btn btn-primary btn-sm mt-3 w-100"
-                            onclick="State.addToCart({id: 'sportswear-pe-set', name: 'DryFit School House Gym Uniform Set', price: 22.00, image: 'https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&q=80&w=600', sizes: ['S','M','L','XL'], colors: [{name: 'Navy Blue House', value:'#1E3A8A'}]}, 1, 'M', 'Navy Blue House')">Add
-                            to Basket</button>
-                    </div>
-                </div>
-                <!-- Item 3: Backpack -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="product-card-geo">
-                        <div class="product-thumb-geo" style="cursor: pointer;"
-                            onclick="window.location.href='product-details.html?id=ergo-backpack'">
-                            <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=600"
-                                alt="Orthopedic Ergonomic School Backpack">
-                        </div>
-                        <div class="product-school-geo">Essential Gear</div>
-                        <h4 class="product-name-geo" style="cursor: pointer;"
-                            onclick="window.location.href='product-details.html?id=ergo-backpack'">Orthopedic Ergonomic
-                            School Backpack</h4>
-                        <div class="product-price-geo">$32.00</div>
-                        <button class="btn btn-primary btn-sm mt-3 w-100"
-                            onclick="State.addToCart({id: 'ergo-backpack', name: 'Orthopedic Ergonomic School Backpack', price: 32.00, image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=600', sizes: ['One Size'], colors: [{name: 'Deep Navy', value:'#1E3A8A'}]}, 1, 'One Size', 'Deep Navy')">Add
-                            to Basket</button>
-                    </div>
-                </div>
-                <!-- Item 4: Polo -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="product-card-geo">
-                        <div class="product-thumb-geo" style="cursor: pointer;"
-                            onclick="window.location.href='product-details.html?id=polo-pique'">
-                            <img src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?auto=format&fit=crop&q=80&w=600"
-                                alt="Everyday P.E. House Sports Polo">
-                        </div>
-                        <div class="product-school-geo">Essential Wear</div>
-                        <h4 class="product-name-geo" style="cursor: pointer;"
-                            onclick="window.location.href='product-details.html?id=polo-pique'">Everyday P.E. House Sports
-                            Polo</h4>
-                        <div class="product-price-geo">$15.00 <span
-                                class="text-muted small text-decoration-line-through fs-7">$18.00</span></div>
-                        <button class="btn btn-primary btn-sm mt-3 w-100"
-                            onclick="State.addToCart({id: 'polo-pique', name: 'Everyday P.E. House Sports Polo', price: 15.00, image: 'https://images.unsplash.com/photo-1581655353564-df123a1eb820?auto=format&fit=crop&q=80&w=600', sizes: ['XS','S','M','L','XL'], colors: [{name: 'Navy Blue', value:'#1E3A8A'}]}, 1, 'M', 'Navy Blue')">Add
-                            to Basket</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 13. Partner Schools (Administrative trust) -->
-    <section class="py-5 bg-white border-bottom">
-        <div class="container">
-            <div class="text-center mb-4">
-                <span class="badge-geo mb-2">Institutional Networks</span>
-                <h3 class="h5 fw-bold text-dark">Trusted by Board-Certified Academic Districts</h3>
-            </div>
-            <div class="row g-4 justify-content-center">
-                <div class="col-6 col-md-3">
-                    <div class="partner-logo-box">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                            <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"></path>
-                        </svg>
-                        <span class="partner-logo-name">Metro Prep Dist.</span>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="partner-logo-box">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                        </svg>
-                        <span class="partner-logo-name">East Prep Board</span>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="partner-logo-box">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                        </svg>
-                        <span class="partner-logo-name">Academic Guild</span>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="partner-logo-box">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                        </svg>
-                        <span class="partner-logo-name">Scholastic Spines</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- 14. Parent Testimonials -->
     <section class="py-5 bg-white border-bottom">
@@ -1093,60 +952,7 @@
         </div>
     </section>
 
-    <!-- 15. School Gallery -->
-    <section class="py-5" style="background-color: #F8FAFC;">
-        <div class="container">
-            <div class="text-center mb-5">
-                <span class="badge-geo mb-2">Campus Chronicles</span>
-                <h2 class="display-6 fw-bold text-dark">Our Uniforms In Action</h2>
-                <p class="text-muted max-w-2xl mx-auto">Explore snapshots of scholastic life, sporting convocations, and
-                    daily classroom activity from our partner schools.</p>
-            </div>
 
-            <div class="row g-4">
-                <div class="col-sm-6 col-md-6 col-lg-3">
-                    <div class="gallery-item-geo">
-                        <img src="https://images.unsplash.com/photo-1596495578065-6e0763fa1141?auto=format&fit=crop&q=80&w=600"
-                            alt="Assembly Hall" class="gallery-img">
-                        <div class="gallery-overlay">
-                            <h5 class="text-white fw-bold mb-0" style="font-size: 16px;">Morning Assemblies</h5>
-                            <p class="text-white-50 small mb-0">Delhi Public School Assemblies</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-6 col-lg-3">
-                    <div class="gallery-item-geo">
-                        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=600"
-                            alt="Library Study" class="gallery-img">
-                        <div class="gallery-overlay">
-                            <h5 class="text-white fw-bold mb-0" style="font-size: 16px;">Academic Focus</h5>
-                            <p class="text-white-50 small mb-0">Army Public School Library Sessions</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-6 col-lg-3">
-                    <div class="gallery-item-geo">
-                        <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&q=80&w=600"
-                            alt="Sports Field" class="gallery-img">
-                        <div class="gallery-overlay">
-                            <h5 class="text-white fw-bold mb-0" style="font-size: 16px;">Physical Training</h5>
-                            <p class="text-white-50 small mb-0">Active Athletic Inter-School Sports</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-6 col-lg-3">
-                    <div class="gallery-item-geo">
-                        <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&q=80&w=600"
-                            alt="Classroom Discussion" class="gallery-img">
-                        <div class="gallery-overlay">
-                            <h5 class="text-white fw-bold mb-0" style="font-size: 16px;">Modern Learning</h5>
-                            <p class="text-white-50 small mb-0">St. Xavier's High School Seminar Classrooms</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
 
 
@@ -1241,278 +1047,8 @@
         </div>
     </section>
 
-    <!-- 19. Onboarding Hub (Become Partner / Become Vendor) -->
-    <section id="become-partner-section" class="py-5"
-        style="background-color: var(--qu-bg-light); border-bottom: 1px solid var(--qu-border-color);">
-        <div class="container">
+    {{-- <!-- 19. Onboarding Hub (Become Partner / Become Vendor) --> --}}
+   {{-- @include("website.partials.onboarding") --}}
 
-            <!-- Tab Triggers -->
-            <div class="row justify-content-center mb-5">
-                <div class="col-md-8 text-center">
-                    <span class="badge-geo mb-2"
-                        style="background-color: var(--qu-badge-bg); color: var(--qu-primary);">Marketplace Hub</span>
-                    <h2 class="display-6 fw-extrabold text-dark mb-3"
-                        style="font-family: var(--font-display); color: var(--qu-primary) !important;">
-                        Onboard Your Organization
-                    </h2>
-                    <p class="text-secondary mb-4 small">Select your portal to join the country's leading official school
-                        supply ecosystem.</p>
-
-                    <div class="d-inline-flex p-1 bg-white rounded-pill border" style="box-shadow: var(--qu-shadow-sm);">
-                        <button class="btn rounded-pill px-4 py-2 fw-semibold" id="tab-school-btn"
-                            onclick="switchOnboardingTab('school')"
-                            style="font-size: 14px; border: none; background-color: var(--qu-primary); color: var(--qu-bg-white); transition: all 0.3s ease;">
-                            Register Your School
-                        </button>
-                        <button class="btn rounded-pill px-4 py-2 fw-semibold text-secondary" id="tab-vendor-btn"
-                            onclick="switchOnboardingTab('vendor')"
-                            style="font-size: 14px; border: none; background-color: transparent; color: var(--qu-secondary); transition: all 0.3s ease;">
-                            Become a Vendor
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- School Partner Tab Panel -->
-            <div id="tab-content-school" class="onboarding-tab-content">
-                <div class="row align-items-center g-5">
-                    <!-- Text and info column -->
-                    <div class="col-lg-6">
-                        <span class="badge-geo mb-3"
-                            style="background-color: var(--qu-badge-bg); color: var(--qu-primary);">For Academic
-                            Institutions</span>
-                        <h3 class="display-6 fw-bold text-dark mb-3"
-                            style="font-family: var(--font-display); color: var(--qu-primary) !important;">
-                            Sell Official Uniforms
-                        </h3>
-                        <p class="fs-6 text-secondary mb-4" style="line-height: 1.7;">
-                            Create a custom-crested digital storefront for your educational campus on eSchoolKart. Enable
-                            parents to search, size, and purchase authenticated uniforms, books, and sports kits with
-                            absolute trust and zero queue-times.
-                        </p>
-                        <div class="row g-3 mb-4">
-                            <div class="col-sm-6">
-                                <div class="d-flex align-items-center gap-2">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                        stroke="var(--qu-primary)" stroke-width="2.5" class="flex-shrink-0">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                    <span class="fw-semibold text-dark small">Official School Partners</span>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="d-flex align-items-center gap-2">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                        stroke="var(--qu-primary)" stroke-width="2.5" class="flex-shrink-0">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                    <span class="fw-semibold text-dark small">Quality Assured Standards</span>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="d-flex align-items-center gap-2">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                        stroke="var(--qu-primary)" stroke-width="2.5" class="flex-shrink-0">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                    <span class="fw-semibold text-dark small">Dedicated Customer Support</span>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="d-flex align-items-center gap-2">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                        stroke="var(--qu-primary)" stroke-width="2.5" class="flex-shrink-0">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                    <span class="fw-semibold text-dark small">Authorized Badge Cresting</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Form Card column -->
-                    <div class="col-lg-6">
-                        <div class="card-geo p-4 border-0 shadow-sm" style="background-color: var(--qu-bg-white);">
-                            <h4 class="fw-bold text-dark mb-1">Register Your School</h4>
-                            <p class="text-secondary small mb-4">Our Institutional Partnerships manager will contact you
-                                with mock designs.</p>
-
-                            <form id="partner-school-form">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-semibold">School Name</label>
-                                        <input type="text" required class="form-control"
-                                            placeholder="e.g. St. Xavier's High"
-                                            style="border-radius: var(--qu-radius-sm); border: 1px solid var(--qu-border-color); padding: 10px 14px;">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-semibold">Contact Person</label>
-                                        <input type="text" required class="form-control"
-                                            placeholder="e.g. Principal Sharma"
-                                            style="border-radius: var(--qu-radius-sm); border: 1px solid var(--qu-border-color); padding: 10px 14px;">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-semibold">Email Address</label>
-                                        <input type="email" required class="form-control"
-                                            placeholder="admin@school.edu"
-                                            style="border-radius: var(--qu-radius-sm); border: 1px solid var(--qu-border-color); padding: 10px 14px;">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-semibold">Phone Number</label>
-                                        <input type="tel" required class="form-control" placeholder="+91 98765 43210"
-                                            style="border-radius: var(--qu-radius-sm); border: 1px solid var(--qu-border-color); padding: 10px 14px;">
-                                    </div>
-                                    <div class="col-12">
-                                        <button type="submit" class="btn btn-primary w-100 py-3 mt-2"
-                                            style="border-radius: var(--qu-radius-sm); font-weight: 600;">Submit
-                                            Partnership Request</button>
-                                    </div>
-                                </div>
-                            </form>
-
-                            <!-- Success Message -->
-                            <div id="partner-school-success" class="d-none text-center py-4">
-                                <div
-                                    style="background-color: #DEF7EC; color: #03543F; width: 56px; height: 56px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;">
-                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="3">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </div>
-                                <h5 class="fw-bold text-dark">Partnership Request Submitted!</h5>
-                                <p class="text-secondary small mb-0 mt-2">Thank you! Our Institutional Onboarding Team
-                                    will
-                                    reach out to schedule a virtual portal demo and garment sample validation in 24 hours.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Vendor Partner Tab Panel -->
-            <div id="tab-content-vendor" class="onboarding-tab-content d-none">
-                <div class="row align-items-center g-5 flex-row-reverse">
-                    <!-- Text and info column -->
-                    <div class="col-lg-6">
-                        <span class="badge-geo mb-3"
-                            style="background-color: var(--qu-badge-bg); color: var(--qu-primary);">Join
-                            eSchoolKart</span>
-                        <h3 class="display-6 fw-bold text-dark mb-3"
-                            style="font-family: var(--font-display); color: var(--qu-primary) !important;">
-                            Become an Approved Supplier
-                        </h3>
-                        <p class="fs-6 text-secondary mb-4" style="line-height: 1.7;">
-                            Are you an authorized manufacturer or licensed supplier of premium school shoes, accessories,
-                            stationery, or bags? Access high-volume, secure seasonal demand by distributing verified
-                            products straight to school-authorized dashboards.
-                        </p>
-                        <div class="row g-3 mb-4">
-                            <div class="col-sm-6">
-                                <div class="d-flex align-items-center gap-2">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                        stroke="var(--qu-primary)" stroke-width="2.5" class="flex-shrink-0">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                    <span class="fw-semibold text-dark small">Secure Payments Gateway</span>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="d-flex align-items-center gap-2">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                        stroke="var(--qu-primary)" stroke-width="2.5" class="flex-shrink-0">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                    <span class="fw-semibold text-dark small">Fast Delivery Logistics</span>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="d-flex align-items-center gap-2">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                        stroke="var(--qu-primary)" stroke-width="2.5" class="flex-shrink-0">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                    <span class="fw-semibold text-dark small">Easy, Integrated Returns</span>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="d-flex align-items-center gap-2">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                        stroke="var(--qu-primary)" stroke-width="2.5" class="flex-shrink-0">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                    <span class="fw-semibold text-dark small">Guaranteed Calendar Volume</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Form Card column -->
-                    <div class="col-lg-6">
-                        <div class="card-geo p-4 border-0 shadow-sm" style="background-color: var(--qu-bg-white);">
-                            <h4 class="fw-bold text-dark mb-1">Apply to Supply</h4>
-                            <p class="text-secondary small mb-4">Submit your manufacturing registration details to undergo
-                                credential verification.</p>
-
-                            <form id="vendor-partner-form">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-semibold">Company Name</label>
-                                        <input type="text" required class="form-control"
-                                            placeholder="e.g. Apex Uniform Mills"
-                                            style="border-radius: var(--qu-radius-sm); border: 1px solid var(--qu-border-color); padding: 10px 14px;">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-semibold">Product Category</label>
-                                        <select required class="form-select"
-                                            style="border-radius: var(--qu-radius-sm); border: 1px solid var(--qu-border-color); padding: 10px 14px;">
-                                            <option value="" disabled selected>Select category...</option>
-                                            <option value="uniforms">Uniform Fabrics & Tailoring</option>
-                                            <option value="shoes">School Shoes & Socks</option>
-                                            <option value="bags">School Bags & Accessories</option>
-                                            <option value="books">Stationery, Books & Art Kits</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-semibold">Contact Email</label>
-                                        <input type="email" required class="form-control"
-                                            placeholder="partner@company.com"
-                                            style="border-radius: var(--qu-radius-sm); border: 1px solid var(--qu-border-color); padding: 10px 14px;">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-semibold">GSTIN / Corporate ID</label>
-                                        <input type="text" required class="form-control"
-                                            placeholder="e.g. 29GGGGG1314R1Z1"
-                                            style="border-radius: var(--qu-radius-sm); border: 1px solid var(--qu-border-color); padding: 10px 14px;">
-                                    </div>
-                                    <div class="col-12">
-                                        <button type="submit" class="btn btn-primary w-100 py-3 mt-2"
-                                            style="border-radius: var(--qu-radius-sm); font-weight: 600;">Apply as
-                                            Authorized Supplier</button>
-                                    </div>
-                                </div>
-                            </form>
-
-                            <!-- Success Message -->
-                            <div id="vendor-partner-success" class="d-none text-center py-4">
-                                <div
-                                    style="background-color: #DEF7EC; color: #03543F; width: 56px; height: 56px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;">
-                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="3">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </div>
-                                <h5 class="fw-bold text-dark">Supplier Application Received!</h5>
-                                <p class="text-secondary small mb-0 mt-2">Thank you! Your company details and catalog
-                                    categories are successfully registered. Our Merchant Desk will review your tax status
-                                    and GST credentials within 2 business days.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-    </section>
-
-    <!-- 21. Footer -->
 @endsection
+

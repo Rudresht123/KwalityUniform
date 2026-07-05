@@ -13,9 +13,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
- $middleware->redirectUsersTo(function (Request $request) {
-        return route('dashboard');
-    });
+        $middleware->validateCsrfTokens(except: [
+            'partnership/school',
+            'partnership/vendor',
+        ]);
+
+        $middleware->redirectUsersTo(function (Request $request) {
+            return route('dashboard');
+        });
 
         $middleware->alias([
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,

@@ -177,7 +177,7 @@ if (!function_exists('emailButton')) {
     }
 
     if (!function_exists('featuredSchools')) {
-        function featuredSchools($limit = 4)
+        function featuredSchools($limit = 10)
         {
             return new GlobalRepository()->featuredSchools($limit);
         }

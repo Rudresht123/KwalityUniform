@@ -89,6 +89,12 @@ class PermissionSeeder extends Seeder
                 'vendor.delete' => 'Delete Vendor',
             ],
 
+            'Partnership Management' => [
+                'partnership.view'    => 'View Partnership Requests',
+                'partnership.approve' => 'Approve Partnership Request',
+                'partnership.reject'  => 'Reject Partnership Request',
+            ],
+
             'System Management' => [
                 'audit.view' => 'View Audit Reports',
                 'global_settings.view' => 'View Global Settings',

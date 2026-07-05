@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\SuperAdmin;
 
 use App\Models\RolePermission\Role;
 use App\Models\User;
@@ -59,8 +59,8 @@ class VendorFactory extends Factory
 
             'logo_url' => null,
 
-            'created_by' => $admin?->id,
-            'updated_by' => $admin?->id,
+            'created_by' => 1,
+            'updated_by' => 1,
         ];
     }
 }

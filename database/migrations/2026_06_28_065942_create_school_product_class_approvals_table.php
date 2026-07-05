@@ -17,7 +17,7 @@ return new class extends Migration
             $table->uuid('class_id');
             $table->timestamps();
 
-            $table->foreign('school_product_approval_id')->references('school_product_approval_id')->on('school_product_approvals')->onDelete('cascade');
+            $table->foreign('school_product_approval_id','fk_spca_approval')->references('school_product_approval_id')->on('school_product_approvals')->onDelete('cascade');
             $table->foreign('class_id')->references('id')->on('school_classes')->onDelete('cascade');
         });
     }

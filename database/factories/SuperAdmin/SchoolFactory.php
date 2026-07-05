@@ -1,5 +1,5 @@
 <?php
-namespace Database\Factories;
+namespace Database\Factories\SuperAdmin;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
 use App\Models\SuperAdmin\School;
@@ -52,7 +52,7 @@ class SchoolFactory extends Factory
                 '0',
             ]),
 
-            'created_by' => $admin?->id,
+        'created_by' => $admin?->id,
         'updated_by' => $admin?->id,
         ];
     }

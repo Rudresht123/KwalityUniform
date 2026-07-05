@@ -6,12 +6,13 @@ use App\Models\Record;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Database\Factories\VendorFactory;
+use Database\Factories\SuperAdmin\VendorFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use App\Traits\LogsAllActivity;
+
 
 #[Fillable(['user_id', 'business_name', 'owner_name', 'email', 'phone', 'address', 'city', 'state', 'pincode', 'gstin', 'pan_number', 'bank_account_no', 'ifsc_code', 'commission_rate', 'status', 'logo_url', 'is_active', 'created_by', 'updated_by', 'image_id'])]
 class Vendor extends Record

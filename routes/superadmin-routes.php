@@ -24,6 +24,14 @@ use App\Http\Controllers\SuperAdmin\UserStatusReportController;
 use App\Http\Controllers\SuperAdmin\SchoolStandardController;
 use App\Http\Controllers\SuperAdmin\SchoolSectionController;
 use App\Http\Controllers\SuperAdmin\ProductAssignmentController;
+use App\Http\Controllers\SuperAdmin\PartnershipRequestController;
+Route::prefix('partnerships')->name('partnership.')->group(function () {
+    Route::get('/index', [PartnershipRequestController::class, 'index'])->name('index')->middleware('permission:partnership.view');
+    Route::post('/approve-school/{id}', [PartnershipRequestController::class, 'approveSchoolRequest'])->name('approve-school')->middleware('permission:partnership.approve');
+    Route::post('/approve-vendor/{id}', [PartnershipRequestController::class, 'approveVendorRequest'])->name('approve-vendor')->middleware('permission:partnership.approve');
+    Route::post('/reject/{type}/{id}', [PartnershipRequestController::class, 'rejectRequest'])->name('reject')->middleware('permission:partnership.reject');
+});
+
 Route::prefix('vendors')->name('vendor.')->group(function () {
     Route::get('/index', [VendorController::class, 'index'])->name('index')->middleware('permission:vendor.view');
     Route::get('/create', [VendorController::class, 'create'])->name('create')->middleware('permission:vendor.create');

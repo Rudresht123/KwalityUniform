@@ -79,6 +79,15 @@
                                         </a> 
                                     </li> <!-- End::slide -->
                                     <!-- Start::slide -->
+                                    @can('partnership.view')
+                                        <li class="slide {{ request()->routeIs('partnership.*') ? 'active' : '' }}">
+                                            <a href="{{ route('partnership.index') }}" class="side-menu__item {{ request()->routeIs('partnership.index') ? 'active' : '' }}">
+                                                <i class="ti ti-user-check side-menu__icon"></i>
+                                                <span class="side-menu__label">Partnership Requests</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+
                                     @canany(['vendor.create', 'vendor.view'])
 
                                         <li class="slide has-sub {{ request()->routeIs('vendor.*') ? 'open active' : '' }}">

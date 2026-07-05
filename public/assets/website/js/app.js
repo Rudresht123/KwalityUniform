@@ -703,27 +703,6 @@ const State = {
       }).join('');
     }
 
-    // Partner School Form submit handler
-    const partnerSchoolForm = document.getElementById('partner-school-form');
-    if (partnerSchoolForm) {
-      partnerSchoolForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        partnerSchoolForm.classList.add('d-none');
-        document.getElementById('partner-school-success')?.classList.remove('d-none');
-        this.showToast(`Partnership request submitted! Our onboarding team will contact you.`);
-      });
-    }
-
-    // Vendor Partner Form submit handler
-    const vendorPartnerForm = document.getElementById('vendor-partner-form');
-    if (vendorPartnerForm) {
-      vendorPartnerForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        vendorPartnerForm.classList.add('d-none');
-        document.getElementById('vendor-partner-success')?.classList.remove('d-none');
-        this.showToast(`Supplier application received! Our merchant desk will contact you.`);
-      });
-    }
   },
 
   // 2. SHOP CATALOGUE INITIALIZATION
@@ -1468,3 +1447,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Expose state globally so inline click handlers in cards can trigger actions
 window.State = State;
+
+
+
