@@ -511,6 +511,8 @@
 
 
 @section('content')
+
+
     <div class="pa-wrap">
 
         {{-- ── Hero ── --}}
@@ -703,7 +705,7 @@
                                         </td>
 
                                         <td>
-                                            {{ $product->approved_at->format('d M Y') }}
+                                        {{ $product->approved_at?->format('d M Y') }}
                                         </td>
 
                                         <td class="text-center">

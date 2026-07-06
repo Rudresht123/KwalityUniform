@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use App\Listeners\AuditAuthEvents;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -42,5 +43,12 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('viewHistoryStock', function ($user) {
             return (new \App\Policies\StockPolicy())->viewHistory($user);
         });
+
+        Gate::define('school.product.view', function ($user) {
+            return $user->hasRole('School');
+        });
+
+            Paginator::useBootstrapFive();
+
     }
 }

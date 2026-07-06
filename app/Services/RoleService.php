@@ -13,9 +13,37 @@ class RoleService
         return Role::whereNot("name","super-admin")->get();
     }
 
-    public function getGroupedPermissions(?string $roleName = null)
+    public function getGroupedPermissions(?string $roleId = null)
     {
-        $permissions = Permission::all();
+        $query = Permission::query();
+
+        if ($roleId) {
+            $role = Role::findOrFail($roleId);
+            
+            // Automatic Category Detection
+            $category = $role->role_category;
+            if (!$category) {
+                $roleName = strtolower($role->name);
+                if (str_contains($roleName, 'school')) {
+                    $category = 'school';
+                } elseif (str_contains($roleName, 'vendor')) {
+                    $category = 'vendor';
+                } elseif (str_contains($roleName, 'parent')) {
+                    $category = 'parent';
+                } elseif (str_contains($roleName, 'admin')) {
+                    $category = 'admin';
+                }
+            }
+
+            if ($category) {
+                $query->where(function($q) use ($category) {
+                    $q->where('role_category', $category)
+                      ->orWhereNull('role_category');
+                });
+            }
+        }
+
+        $permissions = $query->get();
 
         // Filter out unimplemented permissions
         $permissions = $permissions->filter(function ($permission) {
@@ -23,58 +51,27 @@ class RoleService
                    !str_starts_with($permission->name, 'school_section.');
         });
 
-        if ($roleName) {
-            $roleName = strtolower($roleName);
-            
-            $mapping = [
-                'school' => [
-                    'School Management', 
-                    'Parent Management',
-                    'Product Management',
-                ],
-                'vendor' => [
-                    'Vendor Management', 
-                    'Product Management', 
-                ],
-                'admin' => [
-                    'Vendor Management',
-                    'School Management',
-                    'School Board Management',
-                    'User Management',
-                    'Parent Management',
-                    'Product Management',
-                    'System Management',
-                ],
-                'parent' => [
-                    'School Management',
-                ],
-            ];
-
-            foreach ($mapping as $keyword => $allowedGroups) {
-                if (str_contains($roleName, $keyword)) {
-                    if ($keyword === 'school') {
-                        $permissions = $permissions->filter(function ($permission) use ($allowedGroups) {
-                            return (in_array($permission->group_name, $allowedGroups) && 
-                                   ($permission->name === 'school.product.approve' || 
-                                    $permission->name === 'school.product.report' || 
-                                    $permission->group_name !== 'School Management'));
-                        });
-                    } else {
-                        $permissions = $permissions->whereIn('group_name', $allowedGroups);
-                    }
-                    break;
-                }
-            }
-        }
-
         return $permissions->groupBy('group_name');
     }
 
     public function createRole(array $data): Role
     {
         return DB::transaction(function () use ($data) {
+            $roleName = $data['name'];
+            $category = $data['role_category'] ?? null;
+
+            // Auto-detect category if not provided
+            if (!$category) {
+                $lowerName = strtolower($roleName);
+                if (str_contains($lowerName, 'school')) $category = 'school';
+                elseif (str_contains($lowerName, 'vendor')) $category = 'vendor';
+                elseif (str_contains($lowerName, 'parent')) $category = 'parent';
+                elseif (str_contains($lowerName, 'admin')) $category = 'admin';
+            }
+
             $role = Role::create([
-                'name' => $data['name'],
+                'name' => $roleName,
+                'role_category' => $category,
                 'guard_name' => 'web',
             ]);
 
@@ -89,38 +86,32 @@ class RoleService
         return DB::transaction(function () use ($id, $data) {
             $role = Role::findOrFail($id);
 
-            $role->update([
-                'name' => $data['name'],
-            ]);
+            $roleName = $data['name'] ?? $role->name;
+            $category = $data['role_category'] ?? $role->role_category;
 
-            // Filter permissions based on role name to prevent unauthorized permissions
-            $permissions = $data['permissions'] ?? [];
-            $roleName = strtolower($role->name);
-            
-            $allowedGroups = [];
-            if (str_contains($roleName, 'school')) {
-                $allowedGroups = ['School Management', 'Parent Management', 'Product Management'];
-            } elseif (str_contains($roleName, 'vendor')) {
-                $allowedGroups = ['Vendor Management', 'Product Management'];
-            } elseif (str_contains($roleName, 'parent')) {
-                $allowedGroups = ['School Management'];
-            } elseif (str_contains($roleName, 'admin')) {
-                $allowedGroups = [
-                    'Vendor Management',
-                    'School Management',
-                    'School Board Management',
-                    'User Management',
-                    'Parent Management',
-                    'Product Management',
-                    'System Management',
-                ];
+            // Auto-detect category if it changes or is missing
+            if (!$category) {
+                $lowerName = strtolower($roleName);
+                if (str_contains($lowerName, 'school')) $category = 'school';
+                elseif (str_contains($lowerName, 'vendor')) $category = 'vendor';
+                elseif (str_contains($lowerName, 'parent')) $category = 'parent';
+                elseif (str_contains($lowerName, 'admin')) $category = 'admin';
             }
 
-            if (!empty($allowedGroups)) {
-                $permissions = Permission::whereIn('group_name', $allowedGroups)
-                    ->whereIn('name', $permissions)
-                    ->pluck('name')
-                    ->toArray();
+            $role->update([
+                'name' => $roleName,
+                'role_category' => $category,
+            ]);
+
+            $permissions = $data['permissions'] ?? [];
+            
+            if ($category) {
+                $allowedPermissions = Permission::where(function($q) use ($category) {
+                    $q->where('role_category', $category)
+                      ->orWhereNull('role_category');
+                })->pluck('name')->toArray();
+
+                $permissions = array_intersect($permissions, $allowedPermissions);
             }
 
             $role->syncPermissions($permissions);

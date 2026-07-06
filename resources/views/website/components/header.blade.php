@@ -27,7 +27,7 @@
           </a>
 
           <!-- Cart Link -->
-          <a href="cart.html" class="action-icon-btn" title="Cart">
+          <a href="{{ route('website.cart.index') }}" class="action-icon-btn" title="Cart">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
               <path d="M3 6h18"></path>
@@ -35,6 +35,8 @@
             </svg>
             <span class="action-badge" id="cart-badge" style="display: none;">0</span>
           </a>
+
+
 
           <!-- Account State -->
           <div id="header-user-display"></div>

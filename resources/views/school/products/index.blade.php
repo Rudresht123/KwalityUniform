@@ -1,6 +1,8 @@
 @extends('layouts.common')
 
 @section('content')
+
+
     <div class="container-xxl py-4">
 
         {{-- Page Header --}}
@@ -52,15 +54,16 @@
             </div>
 
             {{-- ── Product Grid ── --}}
-            <div class="col-12 col-md-9">
+            <div class="col-12 col-md-9" >
 
-                @if (request()->has(['category_id', 'gender_type']))
-                    <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-3 g-4">
+                @if (count($products)>0)
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-3 g-4 editUrl" style="max-height:80vh;overflow:scroll">
 
                         @forelse($products as $product)
                             <div class="col">
-                                <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden product-card"
-                                    role="button" onclick="openProductDetails('{{ $product->product_id }}')">
+                                <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden product-card editUrl"
+                                    data-url="{{ route('school.products.show', $product->product_id) }}" 
+                                    data-modalid="productShow" role="button">
 
                                     {{-- Image --}}
                                     <div class="position-relative overflow-hidden" style="height:220px">
@@ -134,107 +137,61 @@
 
 
     {{-- ─── Product Detail Modal ─────────────────────────────────────── --}}
-    <div class="modal fade" id="product-modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content border-0 shadow rounded-4 overflow-hidden">
+    @include('layouts.modals.editmodal', [
+        'modalId' => 'productShow',
+        'title' => 'Product Details',
+        'modalClass' => 'qv-modal-premium',
+        'subtitle' => 'Uniform specification & availability',
+        'showFooter' => false,
+        'buttonText' => 'Add To Basket',
+    ])
 
-                <button type="button" class="btn-close position-absolute top-0 end-0 m-3 z-3" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
 
-                <div class="modal-body p-0">
-                    <div class="row g-0">
-
-                        {{-- Left — Image Slider --}}
-                        <div class="col-12 col-lg-5 bg-light p-4 d-flex flex-column gap-3">
-                            <div class="position-relative rounded-3 overflow-hidden bg-white d-flex align-items-center justify-content-center"
-                                style="aspect-ratio:1/1">
-                                <img id="modal-main-image" src="" alt="Product"
-                                    class="img-fluid object-fit-contain w-100 h-100"
-                                    style="object-fit:contain;max-height:380px">
-
-                                <button onclick="prevImage()" id="prev-btn"
-                                    class="btn btn-light btn-sm rounded-circle position-absolute start-0 top-50 translate-middle-y ms-2 shadow-sm d-none">
-                                    <i class="ti ti-chevron-left"></i>
-                                </button>
-                                <button onclick="nextImage()" id="next-btn"
-                                    class="btn btn-light btn-sm rounded-circle position-absolute end-0 top-50 translate-middle-y me-2 shadow-sm d-none">
-                                    <i class="ti ti-chevron-right"></i>
-                                </button>
-                            </div>
-
-                            {{-- Thumbnails --}}
-                            <div id="modal-thumbnails" class="d-flex gap-2 overflow-auto pb-1"></div>
-                        </div>
-
-                        {{-- Right — Details --}}
-                        <div class="col-12 col-lg-7 p-4 p-lg-5 d-flex flex-column justify-content-center">
-
-                            <span id="modal-category"
-                                class="badge bg-primary bg-opacity-10 text-primary fw-semibold mb-2 align-self-start"></span>
-
-                            <h3 id="modal-name" class="fw-bold text-dark mb-1"></h3>
-                            <p id="modal-vendor" class="text-muted fst-italic mb-4 small"></p>
-
-                            <div class="border-top border-bottom py-3 mb-4">
-                                <p class="text-secondary small fw-semibold text-uppercase mb-1">Description</p>
-                                <p id="modal-description" class="text-secondary mb-0 lh-lg"></p>
-                            </div>
-
-                            <div class="row g-3 mb-4">
-                                <div class="col-6">
-                                    <div class="bg-light rounded-3 p-3">
-                                        <span class="d-block text-muted"
-                                            style="font-size:.7rem;text-transform:uppercase;letter-spacing:.05em">Gender</span>
-                                        <span id="modal-gender" class="fw-semibold text-dark small"></span>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="bg-light rounded-3 p-3">
-                                        <span class="d-block text-muted"
-                                            style="font-size:.7rem;text-transform:uppercase;letter-spacing:.05em">Fabric</span>
-                                        <span id="modal-fabric" class="fw-semibold text-dark small"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button id="approve-btn" onclick="approveProduct()"
-                                class="btn btn-primary w-100 py-2 fw-bold rounded-3 d-flex align-items-center justify-content-center gap-2">
-                                <i class="ti ti-check"></i>
-                                <span id="approve-btn-text">Approve for my School</span>
-                            </button>
-
+    {{-- ─── Standard Selection Modal ─────────────────────────────────────── --}}
+    <div class="modal fade" id="standard-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow rounded-4">
+                <div class="modal-header border-0 p-4">
+                    <h5 class="fw-bold text-dark mb-0">Select Standards</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="text-muted small mb-4">Choose which standards (grades) this product should be approved for.</p>
+                    <div id="standard-list" class="d-flex flex-column gap-2 max-height-400 overflow-auto" style="max-height: 400px;">
+                        <!-- Standards will be loaded here -->
+                        <div class="text-center py-3">
+                            <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                            <span class="ms-2 small text-muted">Loading standards...</span>
                         </div>
                     </div>
                 </div>
-
+                <div class="modal-footer border-0 p-4">
+                    <button type="button" class="btn btn-light btn-sm fw-semibold" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" id="confirm-approve-btn" onclick="submitApproval()"
+                        class="btn btn-primary btn-sm fw-bold px-4">Confirm Approval</button>
+                </div>
             </div>
         </div>
     </div>
-
 
     <style>
         .product-card {
             transition: transform .2s, box-shadow .2s;
             cursor: pointer;
         }
-
         .product-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 .75rem 1.5rem rgba(0, 0, 0, .1) !important;
         }
-
         .product-thumb {
             transition: transform .4s;
         }
-
         .product-card:hover .product-thumb {
             transform: scale(1.05);
         }
-
         .view-link {
             transition: letter-spacing .2s;
         }
-
         .product-card:hover .view-link {
             letter-spacing: .02em;
         }
@@ -242,80 +199,86 @@
 
 
     <script>
-        let currentImages = [];
-        let currentImageIndex = 0;
         let currentProductId = null;
-        let productModal = null;
 
-        document.addEventListener('DOMContentLoaded', () => {
-            productModal = new bootstrap.Modal(document.getElementById('product-modal'));
-        });
-
-        async function openProductDetails(productId) {
+        async function handleApproveClick(productId) {
             currentProductId = productId;
-            productModal.show();
+            
+            const standardModalEl = document.getElementById('standard-modal');
+            if (!standardModalEl) return;
+            
+            const standardModal = new bootstrap.Modal(standardModalEl);
+            standardModal.show();
 
             try {
-                const response = await fetch(`/school-products/${productId}`);
+                const response = await fetch('{{ route('school.products.standards') }}');
                 const data = await response.json();
 
-                if (data.success) {
-                    const p = data.product;
-                    currentImages = data.images;
-                    currentImageIndex = 0;
+                const list = document.getElementById('standard-list');
+                if (data.success && (data.standards.length > 0 || data.classes.length > 0)) {
+                    
+                    const classesByStandard = data.classes.reduce((acc, cls) => {
+                        acc[cls.standard_id] = acc[cls.standard_id] || [];
+                        acc[cls.standard_id].push(cls);
+                        return acc;
+                    }, {});
 
-                    document.getElementById('modal-name').innerText = p.product_name;
-                    document.getElementById('modal-category').innerText = p.category?.category_name || 'General';
-                    document.getElementById('modal-vendor').innerText = 'By ' + (p.vendor?.business_name ||
-                        'Unknown Vendor');
-                    document.getElementById('modal-description').innerText = p.description ||
-                        'No description available.';
-                    document.getElementById('modal-gender').innerText = p.gender_type;
-                    document.getElementById('modal-fabric').innerText = p.fabric_composition || 'Not specified';
-
-                    const approveBtn = document.getElementById('approve-btn');
-                    const approveBtnText = document.getElementById('approve-btn-text');
-
-                    if (data.is_school_approved) {
-                        approveBtn.className =
-                            'btn btn-success w-100 py-2 fw-bold rounded-3 d-flex align-items-center justify-content-center gap-2';
-                        approveBtnText.innerText = 'Approved for School';
-                        approveBtn.onclick = null;
-                    } else {
-                        approveBtn.className =
-                            'btn btn-primary w-100 py-2 fw-bold rounded-3 d-flex align-items-center justify-content-center gap-2';
-                        approveBtnText.innerText = 'Approve for my School';
-                        approveBtn.onclick = approveProduct;
-                    }
-
-                    updateSlider();
-
-                    const thumbContainer = document.getElementById('modal-thumbnails');
-                    thumbContainer.innerHTML = '';
-                    currentImages.forEach((img, idx) => {
-                        const thumb = document.createElement('img');
-                        thumb.src = img;
-                        thumb.className =
-                            `rounded-2 border border-2 object-fit-cover flex-shrink-0 ${idx === 0 ? 'border-primary' : 'border-transparent'}`;
-                        thumb.style.cssText = 'width:56px;height:56px;cursor:pointer;object-fit:cover';
-                        thumb.onclick = () => setIndex(idx);
-                        thumbContainer.appendChild(thumb);
+                    let html = '';
+                    data.standards.forEach(s => {
+                        const classes = classesByStandard[s.id] || [];
+                        html += `
+                            <div class="mb-4">
+                                <div class="form-check custom-checkbox mb-2">
+                                    <input class="form-check-input standard-checkbox" type="checkbox" value="${s.id}" id="std-${s.id}" name="standards">
+                                    <label class="form-check-label d-flex align-items-center justify-content-between w-100 cursor-pointer fw-bold text-dark" for="std-${s.id}">
+                                        <span>${s.standard_name}</span>
+                                        <i class="ti ti-circle-check text-muted" style="font-size: 1.1rem"></i>
+                                    </label>
+                                </div>
+                                <div class="ms-4 d-flex flex-column gap-1 border-start ps-3">
+                                    ${classes.map(c => `
+                                        <div class="form-check custom-checkbox mb-1">
+                                            <input class="form-check-input class-checkbox" type="checkbox" value="${c.id}" id="cls-${c.id}" name="classes">
+                                            <label class="form-check-label d-flex align-items-center justify-content-between w-100 cursor-pointer" for="cls-${c.id}">
+                                                <span class="text-secondary small">${c.class_name}</span>
+                                                <i class="ti ti-circle-check text-muted" style="font-size: 0.9rem"></i>
+                                            </label>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `;
                     });
 
-                    document.getElementById('prev-btn').classList.toggle('d-none', currentImages.length <= 1);
-                    document.getElementById('next-btn').classList.toggle('d-none', currentImages.length <= 1);
+                    list.innerHTML = html;
+                } else {
+                    list.innerHTML = '<div class="text-center py-3 text-muted small">No standards or classes found for your school.</div>';
                 }
             } catch (error) {
-                console.error('Error fetching product details:', error);
+                console.error('Error fetching standards:', error);
+                document.getElementById('standard-list').innerHTML = '<div class="text-center py-3 text-danger small">Failed to load standards. Please refresh.</div>';
             }
         }
 
-        async function approveProduct() {
+        async function submitApproval() {
             if (!currentProductId) return;
+
+            const selectedStandards = Array.from(document.querySelectorAll('input[name="standards"]:checked')).map(el => el.value);
+            const selectedClasses = Array.from(document.querySelectorAll('input[name="classes"]:checked')).map(el => el.value);
             
+            if (selectedStandards.length === 0 && selectedClasses.length === 0) {
+                Swal.fire({
+                    title: 'No Selection Made',
+                    text: 'Please select at least one standard or class to approve this product.',
+                    icon: 'warning',
+                    confirmButtonColor: '#6259ca'
+                });
+                return;
+            }
+
             const result = await Swal.fire({
                 title: 'Approve Product?',
-                text: 'Do you want to approve this product for your school catalogue?',
+                text: `Approve this product for ${selectedStandards.length} selected standard(s) and ${selectedClasses.length} selected class(es)?`,
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#6259ca',
@@ -325,11 +288,10 @@
 
             if (!result.isConfirmed) return;
 
-            const btn = document.getElementById('approve-btn');
-            const btnText = document.getElementById('approve-btn-text');
-
+            const btn = document.getElementById('confirm-approve-btn');
+            const originalText = btn.innerText;
             btn.disabled = true;
-            btnText.innerText = 'Processing…';
+            btn.innerText = 'Processing…';
 
             try {
                 const response = await fetch(`/school-products/${currentProductId}/approve`, {
@@ -337,11 +299,16 @@
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
+                    },
+                    body: JSON.stringify({
+                        standard_ids: selectedStandards,
+                        class_ids: selectedClasses
+                    })
                 });
                 const data = await response.json();
 
                 if (data.success) {
+                    bootstrap.Modal.getInstance(document.getElementById('standard-modal')).hide();
                     Swal.fire({
                         title: 'Approved!',
                         text: data.message || 'Product approved for your school successfully!',
@@ -349,10 +316,13 @@
                         confirmButtonColor: '#6259ca'
                     });
 
-                    btn.className =
-                        'btn btn-success w-100 py-2 fw-bold rounded-3 d-flex align-items-center justify-content-center gap-2';
-                    btnText.innerText = 'Approved for School';
-                    btn.onclick = null;
+                    // Update the button in the product modal if it exists
+                    const approveBtn = document.querySelector('.btn-approve-school');
+                    if (approveBtn) {
+                        approveBtn.className = 'btn-approve-school approved';
+                        approveBtn.innerHTML = '<i class="ti ti-check me-2"></i> Approved for School';
+                        approveBtn.onclick = null;
+                    }
                 } else {
                     Swal.fire({
                         title: 'Error!',
@@ -370,29 +340,10 @@
                 });
             } finally {
                 btn.disabled = false;
+                btn.innerText = originalText;
             }
-        }
-
-        function setIndex(index) {
-            currentImageIndex = index;
-            updateSlider();
-            const thumbs = document.getElementById('modal-thumbnails').children;
-            for (let i = 0; i < thumbs.length; i++) {
-                thumbs[i].className =
-                    `rounded-2 border border-2 object-fit-cover flex-shrink-0 ${i === currentImageIndex ? 'border-primary' : 'border-light'}`;
-            }
-        }
-
-        function updateSlider() {
-            document.getElementById('modal-main-image').src = currentImages[currentImageIndex] || '';
-        }
-
-        function prevImage() {
-            if (currentImageIndex > 0) setIndex(currentImageIndex - 1);
-        }
-
-        function nextImage() {
-            if (currentImageIndex < currentImages.length - 1) setIndex(currentImageIndex + 1);
         }
     </script>
 @endsection
+
+

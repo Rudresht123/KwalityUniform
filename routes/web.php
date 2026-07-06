@@ -35,23 +35,21 @@ Route::prefix('super-admin')->group(function () {
 
         // School Product Routes
         Route::middleware(['auth'])->group(function () {
+            Route::get('/school-products/standards', [SchoolProductController::class, 'getStandards'])
+                ->name('school.products.standards');
+
             Route::get('/school-products', [SchoolProductController::class, 'index'])
-                ->middleware('can:school.product.view')
                 ->name('school.products.index');
 
             Route::get('/school-products/approved', [SchoolProductController::class, 'approved'])
-                ->middleware('can:school.product.view')
                 ->name('school.products.approved');
 
             Route::get('/school-products/{productId}', [SchoolProductController::class, 'show'])
-                ->middleware('can:school.product.view')
                 ->name('school.products.show');
 
-            Route::post('/school-products/{productId}/approve', [SchoolProductController::class, 'approveProduct'])
-                ->middleware('can:school.product.view');
+            Route::post('/school-products/{productId}/approve', [SchoolProductController::class, 'approveProduct']);
 
-            Route::post('/school-products/{productId}/unapprove', [SchoolProductController::class, 'unapproveProduct'])
-                ->middleware('can:school.product.view');
+            Route::post('/school-products/{productId}/unapprove', [SchoolProductController::class, 'unapproveProduct']);
         });
 
         // Screen Lock specialized routes within super-admin prefix

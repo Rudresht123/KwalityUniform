@@ -71,7 +71,16 @@ class NotificationTemplateSeeder extends Seeder
             'message' => 'Product "{product_name}" is currently out of stock.',
             'type' => 'danger',
             'icon' => 'ti-package-off',
-            'channels' => ['database', 'broadcast'],
+            'channels' => ['database', 'broadcast', 'mail'],
+        ],
+
+        [
+            'key' => 'school_product_approved',
+            'title' => 'School Product Approval',
+            'message' => 'School "{school_name}" has approved product "{product_name}" (Code: {product_code}) for their official catalogue.',
+            'type' => 'success',
+            'icon' => 'ti-school',
+            'channels' => ['database', 'broadcast', 'mail'],
         ],
 
         [

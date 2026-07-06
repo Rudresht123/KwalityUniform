@@ -1,14 +1,19 @@
 <?php
 namespace App\Http\Controllers\Website;
 use App\Http\Controllers\Controller;
+use App\Models\SuperAdmin\Category;
+use App\Models\SuperAdmin\ParentCategory;
+use App\Models\SuperAdmin\Product;
+use App\Models\SuperAdmin\School;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\SuperAdmin\SchoolPartnershipRequest;
+use App\Models\SuperAdmin\SchoolStandard;
+use App\Repositories\ProductRepository;
 use App\Services\EmailService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
-
 
 class WebsiteController extends Controller
 {
@@ -21,39 +26,113 @@ class WebsiteController extends Controller
         ]);
     }
 
-    public function shop(Request $request)
-    {
-        $filters = [
-            'school' => $request->query('school'),
-            'category' => $request->query('category'),
-            'search' => $request->query('search'),
-        ];
+public function shop(Request $request)
+{
+    $schoolId = $request->query('school');
+    $parentCategoryId = $request->query('parent_category');
+    $subCategoryId = $request->query('sub_category');
+    $search = $request->query('search');
 
-        $products = new \App\Repositories\ProductRepository()->searchProducts($filters);
-        $schools = \App\Models\SuperAdmin\School::active()->get();
-        $categories = \App\Models\SuperAdmin\ParentCategory::active()->get();
+    $filters = [
+        'school' => $schoolId,
+        'parent_category' => $parentCategoryId,
+        'sub_category' => $subCategoryId,
+        'search' => $search,
+    ];
 
-        if ($request->ajax()) {
-            return view('website.partials.shop-products', compact('products', 'filters'))->render();
-        }
+    $products = new ProductRepository()->searchProducts($filters);
+    $schools = School::active()->get();
+    $parentCategories = ParentCategory::active()->get();
 
-        return view('website.pages.shop', [
-            'products' => $products,
-            'schools' => $schools,
-            'categories' => $categories,
-            'filters' => $filters,
-        ]);
+    $standards = collect();
+    if ($schoolId) {
+        $standards = SchoolStandard::where('school_id', $schoolId)
+            ->where('is_active', true)
+            ->select('id', 'standard_name')
+            ->get();
     }
 
-    public function show($id)
-    {
-        $product = \App\Models\SuperAdmin\Product::approved()
+    $subCategories = collect();
+    if ($parentCategoryId) {
+        $subCategories = Category::where('parent_id', $parentCategoryId)
+            ->where('is_active', true)
+            ->get(['category_id', 'category_name']);
+    }
+
+    if ($request->ajax()) {
+        return view('website.partials.shop-products', compact('products', 'filters', 'standards', 'subCategories'))->render();
+    }
+
+    return view('website.pages.shop', [
+        'products' => $products,
+        'schools' => $schools,
+        'categories' => $parentCategories,
+        'subCategories' => $subCategories,
+        'filters' => $filters,
+        'standards' => $standards,
+    ]);
+}
+
+public function getSubCategories($parent_id)
+{
+    $subCategories = Category::where('parent_id', $parent_id)
+        ->where('is_active', true)
+        ->get(['category_id', 'category_name']);
+
+    return response()->json([
+        'success' => true,
+        'subCategories' => $subCategories,
+    ]);
+}
+
+public function show($id)
+{
+        $product = Product::approved()
             ->active()
             ->with(['variants', 'images', 'schoolApprovals.school'])
             ->findOrFail($id);
 
         return view('website.pages.product-details', [
             'product' => $product,
+        ]);
+    }
+    public function showJson($id)
+    {
+        $product = Product::approved()
+            ->active()
+            ->with(['variants', 'images', 'category', 'schoolApprovals.school'])
+            ->findOrFail($id);
+
+        $productData = [
+            'id' => $product->product_id,
+            'name' => $product->product_name,
+            'description' => $product->description,
+            'price' => $product->price,
+            'category' => $product->category?->category_name,
+            'school' => $product->schoolApprovals->first()?->school?->school_name ?? 'General Wear',
+            'fabric' => $product->fabric_composition,
+            'gender' => $product->gender_type,
+            'variants' => $product->variants->map(
+                fn($variant) => [
+                    'variant_id' => $variant->variant_id,
+                    'size_id' => $variant->size?->size_id,
+                    'display_name' => $variant->size?->display_name,
+                    'size_name' => $variant->size?->size_name,
+                    'mrp' => $variant?->mrp,
+                    'selling_price' => $variant?->selling_price,
+                    'stock_qty' => $variant?->stock_qty,
+                    'sku' => $variant?->sku,
+                    'color_id' => $variant->color?->color_id,
+                    'color_name' => $variant->color?->color_name,
+                    'hex_code' => $variant->color?->hex_code,
+                    'price' => $variant->price,
+                ],
+            ),
+            'images' => $product->images->map(fn($image) => getFileUrl($image->file_id))->toArray(),
+        ];
+
+        return view('website.products.product-description', [
+            'product' => $productData,
         ]);
     }
 

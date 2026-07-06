@@ -92,9 +92,11 @@
               </div>
               
               <!-- Add to cart -->
-              <button id="details-add-btn" class="btn btn-primary px-4 py-2.5 flex-grow-1" style="height: 44px;">
+              <button id="details-add-btn" class="btn btn-primary px-4 py-2.5 flex-grow-1" style="height: 44px;" onclick="addToBasket('{{ $product->id }}')">
                 Add to Basket
               </button>
+
+
 
               <!-- Add to wishlist -->
               <button id="details-wishlist-btn" class="btn btn-outline-primary px-3" style="height: 44px;">

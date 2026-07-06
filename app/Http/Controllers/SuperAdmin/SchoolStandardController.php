@@ -90,9 +90,9 @@ class SchoolStandardController extends BaseController
             }
         }
 
-        $standards = $school->standards()->get();
+        $classes = $school->standards()->get();
 
-        return view('super-admin.school-standard.edit', compact('school', 'standards'), $this->pageData('Manage School Standards', 'Home|School Standards|Manage'));
+        return view('super-admin.school-standard.edit', compact('school', 'classes'), $this->pageData('Manage School Standards', 'Home|School Standards|Manage'));
     }
 
     /**

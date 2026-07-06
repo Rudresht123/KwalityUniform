@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SchoolProductStandardApproval extends Model
 {
+    protected $table = 'school_product_standard_approvals';
+
     protected $fillable = [
         'school_product_approval_id',
         'standard_id',

@@ -38,7 +38,9 @@
     <link rel="stylesheet" href="{{ asset('assets/css/toast.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/select2.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/apex.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/modal.css') }}">
     <script src="{{ asset('assets/js/alertify.js') }}"></script>
+    <script src="{{ asset('assets/modal.js') }}"></script>
     <script src="{{ asset('assets/js/apexcharts.min.js') }}"></script>
     <script src="{{ asset('assets/js/chartsfunctions.js') }}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">

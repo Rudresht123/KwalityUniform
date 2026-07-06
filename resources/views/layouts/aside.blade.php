@@ -1,4 +1,4 @@
-<aside class="app-sidebar sticky" id="sidebar"> <!-- Start::main-sidebar-header -->
+<aside class="app-sidebar sticky" id="sidebar"> 
     <div class="main-sidebar-header"> 
         <a href="{{ route('dashboard') }}" class="header-logo"> 
             <img src="{{ asset('assets/images/logo.svg') }}" class="logo-fixed" alt="logo"> 
@@ -27,7 +27,7 @@
             opacity: 1 !important;
             /* White background effect */
             background-color: #ffffff;
-            padding: 5px 12px;
+          /* //  padding: 5px 12px; */
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
@@ -175,6 +175,7 @@
                                     @endif
 
 
+                                    @if(userRole() === 'super-admin')
                                     @can('product_approval_view')
                                         <li class="slide has-sub {{ request()->routeIs('product-approval.*') ? 'open active' : '' }}">
 
@@ -203,27 +204,9 @@
 
                                         </li>
                                     @endcan
+                                    @endif
 
                                     @if(!auth()->user()->hasRole('vendor'))
-                                    @can('product_approval_view')
-                                        <li class="slide {{ request()->routeIs('school-product-approval.approved') ? 'active' : '' }}">
-                                            <a href="{{ route('school-product-approval.approved') }}" class="side-menu__item {{ request()->routeIs('school-product-approval.approved') ? 'active' : '' }}">
-                                                <i class="ti-shopping-cart side-menu__icon"></i>
-                                                <span class="side-menu__label">Approved Products</span>
-                                            </a>
-                                        </li>
-                                        <li class="slide {{ request()->routeIs('school-product-approval.school_approved') ? 'active' : '' }}">
-                                            <a href="{{ route('school-product-approval.school_approved') }}" class="side-menu__item {{ request()->routeIs('school-product-approval.school_approved') ? 'active' : '' }}">
-                                                <i class="ti-shopping-cart side-menu__icon"></i>
-                                                <span class="side-menu__label">School Approved Products</span>
-                                            </a>
-                                        </li>
-                                    @endcan
-                                    @endif
- 
-
-                                
-                                    @if(userRole() !== 'super-admin' && !auth()->user()->hasRole('vendor'))
                                     @canany(['school.product.approve', 'school.product.report'])
                                         <li class="slide has-sub {{ request()->routeIs('school.products.*') ? 'open active' : '' }}">
                                             <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs('school.products.*') ? 'active' : '' }}">
@@ -249,7 +232,7 @@
                                             </ul>
                                         </li>
                                     @endcan
-                                @endif
+                                    @endif
 
                                     @canany(['category.view', 'category.create', 'size.view', 'color.view'])
 

@@ -39,7 +39,7 @@
                                     <td>{{ $school->city }}, {{ $school->state }}</td>
                                     <td class="text-center">
                                         <span class="badge bg-primary-subtle text-primary fs-13 rounded-pill px-3">
-                                            {{ $school->classes_count }} Classes
+                                            {{ $school->standards_count }} Standards
                                         </span>
                                     </td>
                                     <td>

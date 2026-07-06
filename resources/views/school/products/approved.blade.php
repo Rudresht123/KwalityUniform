@@ -917,12 +917,11 @@
             const catId = document.getElementById('catFilter').value;
             const vendorId = document.getElementById('vendorFilter').value;
 
-            const params = new URLSearchParams({
-                page: page,
-                search: search,
-                category_id: catId,
-                vendor_id: vendorId
-            });
+            const params = new URLSearchParams();
+            if (page) params.append('page', page);
+            if (search) params.append('search', search);
+            if (catId) params.append('category_id', catId);
+            if (vendorId) params.append('vendor_id', vendorId);
 
             // Show loading state
             const body = document.getElementById('prodBody');
@@ -930,7 +929,7 @@
             body.style.pointerEvents = 'none';
 
             try {
-                const resp = await fetch(`{{ route('school.products.approved') }}?${params}`, {
+                const resp = await fetch(`{{ route('school.products.approved') }}?${params.toString()}`, {
                     headers: { 'X-Requested-With': 'XMLHttpRequest' }
                 });
                 const data = await resp.json();
@@ -967,18 +966,19 @@
         const debouncedFetch = debounce(fetchProducts, 300);
 
         document.getElementById('prodSearch').addEventListener('input', () => {
-            debouncedFetch();
+            debouncedFetch(1);
         });
 
-        document.getElementById('catFilter').addEventListener('change', () => fetchProducts());
-        document.getElementById('vendorFilter').addEventListener('change', () => fetchProducts());
+        document.getElementById('catFilter').addEventListener('change', () => fetchProducts(1));
+        document.getElementById('vendorFilter').addEventListener('change', () => fetchProducts(1));
 
         // Intercept pagination links
         document.addEventListener('click', e => {
-            if (e.target.closest('.pagination a')) {
+            const anchor = e.target.closest('.pagination a');
+            if (anchor) {
                 e.preventDefault();
-                const url = new URL(e.target.closest('a').href);
-                const page = url.searchParams.get('page');
+                const url = new URL(anchor.href);
+                const page = url.searchParams.get('page') || 1;
                 fetchProducts(page);
             }
         });

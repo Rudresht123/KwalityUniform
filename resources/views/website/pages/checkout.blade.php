@@ -1,143 +1,142 @@
 @extends('website.components.common')
 
-
 @section('content')
-    <!-- Page Header (Full Width Banner with Background Image) -->
-    <div class="geo-page-header" style="background-image: url('https://images.unsplash.com/photo-1589756823855-edd13437c56e?auto=format&fit=crop&q=80&w=1200');">
-      <div class="container">
-        <h1 class="display-6 fw-extrabold text-white mb-2">Secure Checkout</h1>
+<div class="geo-page-header" style="background-color: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+    <div class="container">
+        <h1 class="display-6 fw-extrabold text-dark mb-2">Checkout</h1>
         <ul class="geo-breadcrumb mb-0">
-          <li><a href="index.html">Home</a></li>
-          <li>&bull;</li>
-          <li><a href="cart.html">Basket</a></li>
-          <li>&bull;</li>
-          <li class="active-item">Secure Checkout</li>
+            <li><a href="{{ route('website.shop') }}">Shop</a></li>
+            <li>&bull;</li>
+            <li><a href="{{ route('website.cart.index') }}">Basket</a></li>
+            <li>&bull;</li>
+            <li class="active-item">Checkout</li>
         </ul>
-      </div>
     </div>
+</div>
 
-    <!-- Main Content -->
-    <main class="container py-5">
-      
-      <div class="row g-4">
-        
-        <!-- Forms columns (Left Col - 7 cols) -->
-        <div class="col-lg-7">
-          <form id="checkout-form">
-            
-            <!-- Step 1: Contact & Shipping -->
-            <div class="card-geo p-4 mb-4">
-              <h4 class="fw-bold mb-4 text-dark" style="font-size: 16px;"><span class="badge-geo me-2" style="background: var(--qu-primary); color: #FFF; width: 22px; height: 22px; padding:0; display: inline-flex; align-items:center; justify-content:center; border-radius:50%;">1</span>Contact & Shipping</h4>
-              
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label for="chk-name" class="form-label small fw-semibold">Contact Full Name</label>
-                  <input type="text" id="chk-name" class="form-control" placeholder="Sarah Jenkins" required />
+<main class="container py-5">
+    <form action="#" method="POST" id="checkout-form">
+        @csrf
+        <div class="row g-4">
+            <!-- Shipping and Payment Details -->
+            <div class="col-lg-8">
+                <div class="card-geo p-4 mb-4">
+                    <h5 class="fw-bold mb-4"><i class="ti ti-map-pin me-2"></i>Shipping Address</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Full Name</label>
+                            <input type="text" name="full_name" class="form-control" placeholder="John Doe" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Email Address</label>
+                            <input type="email" name="email" class="form-control" placeholder="john@example.com" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Phone Number</label>
+                            <input type="text" name="phone" class="form-control" placeholder="+91 00000-00000" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">City</label>
+                            <input type="text" name="city" class="form-control" placeholder="Mumbai" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-semibold">Detailed Address</label>
+                            <textarea name="address" class="form-control" rows="3" placeholder="Street, Apartment, Area..." required></textarea>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                  <label for="chk-email" class="form-label small fw-semibold">Email Address (Order Receipt)</label>
-                  <input type="email" id="chk-email" class="form-control" placeholder="sarah@example.com" required />
+
+                <div class="card-geo p-4">
+                    <h5 class="fw-bold mb-4"><i class="ti ti-credit-card me-2"></i>Payment Method</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="payment-option card-geo p-3 text-center border-primary is-selected" id="pay-cod">
+                                <i class="ti ti-truck" style="font-size: 24px;"></i>
+                                <div class="fw-bold mt-2">Cash on Delivery</div>
+                                <input type="radio" name="payment_method" value="cod" class="payment-radio" checked>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="payment-option card-geo p-3 text-center" id="pay-upi">
+                                <i class="ti ti-device-mobile" style="font-size: 24px;"></i>
+                                <div class="fw-bold mt-2">UPI / QR Code</div>
+                                <input type="radio" name="payment_method" value="upi" class="payment-radio">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="payment-option card-geo p-3 text-center" id="pay-card">
+                                <i class="ti ti-credit-card" style="font-size: 24px;"></i>
+                                <div class="fw-bold mt-2">Credit / Debit Card</div>
+                                <input type="radio" name="payment_method" value="card" class="payment-radio">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                  <label for="chk-phone" class="form-label small fw-semibold">Mobile Phone (Delivery SMS)</label>
-                  <input type="tel" id="chk-phone" class="form-control" placeholder="+1 (555) 019-2831" required />
-                </div>
-                <div class="col-md-6">
-                  <label for="chk-district" class="form-label small fw-semibold">School District Area</label>
-                  <select id="chk-district" class="form-select" required>
-                    <option value="" disabled selected>Select District...</option>
-                    <option value="st-marys">Delhi NCR (Dwarka)</option>
-                    <option value="oakwood">Kolkata (Park Street)</option>
-                    <option value="crestview">New Delhi (Lajpat Nagar)</option>
-                    <option value="pinecrest">Pune (Cantonment)</option>
-                  </select>
-                </div>
-                <div class="col-12">
-                  <label for="chk-address" class="form-label small fw-semibold">Delivery Street Address</label>
-                  <input type="text" id="chk-address" class="form-control" placeholder="782 Maple Avenue" required />
-                </div>
-                <div class="col-md-6">
-                  <label for="chk-city" class="form-label small fw-semibold">City</label>
-                  <input type="text" id="chk-city" class="form-control" placeholder="Metro Heights" required />
-                </div>
-                <div class="col-md-6">
-                  <label for="chk-zip" class="form-label small fw-semibold">ZIP Code</label>
-                  <input type="text" id="chk-zip" class="form-control" placeholder="10012" required />
-                </div>
-              </div>
             </div>
 
-            <!-- Step 2: Payment Simulation -->
-            <div class="card-geo p-4">
-              <h4 class="fw-bold mb-4 text-dark" style="font-size: 16px;"><span class="badge-geo me-2" style="background: var(--qu-primary); color: #FFF; width: 22px; height: 22px; padding:0; display: inline-flex; align-items:center; justify-content:center; border-radius:50%;">2</span>Simulated Billing Payment</h4>
-              
-              <div class="row g-3">
-                <div class="col-12">
-                  <label for="chk-card-name" class="form-label small fw-semibold">Name on Card</label>
-                  <input type="text" id="chk-card-name" class="form-control" placeholder="Sarah Jenkins" required />
-                </div>
-                <div class="col-12">
-                  <label for="chk-card-num" class="form-label small fw-semibold">Card Number (Simulated)</label>
-                  <div class="input-group">
-                    <span class="input-group-text bg-white"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg></span>
-                    <input type="text" id="chk-card-num" class="form-control border-start-0" placeholder="4111 2222 3333 4444" required />
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <label for="chk-card-expiry" class="form-label small fw-semibold">Expiry Date</label>
-                  <input type="text" id="chk-card-expiry" class="form-control" placeholder="12 / 28" required />
-                </div>
-                <div class="col-md-6">
-                  <label for="chk-card-cvv" class="form-label small fw-semibold">CVV Code</label>
-                  <input type="password" id="chk-card-cvv" class="form-control" placeholder="&bull;&bull;&bull;" maxlength="3" required />
-                </div>
-              </div>
+            <!-- Order Summary -->
+            <div class="col-lg-4">
+                <div class="card-geo p-4 sticky-top" style="top: 100px;">
+                    <h5 class="fw-bold mb-4">Order Summary</h5>
+                    <div class="order-summary-items mb-4">
+                        {{-- This part usually needs to be passed from controller, providing a placeholder layout --}}
+                        <p class="text-muted small">Items from your basket will be listed here.</p>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-muted">Subtotal</span>
+                        <span class="fw-semibold">₹0.00</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-muted">Shipping</span>
+                        <span class="text-success fw-semibold">Free</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-4 pb-3 border-bottom">
+                        <span class="fw-bold h5 mb-0">Total</span>
+                        <span class="fw-extrabold h5 mb-0 text-primary">₹0.00</span>
+                    </div>
 
-              <div class="alert alert-info small mt-4 mb-0" style="border-radius: var(--qu-radius-sm);">
-                🔐 <strong>Secure Sandbox Mode:</strong> This page is integrated into our secure staging environment. No actual funds will be drafted.
-              </div>
+                    <button type="submit" class="btn btn-primary w-100 py-3 fw-bold">
+                        Place Order <i class="ti ti-check me-2"></i>
+                    </button>
+                </div>
             </div>
-
-            <!-- Checkout Button -->
-            <button type="submit" class="btn btn-primary w-100 py-3 mt-4">Place Official Uniform Order &rarr;</button>
-
-          </form>
         </div>
+    </form>
+</main>
 
-        <!-- Order summary (Right Col - 5 cols) -->
-        <div class="col-lg-5">
-          <div class="card-geo p-4" style="position: sticky; top: 100px;">
-            <h4 class="fw-bold mb-4 text-dark" style="font-size: 16px; border-bottom: 1px solid var(--qu-border-color); pb-3;">Order Verification</h4>
-            
-            <!-- Items summary container -->
-            <div id="checkout-items-summary" class="mb-4">
-              <!-- Injected dynamically via JS -->
-            </div>
+<style>
+    .payment-option {
+        cursor: pointer;
+        transition: all 0.2s;
+        position: relative;
+        border: 2px solid transparent;
+    }
+    .payment-option:hover {
+        border-color: var(--qu-primary);
+    }
+    .payment-option.is-selected {
+        border-color: var(--qu-primary);
+        background-color: #f0f7ff;
+    }
+    .payment-radio {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+</style>
 
-            <hr>
-
-            <div class="d-flex justify-content-between mb-2 small">
-              <span class="text-muted">Garment Base Cost</span>
-              <span class="fw-bold text-dark" id="checkout-base-cost">$0.00</span>
-            </div>
-            
-            <div class="d-flex justify-content-between mb-2 small">
-              <span class="text-muted">Standard Campus Delivery</span>
-              <span class="text-success fw-bold">FREE</span>
-            </div>
-
-            <div class="d-flex justify-content-between mb-4 pt-3 border-top">
-              <span class="fw-bold text-dark fs-6">Ultimate Charge Total</span>
-              <span id="checkout-final-total" class="fw-bold text-primary fs-5" style="font-family: var(--font-display);">$0.00</span>
-            </div>
-
-            <div style="background: var(--qu-badge-bg); color: var(--qu-primary); font-size: 11px; padding: 12px; border-radius: var(--qu-radius-sm); font-weight: 600;" class="text-center">
-              🏫 Official Delivery: Deliveries are dropped directly at the partner school's central administrative fitting office every Tuesday. Pickup is free of charge.
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-    </main>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const options = document.querySelectorAll('.payment-option');
+        options.forEach(opt => {
+            opt.addEventListener('click', function() {
+                options.forEach(o => o.classList.remove('is-selected'));
+                this.classList.add('is-selected');
+                this.querySelector('input').checked = true;
+            });
+        });
+    });
+</script>
 @endsection

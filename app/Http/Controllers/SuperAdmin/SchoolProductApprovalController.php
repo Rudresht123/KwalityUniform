@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\BaseController;
+use App\Models\SuperAdmin\Product;
+use App\Policies\ProductPolicy;
 use App\Services\SchoolApprovalService;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -27,7 +29,7 @@ class SchoolProductApprovalController extends BaseController
             return redirect()->route('dashboard')->with('error', 'No school associated with your account.');
         }
 
-        $products = \App\Models\SuperAdmin\Product::approved()
+        $products = Product::approved()
             ->with(['vendor', 'category', 'schoolApprovals'])
             ->when($schoolId, function($q) use ($schoolId) {
                 return $q->whereHas('schoolApprovals', function($sq) use ($schoolId) {
@@ -48,7 +50,7 @@ class SchoolProductApprovalController extends BaseController
      */
     public function schoolApproved(Request $request)
     {
-        $this->authorize('viewAny', \App\Policies\ProductPolicy::class);
+        $this->authorize('viewAny',ProductPolicy::class);
 
         $schoolId = $request->user()->school?->school_id;
 
@@ -57,7 +59,7 @@ class SchoolProductApprovalController extends BaseController
         }
 
         if ($request->ajax()) {
-            $products = \App\Models\SuperAdmin\Product::approved()
+            $products = Product::approved()
                 ->with(['vendor', 'category', 'schoolApprovals'])
                 ->when($request->filled('category_id'), function($q) use ($request) {
                     return $q->where('category_id', $request->category_id);
@@ -91,7 +93,7 @@ class SchoolProductApprovalController extends BaseController
 
     public function approved(Request $request)
     {
-        $this->authorize('viewAny', \App\Policies\ProductPolicy::class);
+        $this->authorize('viewAny', ProductPolicy::class);
 
         $schoolId = $request->user()->school?->school_id;
 
@@ -100,7 +102,7 @@ class SchoolProductApprovalController extends BaseController
         }
 
         if ($request->ajax()) {
-            $products = \App\Models\SuperAdmin\Product::approved()
+            $products = Product::approved()
                 ->with(['vendor', 'category', 'schoolApprovals'])
                 ->whereHas('schoolApprovals', function($q) use ($schoolId) {
                     $q->where('school_id', $schoolId)->where('status', 'approved');
@@ -143,7 +145,7 @@ class SchoolProductApprovalController extends BaseController
 
     public function reject(Request $request)
     {
-        $this->authorize('actionApproval', \App\Policies\ProductPolicy::class);
+        $this->authorize('actionApproval', ProductPolicy::class);
         
         $request->validate([
             'product_id' => 'required|exists:products,product_id',

@@ -61,14 +61,24 @@ class ProductRepository
     {
         $query = Product::approved()->active();
 
-        if (!empty($filters['school'])) {
+        if (!empty($filters['school']) && $filters['school'] !== 'all' && $filters['school'] !== 'generic') {
             $query->whereHas('schoolApprovals', function ($q) use ($filters) {
                 $q->where('school_id', $filters['school']);
             });
         }
 
-        if (!empty($filters['category'])) {
-            $query->where('category_id', $filters['category']);
+        if (!empty($filters['standard']) && $filters['standard'] !== 'all') {
+            $query->whereHas('schoolApprovals.standardApprovals', function ($q) use ($filters) {
+                $q->where('standard_id', $filters['standard']);
+            });
+        }
+
+        if (!empty($filters['sub_category']) && $filters['sub_category'] !== 'all') {
+            $query->where('category_id', $filters['sub_category']);
+        } elseif (!empty($filters['parent_category']) && $filters['parent_category'] !== 'all') {
+            $query->whereHas('category', function ($q) use ($filters) {
+                $q->where('parent_id', $filters['parent_category']);
+            });
         }
 
         if (!empty($filters['search'])) {

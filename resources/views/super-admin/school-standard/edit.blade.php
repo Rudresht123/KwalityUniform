@@ -77,11 +77,12 @@
                                 <div id="class-fields-container" class="pe-2" style="max-height: 500px; overflow-y: auto;">
                                     @php
                                         // Use old values if they exist (after validation error), otherwise use DB classes
-                                        $currentClasses = old('class_names');
+                                        $currentClasses = old('standard_name');
                                         if (is_null($currentClasses)) {
-                                            $currentClasses = $classes->pluck('class_name')->toArray();
+                                            $currentClasses = $classes->pluck('standard_name')->toArray();
                                             if (empty($currentClasses)) $currentClasses = ['']; // At least one empty row if none exist
                                         }
+                                     
                                     @endphp
                                     
                                     @foreach($currentClasses as $index => $oldValue)

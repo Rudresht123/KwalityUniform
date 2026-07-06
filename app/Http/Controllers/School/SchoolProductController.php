@@ -5,6 +5,7 @@ namespace App\Http\Controllers\School;
 use App\Http\Controllers\BaseController;
 use App\Models\SuperAdmin\Product;
 use App\Models\SuperAdmin\SchoolProductApproval;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -56,6 +57,32 @@ class SchoolProductController extends BaseController
         ]);
     }
 
+    public function getStandards(Request $request)
+    {
+        $school = $request->user()->school;
+        if (!$school) {
+            return response()->json(['success' => false, 'message' => 'No school associated with your account.'], 403);
+        }
+
+        // Get active standards for the school
+        $standards = \App\Models\SuperAdmin\SchoolStandard::where('school_id', $school->school_id)
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get(['id', 'standard_name']);
+
+        // Get active classes for the school
+        $classes = \App\Models\SuperAdmin\SchoolClass::where('school_id', $school->school_id)
+            ->where('is_active', true)
+            ->orderBy('class_name')
+            ->get(['id', 'standard_id', 'class_name']);
+
+        return response()->json([
+            'success' => true, 
+            'standards' => $standards,
+            'classes' => $classes
+        ]);
+    }
+
     public function approveProduct(Request $request, $productId)
     {
         $school = $request->user()->school;
@@ -63,36 +90,58 @@ class SchoolProductController extends BaseController
             return response()->json(['success' => false, 'message' => 'No school associated with your account.'], 403);
         }
 
+        $standardIds = $request->input('standard_ids', []);
+        $classIds = $request->input('class_ids', []);
+
         try {
-            $product = Product::findOrFail($productId);
+            return \Illuminate\Support\Facades\DB::transaction(function () use ($productId, $school, $standardIds, $classIds) {
+                $product = Product::findOrFail($productId);
 
-            \App\Models\SuperAdmin\SchoolProductApproval::updateOrCreate(
-                [
-                    'school_id' => $school->school_id,
-                    'product_id' => $productId,
-                ],
-                [
-                    'status' => 'approved',
-                    'actioned_by' => auth()->id(),
-                    'actioned_at' => now(),
-                ]
-            );
+                $approval = SchoolProductApproval::updateOrCreate(
+                    [
+                        'school_id' => $school->school_id,
+                        'product_id' => $productId,
+                    ],
+                    [
+                        'status' => 'approved',
+                        'actioned_by' => auth()->id(),
+                        'actioned_at' => now(),
+                    ]
+                );
 
-            // Use the global helper to send notifications to Super Admins
-            // This will handle template fetching and distribution via configured channels
-            $admins = \App\Models\User::role('super-admin')->get();
-            sendNotification(
-                $admins,
-                'school_product_approved',
-                [
-                    'school_name' => $school->school_name,
-                    'product_name' => $product->product_name,
-                    'product_code' => $product->product_code,
-                ],
-                route('school-product-approval.index')
-            );
+                // Sync standards
+                $approval->standardApprovals()->delete();
+                foreach ($standardIds as $standardId) {
+                    \App\Models\SuperAdmin\SchoolProductStandardApproval::create([
+                        'school_product_approval_id' => $approval->school_product_approval_id,
+                        'standard_id' => $standardId,
+                    ]);
+                }
 
-            return response()->json(['success' => true, 'message' => 'Product approved for your school successfully!']);
+                // Sync classes
+                $approval->classApprovals()->delete();
+                foreach ($classIds as $classId) {
+                    \App\Models\SuperAdmin\SchoolProductClassApproval::create([
+                        'school_product_approval_id' => $approval->school_product_approval_id,
+                        'class_id' => $classId,
+                    ]);
+                }
+
+                // Use the global helper to send notifications to Super Admins
+                $admins = \App\Models\User::role('super-admin')->get();
+                sendNotification(
+                    $admins,
+                    'school_product_approved',
+                    [
+                        'school_name' => $school->school_name,
+                        'product_name' => $product->product_name,
+                        'product_code' => $product->product_code,
+                    ],
+                    route('school-product-approval.index')
+                );
+
+                return response()->json(['success' => true, 'message' => 'Product approved for your school successfully!']);
+            });
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Error approving product: ' . $e->getMessage()], 500);
         }
@@ -106,11 +155,13 @@ class SchoolProductController extends BaseController
         }
 
         try {
-            \App\Models\SuperAdmin\SchoolProductApproval::where('school_id', $school->school_id)
-                ->where('product_id', $productId)
-                ->delete();
+            return \Illuminate\Support\Facades\DB::transaction(function () use ($productId, $school) {
+                SchoolProductApproval::where('school_id', $school->school_id)
+                    ->where('product_id', $productId)
+                    ->delete();
 
-            return response()->json(['success' => true, 'message' => 'Product removed from approved list successfully!']);
+                return response()->json(['success' => true, 'message' => 'Product removed from approved list successfully!']);
+            });
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Error unapproving product: ' . $e->getMessage()], 500);
         }
@@ -169,30 +220,45 @@ class SchoolProductController extends BaseController
             'pageData' => $this->pageData('My Approved Products', 'Home|My Products|Approved')
         ]);
     }
+public function show($productId)
+{
+    $school = auth()->user()->school;
 
-    public function show($productId)
-    {
-        $school = auth()->user()->school;
-
-        // Ensure the product is approved by Super Admin before showing it to the school
-        $product = Product::where('approval_status', 'approved')
-            ->with(['vendor', 'category', 'images', 'variants'])
-            ->findOrFail($productId);
-
-        $isApproved = \App\Models\SuperAdmin\SchoolProductApproval::where('school_id', $school->school_id)
-            ->where('product_id', $productId)
-            ->where('status', 'approved')
-            ->exists();
-
-        return response()->json([
-            'success' => true,
-            'product' => $product,
-            'is_school_approved' => $isApproved,
-            'images' => $product->images->map(function($img) {
-                return getFileUrl($img->file_id);
-            }),
-        ]);
+    if (!$school) {
+        return response()->json(['success' => false, 'message' => 'No school associated with your account.'], 403);
     }
+
+    $product = Product::approved()
+        ->with([
+            'vendor',
+            'category',
+            'images',
+            'variants.size',
+            'variants.color'
+        ])
+        ->findOrFail($productId);
+
+    $images = $product->images->map(fn($img) => getFileUrl($img->file_id))->toArray();
+    
+    if (empty($images)) {
+        $images = [asset("assets/images/no_image.jpg")];
+    }
+
+    $isApproved = SchoolProductApproval::where([
+        'school_id' => $school->school_id,
+        'product_id' => $productId,
+        'status' => 'approved'
+    ])->exists();
+
+    return view(
+        'school.products.quick-view',
+        compact(
+            'product',
+            'images',
+            'isApproved'
+        )
+    );
+}
     }
 
 

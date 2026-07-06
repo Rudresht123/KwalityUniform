@@ -134,9 +134,7 @@ if (!function_exists('emailButton')) {
                 $message = str_replace('{' . $placeholder . '}', $value, $message);
             }
 
-            $channels = is_array($template->channels)
-    ? $template->channels
-    : json_decode($template->channels, true);
+            $channels = is_array($template->channels) ? $template->channels : json_decode($template->channels, true);
 
             Notification::send(
                 $users,
@@ -183,7 +181,7 @@ if (!function_exists('emailButton')) {
         }
     }
 
-       if (!function_exists('schools')) {
+    if (!function_exists('schools')) {
         function schools($search = [])
         {
             return new GlobalRepository()->schools($search);
@@ -211,6 +209,24 @@ if (!function_exists('emailButton')) {
             }
 
             return auth()->user()?->roles()->first()?->name ?? '';
+        }
+    }
+
+    if (!function_exists('shortenText')) {
+        /**
+         * Shorten a string to a specified length.
+         *
+         * @param string|null $text
+         * @param int $limit
+         * @param string $end
+         * @return string
+         */
+        function shortenText(?string $text, int $limit = 100, string $end = '...'): string
+        {
+            if (!$text) {
+                return '';
+            }
+            return \Illuminate\Support\Str::limit($text, $limit, $end);
         }
     }
 }

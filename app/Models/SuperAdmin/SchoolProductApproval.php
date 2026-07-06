@@ -25,8 +25,6 @@ class SchoolProductApproval extends Record
         'rejection_reason',
         'actioned_by',
         'actioned_at',
-        'created_by',
-        'updated_by',
         'deleted_by'
     ];
 
@@ -73,6 +71,14 @@ class SchoolProductApproval extends Record
     public function actor()
     {
         return $this->belongsTo(\App\Models\User::class, 'actioned_by');
+    }
+
+    /**
+     * Get the standards this product is approved for within the school.
+     */
+    public function standardApprovals()
+    {
+        return $this->hasMany(SchoolProductStandardApproval::class, 'school_product_approval_id', 'school_product_approval_id');
     }
 
     /**
