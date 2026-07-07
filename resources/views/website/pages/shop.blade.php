@@ -312,13 +312,32 @@
             // Attach listeners
             $(document).on('change', '.select2', function() {
                 // Avoid double calling for school select since we have a specific listener
-                if (this.id !== 'shop-school-select' && this.id !== 'shop-category-select') {
+                if (this.id !== 'shop-school-set' && this.id !== 'shop-category-select') {
                     shopAjaxFilter();
                 }
             });
             searchInput?.addEventListener('input', debounce(shopAjaxFilter, 500));
 
+            // OBSERVER FOR DYNAMIC MODAL CONTENT
+            // This ensures that when the product description modal is loaded via AJAX, 
+            // the variant and stock logic is initialized.
+            const modalBody = document.querySelector('.modal-body');
+            if (modalBody) {
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                            const quickViewWrap = document.querySelector('.quick-view-wrap');
+                            if (quickViewWrap) {
+                                window.initProductDetails(quickViewWrap);
+                            }
+                        }
+                    });
+                });
+                observer.observe(modalBody, { childList: true, subtree: true });
+            }
+
             // Event delegation for pagination links
+
             document.addEventListener('click', function(e) {
                 if (e.target.closest('.pagination a')) {
                     e.preventDefault();
@@ -382,5 +401,7 @@
         'showFooter' => false,
         'buttonText' => 'Add To Basket',
     ])
+
+    <script src="{{ asset('assets/product-details.js') }}" defer></script>
 
 @endsection

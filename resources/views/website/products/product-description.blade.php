@@ -238,11 +238,13 @@
 
             @endif
 
+            {{-- Stock Status --}}
+            <div id="qv-stock-status" class="mb-3 d-flex align-items-center gap-2" style="display: none;">
+                <span class="stock-dot" style="width: 8px; height: 8px; border-radius: 50%; display: inline-block;"></span>
+                <span class="stock-text small fw-semibold"></span>
+            </div>
 
-
-
-
-         {{-- Action --}}
+             {{-- Action --}}
 <div class="qv-action-row">
 
     <div class="qty-stepper">

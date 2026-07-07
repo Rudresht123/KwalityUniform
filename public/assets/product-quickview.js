@@ -69,9 +69,20 @@ function initProductQuickView(productData) {
             addBtn.innerHTML = `<i class="ti ti-shopping-cart-plus me-2"></i> Add To Basket - ₹${total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
         }
 
-        // 2. Update Stock Status
+        // Stock Status Element
         const stockStatusEl = document.getElementById('qv-stock-status');
+
+        // Check if required selections are made
+        if (addBtn && (!selectedSize || !selectedColor)) {
+            addBtn.disabled = true;
+            addBtn.classList.add('disabled');
+            if (stockStatusEl) stockStatusEl.style.display = 'none';
+            return; // Skip stock status check if selections are missing
+        }
+
+        // 2. Update Stock Status
         if (stockStatusEl) {
+            stockStatusEl.style.display = 'flex';
             const stockDot = stockStatusEl.querySelector('.stock-dot');
             const stockText = stockStatusEl.querySelector('.stock-text');
             const stockQty = variant ? variant.stock_qty : 0;
@@ -95,13 +106,17 @@ function initProductQuickView(productData) {
                 addBtn.disabled = quantity > stockQty;
                 addBtn.classList.toggle('disabled', quantity > stockQty);
             }
+        } else if (addBtn) {
+            // If no stock status element, ensure button is enabled if variant exists and has stock
+            addBtn.disabled = (variant && variant.stock_qty <= 0) || (variant && quantity > variant.stock_qty);
+            addBtn.classList.toggle('disabled', addBtn.disabled);
         }
     }
 
     // Size selection
     document.getElementById('qv-size-group')?.addEventListener('click', function(e) {
         const btn = e.target.closest('.size-pill');
-        if (!btn) return;
+        if (!btn || btn.classList.contains('out-of-stock')) return;
         this.querySelectorAll('.size-pill').forEach(b => b.classList.remove('is-selected'));
         btn.classList.add('is-selected');
         updatePrice();
@@ -110,11 +125,40 @@ function initProductQuickView(productData) {
     // Color selection
     document.getElementById('qv-color-group')?.addEventListener('click', function(e) {
         const btn = e.target.closest('.color-item');
-        if (!btn) return;
+        if (!btn || btn.classList.contains('out-of-stock')) return;
         this.querySelectorAll('.color-item').forEach(b => b.classList.remove('is-selected'));
         btn.classList.add('is-selected');
         updatePrice();
     });
+
+    // Initialize stock status for selection buttons
+    function initializeSelectionStock() {
+        // Sizes
+        const sizePills = document.querySelectorAll('#qv-size-group .size-pill');
+        sizePills.forEach(pill => {
+            const sizeText = pill.textContent.trim();
+            const hasStock = product.variants.some(v => v.display_name === sizeText && v.stock_qty > 0);
+            if (!hasStock) {
+                pill.classList.add('out-of-stock');
+                pill.style.cursor = 'not-allowed';
+                pill.style.opacity = '0.5';
+            }
+        });
+
+        // Colors
+        const colorItems = document.querySelectorAll('#qv-color-group .color-item');
+        colorItems.forEach(item => {
+            const colorText = item.textContent.trim();
+            const hasStock = product.variants.some(v => v.color_name === colorText && v.stock_qty > 0);
+            if (!hasStock) {
+                item.classList.add('out-of-stock');
+                item.style.cursor = 'not-allowed';
+                item.style.opacity = '0.5';
+            }
+        });
+    }
+
+    initializeSelectionStock();
 
     // Quantity controls
     document.getElementById('qv-qty-minus')?.addEventListener('click', function() {
@@ -135,16 +179,6 @@ function initProductQuickView(productData) {
     addBtn?.addEventListener('click', async function() {
         const selectedSize = document.querySelector('#qv-size-group .size-pill.is-selected');
         const selectedColor = document.querySelector('#qv-color-group .color-item.is-selected');
-
-        if (!selectedSize || !selectedColor) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Selection Required',
-                text: 'Please select both size and color before adding to basket.',
-                confirmButtonColor: '#6B62DD'
-            });
-            return;
-        }
 
         const sizeText = selectedSize.textContent.trim();
         const colorText = selectedColor.textContent.trim();

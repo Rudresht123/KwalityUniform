@@ -15,8 +15,50 @@
       </div>
     </div>
 
+    <style>
+      .size-badge.out-of-stock {
+        border-color: #EF4444 !important;
+        color: #EF4444 !important;
+        background-color: #FEE2E2 !important;
+        cursor: not-allowed !important;
+        opacity: 0.6;
+      }
+      .color-swatch.out-of-stock {
+        border: 2px solid #EF4444 !important;
+        cursor: not-allowed !important;
+        opacity: 0.6;
+        position: relative;
+      }
+      .color-swatch.out-of-stock::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 70%;
+        height: 2px;
+        background: #EF4444;
+        transform: translate(-50%, -50%) rotate(45deg);
+      }
+      .btn-out-of-stock {
+        background-color: #EF4444 !important;
+        border-color: #EF4444 !important;
+        color: white !important;
+        cursor: not-allowed !important;
+      }
+      .size-badge.active-selection {
+        background-color: var(--qu-primary) !important;
+        color: white !important;
+        border-color: var(--qu-primary) !important;
+      }
+      .color-swatch.active-selection {
+        outline: 2px solid var(--qu-primary);
+        outline-offset: 2px;
+      }
+    </style>
+
     <!-- Main Content -->
     <main class="container py-5">
+
       
       <!-- Product Showcase Block (Geometric Balance styled 20px card) -->
       <div class="card-geo p-4 p-md-5 mb-5">
@@ -52,7 +94,7 @@
             </div>
 
             <!-- Price -->
-            <div id="details-price" class="display-5 fw-bold text-primary mb-4" style="font-family: var(--font-display);">
+            <div id="details-price" class="display-5 fw-bold text-primary mb-4" style="font-family: var(--font-display);" data-base-price="{{ $product->price }}">
               ${{ number_format($product->price, 2) }}
             </div>
 
@@ -92,7 +134,10 @@
               </div>
               
               <!-- Add to cart -->
-              <button id="details-add-btn" class="btn btn-primary px-4 py-2.5 flex-grow-1" style="height: 44px;" onclick="addToBasket('{{ $product->id }}')">
+              <button id="details-add-btn" class="btn btn-primary px-4 py-2.5 flex-grow-1 add-to-cart-btn" 
+                      style="height: 44px;" 
+                      data-product-id="{{ $product->product_id }}" 
+                      data-quantity="1">
                 Add to Basket
               </button>
 
@@ -119,7 +164,23 @@
 
     </main>
 
+    <script id="product-variants-data" type="application/json">
+        {!! json_encode($product->variants->map(function($v) {
+            return [
+                'variant_id' => $v->variant_id,
+                'size' => $v->size?->display_name ?? $v->size?->size_name,
+                'color' => $v->color?->color_name,
+                'stock' => $v->stock_qty,
+                'price' => $v->selling_price,
+            ];
+        })) !!}
+    </script>
+
+    <script src="{{ asset('assets/js/product-details.js') }}"></script>
+
     <!-- Footer -->
+
+
     <footer class="footer-geo">
       <div class="container footer-inner">
         <div>
