@@ -17,6 +17,11 @@ Route::post('/cart/add', [App\Http\Controllers\Website\CartController::class, 'a
 Route::post('/cart/update', [App\Http\Controllers\Website\CartController::class, 'update'])->name('website.cart.update');
 Route::delete('/cart/remove/{id}', [App\Http\Controllers\Website\CartController::class, 'remove'])->name('website.cart.remove');
 Route::post('/cart/clear', [App\Http\Controllers\Website\CartController::class, 'clear'])->name('website.cart.clear');
+Route::get('/checkout', [App\Http\Controllers\Website\CartController::class, 'checkout'])->name('website.checkout'); 
+Route::post('/checkout/save', [App\Http\Controllers\Website\CartController::class, 'saveCheckoutDetails'])->name('website.checkout.save');
+Route::get('/checkout/confirmation', [App\Http\Controllers\Website\CartController::class, 'confirmation'])->name('website.checkout.confirmation');
+Route::post('/checkout/store', [App\Http\Controllers\Website\CartController::class, 'store'])->name('website.order.store');
+Route::get('/checkout/success', [App\Http\Controllers\Website\CartController::class, 'success'])->name('website.checkout.success');
 
 Route::post('/partnership/school', [WebsiteController::class, 'storeSchoolPartnership'])->name('website.partnership.school');
 Route::post('/partnership/vendor', [WebsiteController::class, 'storeVendorPartnership'])->name('website.partnership.vendor');

@@ -121,7 +121,7 @@
 
                             <div class="product-price">
 
-                                ₹{{ number_format($product['price'], 2) }}
+                                <span id="qv-dynamic-price">₹{{ number_format($product['price'], 2) }}</span>
 
                                 <small>
 

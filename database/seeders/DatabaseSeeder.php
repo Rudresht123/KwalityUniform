@@ -13,22 +13,37 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-    //     // 1. Core Access Control
-    //     $this->call([
-    //         RoleSeeder::class,
-    //         PermissionSeeder::class,
-    //         SuperAdminSeeder::class,
-    //     ]);
+        \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-    //     // 2. Product Attributes
-    //     $this->call([
-    //         SizeSeeder::class,
-    //         ColorSeeder::class,
-    //     ]);
+        // Clear existing data to prevent duplicate entry errors
+        \Illuminate\Support\Facades\DB::table('product_variants')->truncate();
+        \Illuminate\Support\Facades\DB::table('products')->truncate();
+        \Illuminate\Support\Facades\DB::table('schools')->truncate();
+        \Illuminate\Support\Facades\DB::table('vendors')->truncate();
+        \Illuminate\Support\Facades\DB::table('users')->truncate();
+        \Illuminate\Support\Facades\DB::table('role_has_permissions')->truncate();
+        \Illuminate\Support\Facades\DB::table('model_has_roles')->truncate();
+        \Illuminate\Support\Facades\DB::table('permissions')->truncate();
+        \Illuminate\Support\Facades\DB::table('roles')->truncate();
 
-    //     // 3. Entities
-    //     School::factory()->count(150)->create();
-      //  Vendor::factory()->count(180)->create();
+        \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        // 1. Core Access Control
+        $this->call([
+            RoleSeeder::class,
+            PermissionSeeder::class,
+            SuperAdminSeeder::class,
+        ]);
+
+        // 2. Product Attributes
+        $this->call([
+            SizeSeeder::class,
+            ColorSeeder::class,
+        ]);
+
+        // 3. Entities
+        \App\Models\SuperAdmin\School::factory()->count(150)->create();
+        \App\Models\SuperAdmin\Vendor::factory()->count(180)->create();
 
         // 4. Products and Variants
         $this->call([

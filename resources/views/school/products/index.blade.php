@@ -1,7 +1,7 @@
 @extends('layouts.common')
 
 @section('content')
-
+sty
 
     <div class="container-xxl py-4">
 

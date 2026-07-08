@@ -65,6 +65,12 @@ function initProductQuickView(productData) {
         const unitPrice = variant ? (variant.selling_price ?? variant.price) : product.price;
         const total = unitPrice * quantity;
 
+        // Update main price display
+        const dynamicPriceEl = document.getElementById('qv-dynamic-price');
+        if (dynamicPriceEl) {
+            dynamicPriceEl.innerText = '₹' + unitPrice.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
         if (addBtn) {
             addBtn.innerHTML = `<i class="ti ti-shopping-cart-plus me-2"></i> Add To Basket - ₹${total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
         }

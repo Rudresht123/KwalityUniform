@@ -59,13 +59,16 @@ class ProductRepository
 
     public function searchProducts(array $filters = [])
     {
+        // Force school selection: if school is not provided or is 'all'/'generic', return empty results.
+        if (empty($filters['school']) || $filters['school'] === 'all' || $filters['school'] === 'generic') {
+            return collect(); 
+        }
+
         $query = Product::approved()->active();
 
-        if (!empty($filters['school']) && $filters['school'] !== 'all' && $filters['school'] !== 'generic') {
-            $query->whereHas('schoolApprovals', function ($q) use ($filters) {
-                $q->where('school_id', $filters['school']);
-            });
-        }
+        $query->whereHas('schoolApprovals', function ($q) use ($filters) {
+            $q->where('school_id', $filters['school']);
+        });
 
         if (!empty($filters['standard']) && $filters['standard'] !== 'all') {
             $query->whereHas('schoolApprovals.standardApprovals', function ($q) use ($filters) {
@@ -73,7 +76,14 @@ class ProductRepository
             });
         }
 
+        if (!empty($filters['class']) && $filters['class'] !== 'all') {
+            $query->whereHas('schoolApprovals.classApprovals', function ($q) use ($filters) {
+                $q->where('school_class_id', $filters['class']);
+            });
+        }
+
         if (!empty($filters['sub_category']) && $filters['sub_category'] !== 'all') {
+
             $query->where('category_id', $filters['sub_category']);
         } elseif (!empty($filters['parent_category']) && $filters['parent_category'] !== 'all') {
             $query->whereHas('category', function ($q) use ($filters) {

@@ -64,25 +64,39 @@ class ProductSeeder extends Seeder
                 'updated_by' => 1,
             ]);
 
-            // Create 5 variants per product for a total of 500 variants
-            for ($v = 0; $v < 5; $v++) {
+            // Create 5 UNIQUE variants per product
+            $createdVariants = 0;
+            $attempts = 0;
+            while ($createdVariants < 5 && $attempts < 50) {
                 $randomSize = $sizes->random();
                 $randomColor = $colors->random();
+                $sizeId = $randomSize->size_id ?? $randomSize->id;
+                $colorId = $randomColor->color_id ?? $randomColor->id;
 
-                ProductVariant::create([
-                    'product_id' => $product->product_id,
-                    'sku' => $productCode . '-' . strtoupper($randomSize->size_name) . '-' . strtoupper($randomColor->color_name) . '-' . $v,
-                    'size_id' => $randomSize->size_id ?? $randomSize->id,
-                    'color_id' => $randomColor->color_id ?? $randomColor->id,
-                    'mrp' => rand(500, 5000),
-                    'selling_price' => rand(400, 4500),
-                    'stock_qty' => rand(20, 500),
-                    'low_stock_alert' => 15,
-                    'is_active' => true,
-                    
-                'created_by' => 1,
-                'updated_by' => 1,
-                ]);
+                // Check if this combination already exists for this product
+                $exists = ProductVariant::where('product_id', $product->product_id)
+                    ->where('size_id', $sizeId)
+                    ->where('color_id', $colorId)
+                    ->exists();
+
+                if (!$exists) {
+                    ProductVariant::create([
+                        'variant_id' => Str::uuid(),
+                        'product_id' => $product->product_id,
+                        'sku' => $productCode . '-' . strtoupper($randomSize->size_name) . '-' . strtoupper($randomColor->color_name) . '-' . $createdVariants,
+                        'size_id' => $sizeId,
+                        'color_id' => $colorId,
+                        'mrp' => rand(500, 5000),
+                        'selling_price' => rand(400, 4500),
+                        'stock_qty' => rand(20, 500),
+                        'low_stock_alert' => 15,
+                        'is_active' => true,
+                        'created_by' => 1,
+                        'updated_by' => 1,
+                    ]);
+                    $createdVariants++;
+                }
+                $attempts++;
             }
         }
     }

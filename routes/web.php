@@ -89,3 +89,10 @@ Route::get('/test-notification', function () {
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/website-routes.php';
+
+// Delivery & Fulfillment Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/vendor/fulfillment', \App\Http\Livewire\VendorFulfillment::class)->name('vendor.fulfillment');
+    Route::get('/school/distribution', \App\Http\Livewire\SchoolDistribution::class)->name('school.distribution');
+    Route::get('/parent/orders', \App\Http\Livewire\ParentOrderTracking::class)->name('parent.orders');
+});

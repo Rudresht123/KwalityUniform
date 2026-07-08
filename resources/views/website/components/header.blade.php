@@ -33,7 +33,7 @@
               <path d="M3 6h18"></path>
               <path d="M16 10a4 4 0 0 1-8 0"></path>
             </svg>
-            <span class="action-badge" id="cart-badge" style="display: none;">0</span>
+            <span class="action-badge cart-count-badge" id="cart-badge">0</span>
           </a>
 
 

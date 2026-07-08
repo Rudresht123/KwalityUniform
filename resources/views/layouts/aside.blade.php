@@ -90,7 +90,7 @@
 
                                     @canany(['vendor.create', 'vendor.view'])
 
-                                        <li class="slide has-sub {{ request()->routeIs('vendor.*') ? 'open active' : '' }}">
+                                        <li class="slide has-sub {{ (userRole() === 'super-admin' || request()->routeIs('vendor.*')) ? 'open' : '' }} {{ request()->routeIs('vendor.*') ? 'active' : '' }}">
 
                                             <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs('vendor.*') ? 'active' : '' }}">
                                                 <i class="ti-wallet side-menu__icon"></i>
@@ -131,7 +131,7 @@
                                     @if(auth()->user()->hasRole('vendor'))
                                     @canany(['product.view', 'product.create'])
 
-                                        <li class="slide has-sub {{ request()->routeIs('product.*') ? 'open active' : '' }}">
+                                        <li class="slide has-sub {{ (userRole() === 'super-admin' || request()->routeIs('product.*')) ? 'open' : '' }} {{ request()->routeIs('product.*') ? 'active' : '' }}">
 
                                             <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs('product.*') ? 'active' : '' }}">
                                                 <i class="ti-shopping-cart side-menu__icon"></i>
@@ -177,7 +177,7 @@
 
                                     @if(userRole() === 'super-admin')
                                     @can('product_approval_view')
-                                        <li class="slide has-sub {{ request()->routeIs('product-approval.*') ? 'open active' : '' }}">
+                                        <li class="slide has-sub {{ (userRole() === 'super-admin' || request()->routeIs('product-approval.*')) ? 'open' : '' }} {{ request()->routeIs('product-approval.*') ? 'active' : '' }}">
 
                                             <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs('product-approval.*') ? 'active' : '' }}">
                                                 <i class="ti-shopping-cart side-menu__icon"></i>
@@ -208,7 +208,7 @@
 
                                     @if(!auth()->user()->hasRole('vendor'))
                                     @canany(['school.product.approve', 'school.product.report'])
-                                        <li class="slide has-sub {{ request()->routeIs('school.products.*') ? 'open active' : '' }}">
+                                        <li class="slide has-sub {{ (userRole() === 'super-admin' || request()->routeIs('school.products.*')) ? 'open' : '' }} {{ request()->routeIs('school.products.*') ? 'active' : '' }}">
                                             <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs('school.products.*') ? 'active' : '' }}">
                                                 <i class="ti-shopping-cart side-menu__icon"></i>
                                                 <span class="side-menu__label">Product Management</span>
@@ -237,7 +237,7 @@
                                     @canany(['category.view', 'category.create', 'size.view', 'color.view'])
 
 
-                                        <li class="slide has-sub {{ request()->routeIs(['category.*', 'parent-category.*', 'size.*', 'color.*']) ? 'open active' : '' }}">
+                                        <li class="slide has-sub {{ (userRole() === 'super-admin' || request()->routeIs(['category.*', 'parent-category.*', 'size.*', 'color.*'])) ? 'open' : '' }} {{ request()->routeIs(['category.*', 'parent-category.*', 'size.*', 'color.*']) ? 'active' : '' }}">
 
                                             <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs(['category.*', 'parent-category.*', 'size.*', 'color.*']) ? 'active' : '' }}">
                                                 <i class="ti-package side-menu__icon"></i>
@@ -286,7 +286,7 @@
                                     @endcanany
 
                                     @can('stock_view')
-                                        <li class="slide has-sub {{ request()->routeIs(['stock.*', 'stock-management.*', 'stock-adjustment.*', 'school-product-approval.*']) ? 'open active' : '' }}">
+                                        <li class="slide has-sub {{ (userRole() === 'super-admin' || request()->routeIs(['stock.*', 'stock-management.*', 'stock-adjustment.*', 'school-product-approval.*'])) ? 'open' : '' }} {{ request()->routeIs(['stock.*', 'stock-management.*', 'stock-adjustment.*', 'school-product-approval.*']) ? 'active' : '' }}">
                                             <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs(['stock.*', 'stock-management.*', 'stock-adjustment.*', 'school-product-approval.*']) ? 'active' : '' }}">
                                                 <i class="ti-dropbox side-menu__icon"></i>
                                                 <span class="side-menu__label">
@@ -329,7 +329,7 @@
 
                                     @if(!auth()->user()->hasRole('vendor'))
                                     @can('parent.view')
-                                        <li class="slide has-sub {{ request()->routeIs('parent-user.*') ? 'open active' : '' }}">
+                                        <li class="slide has-sub {{ (userRole() === 'super-admin' || request()->routeIs('parent-user.*')) ? 'open' : '' }} {{ request()->routeIs('parent-user.*') ? 'active' : '' }}">
                                             <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs('parent-user.*') ? 'active' : '' }}">
                                                 <i class="ti ti-users side-menu__icon"></i>
                                                 <span class="side-menu__label">Parent Management</span>
@@ -354,7 +354,7 @@
                                     @canany(['school.view', 'school.create'])
 
 
-                                        <li class="slide has-sub {{ (request()->routeIs('school.*') && !request()->routeIs('school-standard.*')) ? 'open active' : '' }}">
+                                        <li class="slide has-sub {{ (userRole() === 'super-admin' || (request()->routeIs('school.*') && !request()->routeIs('school-standard.*'))) ? 'open' : '' }} {{ (request()->routeIs('school.*') && !request()->routeIs('school-standard.*')) ? 'active' : '' }}">
 
                                             <a href="javascript:void(0);" class="side-menu__item {{ (request()->routeIs('school.*') && !request()->routeIs('school-standard.*')) ? 'active' : '' }}">
 
@@ -396,7 +396,7 @@
                                     @endcanany
 
                                     @canany(['school_board.view', 'school_board.create'])
-                                        <li class="slide has-sub {{ request()->routeIs('school-boards.*') ? 'open active' : '' }}">
+                                        <li class="slide has-sub {{ (userRole() === 'super-admin' || request()->routeIs('school-boards.*')) ? 'open' : '' }} {{ request()->routeIs('school-boards.*') ? 'active' : '' }}">
                                             <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs('school-boards.*') ? 'active' : '' }}">
                                                 <span class="shape1"></span>
                                                 <span class="shape2"></span>
@@ -427,7 +427,7 @@
 
                                     @canany(['school_standard.view', 'school_standard.create'])
 
-                                        <li class="slide has-sub {{ request()->routeIs('school-standard.*') ? 'open active' : '' }}">
+                                        <li class="slide has-sub {{ (userRole() === 'super-admin' || request()->routeIs('school-standard.*')) ? 'open' : '' }} {{ request()->routeIs('school-standard.*') ? 'active' : '' }}">
 
                                             <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs('school-standard.*') ? 'active' : '' }}">
 
@@ -477,7 +477,7 @@
                                     @endcanany
                                     @canany(['role.view', 'role.create', 'admin.view'])
 
-                                        <li class="slide has-sub {{ request()->routeIs(['role.*', 'admin.*']) ? 'open active' : '' }}">
+                                        <li class="slide has-sub {{ (userRole() === 'super-admin' || request()->routeIs(['role.*', 'admin.*'])) ? 'open' : '' }} {{ request()->routeIs(['role.*', 'admin.*']) ? 'active' : '' }}">
 
                                             <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs(['role.*', 'admin.*']) ? 'active' : '' }}">
 

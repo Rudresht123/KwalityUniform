@@ -7,6 +7,13 @@
             <div class="col-lg-12">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-2">
+                                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="#">Inventory</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">School Product Approval</li>
+                            </ol>
+                        </nav>
                         <h3 class="mb-1">School Product Approval</h3>
                         <p class="text-muted">Manage products for your school inventory.</p>
                     </div>
@@ -77,7 +84,11 @@
         </div>
 
         <div class="d-flex justify-content-center mt-4">
-            {{ $products->links() }}
+            <div class="pagination-style-1">
+                @if($products instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                    {{ $products->appends(request()->query())->links() }}
+                @endif
+            </div>
         </div>
     </div>
 </div>
@@ -108,6 +119,22 @@
     .product-card .card-title {
         font-weight: 600;
         color: #333;
+    }
+    /* Fix for button hover background color */
+    .btn-preview:hover {
+        background-color: #0056b3 !important; 
+        color: #fff !important;
+    }
+    /* Fix for modal buttons hover */
+    #previewModal .btn-success:hover {
+        background-color: #198754 !important;
+        border-color: #198754 !important;
+        color: #fff !important;
+    }
+    #previewModal .btn-outline-danger:hover {
+        background-color: #dc3545 !important;
+        border-color: #dc3545 !important;
+        color: #fff !important;
     }
 </style>
 
@@ -181,6 +208,10 @@
                     // Format currency
                     const formatPrice = (val) => '₹' + parseFloat(val).toLocaleString('en-IN');
 
+                    // Extract unique sizes and colors from variants
+                    const sizes = [...new Set(p.variants.map(v => v.size?.size_name || 'N/A'))];
+                    const colors = [...new Set(p.variants.map(v => v.color?.color_name || 'N/A'))];
+
                     let variantsHtml = p.variants.map(v => `
                         <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
                             <div>
@@ -217,7 +248,31 @@
                                     </div>
                                 </div>
 
-                                <h5 class="mb-3">Pricing & Variants</h5>
+                                <h5 class="mb-3">Select Configuration</h5>
+                                <div class="row g-3 mb-3">
+                                    <div class="col-6">
+                                        <label class="form-label small fw-bold">Size</label>
+                                        <select id="preview-size" class="form-select form-select-sm">
+                                            <option value="">Select Size</option>
+                                            ${sizes.map(s => `<option value="${s}">${s}</option>`).join('')}
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label small fw-bold">Color</label>
+                                        <select id="preview-color" class="form-select form-select-sm">
+                                            <option value="">Select Color</option>
+                                            ${colors.map(c => `<option value="${c}">${c}</option>`).join('')}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="bg-light p-3 rounded text-center mb-4">
+                                    <div class="text-muted small mb-1">Estimated Price</div>
+                                    <div id="preview-dynamic-price" class="h4 fw-bold text-primary mb-0">₹0.00</div>
+                                    <div class="text-muted" style="font-size: 10px;">Inclusive of all taxes</div>
+                                </div>
+
+                                <h5 class="mb-3">All Variants</h5>
                                 <div class="border rounded overflow-hidden mb-4">
                                     ${variantsHtml || '<div class="p-3 text-center text-muted">No variants available.</div>'}
                                 </div>
@@ -233,6 +288,42 @@
                             </div>
                         </div>
                     `);
+
+                    // Dynamic Price Logic
+                    const updatePrice = () => {
+                        const selectedSize = $('#preview-size').val();
+                        const selectedColor = $('#preview-color').val();
+                        
+                        // Try to find the most specific variant match
+                        let variant = p.variants.find(v => 
+                            (selectedSize && v.size?.size_name === selectedSize) && 
+                            (selectedColor && v.color?.color_name === selectedColor)
+                        );
+
+                        // Fallback to size only match
+                        if (!variant && selectedSize) {
+                            variant = p.variants.find(v => v.size?.size_name === selectedSize);
+                        }
+
+                        // Fallback to color only match
+                        if (!variant && selectedColor) {
+                            variant = p.variants.find(v => v.color?.color_name === selectedColor);
+                        }
+
+                        // Fallback to first variant if nothing selected or no match
+                        if (!variant && p.variants.length > 0) {
+                            variant = p.variants[0];
+                        }
+
+                        if (variant) {
+                            $('#preview-dynamic-price').text(formatPrice(variant.selling_price));
+                        } else {
+                            $('#preview-dynamic-price').text('₹0.00');
+                        }
+                    };
+
+                    $('#preview-size, #preview-color').on('change', updatePrice);
+                    updatePrice(); // Initial call to show first variant price
 
                     // Attach events to new buttons
                     $('#btn-approve-product').on('click', function() {

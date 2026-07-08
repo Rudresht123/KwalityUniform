@@ -71,6 +71,7 @@ class AddToCart extends Component
                 'cart_id' => $cart->cart_id,
                 'product_id' => $this->productId,
                 'variant_id' => $this->variantId,
+                'vendor_id' => $product->vendor_id,
                 'quantity' => $this->quantity,
                 'unit_price' => $unitPrice,
             ]);

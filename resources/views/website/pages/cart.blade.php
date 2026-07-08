@@ -55,14 +55,20 @@
                                 </div>
 
                                 <div class="cart-item-info">
-                                    <div class="cart-item-school">
-                                        {{ $item->product->schoolApprovals->first()?->school?->school_name ?? 'General Wear' }}
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <div class="cart-item-school">
+                                            {{ $item->product->schoolApprovals->first()?->school?->school_name ?? 'General Wear' }}
+                                        </div>
+                                        <span class="badge bg-success-subtle text-success" style="font-size: 9px; padding: 2px 6px; border-radius: 4px;">Verified</span>
                                     </div>
                                     <div class="cart-item-name">{{ $item->product->product_name }}</div>
                                     <div class="cart-item-variant">
                                         <span>{{ $item->variant->display_name ?? 'N/A' }}</span>
                                         <span class="dot">&bull;</span>
                                         <span>{{ $item->variant->color_name ?? 'N/A' }}</span>
+                                    </div>
+                                    <div class="text-muted small mt-1" style="font-size: 11px; line-height: 1.2;">
+                                        {{ Str::limit($item->product->description, 60) }}
                                     </div>
                                 </div>
 
@@ -78,8 +84,11 @@
                                     </button>
                                 </div>
 
-                                <div class="cart-item-price">
-                                    ₹{{ number_format($item->unit_price, 2) }}
+                                <div class="d-flex flex-column align-items-end">
+                                    <div class="text-secondary small" style="font-size: 11px;">₹{{ number_format($item->unit_price, 2) }}</div>
+                                    <div class="fw-bold text-dark item-total-price">
+                                        ₹{{ number_format($item->quantity * $item->unit_price, 2) }}
+                                    </div>
                                 </div>
 
                                 <button class="cart-item-remove remove-item" data-url="{{ route('website.cart.remove', $item->cart_item_id) }}" title="Remove item">
@@ -99,22 +108,50 @@
         <div class="col-lg-4">
             <div class="summary-panel sticky-top" style="top: 100px;">
                 <h5 class="summary-title">Order Summary</h5>
+                
+                <!-- Delivery Options -->
+                <div class="mb-4">
+                    <label class="fw-bold text-dark small mb-2 d-block">Select Distribution Method:</label>
+                    <div class="d-flex flex-column gap-2">
+                        <div class="p-3 border rounded-3 d-flex align-items-center justify-content-between cursor-pointer" id="delivery-school" style="border: 2px solid var(--qu-primary); background-color: rgba(30, 58, 138, 0.02); cursor: pointer;">
+                            <div class="form-check mb-0">
+                                <input class="form-check-input" type="radio" name="delivery-option" checked>
+                                <label class="form-check-label ms-2 cursor-pointer" style="user-select: none;">
+                                    <span class="fw-bold text-dark small d-block" style="line-height: 1.2;">Deliver to School Desk</span>
+                                    <span class="text-secondary" style="font-size: 11px;">Official academic pick-up desk</span>
+                                </label>
+                            </div>
+                            <span class="text-success fw-bold small">FREE</span>
+                        </div>
+
+                        <div class="p-3 border rounded-3 d-flex align-items-center justify-content-between cursor-pointer" id="delivery-home" style="border: 2px solid #dee2e6; background-color: transparent; cursor: pointer;">
+                            <div class="form-check mb-0">
+                                <input class="form-check-input" type="radio" name="delivery-option">
+                                <label class="form-check-label ms-2 cursor-pointer" style="user-select: none;">
+                                    <span class="fw-bold text-dark small d-block" style="line-height: 1.2;">Home Delivery</span>
+                                    <span class="text-secondary" style="font-size: 11px;">Direct residential courier dispatch</span>
+                                </label>
+                            </div>
+                            <span class="text-dark fw-bold small">$8.00</span>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="summary-row">
                     <span class="summary-label">Subtotal</span>
-                    <span class="summary-value">₹{{ number_format($subtotal, 2) }}</span>
+                    <span class="summary-value" id="summary-subtotal">₹{{ number_format($subtotal, 2) }}</span>
                 </div>
                 <div class="summary-row">
                     <span class="summary-label">Shipping</span>
-                    <span class="summary-value summary-free">Free</span>
+                    <span class="summary-value summary-free" id="summary-shipping">Free</span>
                 </div>
 
                 <div class="summary-total-row">
                     <span class="summary-total-label">Total</span>
-                    <span class="summary-total-value">₹{{ number_format($subtotal, 2) }}</span>
+                    <span class="summary-total-value" id="summary-total">₹{{ number_format($subtotal, 2) }}</span>
                 </div>
 
-                <a href="" class="btn-checkout {{ $cartItems->isEmpty() ? 'disabled' : '' }}">
+                <a href="{{ route('website.checkout') }}" class="btn-checkout {{ $cartItems->isEmpty() ? 'disabled' : '' }}">
                     Proceed to Checkout <i class="ti ti-arrow-right ms-2"></i>
                 </a>
 
@@ -137,6 +174,41 @@
 
 <script>
 $(document).ready(function() {
+    let deliveryFee = 0;
+
+    function updateTotals(subtotal) {
+        const total = parseFloat(subtotal) + deliveryFee;
+        animatePriceChange($('#summary-subtotal'), subtotal);
+        animatePriceChange($('#summary-total'), total);
+        $('#summary-shipping').text(deliveryFee === 0 ? 'Free' : '₹' + deliveryFee.toFixed(2));
+    }
+
+    /* ===================================================
+       Delivery Options Interaction
+    =================================================== */
+    $('#delivery-school').on('click', function() {
+        deliveryFee = 0;
+        $(this).css({'border': '2px solid var(--qu-primary)', 'background-color': 'rgba(30, 58, 138, 0.02)'});
+        $('#delivery-home').css({'border': '2px solid #dee2e6', 'background-color': 'transparent'});
+        $('input[name="delivery-option"]').eq(0).prop('checked', true);
+        
+        localStorage.setItem('qu_delivery_preference', 'school');
+
+        const currentSubtotal = $('#summary-subtotal').text().replace(/[₹,]/g, '');
+        updateTotals(currentSubtotal);
+    });
+
+    $('#delivery-home').on('click', function() {
+        deliveryFee = 8.00; 
+        $(this).css({'border': '2px solid var(--qu-primary)', 'background-color': 'rgba(30, 58, 138, 0.02)'});
+        $('#delivery-school').css({'border': '2px solid #dee2e6', 'background-color': 'transparent'});
+        $('input[name="delivery-option"]').eq(1).prop('checked', true);
+        
+        localStorage.setItem('qu_delivery_preference', 'home');
+
+        const currentSubtotal = $('#summary-subtotal').text().replace(/[₹,]/g, '');
+        updateTotals(currentSubtotal);
+    });
 
     /* ===================================================
        Update Quantity (AJAX + Animated Price Update)
@@ -150,7 +222,6 @@ $(document).ready(function() {
 
         if (qty < min) return;
 
-        // Disable both qty buttons in this row while request is in flight
         const $qtyBtns = $row.find('.qty-update');
         $qtyBtns.prop('disabled', true).css('opacity', 0.5);
 
@@ -166,26 +237,14 @@ $(document).ready(function() {
             dataType: 'json',
 
             success: function(response) {
-                // Expecting response like:
-                // { item_total: 450.00, subtotal: 1250.00, total: 1250.00, quantity: 3 }
-
-                // 1. Update this row's quantity display
                 $row.find('.qty-val').text(response.quantity ?? qty);
-
-                // 2. Update the +/- button data-qty attributes for next click
                 $row.find('.qty-update').each(function() {
                     const isMinus = $(this).find('i').hasClass('ti-minus');
                     $(this).data('qty', isMinus ? response.quantity - 1 : response.quantity + 1);
                 });
 
-                // 3. Animate + update this row's item total price
-                animatePriceChange($row.find('.cart-item-price'), response.item_total);
-
-                // 4. Animate + update the summary panel subtotal & total
-                animatePriceChange($('#summary-subtotal'), response.subtotal);
-                animatePriceChange($('#summary-total'), response.total ?? response.subtotal);
-
-                // 5. Quick highlight flash on the whole row to show something happened
+                animatePriceChange($row.find('.item-total-price'), response.item_total);
+                updateTotals(response.subtotal);
                 flashRow($row);
             },
 
@@ -201,7 +260,7 @@ $(document).ready(function() {
 
     /* ===================================================
        Remove Item (AJAX + Fade Out Animation)
-    =================================================== */
+    ================================================== */
     $(document).on('click', '.remove-item', function() {
         if (!confirm('Remove this item from your basket?')) return;
 
@@ -218,19 +277,14 @@ $(document).ready(function() {
             dataType: 'json',
 
             success: function(response) {
-                // Smoothly collapse and remove the row
                 $row.slideUp(250, function() {
                     $row.remove();
-
-                    // Update badge count
                     const remaining = $('.cart-item-card').length;
                     $('.cart-count-badge').text(remaining);
+                    
+                    const newSubtotal = response.subtotal || $('#summary-subtotal').text().replace(/[₹,]/g, '');
+                    updateTotals(newSubtotal);
 
-                    // Update totals
-                    animatePriceChange($('#summary-subtotal'), response.subtotal);
-                    animatePriceChange($('#summary-total'), response.total ?? response.subtotal);
-
-                    // Show empty state if cart is now empty
                     if (remaining === 0) {
                         location.reload();
                     }
@@ -245,14 +299,11 @@ $(document).ready(function() {
 
     /* ===================================================
        Clear Entire Cart
-    =================================================== */
+    ================================================== */
     $('#clear-cart').on('click', function() {
         if (!confirm('Are you sure you want to clear your entire basket?')) return;
-
-        const $btn = $(this);
-
         $.ajax({
-            url: $btn.data('url'),
+            url: $('#clear-cart').data('url'),
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': "{{ csrf_token() }}",
@@ -262,28 +313,18 @@ $(document).ready(function() {
                 location.reload();
             },
             error: function() {
-                alert('Could not clear basket. Please try again.');
+                alert('Could not clear basket.');
             }
         });
     });
 
-    /* ===================================================
-       Helper: Animate a price element to a new value
-       - Counts up/down smoothly instead of an instant jump
-       - Briefly scales + colors the text for a "pop" effect
-    =================================================== */
     function animatePriceChange($el, newValue) {
         if (newValue === undefined || newValue === null) return;
-
         const oldText = $el.text().replace(/[₹,]/g, '');
         const oldValue = parseFloat(oldText) || 0;
         const target = parseFloat(newValue);
-
-        // Pop effect
         $el.addClass('price-pop');
         setTimeout(() => $el.removeClass('price-pop'), 350);
-
-        // Count animation
         $({ val: oldValue }).animate({ val: target }, {
             duration: 400,
             easing: 'swing',
@@ -296,14 +337,10 @@ $(document).ready(function() {
         });
     }
 
-    /* ===================================================
-       Helper: Flash a row briefly to indicate an update
-    =================================================== */
     function flashRow($row) {
         $row.addClass('row-flash');
         setTimeout(() => $row.removeClass('row-flash'), 400);
     }
-
 });
 </script>
 @endsection

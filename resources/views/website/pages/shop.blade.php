@@ -42,24 +42,22 @@
                     <div class="mb-4">
                         <label for="shop-school-select" class="form-label small fw-semibold">School Portal</label>
                         <select id="shop-school-select" class="select2">
-                            <option value="all">All Partner Schools</option>
+                            <option value="">-- Select School --</option>
                             @foreach ($schools as $school)
                                 <option value="{{ $school->school_id }}"
                                     {{ request('school') == $school->school_id ? 'selected' : '' }}>
                                     {{ $school->school_name }}</option>
                             @endforeach
-                            <option value="generic" {{ request('school') == 'generic' ? 'selected' : '' }}>Essential Wear
-                                (No School Crest)</option>
                         </select>
                     </div>
 
                     <!-- Standard Filter -->
                     <div class="mb-4" id="shop-standard-filter-container"
-                        style="{{ request('school') == 'all' || request('school') == 'generic' ? 'display:none' : '' }}">
+                        style="{{ request('school') ? '' : 'display:none' }}">
                         <label for="shop-standard-select" class="form-label small fw-semibold">Standard / Grade</label>
                         <select id="shop-standard-select" class="select2">
                             <option value="all">All Standards</option>
-                            @if (request('school') && request('school') != 'all' && request('school') != 'generic')
+                            @if (request('school'))
                                 @php
                                     $currentSchoolId = request('school');
                                     $standards = \App\Models\SuperAdmin\SchoolStandard::where(
@@ -76,6 +74,16 @@
                                     </option>
                                 @endforeach
                             @endif
+                        </select>
+                    </div>
+
+                    <!-- Class Filter -->
+                    <div class="mb-4" id="shop-class-filter-container"
+                        style="{{ request('school') ? '' : 'display:none' }}">
+                        <label for="shop-class-select" class="form-label small fw-semibold">Class / Section</label>
+                        <select id="shop-class-select" class="select2">
+                            <option value="all">All Classes</option>
+                            <!-- Populated dynamically -->
                         </select>
                     </div>
 
@@ -177,7 +185,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             const schoolSelect = document.getElementById('shop-school-select');
             const standardSelect = document.getElementById('shop-standard-select');
+            const classSelect = document.getElementById('shop-class-select');
             const standardContainer = document.getElementById('shop-standard-filter-container');
+            const classContainer = document.getElementById('shop-class-filter-container');
             const categorySelect = document.getElementById('shop-category-select');
             const subcategorySelect = document.getElementById('shop-subcategory-select');
             const subcategoryContainer = document.getElementById('shop-subcategory-filter-container');
@@ -186,21 +196,25 @@
             const loader = document.getElementById('shop-loader');
 
             async function shopAjaxFilter() {
+
                 const school = schoolSelect.value;
                 const standard = standardSelect ? standardSelect.value : 'all';
+                const classVal = classSelect ? classSelect.value : 'all';
                 const category = categorySelect.value;
                 const subcategory = subcategorySelect ? subcategorySelect.value : 'all';
                 const search = searchInput.value.trim();
 
                 // Build URL
                 const params = new URLSearchParams();
-                if (school !== 'all') params.append('school', school);
+                if (school) params.append('school', school);
                 if (standard !== 'all') params.append('standard', standard);
+                if (classVal !== 'all') params.append('class', classVal);
                 if (category !== 'all') params.append('parent_category', category);
                 if (subcategory !== 'all') params.append('sub_category', subcategory);
                 if (search) params.append('search', search);
 
                 const url = `{{ route('website.shop') }}?${params.toString()}`;
+
 
                 // Show loader
                 loader.classList.remove('d-none');

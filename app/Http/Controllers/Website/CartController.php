@@ -10,7 +10,9 @@ use App\Models\SuperAdmin\Product as SuperAdminProduct;
 use App\Models\SuperAdmin\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
@@ -45,12 +47,25 @@ class CartController extends Controller
     {
         $cart = $this->getActiveCart();
         $cartItems = CartItem::where('cart_id', $cart->cart_id)
-            ->with(['product', 'variant'])
+            ->with(['product.schoolApprovals.school', 'variant'])
             ->get();
 
         $subtotal = $cartItems->sum(fn($item) => $item->quantity * $item->unit_price);
 
-        return view('website.pages.cart', compact('cart', 'cartItems', 'subtotal'));
+        // Determine the primary school for the cart items
+        $schools = $cartItems->flatMap(function ($item) {
+            return $item->product->schoolApprovals->pluck('school');
+        })->unique('school_id');
+
+        $primarySchool = null;
+        if ($schools->count() === 1) {
+            $primarySchool = $schools->first();
+        }
+
+        // Start at 'basket' step
+        $currentState = 'basket';
+
+        return view('website.pages.checkout', compact('cart', 'cartItems', 'subtotal', 'primarySchool', 'currentState'));
     }
 
     public function add(Request $request)
@@ -92,6 +107,7 @@ class CartController extends Controller
                 'cart_id' => $cart->cart_id,
                 'product_id' => $request->product_id,
                 'variant_id' => $request->variant_id,
+                'vendor_id' => $product->vendor_id,
                 'quantity' => $request->quantity,
                 'unit_price' => $unitPrice,
             ]);
@@ -113,7 +129,17 @@ class CartController extends Controller
         $item = CartItem::findOrFail($request->cart_item_id);
         $item->update(['quantity' => $request->quantity]);
 
-        return response()->json(['message' => 'Quantity updated']);
+        $cart = $item->cart;
+        $cartItems = CartItem::where('cart_id', $cart->cart_id)->get();
+        $subtotal = $cartItems->sum(fn($item) => $item->quantity * $item->unit_price);
+
+        return response()->json([
+            'message' => 'Quantity updated',
+            'quantity' => $item->quantity,
+            'item_total' => $item->quantity * $item->unit_price,
+            'subtotal' => $subtotal,
+            'total' => $subtotal, // Assuming free shipping as per the current view
+        ]);
     }
 
     public function remove($id)
@@ -127,5 +153,154 @@ class CartController extends Controller
         $cart = $this->getActiveCart();
         CartItem::where('cart_id', $cart->cart_id)->delete();
         return response()->json(['message' => 'Basket cleared']);
+    }
+
+    public function checkout()
+    {
+        $cart = $this->getActiveCart();
+        $cartItems = CartItem::where('cart_id', $cart->cart_id)
+            ->with(['product.schoolApprovals.school', 'variant'])
+            ->get();
+
+        if ($cartItems->isEmpty()) {
+            return redirect()->route('website.cart.index')->with('error', 'Your basket is empty.');
+        }
+
+        $subtotal = $cartItems->sum(fn($item) => $item->quantity * $item->unit_price);
+
+        // Determine the primary school for the cart items
+        $schools = $cartItems->flatMap(function ($item) {
+            return $item->product->schoolApprovals->pluck('school');
+        })->unique('school_id');
+
+        $primarySchool = null;
+        if ($schools->count() === 1) {
+            $primarySchool = $schools->first();
+        }
+
+        // Pass current state to the view so JS can jump to the correct step
+        $currentState = session()->has('checkout_details') ? 'confirmation' : 'checkout';
+
+        return view('website.pages.checkout', compact('cart', 'cartItems', 'subtotal', 'primarySchool', 'currentState'));
+    }
+
+    public function saveCheckoutDetails(Request $request)
+    {
+        $request->validate([
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'city' => 'required|string|max:100',
+            'address' => 'required|string',
+            'payment_method' => 'required|in:cod,upi,card',
+            'delivery_type' => 'required|in:school,home',
+        ]);
+
+        session()->put('checkout_details', $request->all());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Details saved successfully',
+            'details' => session('checkout_details')
+        ]);
+    }
+
+    public function confirmation()
+    {
+        // Kept for backward compatibility/direct access, but AJAX will use saveCheckoutDetails
+        $details = session()->get('checkout_details');
+        if (!$details) {
+            return redirect()->route('website.checkout');
+        }
+
+        $cart = $this->getActiveCart();
+        $cartItems = CartItem::where('cart_id', $cart->cart_id)
+            ->with(['product', 'variant'])
+            ->get();
+
+        if ($cartItems->isEmpty()) {
+            session()->forget('checkout_details');
+            return redirect()->route('website.cart.index')->with('error', 'Your basket is empty.');
+        }
+
+        $subtotal = $cartItems->sum(fn($item) => $item->quantity * $item->unit_price);
+        $shipping = ($details['delivery_type'] === 'home') ? 8.00 : 0;
+
+        return view('website.pages.confirmation', compact('cart', 'cartItems', 'subtotal', 'shipping', 'details'));
+    }
+
+    public function store(Request $request)
+    {
+        Log::info('Checkout store request data:', $request->all());
+        $details = session()->get('checkout_details');
+        if (!$details) {
+            return response()->json(['success' => false, 'message' => 'Session expired. Please enter your details again.'], 422);
+        }
+
+        $cart = $this->getActiveCart();
+        $cartItems = CartItem::where('cart_id', $cart->cart_id)->get();
+
+        if ($cartItems->isEmpty()) {
+            return response()->json(['success' => false, 'message' => 'Your basket is empty.'], 422);
+        }
+
+        $subtotal = $cartItems->sum(fn($item) => $item->quantity * $item->unit_price);
+        $shipping = ($details['delivery_type'] === 'home') ? 8.00 : 0;
+        $grandTotal = $subtotal + $shipping;
+
+        try {
+            DB::transaction(function () use ($cart, $cartItems, $subtotal, $shipping, $grandTotal, $details) {
+                $deliveryType = match ($details['delivery_type']) {
+                    'school' => \App\Enums\DeliveryType::SCHOOL_DELIVERY,
+                    'home' => \App\Enums\DeliveryType::HOME_DELIVERY,
+                    default => \App\Enums\DeliveryType::SCHOOL_DELIVERY,
+                };
+
+                $order = \App\Models\Order::create([
+                    'order_number' => 'ORD-' . strtoupper(Str::random(10)),
+                    'user_id' => Auth::id(),
+                    'cart_id' => $cart->cart_id,
+                    'delivery_type' => $deliveryType,
+                    'status' => 'pending',
+                    'payment_status' => 'pending',
+                    'subtotal' => $subtotal,
+                    'shipping_charge' => $shipping,
+                    'grand_total' => $grandTotal,
+                    'placed_at' => now(),
+                ]);
+
+                foreach ($cartItems as $item) {
+                    $product = $item->product;
+                    \App\Models\OrderItem::create([
+                        'order_id' => $order->id,
+                        'product_id' => $item->product_id,
+                        'variant_id' => $item->variant_id,
+                        'vendor_id' => $item->vendor_id,
+                        'product_name' => $product->product_name,
+                        'unit_price' => $item->unit_price,
+                        'quantity' => $item->quantity,
+                        'line_total' => $item->quantity * $item->unit_price,
+                    ]);
+                }
+
+                // Clear cart items
+                CartItem::where('cart_id', $cart->cart_id)->delete();
+            });
+
+            session()->forget('checkout_details');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Thank you! Your order has been placed successfully.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Order placement failed: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'An error occurred while placing your order.'], 500);
+        }
+    }
+
+    public function success()
+    {
+        return view('website.pages.success');
     }
 }

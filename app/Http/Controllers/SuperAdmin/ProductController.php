@@ -16,12 +16,12 @@ use Yajra\DataTables\Facades\DataTables;
 use Throwable;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Log;
 use App\Notifications\ProductApprovalRequestNotification;
 use App\Notifications\ProductStatusUpdatedNotification;
 use App\Models\User;
 use Illuminate\Support\Facades\Notification;
 use App\Services\EmailService;
-use Laravel\Reverb\Loggers\Log;
 
 class ProductController extends BaseController
 {
@@ -291,7 +291,10 @@ class ProductController extends BaseController
             return redirect()->route('product.index')->with('success', 'Product updated successfully.');
         } catch (Throwable $e) {
             DB::rollBack();
-            Log::info($e);
+            \Illuminate\Support\Facades\Log::error('Product update failed: ' . $e->getMessage(), [
+                'exception' => $e,
+                'product_id' => $product->product_id
+            ]);
             return back()
                 ->withInput()
                 ->with('error', 'Failed to update product: ' . $e->getMessage());

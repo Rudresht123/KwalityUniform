@@ -66,5 +66,7 @@
 </div>
 
 <div class="col-12 mt-5">
-    {{ $products->appends(request()->query())->links() }}
+    @if($products instanceof \Illuminate\Pagination\LengthAwarePaginator)
+        {{ $products->appends(request()->query())->links() }}
+    @endif
 </div>

@@ -463,14 +463,16 @@ const State = {
 
   // Update navbar state
   updateHeaderCounts() {
-    const cartCountEl = document.getElementById('cart-badge');
+    const cartCountEls = document.querySelectorAll('.cart-count-badge');
     const wishlistCountEl = document.getElementById('wishlist-badge');
     const userDisplayEl = document.getElementById('header-user-display');
 
-    if (cartCountEl) {
+    if (cartCountEls.length > 0) {
       const count = this.getCart().reduce((sum, item) => sum + item.quantity, 0);
-      cartCountEl.innerText = count;
-      cartCountEl.style.display = count > 0 ? 'flex' : 'none';
+      cartCountEls.forEach(el => {
+        el.innerText = count;
+        el.style.display = count > 0 ? 'flex' : 'none';
+      });
     }
     if (wishlistCountEl) {
       const count = this.getWishlist().length;
