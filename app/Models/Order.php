@@ -51,9 +51,13 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function shippingAddress(): HasOne
+    public function shippingAddress(): BelongsTo
     {
-        return $this->hasOne(ShippingAddress::class);
+        return $this->belongsTo(ShippingAddress::class, 'shipping_address_id');
+    }
+
+    public function status(){
+        $this->status;
     }
 
     public function shipments()

@@ -3,23 +3,7 @@
 @section('content')
 <div class="page-content">
     <div class="container-fluid">
-        <div class="row mb-4">
-            <div class="col-lg-12">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb mb-2">
-                                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                                <li class="breadcrumb-item"><a href="#">Inventory</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">School Product Approval</li>
-                            </ol>
-                        </nav>
-                        <h3 class="mb-1">School Product Approval</h3>
-                        <p class="text-muted">Manage products for your school inventory.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+  
 
         <div class="row mb-4">
             <div class="col-lg-12">
@@ -40,7 +24,7 @@
 
         <div class="row">
 
-            @forelse($products as $product)
+            @foreach($products as $product)
                 <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-4">
                     <div class="card product-card h-100 shadow-sm border-0 overflow-hidden">
                         <div class="position-relative">
@@ -72,15 +56,7 @@
                         </div>
                     </div>
                 </div>
-            @empty
-                <div class="col-12 text-center py-5">
-                    <div class="empty-state">
-                        <img src="{{ asset('assets/images/empty-box.png') }}" alt="No products" class="img-fluid mb-3" style="max-width: 200px;">
-                        <h4>No products found</h4>
-                        <p class="text-muted">There are no products awaiting your approval at this time.</p>
-                    </div>
-                </div>
-            @endforelse
+         @endforeach
         </div>
 
         <div class="d-flex justify-content-center mt-4">

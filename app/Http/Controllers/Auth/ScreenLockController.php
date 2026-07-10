@@ -25,7 +25,7 @@ class ScreenLockController extends Controller
     public function show()
     {
         if (!Session::get('screen_locked')) {
-            return redirect()->route('dashboard');
+            return $this->redirectBasedOnRole();
         }
 
         return view('auth.lockscreen');
@@ -42,11 +42,32 @@ class ScreenLockController extends Controller
 
         if (Hash::check($request->password, $request->user()->password)) {
             Session::forget('screen_locked');
-            return redirect()->intended(route('dashboard'));
+            return redirect()->intended($this->redirectBasedOnRole());
         }
 
         return back()->withErrors([
             'password' => 'The provided password does not match our records.',
         ]);
+    }
+
+    /**
+     * Helper method to determine the correct dashboard route based on user role.
+     */
+    protected function redirectBasedOnRole()
+    {
+        $user = auth()->user();
+        if (!$user) return route('login');
+
+        if ($user->hasAnyRole(['Super Admin', 'Admin'])) {
+            return route('dashboard');
+        }
+        if ($user->hasRole('School')) {
+            return route('school.distribution');
+        }
+        if ($user->hasRole('Parent')) {
+            return route('parent.orders');
+        }
+
+        return route('website.shop');
     }
 }

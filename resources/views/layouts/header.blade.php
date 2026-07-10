@@ -59,10 +59,10 @@
                     <i class="fe fe-bell header-link-icon"></i>
 
                     <span
-                        class="badge bg-secondary header-icon-badge pulse pulse-secondary {{ auth()->user()->unreadNotifications()->count() ? '' : 'd-none' }}"
+                        class="badge bg-secondary header-icon-badge pulse pulse-secondary {{ auth()->user()?->unreadNotifications()->count() ? '' : 'd-none' }}"
                         id="notification-icon-badge">
 
-                        {{ auth()->user()->unreadNotifications()->count() }}
+                        {{ auth()->user()?->unreadNotifications()->count() ?? 0 }}
 
                     </span>
 
@@ -87,7 +87,7 @@
 
                             <span class="badge bg-secondary rounded-pill" id="notifiation-data">
 
-                                {{ auth()->user()->unreadNotifications()->count() }}
+                                {{ auth()->user()?->unreadNotifications()->count() ?? 0 }}
                                 Unread
 
                             </span>
@@ -101,8 +101,7 @@
                     <ul class="list-unstyled mb-0" id="header-notification-scroll" data-simplebar
                         style="max-height:350px;">
 
-                        @forelse(auth()->user()
-                    ->unreadNotifications()
+                        @forelse(auth()->user()?->unreadNotifications()
                     ->latest()
                     ->take(5)
                     ->get()
@@ -198,14 +197,14 @@
                     data-bs-auto-close="outside" aria-expanded="false">
                     <div class="d-flex align-items-center">
                         <div class="header-link-icon">
-<img src="{{ auth()->user()->userLogo() ?: asset('assets/images/no_image.jpg') }}"
+<img src="{{ auth()->user()?->userLogo() ?: asset('assets/images/no_image.jpg') }}"
      alt="User"
      width="32"
      height="32"
      class="rounded-circle border">
                         </div>
                         <div class="d-none">
-                            <p class="fw-semibold mb-0">{{ auth()->user()->name }}</p>
+                            <p class="fw-semibold mb-0">{{ auth()->user()?->name ?? 'Guest' }}</p>
                         </div>
                     </div>
                 </a> <!-- End::header-link|dropdown-toggle -->
@@ -213,13 +212,17 @@
                     aria-labelledby="mainHeaderProfile">
                     <li>
                         <div class="header-navheading border-bottom">
-                            <h6 class="main-notification-title text-dark">{{ auth()->user()->name }}</h6>
-                            <p class="main-notification-text mb-0 text-muted small">{{ auth()->user()->email }}
+                            <h6 class="main-notification-title text-dark">{{ auth()->user()?->name ?? 'Guest' }}</h6>
+                            <p class="main-notification-text mb-0 text-muted small">{{ auth()->user()?->email ?? 'Guest' }}
                             </p>
                         </div>
                     </li>
                     <li><a class="dropdown-item d-flex border-bottom" href="{{ route('profile.edit') }}"><i
-                                class="fe fe-user fs-16 align-middle me-2"></i>Profile</a></li>
+                                class="ti ti-user fs-16 align-middle me-2"></i>Profile</a></li>
+                    <li><a class="dropdown-item d-flex border-bottom" href="{{ route('website.orders.index') }}"><i
+                                class="ti ti-package fs-16 align-middle me-2"></i>My Orders</a></li>
+                    <li><a class="dropdown-item d-flex border-bottom" href="{{ route('website.orders.index') }}"><i
+                                class="ti ti-truck-delivery fs-16 align-middle me-2"></i>Track Order</a></li>
                     <li><a class="dropdown-item d-flex border-bottom" href="{{ route('lockscreen.lock') }}"><i
                                 class="fe fe-lock fs-16 align-middle me-2"></i>Lock Screen</a></li>
                     <li>
@@ -292,5 +295,5 @@
     }
 </script>
 <script>
-    window.userId = {{ auth()->id() }};
+    window.userId = {{ auth()->id() ?? 'null' }};
 </script>

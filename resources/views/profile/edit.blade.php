@@ -156,14 +156,14 @@
                     </div>
                 </div>
                 <div class="col text-center text-md-start ps-md-4">
-                    <h2 class="fw-bold mb-1">{{ auth()->user()->name }}</h2>
-                    <p class="opacity-75 mb-3">{{ auth()->user()->email }}</p>
+                    <h2 class="fw-bold mb-1">{{ auth()->user()?->name ?? 'User' }}</h2>
+                    <p class="opacity-75 mb-3">{{ auth()->user()?->email ?? 'N/A' }}</p>
                     <div class="d-flex flex-wrap justify-content-center justify-content-md-start gap-2">
                         <span class="badge bg-white-transparent rounded-pill px-3 py-2">
-                            <i class="ti ti-shield-check me-1"></i> {{ strtoupper(auth()->user()->getRoleNames()->first() ?? 'User') }}
+                            <i class="ti ti-shield-check me-1"></i> {{ strtoupper(auth()->user()?->getRoleNames()->first() ?? 'User') }}
                         </span>
                         <span class="badge bg-white-transparent rounded-pill px-3 py-2">
-                            <i class="ti ti-calendar-event me-1"></i> Joined {{ auth()->user()->created_at->format('M Y') }}
+                            <i class="ti ti-calendar-event me-1"></i> Joined {{ auth()->user()?->created_at ? auth()->user()->created_at->format('M Y') : 'N/A' }}
                         </span>
                     </div>
                 </div>

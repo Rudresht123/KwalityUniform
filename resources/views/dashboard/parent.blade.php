@@ -5,7 +5,7 @@
             <div class="card-body p-4 position-relative">
                 <div class="row align-items-center">
                     <div class="col-md-8">
-                        <h3 class="fw-bold mb-1">Hello, {{ auth()->user()->name }}!</h3>
+                        <h3 class="fw-bold mb-1">Hello, {{ auth()->user()?->name ?? 'User' }}!</h3>
                         <p class="mb-0 text-white-50">Welcome to your Kwality Uniform parent portal. Manage your children's school uniforms with ease.</p>
                     </div>
                     <div class="col-md-4 text-md-end mt-3 mt-md-0">

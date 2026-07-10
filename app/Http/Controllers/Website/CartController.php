@@ -43,12 +43,24 @@ class CartController extends Controller
         return $cart;
     }
 
+    public function count()
+    {
+        $cart = $this->getActiveCart();
+        $count = CartItem::where('cart_id', $cart->cart_id)->sum('quantity');
+        return response()->json(['count' => $count]);
+    }
+
     public function index()
     {
         $cart = $this->getActiveCart();
         $cartItems = CartItem::where('cart_id', $cart->cart_id)
             ->with(['product.schoolApprovals.school', 'variant'])
-            ->get();
+            ->get()
+            ->map(function($item) {
+                // Attach stock_qty to the item for easier frontend access
+                $item->available_stock = $item->variant?->stock_qty ?? 0;
+                return $item;
+            });
 
         $subtotal = $cartItems->sum(fn($item) => $item->quantity * $item->unit_price);
 
@@ -62,10 +74,7 @@ class CartController extends Controller
             $primarySchool = $schools->first();
         }
 
-        // Start at 'basket' step
-        $currentState = 'basket';
-
-        return view('website.pages.checkout', compact('cart', 'cartItems', 'subtotal', 'primarySchool', 'currentState'));
+        return view('website.pages.cart', compact('cart', 'cartItems', 'subtotal', 'primarySchool'));
     }
 
     public function add(Request $request)
@@ -78,15 +87,26 @@ class CartController extends Controller
         $cart = $this->getActiveCart();
         $product = SuperAdminProduct::findOrFail($request->product_id);
         
-        // Prioritize: Variant Selling Price -> Variant Price -> Product Base Price -> 0.00
-        $unitPrice = 0.00;
+        // Stock Validation
         if ($request->variant_id) {
             $variant = ProductVariant::find($request->variant_id);
-            if ($variant) {
-                $unitPrice = $variant->selling_price ?? $variant->price ?? $product->base_price ?? 0.00;
-            } else {
-                $unitPrice = $product->base_price ?? 0.00;
+            if (!$variant) {
+                return response()->json(['success' => false, 'message' => 'Selected variant not found.'], 404);
             }
+            
+            $currentCartQty = CartItem::where('cart_id', $cart->cart_id)
+                ->where('product_id', $request->product_id)
+                ->where('variant_id', $request->variant_id)
+                ->value('quantity') ?? 0;
+
+            if (($currentCartQty + $request->quantity) > $variant->stock_qty) {
+                return response()->json([
+                    'success' => false, 
+                    'message' => "Only {$variant->stock_qty} items available in stock."
+                ], 422);
+            }
+            
+            $unitPrice = $variant->selling_price ?? $variant->price ?? $product->base_price ?? 0.00;
         } else {
             $unitPrice = $product->base_price ?? 0.00;
         }
@@ -127,6 +147,18 @@ class CartController extends Controller
         ]);
 
         $item = CartItem::findOrFail($request->cart_item_id);
+        
+        // Stock Validation
+        if ($item->variant_id) {
+            $variant = ProductVariant::find($item->variant_id);
+            if ($variant && $request->quantity > $variant->stock_qty) {
+                return response()->json([
+                    'success' => false, 
+                    'message' => "Only {$variant->stock_qty} items available in stock."
+                ], 422);
+            }
+        }
+
         $item->update(['quantity' => $request->quantity]);
 
         $cart = $item->cart;
@@ -163,7 +195,7 @@ class CartController extends Controller
             ->get();
 
         if ($cartItems->isEmpty()) {
-            return redirect()->route('website.cart.index')->with('error', 'Your basket is empty.');
+            return redirect('/')->with('error', 'Your basket is empty.');
         }
 
         $subtotal = $cartItems->sum(fn($item) => $item->quantity * $item->unit_price);
@@ -220,7 +252,7 @@ class CartController extends Controller
 
         if ($cartItems->isEmpty()) {
             session()->forget('checkout_details');
-            return redirect()->route('website.cart.index')->with('error', 'Your basket is empty.');
+            return redirect('/')->with('error', 'Your basket is empty.');
         }
 
         $subtotal = $cartItems->sum(fn($item) => $item->quantity * $item->unit_price);

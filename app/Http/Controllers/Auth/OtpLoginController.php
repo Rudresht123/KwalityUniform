@@ -33,6 +33,13 @@ class OtpLoginController extends Controller
             ]);
         }
 
+        // Restrict login to website users (parents) only
+        if ($user->hasRole('Super Admin') || $user->hasRole('Admin')) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided email is not registered.'],
+            ]);
+        }
+
         if ($this->otpService->sendOtp($user)) {
             return response()->json(['message' => 'OTP has been sent to your email.']);
         }
@@ -61,6 +68,13 @@ class OtpLoginController extends Controller
             ]);
         }
 
+        // Restrict login to website users (parents) only
+        if ($user->hasRole('Super Admin') || $user->hasRole('Admin')) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided email is not registered.'],
+            ]);
+        }
+
         if ($this->otpService->verifyOtp($user, $request->otp)) {
             Auth::login($user, $request->boolean('remember'));
             $request->session()->regenerate();
@@ -68,11 +82,11 @@ class OtpLoginController extends Controller
             if ($request->wantsJson()) {
                 return response()->json([
                     'message' => 'Login successful',
-                    'redirect' => redirect()->intended(route('dashboard', absolute: false))->getTargetUrl()
+                    'redirect' => redirect()->intended('/')->getTargetUrl()
                 ]);
             }
 
-            return redirect()->intended(route('dashboard', absolute: false));
+            return redirect()->intended('/');
         }
 
         throw ValidationException::withMessages([

@@ -40,6 +40,7 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transform-origin: center center;
 }
 
 h1, h2, h3, h4, h5, h6, .display-font {
@@ -414,6 +415,10 @@ a, button, .btn, .card, .nav-link, .form-control, .form-select {
 
 .product-wishlist-geo.active {
   color: #DC2626;
+}
+.product-wishlist-geo.active .wishlist-heart-svg {
+  fill: #DC2626;
+  stroke: #DC2626;
 }
 
 .product-school-geo {
@@ -3712,4 +3717,380 @@ PREMIUM PAGINATION
     .cart-item-remove {
         order: 4;
     }
+}
+
+.geo-page-header {
+    position: relative;
+    background-image: url('/assets/images/slide11.png');
+    background-color: #355295; 
+    background-size: cover;
+    background-position: center right; /* instead of center */
+
+    background-repeat: no-repeat;
+    border-bottom: 1px solid #e2e8f0;
+    overflow: hidden;
+
+    /* Fluid height: scales smoothly between 180px (small phones) and 320px (large desktops) */
+    padding-block: clamp(2.5rem, 6vw, 5rem);
+    min-height: clamp(11rem, 22vw, 20rem);
+    display: flex;
+    align-items: center;
+}
+
+.geo-page-header-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.55) 0%, rgba(15, 23, 42, 0.72) 100%);
+    z-index: 0;
+}
+
+.geo-page-header .container {
+    position: relative;
+    z-index: 1;
+}
+
+.geo-page-header h1 {
+    /* Fluid type: shrinks gracefully on narrow screens instead of wrapping awkwardly */
+    font-size: clamp(1.5rem, 4vw, 2.75rem);
+    line-height: 1.15;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+}
+
+.geo-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+}
+
+.geo-breadcrumb li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.geo-breadcrumb a {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color .15s ease;
+}
+
+.geo-breadcrumb a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.geo-breadcrumb .active-item {
+    color: #fff;
+    font-weight: 700;
+}
+
+/* ============ Responsive tuning ============ */
+@media (min-width: 992px) {
+    .geo-page-header {
+        background-position: 75% center;
+    }
+}
+
+@media (max-width: 991px) {
+    .geo-page-header {
+        background-position: center;
+    }
+}
+
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: #fff;
+}
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+}
+.product-image-wrap {
+    overflow: hidden;
+}
+.product-image-wrap img {
+    transition: transform 0.5s ease;
+}
+.product-card:hover .product-image-wrap img {
+    transform: scale(1.1);
+}
+.empty-state {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+#registerModal {
+    --eschool-blue: #1E3A8A;
+    --eschool-blue-light: #EEF2FF;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+#registerModal .login-modal-dialog { max-width: 620px; }
+
+#registerModal .login-modal-content {
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 30px 60px -20px rgba(15, 23, 42, 0.25);
+}
+
+#registerModal .login-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 20;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: #F1F5F9;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: background 0.15s ease;
+}
+#registerModal .login-modal-close:hover { background: #E2E8F0; }
+
+/* Fixed height, no internal scroll */
+#registerModal .login-modal-body {
+    padding: 36px 40px 28px;
+    max-height: 560px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#registerModal .login-form-header { text-align: center; margin-bottom: 18px; flex: none; }
+#registerModal .login-modal-title { font-size: 23px; font-weight: 800; color: #0F172A; margin: 0 0 4px; letter-spacing: -0.01em; }
+#registerModal .login-modal-subtitle { font-size: 13px; color: #64748B; margin: 0; }
+
+/* Step indicator */
+#registerModal .login-steps {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 22px;
+    flex: none;
+    position: relative;
+}
+#registerModal .login-steps::before {
+    content: '';
+    position: absolute;
+    top: 13px;
+    left: 26px;
+    right: 26px;
+    height: 2px;
+    background: #EEF2FF;
+    z-index: 0;
+}
+#registerModal .login-step {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+}
+#registerModal .login-step-dot {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #E2E8F0;
+    color: #94A3B8;
+    font-size: 11.5px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+#registerModal .login-step-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #94A3B8;
+    letter-spacing: 0.2px;
+}
+#registerModal .login-step.is-active .login-step-dot {
+    border-color: var(--eschool-blue);
+    background: var(--eschool-blue);
+    color: #fff;
+}
+#registerModal .login-step.is-active .login-step-label { color: #1E293B; }
+#registerModal .login-step.is-done .login-step-dot {
+    border-color: var(--eschool-blue);
+    background: var(--eschool-blue-light);
+    color: var(--eschool-blue);
+}
+#registerModal .login-step.is-done .login-step-dot::before { content: '✓'; }
+
+/* Panels — only the active one is shown, fills remaining height */
+#registerModal .login-panels { flex: 1 1 auto; min-height: 0; position: relative; }
+#registerModal .login-panel { display: none; }
+#registerModal .login-panel.is-active { display: block; animation: panelIn 0.18s ease; }
+@keyframes panelIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+#registerModal .login-panel-hint {
+    font-size: 12px;
+    color: #94A3B8;
+    margin: 4px 0 0;
+}
+
+/* Fields — compact fieldset + legend, no separate label row */
+fieldset.login-field {
+    margin: 0 0 16px;
+    padding: 0 12px 6px;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 10px;
+    background: #fff;
+    min-width: 0;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+fieldset.login-field legend {
+    float: none;
+    width: auto;
+    padding: 0 6px;
+    margin-bottom: 0;
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748B;
+    line-height: 1;
+}
+fieldset.login-field:focus-within {
+    border-color: var(--eschool-blue);
+    box-shadow: 0 0 0 3.5px rgba(30, 58, 138, 0.12);
+}
+fieldset.login-field.is-invalid { border-color: #DC2626; background: #FEF2F2; }
+
+#registerModal .login-input {
+    display: block;
+    width: 100%;
+    height: 30px;
+    padding: 0 2px;
+    border: none;
+
+    color: #0F172A;
+    font-size: 14px;
+    font-family: inherit;
+}
+#registerModal .login-input:focus { outline: none; box-shadow: none; }
+#registerModal textarea.login-input { height: auto; min-height: 56px; padding: 2px 2px 6px; resize: vertical; }
+#registerModal select.login-input {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394A3B8' stroke-width='1.6' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 2px center;
+    padding-right: 18px;
+}
+
+#registerModal .login-input::placeholder { color: #ADB2BE; }
+
+#registerModal .login-input-wrap { position: relative; display: flex; align-items: center; }
+#registerModal .login-input-wrap .login-input { padding-right: 28px; }
+#registerModal .login-password-toggle {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 26px;
+    height: 26px;
+    border: none;
+    background: transparent;
+    color: #94A3B8;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+#registerModal .login-password-toggle { background: #F1F5F9; color: grey; }
+#registerModal .login-password-toggle:hover { background: #F1F5F9; color: var(--eschool-blue); }
+
+/* Terms checkbox */
+#registerModal .login-remember { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 13px; color: #64748B; }
+#registerModal .login-remember input { position: absolute; opacity: 0; width: 0; height: 0; }
+#registerModal .login-remember-box {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+    border-radius: 5px;
+    border: 1.5px solid #E2E8F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: transparent;
+    font-size: 11px;
+}
+#registerModal .login-remember input:checked + .login-remember-box {
+    background: var(--eschool-blue);
+    border-color: var(--eschool-blue);
+    color: #fff;
+}
+#registerModal .login-remember-text { line-height: 1.5; }
+#registerModal .login-link { color: var(--eschool-blue); }
+
+/* Alerts */
+#registerModal .alert-small { padding: 10px 14px; border-radius: 9px; font-size: 13px; border: 1px solid transparent; }
+#registerModal .alert-danger { color: #B91C1C; background: #FEF2F2; border-color: #FCA5A5; }
+#registerModal .alert-success { color: #15803D; background: #F0FDF4; border-color: #BBF7D0; }
+
+/* Step nav / submit */
+#registerModal .login-step-nav {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+}
+#registerModal .btn-step-back {
+    height: 46px;
+    padding: 0 18px;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 10px;
+    background: #fff;
+    color: #475569;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    visibility: hidden;
+}
+#registerModal .btn-step-back.is-visible { visibility: visible; }
+#registerModal .btn-step-back:hover { background: #F8FAFC; border-color: #CBD5E1; }
+
+#registerModal .btn-step-next,
+#registerModal .btn-login-submit {
+    flex: 1;
+    height: 46px;
+    border: none;
+    border-radius: 10px;
+    background: var(--eschool-blue);
+    color: #fff;
+    font-weight: 700;
+    font-size: 14.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: background 0.15s ease;
+}
+#registerModal .btn-step-next:hover,
+#registerModal .btn-login-submit:hover { background: #16306F; }
+#registerModal .btn-login-submit:disabled { opacity: 0.75; cursor: progress; }
+
+@media (max-width: 575.98px) {
+    #registerModal .login-modal-body { padding: 28px 20px 22px; height: 92vh; }
+    #registerModal .login-step-label { display: none; }
 }

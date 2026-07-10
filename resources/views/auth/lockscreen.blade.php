@@ -197,14 +197,14 @@
                     <div class="lock-card animate__animated animate__fadeInRight">
                         
                         <div class="user-avatar-wrapper animate__animated animate__bounceIn animate__delay-1s">
-                            <img src="{{ auth()->user()->avatar_url }}" class="user-avatar" alt="User">
+                            <img src="{{ auth()->user()?->avatar_url ?? asset('assets/images/no_image.jpg') }}" class="user-avatar" alt="User">
                             <div class="lock-status-icon">
                                 <i class="ti ti-lock"></i>
                             </div>
                         </div>
 
                         <div class="mb-5">
-                            <h3 class="fw-bold text-secondary mb-1">Hi, {{ auth()->user()->name }}</h3>
+                            <h3 class="fw-bold text-secondary mb-1">Hi, {{ auth()->user()?->name ?? 'User' }}</h3>
                             <p class="text-muted">Enter your password to unlock the screen</p>
                         </div>
 

@@ -12,7 +12,7 @@ return new class extends Migration
 
             $table->id();
 
-            $table->foreignId('shipment_id')
+            $table->foreignUuid('shipment_id')
                 ->constrained()
                 ->cascadeOnDelete();
 

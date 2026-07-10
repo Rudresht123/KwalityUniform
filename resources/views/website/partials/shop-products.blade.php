@@ -9,17 +9,28 @@
 
 <div class="row my-3">
     @forelse($products as $product)
-        <div class="col-lg-3 col-md-4 mb-4 editUrl" data-url="{{ route('website.product.json', $product->product_id) }}"
-            data-modalid="productShow">
+        <div class="col-lg-3 col-md-4 mb-4">
             <div class="premium-product-card" data-product-id="{{ $product->product_id }}">
                 <div class="premium-card-image-wrapper">
                     <div class="premium-badge">Official</div>
+                    <button class="product-wishlist-geo" data-product-id="{{ $product->product_id }}"
+                        onclick="State.toggleWishlist('{{ $product->product_id }}', this); event.stopPropagation();"
+                        title="Add to Wishlist">
+                        <svg class="wishlist-heart-svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                            </path>
+                        </svg>
+                    </button>
                     <div class="premium-image-container" style="cursor: pointer;"
                         onclick="window.location.href='{{ route('website.shop') }}?id={{ $product->id }}">
-                        <img src="{{ $product->firstImage() }}"
-                            alt="{{ $product->product_name }}" class="premium-product-img">
+                        <img src="{{ $product->firstImage() }}" alt="{{ $product->product_name }}"
+                            class="premium-product-img">
                         <div class="premium-image-overlay">
-                            <span class="premium-view-text">Quick View</span>
+                            <span class="premium-view-text editUrl"
+                                data-url="{{ route('website.product.json', $product->product_id) }}"
+                                data-modalid="productShow">Quick View</span>
                         </div>
                     </div>
                 </div>
@@ -66,7 +77,7 @@
 </div>
 
 <div class="col-12 mt-5">
-    @if($products instanceof \Illuminate\Pagination\LengthAwarePaginator)
+    @if ($products instanceof \Illuminate\Pagination\LengthAwarePaginator)
         {{ $products->appends(request()->query())->links() }}
     @endif
 </div>

@@ -1,9 +1,10 @@
 @extends('website.components.common')
 
 @section('content')
-<div class="geo-page-header" style="background-color: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+<div class="geo-page-header">
+    <div class="geo-page-header-overlay"></div>
     <div class="container">
-        <h1 class="display-6 fw-extrabold text-dark mb-2">Checkout</h1>
+        <h1 class="display-6 fw-extrabold text-white mb-2">Checkout</h1>
         <ul class="geo-breadcrumb mb-0">
             <li><a href="{{ route('website.shop') }}">Shop</a></li>
             <li>&bull;</li>
@@ -13,6 +14,8 @@
         </ul>
     </div>
 </div>
+
+
 
 <main class="container py-5">
 
@@ -603,8 +606,11 @@
                 
                 const shipping = deliveryType === 'home' ? 8.00 : 0;
                 document.getElementById('conf-shipping').innerText = shipping === 0 ? 'Free' : '₹' + shipping.toFixed(2);
-                document.getElementById('conf-subtotal').innerText = '₹' + subtotal.toLocaleString('en-IN', { minimumFractionDigits: 2 });
-                document.getElementById('conf-total').innerText = '₹' + (subtotal + shipping).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+                
+                // Ensure subtotal is a number
+                const currentSubtotal = parseFloat(subtotal) || 0;
+                document.getElementById('conf-subtotal').innerText = '₹' + currentSubtotal.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+                document.getElementById('conf-total').innerText = '₹' + (currentSubtotal + shipping).toLocaleString('en-IN', { minimumFractionDigits: 2 });
             }
 
             const itemsList = document.getElementById('confirm-items-list');
@@ -662,13 +668,22 @@
             if (isSchool) {
                 schoolDisplay.style.display = 'block';
                 homeFields.style.display = 'none';
-                homeInputs.forEach(input => input.required = false);
+                homeInputs.forEach(input => {
+                    input.required = false;
+                    input.removeAttribute('name'); // Prevent overwriting school hidden inputs
+                });
                 deliverySchoolContainer.classList.add('is-selected');
                 deliveryHomeContainer.classList.remove('is-selected');
             } else {
                 schoolDisplay.style.display = 'none';
                 homeFields.style.display = 'flex';
-                homeInputs.forEach(input => input.required = true);
+                homeInputs.forEach(input => {
+                    input.required = true;
+                    // Restore names for home delivery
+                    if (input.id === 'field-phone-home') input.setAttribute('name', 'phone');
+                    if (input.id === 'field-city-home') input.setAttribute('name', 'city');
+                    if (input.id === 'field-address-home') input.setAttribute('name', 'address');
+                });
                 deliverySchoolContainer.classList.remove('is-selected');
                 deliveryHomeContainer.classList.add('is-selected');
             }

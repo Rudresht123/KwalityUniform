@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\SuperAdmin\Product;
+use App\Models\SuperAdmin\ProductVariant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -30,8 +32,12 @@ class OrderItem extends Model
 
     public function variant(): BelongsTo
     {
-        // Assuming ProductVariant model exists
-        return $this->belongsTo(ProductVariant::class, 'product_variant_id');
+        return $this->belongsTo(ProductVariant::class, 'variant_id');
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class, 'product_id');
     }
 
     public function shipmentItem(): HasOne

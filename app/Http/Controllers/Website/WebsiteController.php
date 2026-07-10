@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Website;
 use App\Http\Controllers\Controller;
+use App\Models\ContactMessage;
 use App\Models\SuperAdmin\Category;
 use App\Models\SuperAdmin\ParentCategory;
 use App\Models\SuperAdmin\Product;
@@ -11,6 +12,7 @@ use App\Models\SuperAdmin\SchoolPartnershipRequest;
 use App\Models\SuperAdmin\SchoolStandard;
 use App\Repositories\ProductRepository;
 use App\Services\EmailService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
@@ -87,15 +89,22 @@ public function getSubCategories($parent_id)
 
 public function show($id)
 {
-        $product = Product::approved()
-            ->active()
-            ->with(['variants', 'images', 'schoolApprovals.school'])
-            ->findOrFail($id);
+    $product = Product::approved()
+        ->active()
+        ->with(['variants', 'images', 'schoolApprovals.school'])
+        ->findOrFail($id);
 
-        return view('website.pages.product-details', [
-            'product' => $product,
-        ]);
+    if (Auth::check()) {
+        \DB::table('user_recently_viewed')->updateOrInsert(
+            ['user_id' => Auth::id(), 'product_id' => $product->product_id],
+            ['updated_at' => now()]
+        );
     }
+
+    return view('website.pages.product-details', [
+        'product' => $product,
+    ]);
+}
     public function showJson($id)
     {
         $product = Product::approved()
@@ -143,7 +152,14 @@ public function show($id)
 
     public function contact()
     {
-        return view('website.pages.contact');
+        $contactInfo = [
+            'address' => \App\Models\GlobalSetting::get('contact_address', 'Sector 81, Noida, Uttar Pradesh'),
+            'phone'   => \App\Models\GlobalSetting::get('contact_phone', '+91 98765 43210'),
+            'email'   => \App\Models\GlobalSetting::get('contact_email', 'support@qualityuniform.com'),
+            'hours'   => \App\Models\GlobalSetting::get('working_hours', 'Mon - Sat<br>9:00 AM - 6:00 PM'),
+        ];
+
+        return view('website.pages.contact', compact('contactInfo'));
     }
 
     public function storeSchoolPartnership(Request $request)
@@ -260,78 +276,62 @@ public function show($id)
         }
     }
 
-    public function storeVendorPartnership(Request $request)
-    {
-        $validated = $request->validate(
-            [
-                'company_name' => 'required|string|max:255',
-                'category' => 'required|string|max:255',
-                'email' => 'required|email|max:255|unique:vendor_partnership_requests,email',
-                'gstin' => 'required|string|max:50',
-                'address' => 'required|string|max:500',
-                'city' => 'required|string|max:100',
-                'state' => 'required|string|max:100',
-                'pincode' => 'required|string|max:20',
-                'pan_number' => 'required|string|max:50',
-                'bank_account_no' => 'required|string|max:50',
-                'ifsc_code' => 'required|string|max:50',
-                'document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            ],
-            [
-                'email.unique' => 'This email has already submitted a partnership request.',
-            ],
-        );
+public function storeContact(Request $request)
+{
+    try {
+        $validated = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'email'     => 'required|email|max:255',
+            'phone'     => 'nullable|string|max:20',
+            'subject'   => 'required|string|max:255',
+            'message'   => 'required|string',
+        ]);
 
-        // Proactively check if email exists in users table to show a clean warning alert
-        if (\App\Models\User::where('email', $validated['email'])->exists()) {
-            return response()->json(
-                [
-                    'message' => 'This email is already registered in our system. Please log in or contact support.',
-                    'errors' => ['email' => ['This email is already registered.']],
-                ],
-                422,
-            );
-        }
+        ContactMessage::create($validated);
 
-        try {
-            $documentId = null;
-            if ($request->hasFile('document')) {
-                $documentId = uploadFile($request->file('document'), 'partnership/vendors');
-            }
+        return response()->json([
+            'success' => true,
+            'message' => 'Thank you! Your message has been submitted successfully. We will get back to you soon.',
+        ]);
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Validation failed.',
+            'errors'  => $e->errors(),
+        ], 422);
+    } catch (\Throwable $e) {
+        Log::error('Contact Form Error', [
+            'message' => $e->getMessage(),
+            'trace'   => $e->getTraceAsString(),
+        ]);
 
-            // Save to database
-            \App\Models\SuperAdmin\VendorPartnershipRequest::create(
-                array_merge($validated, [
-                    'document_path' => $documentId,
-                ]),
-            );
-
-            \App\Services\EmailService::send('vendor_request_admin', 'admin@qualityuniform.com', [
-                'company_name' => $validated['company_name'],
-                'category' => $validated['category'],
-                'email' => $validated['email'],
-                'gstin' => $validated['gstin'],
-                'address' => $validated['address'],
-                'city' => $validated['city'],
-                'state' => $validated['state'],
-                'pincode' => $validated['pincode'],
-                'pan_number' => $validated['pan_number'],
-                'bank_account_no' => $validated['bank_account_no'],
-                'ifsc_code' => $validated['ifsc_code'],
-                'document' => $documentId ? getFileUrl($documentId) : 'No document provided',
-            ]);
-
-            \App\Services\EmailService::send('vendor_request_user', $validated['email'], [
-                'company_name' => $validated['company_name'],
-            ]);
-
-            return response()->json(['success' => true, 'message' => 'Supplier Application Received!']);
-        } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::error('Vendor Partnership Submission Error: ' . $e->getMessage(), [
-                'exception' => $e,
-                'request' => $request->all(),
-            ]);
-            return response()->json(['success' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
-        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Something went wrong. Please try again later.',
+        ], 500);
     }
 }
+
+    public function recentlyViewed()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('info', 'Please login to view your recently visited products.');
+        }
+
+        $userId = Auth::id();
+        $recentProductIds = DB::table('user_recently_viewed')
+            ->where('user_id', $userId)
+            ->orderBy('updated_at', 'desc')
+            ->pluck('product_id');
+
+        $products = Product::whereIn('product_id', $recentProductIds)
+            ->with(['images', 'category'])
+            ->orderByRaw("FIELD(product_id, " . implode(',', $recentProductIds->toArray() ?: [0]) . ")")
+            ->get();
+
+        return view('website.pages.recently-viewed', [
+            'products' => $products,
+        ]);
+    }
+}
+

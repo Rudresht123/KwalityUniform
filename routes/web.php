@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 // Protect all administrative routes with auth and prefix 'super-admin'
 Route::prefix('super-admin')->group(function () {
-    Route::middleware(['auth', CheckScreenLock::class])->group(function () {
+    Route::middleware(['auth', 'role:Super Admin|Admin', CheckScreenLock::class])->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

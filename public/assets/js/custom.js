@@ -5,7 +5,7 @@
   
   function hideLoader() {
     const loader = document.getElementById("loader");
-    loader.classList.add("d-none")
+    loader.classList.add("d-none");
   }
 
   window.addEventListener("load", hideLoader);
@@ -117,7 +117,7 @@
         updateColors();
       });
     });
-
+  
     themeContainerPrimary.appendChild(button);
   }
   nanoButtons[0].click();
@@ -322,6 +322,28 @@
   /* footer year */
   document.getElementById("year").innerHTML = new Date().getFullYear();
   /* footer year */
+
+  function confirmInvoiceDownload(url) {
+    Swal.fire({
+      title: 'Download Invoice?',
+      text: "Would you like to download the PDF invoice for this order?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#1E3A8A',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Download',
+      cancelButtonText: 'Cancel',
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: 'btn btn-primary me-2',
+        cancelButton: 'btn btn-danger'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = url;
+      }
+    });
+  }
 
   /* node waves */
   Waves.attach(".btn-wave", ["waves-light"]);
@@ -620,7 +642,12 @@ function logout() {
 
                     }).then(() => {
 
-                        window.location.href = "/login";
+                        if (document.getElementById('loginModal')) {
+                            const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+                            loginModal.show();
+                        } else {
+                            window.location.href = '/login';
+                        }
 
                     });
 

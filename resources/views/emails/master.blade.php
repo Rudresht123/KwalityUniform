@@ -92,36 +92,36 @@ font-family:Arial,Helvetica,sans-serif;
                             School Uniform ERP Platform
                         </p>
 
-                    </td>
+                        </td>
 
-                </tr>
+                        </tr>
 
-                <!-- Content -->
+                        <!-- Content -->
 
-                <tr>
+                        <tr>
 
-                    <td
+                        <td
                         style="
                         padding:45px;
                         color:#374151;
                         font-size:15px;
                         line-height:1.9;
-                    ">
+                        ">
 
                         {!! $content !!}
 
-                    </td>
+                        </td>
 
-                </tr>
+                        </tr>
 
-                <!-- Support Box -->
+                        <!-- Support Box -->
 
-                <tr>
+                        <tr>
 
-                    <td
+                        <td
                         style="
                         padding:0 45px 35px;
-                    ">
+                        ">
 
                         <table
                             width="100%"
@@ -156,71 +156,70 @@ font-family:Arial,Helvetica,sans-serif;
                                     If you have any questions regarding your account,
                                     please contact the eSchoolKart support team.
 
-                                </td>
+                                    </td>
 
-                            </tr>
+                                    </tr>
 
-                        </table>
+                                    </table>
 
-                    </td>
+                                    </td>
 
-                </tr>
+                                    </tr>
 
-                <!-- Divider -->
+                                    <!-- Divider -->
 
-                <tr>
+                                    <tr>
 
-                    <td
-                        style="
-                        padding:0 45px;
-                    ">
+                                    <td
+                                    style="
+                                    padding:0 45px;
+                                    ">
 
-                        <hr
-                            style="
-                            border:none;
-                            border-top:1px solid #e5e7eb;
-                        ">
+                                    <hr
+                                    style="
+                                    border:none;
+                                    border-top:1px solid #e5e7eb;
+                                    ">
 
-                    </td>
+                                    </td>
 
-                </tr>
+                                    </tr>
 
-                <!-- Footer -->
+                                    <!-- Footer -->
 
-                <tr>
+                                    <tr>
 
-                    <td
-                        style="
-                        padding:30px;
-                        text-align:center;
-                        background:#fafbff;
-                    ">
+                                    <td
+                                    style="
+                                    padding:30px;
+                                    text-align:center;
+                                    background:#fafbff;
+                                    ">
 
-                        <p
-                            style="
-                            margin:0;
-                            color:#64748b;
-                            font-size:13px;
-                        ">
-                            © {{ date('Y') }} eSchoolKart.
-                            All Rights Reserved.
-                        </p>
+                                    <p
+                                    style="
+                                    margin:0;
+                                    color:#64748b;
+                                    font-size:13px;
+                                    ">
+                                    © {{ date('Y') }} eSchoolKart.
+                                    All Rights Reserved.
+                                    </p>
 
-                        <p
-                            style="
-                            margin-top:8px;
-                            margin-bottom:0;
-                            color:#94a3b8;
-                            font-size:12px;
-                        ">
-                            School Uniform Management Platform
-                        </p>
+                                    <p
+                                    style="
+                                    margin-top:8px;
+                                    margin-bottom:0;
+                                    color:#94a3b8;
+                                    font-size:12px;
+                                    ">
+                                    School Uniform Management Platform
+                                    </p>
 
-                    </td>
+                                    </td>
 
-                </tr>
-
-            </table>
+                                    </tr>
+                                    </table>
 
         </td>
 

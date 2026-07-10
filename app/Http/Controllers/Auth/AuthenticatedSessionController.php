@@ -22,13 +22,26 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request): RedirectResponse| \Illuminate\Http\JsonResponse
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        $user = Auth::user();
+
+        $redirectUrl = ($user->hasRole('Super Admin') || $user->hasRole('Admin')) 
+            ? route('dashboard', absolute: false) 
+            : '/';
+
+        if ($request->ajax()) {
+            return response()->json([
+                'message' => 'Login successful!',
+                'redirect' => redirect()->intended($redirectUrl)->getTargetUrl(),
+            ]);
+        }
+
+        return redirect()->intended($redirectUrl);
     }
 
     /**

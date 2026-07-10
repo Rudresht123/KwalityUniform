@@ -1,63 +1,5 @@
 // eSchool Cart - Unified Data Store & State Controller for Multi-Page Website
 
-// Premium preloader self-injection
-(function() {
-  const initLoader = () => {
-    if (document.getElementById('premium-loader')) return;
-
-    // Prevent scrolling while loader is active
-    document.body.classList.add('loader-active');
-
-    const loaderWrap = document.createElement('div');
-    loaderWrap.id = 'premium-loader';
-    loaderWrap.className = 'premium-loader-wrap';
-    loaderWrap.innerHTML = `
-      <div class="loader-crest-container">
-        <div class="loader-crest-ring"></div>
-        <div class="loader-crest-ring-inner"></div>
-        <svg class="loader-crest-svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          <path d="M12 8v8"/>
-          <path d="M9 11h6"/>
-        </svg>
-      </div>
-      <div class="loader-brand-title">eSchool<span>Cart</span></div>
-      <div class="loader-sub-title">Premium Institutional Wear</div>
-      <div class="loader-progress-container">
-        <div class="loader-progress-bar"></div>
-      </div>
-    `;
-
-    document.body.insertBefore(loaderWrap, document.body.firstChild);
-
-    // Fade out loader after 1200ms of luxury transition
-    setTimeout(() => {
-      fadeOutLoader();
-    }, 1200);
-
-    function fadeOutLoader() {
-      if (loaderWrap.classList.contains('loaded')) return;
-      
-      loaderWrap.classList.add('loaded');
-      document.body.classList.remove('loader-active');
-      document.body.classList.add('loader-transition-active');
-      
-      // Clean up classes after animations complete
-      setTimeout(() => {
-        document.body.classList.remove('loader-transition-active');
-        loaderWrap.remove();
-      }, 1000);
-    }
-  };
-
-  // Run as early as possible
-  if (document.body) {
-    initLoader();
-  } else {
-    document.addEventListener('DOMContentLoaded', initLoader);
-  }
-})();
-
 // Global Products & Partner Schools Database
 const DB = {
   schools: [
@@ -353,24 +295,53 @@ const State = {
     localStorage.setItem('qu_wishlist', JSON.stringify(wish));
     this.updateHeaderCounts();
   },
-  toggleWishlist(productId) {
-    const wish = this.getWishlist();
-    const index = wish.indexOf(productId);
-    let added = false;
-    if (index > -1) {
-      wish.splice(index, 1);
-    } else {
-      wish.push(productId);
-      added = true;
+  toggleWishlist(productId, element = null) {
+    if (!element && !document.getElementById('details-wishlist-btn')) {
+       // If no element is provided and we aren't on the product details page, we can't update the UI easily
+       // but we should still perform the API call.
     }
-    this.saveWishlist(wish);
-    this.showToast(added ? "Added to your wishlist!" : "Removed from your wishlist!");
-    
-    // Refresh page if on wishlist page
-    if (document.body.dataset.page === 'wishlist') {
-      this.initWishlist();
-    }
-    return added;
+
+    fetch('/wishlist/toggle', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+      },
+      body: JSON.stringify({ product_id: productId })
+    })
+    .then(async response => {
+      if (response.status === 401) {
+        this.showToast("Please login to manage your wishlist.");
+        if (document.getElementById('loginModal')) {
+          const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+          loginModal.show();
+        } else {
+          window.location.href = '/login';
+        }
+        return;
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data && data.success) {
+        if (element) {
+          element.classList.toggle('active');
+        }
+        this.showToast(data.message);
+        this.updateHeaderCounts();
+        
+        if (document.body.dataset.page === 'wishlist') {
+          window.location.reload();
+        }
+      } else if (data) {
+        this.showToast(data.message || "Something went wrong.");
+      }
+    })
+    .catch(error => {
+      console.error('Wishlist error:', error);
+      this.showToast("An error occurred while updating your wishlist.");
+    });
   },
 
   // Auth Operations
@@ -468,37 +439,35 @@ const State = {
     const userDisplayEl = document.getElementById('header-user-display');
 
     if (cartCountEls.length > 0) {
-      const count = this.getCart().reduce((sum, item) => sum + item.quantity, 0);
-      cartCountEls.forEach(el => {
-        el.innerText = count;
-        el.style.display = count > 0 ? 'flex' : 'none';
-      });
+      fetch('/cart/count')
+        .then(res => res.json())
+        .then(data => {
+          const count = data.count || 0;
+          cartCountEls.forEach(el => {
+            el.innerText = count;
+            el.style.display = count > 0 ? 'flex' : 'none';
+          });
+        })
+        .catch(() => {
+          cartCountEls.forEach(el => {
+            el.style.display = 'none';
+          });
+        });
     }
     if (wishlistCountEl) {
-      const count = this.getWishlist().length;
-      wishlistCountEl.innerText = count;
-      wishlistCountEl.style.display = count > 0 ? 'flex' : 'none';
+      fetch('/wishlist/count')
+        .then(res => res.json())
+        .then(data => {
+          const count = data.count || 0;
+          wishlistCountEl.innerText = count;
+          wishlistCountEl.style.display = count > 0 ? 'flex' : 'none';
+        })
+        .catch(() => {
+          wishlistCountEl.style.display = 'none';
+        });
     }
     if (userDisplayEl) {
-      const user = this.getCurrentUser();
-      if (user) {
-        userDisplayEl.innerHTML = `
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <span style="font-size: 13px; font-weight: 600; color: var(--qu-text-dark);">Hi, ${user.name}</span>
-            <button id="logout-btn" style="background: none; border: none; color: #DC2626; font-size: 12px; padding: 0; cursor: pointer; font-weight: 600;">(Logout)</button>
-          </div>
-        `;
-        document.getElementById('logout-btn')?.addEventListener('click', (e) => {
-          e.preventDefault();
-          this.logout();
-        });
-      } else {
-        userDisplayEl.innerHTML = `
-          <a href="login.html" class="action-icon-btn" title="Login / Register">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-          </a>
-        `;
-      }
+      // Removed localStorage-based UI override to let server-side @auth logic handle the account display.
     }
   },
 

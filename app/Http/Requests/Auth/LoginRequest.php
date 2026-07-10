@@ -70,6 +70,16 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        // Restrict login to website users (parents) only
+        // Admin and Super Admin should not be able to login through the website login flow
+        if ($user->hasRole('Super Admin') || $user->hasRole('Admin')) {
+            Auth::logout();
+
+            throw ValidationException::withMessages([
+                'email' => trans('auth.failed'),
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 
