@@ -161,7 +161,7 @@
                                     </div>
                                     <div class="checkout-summary-item-info">
                                         <div class="checkout-summary-item-name">{{ $item->product->product_name }}</div>
-                                        <div class="checkout-summary-item-variant">{{ $item->variant->display_name ?? 'N/A' }}</div>
+                                        <div class="checkout-summary-item-variant">{{ $item->variant?->size?->display_name ?? 'Standard' }} / {{ $item->variant?->color?->color_name ?? 'N/A' }}</div>
                                     </div>
                                     <div class="checkout-summary-item-price">
                                         ₹{{ number_format($item->quantity * $item->unit_price, 2) }}
@@ -624,7 +624,14 @@
                         </div>
                         <div class="review-item-info">
                             <div class="review-item-name">${item.product.product_name}</div>
-                            <div class="review-item-variant">${item.variant ? item.variant.display_name : 'N/A'}</div>
+ <div class="cart-item-variant">
+                                        <span>{{ $item->variant->size->display_name ?? 'N/A' }}</span>
+                                        <span class="dot">&bull;</span>
+                                        <span>{{ $item->variant->color->color_name ?? 'N/A' }}</span>
+                                    </div>
+                                    <div class="text-muted small mt-1" style="font-size: 11px; line-height: 1.2;">
+                                        {{ Str::limit($item->product->description, 60) }}
+                                    </div>
                         </div>
                         <div class="review-item-price">
                             ₹${(item.quantity * item.unit_price).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
@@ -743,7 +750,12 @@
                 method: 'POST',
                 data: { _token: "{{ csrf_token() }}" },
                 success: function(response) {
-                    updateWizardStep('success');
+                    if (response.success && response.order_id) {
+                        // Redirect to order details page
+                        window.location.href = '/my-orders/' + response.order_id;
+                    } else {
+                        updateWizardStep('success');
+                    }
                 },
                 error: function(xhr) {
                     alert('Error: ' + (xhr.responseJSON?.message || 'An error occurred.'));

@@ -49,7 +49,7 @@ class LoginRequest extends FormRequest
             $field => $login,
             'password' => $this->input('password'),
         ];
-
+  
         if (! Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
@@ -70,14 +70,24 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        // Restrict login to website users (parents) only
-        // Admin and Super Admin should not be able to login through the website login flow
-        if ($user->hasRole('Super Admin') || $user->hasRole('Admin')) {
-            Auth::logout();
-
-            throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
-            ]);
+        // Role-based login portal restriction
+        $isAjax = $this->ajax();
+        if ($isAjax) {
+            // Modal Login: Only parent allowed
+            if (!$user->hasRole('parent')) {
+                Auth::logout();
+                throw ValidationException::withMessages([
+                    'email' => 'Only parent users are authorized to login via the website modal.',
+                ]);
+            }
+        } else {
+            // Admin Page Login: Parent NOT allowed
+            if ($user->hasRole('parent')) {
+                Auth::logout();
+                throw ValidationException::withMessages([
+                    'email' => 'Parent users are not authorized to login here. Please use the website login modal.',
+                ]);
+            }
         }
 
         RateLimiter::clear($this->throttleKey());

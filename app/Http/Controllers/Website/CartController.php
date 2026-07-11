@@ -21,6 +21,42 @@ class CartController extends Controller
         $userId = Auth::id();
         $sessionId = session()->getId();
 
+        // 1. If user is logged in, try to find their active cart first
+        if ($userId) {
+            $userCart = Cart::where('user_id', $userId)
+                ->where('status', 'active')
+                ->first();
+
+            if ($userCart) {
+                return $userCart;
+            }
+
+            // 2. No user cart found, check if there is a guest cart in the session to merge
+            $guestCart = Cart::where('session_id', $sessionId)
+                ->where('status', 'active')
+                ->first();
+
+            if ($guestCart) {
+                // Create a new active cart for the user
+                $userCart = Cart::create([
+                    'cart_id' => Str::uuid(),
+                    'user_id' => $userId,
+                    'session_id' => $sessionId,
+                    'status' => 'active',
+                ]);
+
+                // Move all items from guest cart to user cart
+                CartItem::where('cart_id', $guestCart->cart_id)
+                    ->update(['cart_id' => $userCart->cart_id]);
+
+                // Mark guest cart as abandoned
+                $guestCart->update(['status' => 'abandoned']);
+
+                return $userCart;
+            }
+        }
+
+        // 3. Fallback: Find active cart by session (for guests) or create new one
         $cart = Cart::where('status', 'active')
             ->where(function($query) use ($userId, $sessionId) {
                 if ($userId) {
@@ -84,19 +120,21 @@ class CartController extends Controller
             'quantity' => 'required|integer|min:1',
         ]);
 
+        $variantId = $request->variant_id ?: null;
+
         $cart = $this->getActiveCart();
         $product = SuperAdminProduct::findOrFail($request->product_id);
         
         // Stock Validation
-        if ($request->variant_id) {
-            $variant = ProductVariant::find($request->variant_id);
+        if ($variantId) {
+            $variant = ProductVariant::find($variantId);
             if (!$variant) {
                 return response()->json(['success' => false, 'message' => 'Selected variant not found.'], 404);
             }
             
             $currentCartQty = CartItem::where('cart_id', $cart->cart_id)
                 ->where('product_id', $request->product_id)
-                ->where('variant_id', $request->variant_id)
+                ->where('variant_id', $variantId)
                 ->value('quantity') ?? 0;
 
             if (($currentCartQty + $request->quantity) > $variant->stock_qty) {
@@ -113,7 +151,7 @@ class CartController extends Controller
 
         $cartItem = CartItem::where('cart_id', $cart->cart_id)
             ->where('product_id', $request->product_id)
-            ->where('variant_id', $request->variant_id)
+            ->where('variant_id', $variantId)
             ->first();
 
         if ($cartItem) {
@@ -126,7 +164,7 @@ class CartController extends Controller
                 'cart_item_id' => Str::uuid(),
                 'cart_id' => $cart->cart_id,
                 'product_id' => $request->product_id,
-                'variant_id' => $request->variant_id,
+                'variant_id' => $variantId,
                 'vendor_id' => $product->vendor_id,
                 'quantity' => $request->quantity,
                 'unit_price' => $unitPrice,
@@ -191,7 +229,7 @@ class CartController extends Controller
     {
         $cart = $this->getActiveCart();
         $cartItems = CartItem::where('cart_id', $cart->cart_id)
-            ->with(['product.schoolApprovals.school', 'variant'])
+            ->with(['product.schoolApprovals.school', 'variant.size', 'variant.color'])
             ->get();
 
         if ($cartItems->isEmpty()) {
@@ -256,78 +294,44 @@ class CartController extends Controller
         }
 
         $subtotal = $cartItems->sum(fn($item) => $item->quantity * $item->unit_price);
-        $shipping = ($details['delivery_type'] === 'home') ? 8.00 : 0;
+        $shipping = ($details['delivery_type'] === 'home') ? 0 : 0;
 
         return view('website.pages.confirmation', compact('cart', 'cartItems', 'subtotal', 'shipping', 'details'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, \App\Services\OrderService $orderService, \App\Services\InvoiceService $invoiceService)
     {
-        Log::info('Checkout store request data:', $request->all());
         $details = session()->get('checkout_details');
         if (!$details) {
             return response()->json(['success' => false, 'message' => 'Session expired. Please enter your details again.'], 422);
         }
 
         $cart = $this->getActiveCart();
-        $cartItems = CartItem::where('cart_id', $cart->cart_id)->get();
-
-        if ($cartItems->isEmpty()) {
-            return response()->json(['success' => false, 'message' => 'Your basket is empty.'], 422);
-        }
-
-        $subtotal = $cartItems->sum(fn($item) => $item->quantity * $item->unit_price);
-        $shipping = ($details['delivery_type'] === 'home') ? 8.00 : 0;
-        $grandTotal = $subtotal + $shipping;
 
         try {
-            DB::transaction(function () use ($cart, $cartItems, $subtotal, $shipping, $grandTotal, $details) {
-                $deliveryType = match ($details['delivery_type']) {
-                    'school' => \App\Enums\DeliveryType::SCHOOL_DELIVERY,
-                    'home' => \App\Enums\DeliveryType::HOME_DELIVERY,
-                    default => \App\Enums\DeliveryType::SCHOOL_DELIVERY,
-                };
+            // 1. Place the order using the atomic OrderService
+            $order = $orderService->placeOrder($cart, $details);
 
-                $order = \App\Models\Order::create([
-                    'order_number' => 'ORD-' . strtoupper(Str::random(10)),
-                    'user_id' => Auth::id(),
-                    'cart_id' => $cart->cart_id,
-                    'delivery_type' => $deliveryType,
-                    'status' => 'pending',
-                    'payment_status' => 'pending',
-                    'subtotal' => $subtotal,
-                    'shipping_charge' => $shipping,
-                    'grand_total' => $grandTotal,
-                    'placed_at' => now(),
-                ]);
-
-                foreach ($cartItems as $item) {
-                    $product = $item->product;
-                    \App\Models\OrderItem::create([
-                        'order_id' => $order->id,
-                        'product_id' => $item->product_id,
-                        'variant_id' => $item->variant_id,
-                        'vendor_id' => $item->vendor_id,
-                        'product_name' => $product->product_name,
-                        'unit_price' => $item->unit_price,
-                        'quantity' => $item->quantity,
-                        'line_total' => $item->quantity * $item->unit_price,
-                    ]);
-                }
-
-                // Clear cart items
-                CartItem::where('cart_id', $cart->cart_id)->delete();
-            });
-
-            session()->forget('checkout_details');
+            // 2. Trigger Order Confirmation (Immediate Email with PDF Attachment)
+            \Illuminate\Support\Facades\Mail::to($details['email'])->send(new \App\Mail\OrderConfirmedMail($order));
 
             return response()->json([
                 'success' => true,
-                'message' => 'Thank you! Your order has been placed successfully.'
+                'message' => 'Thank you! Your order has been placed successfully.',
+                'order_number' => $order->order_number,
+                'order_id' => $order->id,
             ]);
         } catch (\Exception $e) {
-            Log::error('Order placement failed: ' . $e->getMessage());
-            return response()->json(['success' => false, 'message' => 'An error occurred while placing your order.'], 500);
+            Log::error('Checkout failed: ' . $e->getMessage(), [
+                'user_id' => Auth::id(),
+                'cart_id' => $cart->cart_id,
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'success' => false, 
+                'message' => $e->getMessage() ?: 'An error occurred while placing your order.'
+            ], 422);
         }
     }
 

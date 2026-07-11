@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             PermissionSeeder::class,
             SuperAdminSeeder::class,
+            NotificationTemplateSeeder::class,
         ]);
 
         // 2. Product Attributes

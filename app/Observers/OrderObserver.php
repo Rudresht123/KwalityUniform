@@ -12,10 +12,74 @@ class OrderObserver
 {
     public function created(Order $order)
     {
-        // Send order confirmation email with PDF invoice upon creation
+        // Logic moved to sendOrderConfirmationEmails to ensure OrderItems exist
+    }
+
+    public function sendOrderConfirmationEmails(Order $order)
+    {
         $user = $order->user;
-        if ($user && $user->email) {
+        if (!$user || !$user->email) {
+            return;
+        }
+
+        try {
+            $invoiceService = new \App\Services\InvoiceService();
+            $invoiceData = $invoiceService->generateInvoice($order);
+            $fileName = 'Invoice_' . $order->order_number . '.pdf';
+
+            // 1. Send confirmation to Customer
             Mail::to($user->email)->send(new OrderConfirmedMail($order));
+
+            // 2. Notify associated Schools
+            $schoolIds = \App\Models\OrderItem::where('order_id', $order->id)
+                ->join('products', 'order_items.product_id', '=', 'products.product_id')
+                ->join('school_product_approvals', 'products.product_id', '=', 'school_product_approvals.product_id')
+                ->pluck('school_product_approvals.school_id')
+                ->unique();
+
+            foreach ($schoolIds as $schoolId) {
+                $school = \App\Models\SuperAdmin\School::find($schoolId);
+                if ($school && $school->email) {
+                    EmailService::send(
+                        'order_confirmed_school',
+                        $school->email,
+                        [
+                            'school_name' => $school->school_name,
+                            'order_number' => $order->order_number,
+                            'user_name' => $user->name,
+                            'total_amount' => number_format($order->grand_total, 2),
+                            'invoice_url' => route('website.orders.pdf', $order->id),
+                        ],
+                        ['attachments' => [$fileName => $invoiceData]]
+                    );
+                }
+            }
+
+            // 3. Notify associated Vendors
+            $vendorIds = \App\Models\OrderItem::where('order_id', $order->id)
+                ->pluck('vendor_id')
+                ->unique();
+
+            foreach ($vendorIds as $vendorId) {
+                $vendor = \App\Models\SuperAdmin\Vendor::find($vendorId);
+                if ($vendor && $vendor->email) {
+                    EmailService::send(
+                        'order_confirmed_vendor',
+                        $vendor->email,
+                        [
+                            'vendor_name' => $vendor->vendor_name ?: 'Vendor',
+                            'order_number' => $order->order_number,
+                            'user_name' => $user->name,
+                            'total_amount' => number_format($order->grand_total, 2),
+                            'invoice_url' => route('website.orders.pdf', $order->id),
+                        ],
+                        ['attachments' => [$fileName => $invoiceData]]
+                    );
+                }
+            }
+
+        } catch (\Exception $e) {
+            \Log::error('Failed to send order confirmation emails: ' . $e->getMessage());
         }
     }
 
@@ -23,12 +87,26 @@ class OrderObserver
     {
         // Only send email if the status has actually changed
         if ($order->wasChanged('status')) {
-            $this->sendStatusEmail($order);
-
-            // Additionally, notify the school when the order is confirmed
             if ($order->status->value === 'confirmed') {
+                $this->sendConfirmationWithInvoice($order);
                 $this->notifySchoolsOfConfirmation($order);
+            } else {
+                $this->sendStatusEmail($order);
             }
+        }
+    }
+
+    protected function sendConfirmationWithInvoice(Order $order)
+    {
+        $user = $order->user;
+        if (!$user || !$user->email) {
+            return;
+        }
+
+        try {
+            Mail::to($user->email)->send(new OrderConfirmedMail($order));
+        } catch (\Exception $e) {
+            \Log::error('Failed to send order confirmation invoice on status update: ' . $e->getMessage());
         }
     }
 
@@ -36,9 +114,9 @@ class OrderObserver
     {
         // Get all schools associated with the products in this order
         $schoolIds = \App\Models\OrderItem::where('order_id', $order->id)
-            ->join('app_models_super_admin_product_variants', 'order_items.variant_id', '=', 'product_variants.variant_id')
-            ->join('app_models_super_admin_products', 'product_variants.product_id', '=', 'products.product_id')
-            ->join('app_models_super_admin_school_product_approvals', 'products.product_id', '=', 'school_product_approvals.product_id')
+            ->join('product_variants', 'order_items.variant_id', '=', 'product_variants.variant_id')
+            ->join('products', 'product_variants.product_id', '=', 'products.product_id')
+            ->join('school_product_approvals', 'products.product_id', '=', 'school_product_approvals.product_id')
             ->pluck('school_product_approvals.school_id')
             ->unique();
 

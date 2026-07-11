@@ -22,7 +22,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse| \Illuminate\Http\JsonResponse
+    public function store(LoginRequest $request)
     {
         $request->authenticate();
 
@@ -30,9 +30,9 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
 
-        $redirectUrl = ($user->hasRole('Super Admin') || $user->hasRole('Admin')) 
-            ? route('dashboard', absolute: false) 
-            : '/';
+        $dashboardRoles = ['super-admin', 'admin', 'vendor', 'school'];
+
+        $redirectUrl = $user->hasAnyRole($dashboardRoles) ? route('dashboard', absolute: false) : '/';
 
         if ($request->ajax()) {
             return response()->json([

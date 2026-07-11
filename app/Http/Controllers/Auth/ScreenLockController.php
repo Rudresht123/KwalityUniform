@@ -58,7 +58,7 @@ class ScreenLockController extends Controller
         $user = auth()->user();
         if (!$user) return route('login');
 
-        if ($user->hasAnyRole(['Super Admin', 'Admin'])) {
+        if ($user->hasAnyRole(['super-admin', 'admin'])) {
             return route('dashboard');
         }
         if ($user->hasRole('School')) {

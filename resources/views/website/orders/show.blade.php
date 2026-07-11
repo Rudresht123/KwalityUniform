@@ -89,7 +89,7 @@
                                                 <img src="{{ $item->variant?->product?->firstImage() ?? $item->image ?? asset('assets/images/no_image.jpg') }}" class="item-thumb me-3">
                                                 <div>
                                                     <div class="item-name">{{ $item->variant?->product?->product_name ?? $item->product_name ?? 'Unknown Product' }}</div>
-                                                    <div class="item-variant">{{ $item->variant->display_name ?? 'Standard' }}</div>
+                                                    <div class="item-variant">{{ $item->variant->size->display_name ?? 'Standard' }} / {{ $item->variant->color->color_name ?? 'N/A' }}</div>
                                                 </div>
                                             </div>
                                         </td>

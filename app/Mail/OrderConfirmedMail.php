@@ -3,21 +3,21 @@
 namespace App\Mail;
 
 use App\Models\Order;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
 class OrderConfirmedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public Order $order)
-    {
-    }
+    public function __construct(
+        public Order $order
+    ) {}
 
     public function envelope(): Envelope
     {
@@ -32,22 +32,16 @@ class OrderConfirmedMail extends Mailable
             view: 'emails.orders.confirmed',
             with: [
                 'order' => $this->order,
-                'invoiceNumber' => 'INV-' . strtoupper($this->order->order_number),
             ],
         );
     }
 
     public function attachments(): array
     {
-        // Generate PDF as a binary string
-        $pdf = Pdf::loadView('website.orders.pdf-invoice', [
-            'order' => $this->order,
-            'invoiceNumber' => 'INV-' . strtoupper($this->order->order_number),
-            'date' => now()->format('d M Y'),
-        ])->output();
+        $invoiceData = app(\App\Services\InvoiceService::class)->generateInvoice($this->order);
 
         return [
-            Attachment::fromData(fn () => $pdf, 'invoice-' . $this->order->order_number . '.pdf')
+            \Illuminate\Mail\Mailables\Attachment::fromData(fn () => $invoiceData, 'Invoice_' . $this->order->order_number . '.pdf')
                 ->withMime('application/pdf'),
         ];
     }

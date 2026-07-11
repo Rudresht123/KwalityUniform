@@ -19,7 +19,6 @@ class Order extends Model
         'cart_id',
         'delivery_type',
         'status',
-        'shipping_address_id',
         'subtotal',
         'discount_amount',
         'tax_amount',
@@ -51,9 +50,9 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function shippingAddress(): BelongsTo
+    public function shippingAddress(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
-        return $this->belongsTo(ShippingAddress::class, 'shipping_address_id');
+        return $this->hasOne(OrderAddress::class)->where('type', 'shipping');
     }
 
     public function status(){

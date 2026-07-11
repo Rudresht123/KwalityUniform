@@ -33,10 +33,10 @@ class OtpLoginController extends Controller
             ]);
         }
 
-        // Restrict login to website users (parents) only
-        if ($user->hasRole('Super Admin') || $user->hasRole('Admin')) {
+        // Restrict administrative users from using website OTP login
+        if ($user->hasAnyRole(['super-admin', 'admin', 'vendor', 'school'])) {
             throw ValidationException::withMessages([
-                'email' => ['The provided email is not registered.'],
+                'email' => ['Administrative users are not authorized to login here. Please use the administrative login page.'],
             ]);
         }
 
@@ -68,10 +68,10 @@ class OtpLoginController extends Controller
             ]);
         }
 
-        // Restrict login to website users (parents) only
-        if ($user->hasRole('Super Admin') || $user->hasRole('Admin')) {
+        // Restrict administrative users from using website OTP login
+        if ($user->hasAnyRole(['super-admin', 'admin', 'vendor', 'school'])) {
             throw ValidationException::withMessages([
-                'email' => ['The provided email is not registered.'],
+                'email' => ['Administrative users are not authorized to login here. Please use the administrative login page.'],
             ]);
         }
 
@@ -79,14 +79,17 @@ class OtpLoginController extends Controller
             Auth::login($user, $request->boolean('remember'));
             $request->session()->regenerate();
 
+            $dashboardRoles = ['super-admin', 'admin', 'vendor', 'school'];
+            $redirectUrl = $user->hasAnyRole($dashboardRoles) ? route('dashboard', absolute: false) : '/';
+
             if ($request->wantsJson()) {
                 return response()->json([
                     'message' => 'Login successful',
-                    'redirect' => redirect()->intended('/')->getTargetUrl()
+                    'redirect' => redirect()->intended($redirectUrl)->getTargetUrl()
                 ]);
             }
 
-            return redirect()->intended('/');
+            return redirect()->intended($redirectUrl);
         }
 
         throw ValidationException::withMessages([

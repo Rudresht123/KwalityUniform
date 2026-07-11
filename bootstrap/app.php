@@ -16,20 +16,18 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'partnership/school',
             'partnership/vendor',
+            'super-admin/profile',
         ]);
 
         $middleware->redirectUsersTo(function (Request $request) {
             $user = $request->user();
             if (!$user) return route('login');
 
-            if ($user->hasAnyRole(['Super Admin', 'Admin'])) {
-                return route('dashboard');
-            }
-            if ($user->hasRole('School')) {
-                return route('school.distribution');
+            if ($user->hasAnyRole(['super-admin', 'admin','vendor','school'])) {
+                return $request->routeIs('dashboard') ? null : route('dashboard');
             }
 
-            return route('website.shop');
+            return $request->routeIs('website.shop') ? null : route('website.shop');
         });
 
         $middleware->alias([
@@ -44,10 +42,8 @@ return Application::configure(basePath: dirname(__DIR__))
             $fallback = route('website.shop');
 
             if ($user) {
-                if ($user->hasAnyRole(['Super Admin', 'Admin'])) {
+                if ($user->hasAnyRole(['super-admin', 'admin','vendor','school'])) {
                     $fallback = route('dashboard');
-                } elseif ($user->hasRole('School')) {
-                    $fallback = route('school.distribution');
                 }
             }
 
@@ -55,6 +51,6 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->shouldRenderJsonWhen(
-            fn (Request $request) => $request->is('api/*'),
+            fn (Request $request) => $request->is('api/*') || $request->is('login*') || $request->is('otp*'),
         );
     })->create();

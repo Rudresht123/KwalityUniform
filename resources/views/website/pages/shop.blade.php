@@ -93,8 +93,8 @@
                         <select id="shop-category-select" class="select2">
                             <option value="all">All Categories</option>
                             @foreach ($categories as $category)
-                                <option value="{{ $category->category_id }}"
-                                    {{ request('parent_category') == $category->category_id ? 'selected' : '' }}>
+                                <option value="{{ $category->parent_id }}"
+                                    {{ request('parent_category') == $category->parent_id ? 'selected' : '' }}>
                                     {{ $category->name }}</option>
                             @endforeach
                         </select>

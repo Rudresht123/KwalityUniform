@@ -51,9 +51,9 @@ class ProfileController extends Controller
             $user->image_id = $file->id;
             
             // Sync to Vendor/School if exists
-            if ($user->hasRole('Vendor')) {
+            if ($user->hasRole('vendor')) {
                 $user->vendor()->update(['image_id' => $file->id]);
-            } elseif ($user->hasRole('School')) {
+            } elseif ($user->hasRole('school')) {
                 $user->school()->update(['image_id' => $file->id]);
             }
 
@@ -81,8 +81,10 @@ class ProfileController extends Controller
 
         $user->delete();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        if ($request->hasSession()) {
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
 
         return Redirect::to('/');
     }

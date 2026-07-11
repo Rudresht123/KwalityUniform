@@ -31,12 +31,16 @@ class WebsiteController extends Controller
 public function shop(Request $request)
 {
     $schoolId = $request->query('school');
+    $standardId = $request->query('standard');
+    $classId = $request->query('class');
     $parentCategoryId = $request->query('parent_category');
     $subCategoryId = $request->query('sub_category');
     $search = $request->query('search');
 
     $filters = [
         'school' => $schoolId,
+        'standard' => $standardId,
+        'class' => $classId,
         'parent_category' => $parentCategoryId,
         'sub_category' => $subCategoryId,
         'search' => $search,

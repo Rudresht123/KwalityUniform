@@ -63,9 +63,9 @@
                                     </div>
                                     <div class="cart-item-name">{{ $item->product->product_name }}</div>
                                     <div class="cart-item-variant">
-                                        <span>{{ $item->variant->display_name ?? 'N/A' }}</span>
+                                        <span>{{ $item->variant->size->display_name ?? 'N/A' }}</span>
                                         <span class="dot">&bull;</span>
-                                        <span>{{ $item->variant->color_name ?? 'N/A' }}</span>
+                                        <span>{{ $item->variant->color->color_name ?? 'N/A' }}</span>
                                     </div>
                                     <div class="text-muted small mt-1" style="font-size: 11px; line-height: 1.2;">
                                         {{ Str::limit($item->product->description, 60) }}

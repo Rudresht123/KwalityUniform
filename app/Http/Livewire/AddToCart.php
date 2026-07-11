@@ -23,6 +23,9 @@ class AddToCart extends Component
         $userId = Auth::id();
         $sessionId = session()->getId();
 
+        // Normalize variantId to null if empty
+        $variantId = $this->variantId ?: null;
+
         // 1. Find or create active cart
         $cart = Cart::where('status', 'active')
             ->where(function($query) use ($userId, $sessionId) {
@@ -47,8 +50,8 @@ class AddToCart extends Component
         $product = Product::findOrFail($this->productId);
         $unitPrice = $product->base_price;
 
-        if ($this->variantId) {
-            $variant = ProductVariant::find($this->variantId);
+        if ($variantId) {
+            $variant = ProductVariant::find($variantId);
             if ($variant) {
                 $unitPrice = $variant->price ?? $product->base_price;
             }
@@ -57,7 +60,7 @@ class AddToCart extends Component
         // 3. Check if item already exists in cart
         $cartItem = CartItem::where('cart_id', $cart->cart_id)
             ->where('product_id', $this->productId)
-            ->where('variant_id', $this->variantId)
+            ->where('variant_id', $variantId)
             ->first();
 
         if ($cartItem) {
@@ -70,7 +73,7 @@ class AddToCart extends Component
                 'cart_item_id' => Str::uuid(),
                 'cart_id' => $cart->cart_id,
                 'product_id' => $this->productId,
-                'variant_id' => $this->variantId,
+                'variant_id' => $variantId,
                 'vendor_id' => $product->vendor_id,
                 'quantity' => $this->quantity,
                 'unit_price' => $unitPrice,

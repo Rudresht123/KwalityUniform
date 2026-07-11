@@ -23,7 +23,8 @@ return new class extends Migration
             $table->enum('status', [
                 'active',
                 'converted',
-                'abandoned'
+                'abandoned',
+                'completed'
             ])->default('active');
 
             $table->timestamp('converted_at')->nullable();

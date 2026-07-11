@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 class File extends Model
 {
+    use HasFactory;
+
     protected $table = 'files';
 
     protected $fillable = ['file_name', 'file_path', 'disk', 'mime_type', 'file_size', 'extension'];

@@ -58,7 +58,7 @@
                                             <img src="{{ $item->product->image_url ?? 'https://via.placeholder.com/50' }}" width="50" height="50" class="rounded shadow-sm" style="object-fit: cover;">
                                             <div>
                                                 <div class="fw-bold text-dark" style="font-size: 14px;">{{ $item->product->name }}</div>
-                                                <div class="text-muted small" style="font-size: 12px;">{{ $item->variant->name ?? 'Standard Size' }}</div>
+                                                <div class="text-muted small" style="font-size: 12px;">{{ $item->variant?->size?->display_name ?? 'Standard' }} / {{ $item->variant?->color?->color_name ?? 'N/A' }}</div>
                                             </div>
                                         </div>
                                     </td>
@@ -90,7 +90,7 @@
                                 <img src="{{ $item->product->image_url ?? 'https://via.placeholder.com/50' }}" width="50" height="50" class="rounded shadow-sm" style="object-fit: cover;">
                                 <div>
                                     <div class="fw-bold text-dark" style="font-size: 14px;">{{ $item->product->name }}</div>
-                                    <div class="text-muted small" style="font-size: 12px;">{{ $item->variant->name ?? 'Standard Size' }}</div>
+                                    <div class="text-muted small" style="font-size: 12px;">{{ $item->variant?->size?->display_name ?? 'Standard' }} / {{ $item->variant?->color?->color_name ?? 'N/A' }}</div>
                                     <div class="text-primary fw-bold small">${{ number_format($item->unit_price, 2) }}</div>
                                 </div>
                             </div>

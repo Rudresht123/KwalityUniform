@@ -8,13 +8,14 @@
                 <i class="ti ti-arrow-left"></i> Back to My Orders
             </a>
             <div class="d-flex gap-2">
-                <a href="{{ route('website.orders.pdf', $order->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                <a href="javascript:void(0);" onclick="confirmInvoiceDownload('{{ route('website.orders.pdf', $order->id) }}')" class="btn btn-sm btn-outline-primary rounded-pill px-3">
                     <i class="ti ti-download"></i> Invoice
                 </a>
                 <button onclick="window.print()" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
                     <i class="ti ti-printer"></i> Print
                 </button>
             </div>
+
         </div>
 
         <div class="row g-4">
@@ -109,7 +110,7 @@
 
                 <!-- Order Actions -->
                 <div class="d-grid gap-3">
-                    <a href="{{ route('website.orders.pdf', $order->id) }}" class="btn btn-primary py-2 fw-bold rounded-pill">
+                    <a href="javascript:void(0);" onclick="confirmInvoiceDownload('{{ route('website.orders.pdf', $order->id) }}')" class="btn btn-primary py-2 fw-bold rounded-pill">
                         <i class="ti ti-download me-2"></i> Download Invoice
                     </a>
                     <button class="btn btn-outline-secondary py-2 fw-bold rounded-pill" onclick="alert('Return request feature coming soon!')">
@@ -146,4 +147,46 @@
         .step-circle { margin: 0; }
     }
 </style>
+
+<script>
+    function confirmInvoiceDownload(url) {
+        const btn = event.currentTarget;
+        const originalHtml = btn.innerHTML;
+
+        if (btn.classList.contains('is-loading')) return;
+
+        btn.classList.add('is-loading');
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Preparing...';
+
+        $.ajax({
+            url: url,
+            method: 'GET',
+            xhrFields: { responseType: 'blob' },
+            success: function(blob, status, xhr) {
+                let filename = 'Invoice.pdf';
+                const disposition = xhr.getResponseHeader('Content-Disposition');
+                if (disposition) {
+                    const match = disposition.match(/filename\*?=(?:UTF-8'')?"?([^";]+)"?/i);
+                    if (match && match[1]) filename = decodeURIComponent(match[1]);
+                }
+
+                const blobUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(blobUrl);
+            },
+            error: function() {
+                alert('Could not download invoice. Please try again.');
+            },
+            complete: function() {
+                btn.classList.remove('is-loading');
+                btn.innerHTML = originalHtml;
+            }
+        });
+    }
+</script>
 @endsection

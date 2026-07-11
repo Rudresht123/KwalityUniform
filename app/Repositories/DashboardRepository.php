@@ -98,7 +98,7 @@ class DashboardRepository
         $query = Activity::with(['causer', 'subject'])->latest();
 
         // Super Admin & Admin => Show all activities
-        if (!$user->hasAnyRole(['Super Admin', 'Admin'])) {
+        if (!$user->hasAnyRole(['super-admin', 'admin'])) {
             $query->where('causer_id', $user->id);
         }
 

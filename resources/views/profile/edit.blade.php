@@ -199,30 +199,30 @@
 
                     <div class="mb-4">
                         <label class="form-label-custom">Full Name</label>
-                        <input type="text" name="name" class="form-control form-control-profile @error('name') is-invalid @enderror" 
+                        <input type="text" name="name" class="form-control form-control-profile {{ isset($errors) && $errors->has('name') ? 'is-invalid' : '' }}" 
                                value="{{ old('name', $user->name) }}" required>
-                        @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        @if(isset($errors) && $errors->has('name')) <div class="invalid-feedback">{{ $errors->first('name') }}</div> @endif
                     </div>
 
                     <div class="mb-4">
                         <label class="form-label-custom">Username</label>
-                        <input type="text" name="username" class="form-control form-control-profile @error('username') is-invalid @enderror" 
+                        <input type="text" name="username" class="form-control form-control-profile {{ isset($errors) && $errors->has('username') ? 'is-invalid' : '' }}" 
                                value="{{ old('username', $user->username) }}" required>
-                        @error('username') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        @if(isset($errors) && $errors->has('username')) <div class="invalid-feedback">{{ $errors->first('username') }}</div> @endif
                     </div>
 
                     <div class="mb-4">
                         <label class="form-label-custom">Email Address</label>
-                        <input type="email" name="email" class="form-control form-control-profile @error('email') is-invalid @enderror" 
+                        <input type="email" name="email" class="form-control form-control-profile {{ isset($errors) && $errors->has('email') ? 'is-invalid' : '' }}" 
                                value="{{ old('email', $user->email) }}" required>
-                        @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        @if(isset($errors) && $errors->has('email')) <div class="invalid-feedback">{{ $errors->first('email') }}</div> @endif
                     </div>
 
                     <div class="mb-4">
                         <label class="form-label-custom">Phone Number</label>
-                        <input type="text" name="phone" class="form-control form-control-profile @error('phone') is-invalid @enderror" 
+                        <input type="text" name="phone" class="form-control form-control-profile {{ isset($errors) && $errors->has('phone') ? 'is-invalid' : '' }}" 
                                value="{{ old('phone', $user->phone) }}">
-                        @error('phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        @if(isset($errors) && $errors->has('phone')) <div class="invalid-feedback">{{ $errors->first('phone') }}</div> @endif
                     </div>
 
                     <div class="pt-2">

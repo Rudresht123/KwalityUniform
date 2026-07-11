@@ -63,7 +63,7 @@ class CartManager extends Component
             return $item->quantity * $item->unit_price;
         });
 
-        $this->deliveryFee = ($this->deliveryOption === 'home') ? 8.00 : 0;
+        $this->deliveryFee = ($this->deliveryOption === 'home') ? 0 : 0;
 
         $addonTotal = 0;
         if (isset($this->addons['gift_box'])) {

@@ -23,16 +23,16 @@ class ProductRepository
 
         if ($user->hasRole('super-admin')) {
             // Super Admin sees everything
-            return $query;
+            return $query->get();
         }
 
         if ($user->hasRole('vendor')) {
             // Vendor sees only their own products
-            return $query->where('vendor_id', $user->vendor?->vendor_id);
+            return $query->where('vendor_id', $user->vendor?->vendor_id)->get();
         }
 
         // Admin sees all approved products (or as per permission)
-        return $query;
+        return $query->get();
     }
 
     public function findById(string $id)
@@ -83,7 +83,6 @@ class ProductRepository
         }
 
         if (!empty($filters['sub_category']) && $filters['sub_category'] !== 'all') {
-
             $query->where('category_id', $filters['sub_category']);
         } elseif (!empty($filters['parent_category']) && $filters['parent_category'] !== 'all') {
             $query->whereHas('category', function ($q) use ($filters) {

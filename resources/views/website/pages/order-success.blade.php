@@ -22,7 +22,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="mb-0 fw-bold text-dark">Order Summary</h5>
                             <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill">
-                                {{ strtoupper($order->status) }}
+                                {{ strtoupper($order->status->value) }}
                             </span>
                         </div>
                     </div>
@@ -149,7 +149,7 @@
         </div>
 
         <div class="text-center mt-5">
-            <a href="{{ route('website.home') }}" class="btn btn-dark px-5 py-3 fw-bold rounded-pill shadow-sm">
+            <a href="{{ url('/') }}" class="btn btn-dark px-5 py-3 fw-bold rounded-pill shadow-sm">
                 Continue Shopping <i class="ti ti-shopping-cart ms-2"></i>
             </a>
         </div>

@@ -351,6 +351,7 @@
                                     @endcan
                                     @endif
 
+                                    @if(!auth()->user()->hasRole('school'))
                                     @canany(['school.view', 'school.create'])
 
 
@@ -394,6 +395,7 @@
                                         </li>
 
                                     @endcanany
+                                    @endif
 
                                     @canany(['school_board.view', 'school_board.create'])
                                         <li class="slide has-sub {{ (userRole() === 'super-admin' || request()->routeIs('school-boards.*')) ? 'open' : '' }} {{ request()->routeIs('school-boards.*') ? 'active' : '' }}">

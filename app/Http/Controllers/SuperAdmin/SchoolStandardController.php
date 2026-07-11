@@ -49,6 +49,7 @@ class SchoolStandardController extends BaseController
         }
 
         $schools = $query->get();
+    
         return view('super-admin.school-standard.create', compact('schools'), $this->pageData('Create School Standard', 'Home|School Standards|Create'));
     }
 

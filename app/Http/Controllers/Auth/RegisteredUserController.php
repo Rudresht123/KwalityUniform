@@ -84,6 +84,20 @@ public function store(Request $request)
 
         event(new Registered($user));
 
+        // Send welcome email to the newly registered parent
+        try {
+            \App\Services\EmailService::send(
+                'welcome_parent',
+                $user->email,
+                [
+                    'user_name' => $user->name,
+                    'website_name' => config('app.name'),
+                ]
+            );
+        } catch (\Exception $e) {
+            \Log::error('Failed to send welcome email to parent: ' . $e->getMessage());
+        }
+
         Auth::login($user);
 
         if ($request->wantsJson() || $request->ajax()) {

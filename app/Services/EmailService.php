@@ -85,17 +85,16 @@ class EmailService
 
                         foreach (
                             $options['attachments']
-                            as $attachment
+                            as $filename => $data
                         ) {
 
-                            if (
-                                file_exists($attachment)
-                            ) {
-
-                                $message->attach(
-                                    $attachment
-                                );
-                            }
+                            $message->attachData(
+                                $data,
+                                $filename,
+                                [
+                                    'mime' => 'application/pdf'
+                                ]
+                            );
                         }
                     }
                 }

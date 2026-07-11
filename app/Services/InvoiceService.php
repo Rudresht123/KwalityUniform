@@ -6,68 +6,49 @@ use App\Models\Order;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Exception;
 
 class InvoiceService
 {
     /**
-     * Generate a professional PDF invoice for an order.
+     * Generate a PDF invoice for a given order.
      *
      * @param Order $order
-     * @return string Path to the generated PDF file
+     * @return string Path to the generated PDF
+     * @throws Exception
      */
-    public function generatePdf(Order $order): string
+    public function generateInvoice(Order $order): string
     {
-        // Ensure order has items loaded to avoid N+1 in the view
-        $order->loadMissing(['items.product', 'items.variant', 'user']);
+        $order->load(['items.variant.size', 'items.variant.color', 'user', 'shippingAddress']);
 
-        $pdf = Pdf::loadView('website.orders.pdf-invoice', [
-            'order' => $order,
-            'invoiceNumber' => $order->order_number,
-            'date' => now()->format('d M Y'),
-        ]);
-        
-        // Set paper size to A4
-        $pdf->setPaper('a4', 'portrait');
-
-        $fileName = 'invoice_' . $order->id . '_' . time() . '.pdf';
-        $filePath = 'invoices/' . $fileName;
-
-        Storage::disk('public')->put($filePath, $pdf->output());
-
-        return $filePath;
+        // Render the PDF using the unified 'emails.invoice' view
+        return Pdf::loadView('emails.invoice', compact('order'))->output();
     }
 
     /**
-     * Stream the PDF invoice directly to the browser.
+     * Download the PDF invoice for a given order.
      *
      * @param Order $order
      * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function streamPdf(Order $order)
-    {
-        $order->loadMissing(['items.product', 'items.variant', 'user']);
-        $pdf = Pdf::loadView('website.orders.pdf-invoice', [
-            'order' => $order,
-            'invoiceNumber' => $order->order_number,
-            'date' => now()->format('d M Y'),
-        ]);
-        return $pdf->stream("Invoice-{$order->id}.pdf");
-    }
-
-    /**
-     * Trigger a download of the PDF invoice.
-     *
-     * @param Order $order
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws Exception
      */
     public function downloadPdf(Order $order)
     {
-        $order->loadMissing(['items.product', 'items.variant', 'user']);
-        $pdf = Pdf::loadView('website.orders.pdf-invoice', [
-            'order' => $order,
-            'invoiceNumber' => $order->order_number,
-            'date' => now()->format('d M Y'),
-        ]);
-        return $pdf->download("Invoice-{$order->id}.pdf");
+        $order->load(['items.variant.size', 'items.variant.color', 'user', 'shippingAddress']);
+
+        // Directly return the PDF as a download response using the unified 'emails.invoice' view
+        return Pdf::loadView('emails.invoice', compact('order'))
+            ->download('Invoice_' . $order->order_number . '.pdf');
+    }
+
+    /**
+     * Get the URL for a specific invoice.
+     *
+     * @param string $filePath
+     * @return string
+     */
+    public function getInvoiceUrl(string $filePath): string
+    {
+        return Storage::url($filePath);
     }
 }

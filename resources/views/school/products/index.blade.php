@@ -1,7 +1,6 @@
 @extends('layouts.common')
 
 @section('content')
-sty
 
     <div class="container-xxl py-4">
 
@@ -115,7 +114,7 @@ sty
                     </div>
 
                     <div class="mt-4">
-                        {{ $products->links() }}
+                      {{ $products->links('vendor.pagination.custom-pagination') }}
                     </div>
                 @else
                     {{-- Empty state --}}

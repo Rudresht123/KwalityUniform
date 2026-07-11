@@ -98,6 +98,8 @@
                                 <form id="modalOtpForm" method="POST" action="{{ route('otp.login') }}">
                                     @csrf
 
+                                    <div id="modalOtpFeedback" class="d-none alert alert-small mb-3 py-2 px-3" style="font-size: 13px; border-radius: 8px;"></div>
+
                                     <div id="modalEmailStep">
                                         <div class="login-field mb-4">
                                             <label class="login-field-label">Registered Email</label>
@@ -251,13 +253,21 @@
         $('#modalSendOtpBtn').click(function() {
             const email = $('#modalOtpEmail').val();
             const btn = $(this);
-            if (!email) return alert('Please enter email');
+            const feedback = $('#modalOtpFeedback');
+            if (!email) {
+                feedback.removeClass('d-none').addClass('alert-danger').text('Please enter email');
+                return;
+            }
 
             btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span> Sending...');
+            feedback.addClass('d-none');
 
             $.ajax({
                 url: "{{ route('otp.send') }}",
                 method: "POST",
+                headers: {
+                    'Accept': 'application/json'
+                },
                 data: { _token: "{{ csrf_token() }}", email: email },
                 success: function(response) {
                     $('#modalDisplayEmail').text(email);
@@ -266,9 +276,15 @@
                     $digitBoxes.eq(0).trigger('focus');
                     startModalTimer(60);
                 },
-                error: function() {
+                error: function(xhr) {
                     btn.prop('disabled', false).html('Get OTP <i class="ti ti-send ms-1"></i>');
-                    alert('Failed to send OTP');
+                    let errorMsg = 'Failed to send OTP';
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        errorMsg = Object.values(xhr.responseJSON.errors)[0][0];
+                    } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMsg = xhr.responseJSON.message;
+                    }
+                    feedback.removeClass('d-none').addClass('alert-danger').text(errorMsg);
                 }
             });
         });
@@ -305,6 +321,9 @@
             $.ajax({
                 url: form.attr('action'),
                 method: "POST",
+                headers: {
+                    'Accept': 'application/json'
+                },
                 data: form.serialize(),
                 dataType: 'json',
                 success: function(response) {
@@ -333,26 +352,37 @@
         $('#modalOtpForm').submit(function(e) {
             e.preventDefault();
 
+            const feedback = $('#modalOtpFeedback');
             if ($('#modalOtpCode').val().length < 6) {
-                alert('Please enter the complete 6-digit code');
+                feedback.removeClass('d-none').addClass('alert-danger').text('Please enter the complete 6-digit code');
                 return;
             }
 
             const form = $(this);
             const btn = form.find('button[type="submit"]');
             btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span> Verifying...');
+            feedback.addClass('d-none');
 
             $.ajax({
                 url: form.attr('action'),
                 method: "POST",
+                headers: {
+                    'Accept': 'application/json'
+                },
                 data: form.serialize(),
                 dataType: 'json',
                 success: function(response) {
                     window.location.href = response.redirect;
                 },
-                error: function() {
+                error: function(xhr) {
                     btn.prop('disabled', false).html('Verify & Login <i class="ti ti-circle-check ms-1"></i>');
-                    alert('Verification failed');
+                    let errorMsg = 'Verification failed';
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        errorMsg = Object.values(xhr.responseJSON.errors)[0][0];
+                    } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMsg = xhr.responseJSON.message;
+                    }
+                    feedback.removeClass('d-none').addClass('alert-danger').text(errorMsg);
                 }
             });
         });
