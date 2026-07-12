@@ -170,7 +170,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::prefix('stock-adjustments')->name('stock-adjustment.')->group(function () {
     Route::post('/adjust', [StockAdjustmentController::class, 'adjust'])->name('adjust')->middleware('permission:stock_adjust');
-    Route::get('/history', [StockController::class, 'history'])->name('history')->middleware('permission:stock_history_view');
+    Route::get('/history', [StockAdjustmentController::class, 'history'])->name('history')->middleware('permission:stock_history_view');
 });
 
 

@@ -11,12 +11,17 @@
           </p>
         </div>
         <div class="footer-links-geo">
-          <a href="about.html">About Us</a>
-          <a href="shop.html">Catalogue</a>
-          <a href="contact.html">Contact Us</a>
-          <a href="wishlist.html">Wishlist</a>
-          <a href="#become-partner-section" onclick="switchOnboardingTab('school')">Become Partner</a>
-          <a href="#become-partner-section" onclick="switchOnboardingTab('vendor')">Become Vendor</a>
+          <a href="{{ route('website.about') }}">About Us</a>
+          <a href="{{ route('website.shop') }}">Catalogue</a>
+          <a href="{{ route('website.contact') }}">Contact Us</a>
+          @auth
+            <a href="{{ route('website.wishlist.index') }}">Wishlist</a>
+          @endauth
+          <a href="{{ route('website.terms') }}">Terms & Conditions</a>
+          <a href="{{ route('website.privacy') }}">Privacy Policy</a>
+          <a href="{{ route('website.returns') }}">Return Policy</a>
+          {{-- <a href="#become-partner-section" onclick="switchOnboardingTab('school')">Become Partner</a>
+          <a href="#become-partner-section" onclick="switchOnboardingTab('vendor')">Become Vendor</a> --}}
         </div>
       </div>
     </footer>

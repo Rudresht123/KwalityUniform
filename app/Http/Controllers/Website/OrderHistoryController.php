@@ -44,7 +44,7 @@ class OrderHistoryController extends Controller
         // Authorize via Policy
         $this->authorize('view', $order);
 
-        $order->load(['items.product', 'items.variant']);
+        $order->load(['items.snapshot', 'items.product', 'items.variant']);
 
         return view('website.orders.show', compact('order'));
     }

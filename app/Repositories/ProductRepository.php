@@ -99,4 +99,86 @@ class ProductRepository
 
         return $query->latest()->paginate(12);
     }
+
+    /**
+     * Get top selling products based on quantity sold.
+     */
+    public function getTopSellingProducts(int $limit = 5, $vendorId = null)
+    {
+        $query = \App\Models\OrderItem::select('product_id', \Illuminate\Support\Facades\DB::raw('SUM(quantity) as total_sold'))
+            ->groupBy('product_id')
+            ->orderByDesc('total_sold');
+
+        if ($vendorId) {
+            $query->where('vendor_id', $vendorId);
+        }
+
+        return $query->take($limit)->get()
+            ->map(fn($item) => [
+                'product_name' => Product::find($item->product_id)->product_name ?? 'Unknown',
+                'total_sold' => $item->total_sold
+            ]);
+    }
+
+    /**
+     * Get daily order volume for products.
+     */
+    public function getProductOrderTrends(int $days = 30, $vendorId = null): array
+    {
+        $labels = [];
+        $counts = [];
+
+        for ($i = $days - 1; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            $labels[] = $date->format('d M');
+
+            $query = \App\Models\OrderItem::whereDate('created_at', $date->toDateString());
+            if ($vendorId) {
+                $query->where('vendor_id', $vendorId);
+            }
+            $counts[] = $query->sum('quantity');
+        }
+
+        return [
+            'labels' => $labels,
+            'counts' => $counts,
+        ];
+    }
+
+    /**
+     * Get pending product approvals.
+     */
+    public function getPendingApprovals(int $limit = 5)
+    {
+        return Product::where('approval_status', 'pending')->with('vendor')->latest()->take($limit)->get();
+    }
+
+    /**
+     * Get product upload trends.
+     */
+    public function getProductUploadTrend($vendorId = null): array
+    {
+        $labels = [];
+        $counts = [];
+
+        for ($i = 11; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $labels[] = $date->format('M');
+
+            $query = Product::whereMonth('created_at', $date->month)
+                ->whereYear('created_at', $date->year);
+
+            if ($vendorId) {
+                $query->where('vendor_id', $vendorId);
+            }
+
+            $counts[] = $query->count();
+        }
+
+        return [
+            'labels' => $labels,
+            'counts' => $counts,
+        ];
+    }
 }
+

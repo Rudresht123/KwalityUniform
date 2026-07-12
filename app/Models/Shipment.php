@@ -14,6 +14,7 @@ class Shipment extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
+        'vendor_id',
         'tracking_number',
         'courier_id',
         'shipment_type', // bulk, individual
@@ -29,6 +30,11 @@ class Shipment extends Model
         'shipped_at' => 'datetime',
         'delivered_at' => 'datetime',
     ];
+
+    public function vendor(): BelongsTo
+    {
+        return $this->belongsTo(Vendor::class, 'vendor_id', 'vendor_id');
+    }
 
     public function courier(): BelongsTo
     {

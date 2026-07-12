@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/select2.css') }}">
     <link href="{{ asset('assets/modal.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/auth-modal.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/website/css/search-suggestions.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('assets/css/icons.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 

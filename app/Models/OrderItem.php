@@ -45,8 +45,8 @@ class OrderItem extends Model
         return $this->hasOne(ShipmentItem::class);
     }
 
-    public function studentDistribution(): HasOne
+    public function snapshot(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
-        return $this->hasOne(StudentDistribution::class);
+        return $this->hasOne(\App\Models\OrderProductSnapshot::class, 'order_item_id');
     }
 }

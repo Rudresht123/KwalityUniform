@@ -93,6 +93,12 @@ require __DIR__ . '/website-routes.php';
 // Delivery & Fulfillment Routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/vendor/fulfillment', \App\Http\Livewire\VendorFulfillment::class)->name('vendor.fulfillment');
+
+    Route::middleware(['role:vendor'])->prefix('vendor')->name('vendor.')->group(function () {
+        Route::get('orders/dispatch', [App\Http\Controllers\Vendor\OrderDispatchController::class, 'index'])->name('orders.dispatch');
+        Route::post('orders/dispatch', [App\Http\Controllers\Vendor\OrderDispatchController::class, 'ship'])->name('orders.ship');
+    });
+
     Route::get('/school/distribution', \App\Http\Livewire\SchoolDistribution::class)->name('school.distribution');
     Route::get('/parent/orders', \App\Http\Livewire\ParentOrderTracking::class)->name('parent.orders');
 });

@@ -26,6 +26,17 @@
                     class="nav-item-link {{ request()->routeIs('website.about') ? 'active' : '' }}">About Us</a>
                 <a href="{{ route('website.contact') }}"
                     class="nav-item-link {{ request()->routeIs('website.contact') ? 'active' : '' }}">Contact</a>
+                
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-item-link dropdown-toggle">
+                        Legal <i class="ti ti-chevron-down ms-1" style="font-size: 10px;"></i>
+                    </a>
+                    <div class="dropdown-menu-premium">
+                        <a href="{{ route('website.terms') }}" class="{{ request()->routeIs('website.terms') ? 'active' : '' }}">Terms & Conditions</a>
+                        <a href="{{ route('website.privacy') }}" class="{{ request()->routeIs('website.privacy') ? 'active' : '' }}">Privacy Policy</a>
+                        <a href="{{ route('website.returns') }}" class="{{ request()->routeIs('website.returns') ? 'active' : '' }}">Return Policy</a>
+                    </div>
+                </div>
             </nav>
 
             <div class="header-actions">

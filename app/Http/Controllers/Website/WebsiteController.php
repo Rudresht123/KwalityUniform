@@ -166,6 +166,21 @@ public function show($id)
         return view('website.pages.contact', compact('contactInfo'));
     }
 
+    public function terms()
+    {
+        return view('website.pages.terms');
+    }
+
+    public function privacy()
+    {
+        return view('website.pages.privacy');
+    }
+
+    public function returns()
+    {
+        return view('website.pages.returns');
+    }
+
     public function storeSchoolPartnership(Request $request)
     {
         try {

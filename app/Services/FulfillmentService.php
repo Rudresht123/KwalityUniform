@@ -21,6 +21,64 @@ class FulfillmentService
     ) {}
 
     /**
+     * Create a vendor-specific shipment for a set of items.
+     */
+    public function createVendorShipment(string $vendorId, array $orderItemIds, string $courierId, string $trackingNumber): Shipment
+    {
+        return DB::transaction(function () use ($vendorId, $orderItemIds, $courierId, $trackingNumber) {
+            // Verify all items belong to the same vendor
+            $items = \App\Models\OrderItem::whereIn('id', $orderItemIds)->get();
+            foreach ($items as $item) {
+                if ($item->vendor_id !== $vendorId) {
+                    throw new \Exception("Item {$item->id} does not belong to the specified vendor.");
+                }
+            }
+
+            // Determine destination based on the first item's order
+            $firstOrder = $items->first()->order;
+            $destinationId = $firstOrder->shipping_address_id ?? $firstOrder->school_id;
+
+            $shipment = $this->shipmentRepository->create([
+                'vendor_id' => $vendorId,
+                'tracking_number' => $trackingNumber,
+                'courier_id' => $courierId,
+                'shipment_type' => 'individual',
+                'destination_address_id' => $destinationId,
+                'status' => ShipmentStatus::PACKED,
+            ]);
+
+            foreach ($items as $item) {
+                ShipmentItem::create([
+                    'shipment_id' => $shipment->id,
+                    'order_item_id' => $item->id,
+                    'quantity_shipped' => $item->quantity,
+                ]);
+            }
+
+            // Update order status if all items for this order across all vendors are now shipped
+            $this->updateOrderFulfillmentStatus($firstOrder->id);
+
+            return $shipment;
+        });
+    }
+
+    /**
+     * Check if all items of an order have been shipped to update order status.
+     */
+    protected function updateOrderFulfillmentStatus(string $orderId): void
+    {
+        $order = \App\Models\Order::findOrFail($orderId);
+        $totalItems = $order->items()->count();
+        $shippedItems = \App\Models\ShipmentItem::whereHas('orderItem', function($q) use ($orderId) {
+            $q->where('order_id', $orderId);
+        })->count();
+
+        if ($shippedItems >= $totalItems) {
+            $this->orderRepository->updateStatus($order->id, OrderStatus::PACKED);
+        }
+    }
+
+    /**
      * Create a bulk shipment for a specific school.
      */
     public function createBulkShipment(string $schoolId, string $courierId): Shipment

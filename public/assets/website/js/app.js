@@ -491,21 +491,156 @@ const State = {
     this.updateHeaderCounts();
     this.highlightNav();
 
-    // Bind mini-search inside header
+    // --- Header Search Autocomplete Implementation ---
     const searchInput = document.getElementById('header-search-input');
     if (searchInput) {
+      // Create suggestions dropdown and append to body to avoid overflow issues
+      const suggestionsDiv = document.createElement('div');
+      suggestionsDiv.className = 'search-suggestions-dropdown';
+      document.body.appendChild(suggestionsDiv);
+
+      let debounceTimer;
+
+      const updateDropdownPosition = () => {
+        const rect = searchInput.getBoundingClientRect();
+        suggestionsDiv.style.width = `${rect.width}px`;
+        suggestionsDiv.style.left = `${rect.left + window.scrollX}px`;
+        suggestionsDiv.style.top = `${rect.bottom + window.scrollY + 8}px`;
+      };
+
+      searchInput.addEventListener('input', async (e) => {
+        const query = e.target.value.trim();
+        
+        if (query.length < 2) {
+          suggestionsDiv.style.display = 'none';
+          return;
+        }
+
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(async () => {
+          try {
+            const response = await fetch(`/api/schools/search?query=${encodeURIComponent(query)}`);
+            const data = await response.json();
+
+            updateDropdownPosition();
+
+            if (data.success && data.schools && data.schools.length > 0) {
+              suggestionsDiv.innerHTML = '';
+              data.schools.forEach(school => {
+                  const item = document.createElement('div');
+                  item.className = 'search-suggestion-item';
+                  item.innerHTML = `
+                      <div class="search-suggestion-left">
+                          <div class="search-suggestion-school-icon">${school.school_name.charAt(0).toUpperCase()}</div>
+                          <span class="search-suggestion-school-name">${school.school_name}</span>
+                      </div>
+                      <div class="search-suggestion-arrow">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                      </div>
+                  `;
+                  item.onclick = () => {
+                      window.location.href = `/shop?school=${school.school_id}`;
+                  };
+                  suggestionsDiv.appendChild(item);
+              });
+              suggestionsDiv.style.display = 'block';
+            } else {
+              suggestionsDiv.innerHTML = '<div class="search-no-results">No schools found matching your search.</div>';
+              suggestionsDiv.style.display = 'block';
+            }
+          } catch (error) {
+            console.error('Search autocomplete error:', error);
+            suggestionsDiv.style.display = 'none';
+          }
+        }, 300);
+      });
+
+      // Handle Enter key
       searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
           const query = searchInput.value.trim();
           if (query) {
-            window.location.href = `shop.html?search=${encodeURIComponent(query)}`;
+            window.location.href = `/shop?search=${encodeURIComponent(query)}`;
           }
+        }
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!searchInput.contains(e.target) && !suggestionsDiv.contains(e.target)) {
+          suggestionsDiv.style.display = 'none';
         }
       });
     }
 
+    this.initModalSearch();
+
     // Setup dynamic mobile drawer navigation
     this.initMobileMenu();
+  },
+
+  // Helper for Modal School Search
+  initModalSearch() {
+    const modalInput = document.getElementById('modal-school-search-input');
+    const modalSuggestions = document.getElementById('modal-school-suggestions');
+    
+    if (!modalInput || !modalSuggestions) return;
+
+    let debounceTimer;
+
+    modalInput.addEventListener('input', async (e) => {
+      const query = e.target.value.trim();
+      
+      if (query.length < 2) {
+        modalSuggestions.style.display = 'none';
+        return;
+      }
+
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(async () => {
+        try {
+          const response = await fetch(`/api/schools/search?query=${encodeURIComponent(query)}`);
+          const data = await response.json();
+
+          if (data.success && data.schools && data.schools.length > 0) {
+            modalSuggestions.innerHTML = '';
+            data.schools.forEach(school => {
+                const item = document.createElement('div');
+                item.className = 'search-suggestion-item';
+                item.innerHTML = `
+                    <div class="search-suggestion-left">
+                        <div class="search-suggestion-school-icon">${school.school_name.charAt(0).toUpperCase()}</div>
+                        <span class="search-suggestion-school-name">${school.school_name}</span>
+                    </div>
+                    <div class="search-suggestion-arrow">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </div>
+                `;
+                item.onclick = () => {
+                    window.location.href = `/shop?school=${school.school_id}`;
+                };
+                modalSuggestions.appendChild(item);
+            });
+            modalSuggestions.style.display = 'block';
+          } else {
+            modalSuggestions.innerHTML = '<div class="search-no-results">No schools found matching your search.</div>';
+            modalSuggestions.style.display = 'block';
+          }
+        } catch (error) {
+          console.error('Modal search error:', error);
+          modalSuggestions.style.display = 'none';
+        }
+      }, 300);
+    });
+
+    modalInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        const query = modalInput.value.trim();
+        if (query) {
+          window.location.href = `/shop?search=${encodeURIComponent(query)}`;
+        }
+      }
+    });
   },
 
   // Helper to dynamically set up Mobile Navigation Drawer
@@ -537,7 +672,7 @@ const State = {
         <div class="mobile-drawer-overlay" id="mobile-drawer-overlay"></div>
         <div class="mobile-drawer-content">
           <div class="mobile-drawer-header">
-            <a href="index.html" class="logo">ESCHOOL<span>CART</span></a>
+            <a href="/" class="logo">ESCHOOL<span>CART</span></a>
             <button class="mobile-drawer-close" id="mobile-drawer-close-btn" aria-label="Close menu">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -547,12 +682,15 @@ const State = {
           </div>
           <div class="mobile-drawer-body">
             <nav class="mobile-drawer-nav">
-              <a href="index.html" class="mobile-nav-item">Home / Schools</a>
-              <a href="shop.html" class="mobile-nav-item">Catalogue</a>
-              <a href="about.html" class="mobile-nav-item">About Us</a>
-              <a href="contact.html" class="mobile-nav-item">Contact Us</a>
-              <a href="wishlist.html" class="mobile-nav-item">Saved Items</a>
-              <a href="cart.html" class="mobile-nav-item">Shopping Basket</a>
+              <a href="/" class="mobile-nav-item">Home / Schools</a>
+              <a href="/shop" class="mobile-nav-item">Catalogue</a>
+              <a href="/about" class="mobile-nav-item">About Us</a>
+              <a href="/contact" class="mobile-nav-item">Contact Us</a>
+              <a href="/terms" class="mobile-nav-item">Terms & Conditions</a>
+              <a href="/privacy" class="mobile-nav-item">Privacy Policy</a>
+              <a href="/returns" class="mobile-nav-item">Return Policy</a>
+              <a href="/wishlist" class="mobile-nav-item">Saved Items</a>
+              <a href="/cart" class="mobile-nav-item">Shopping Basket</a>
             </nav>
             <div class="mobile-drawer-footer">
               <p class="small text-muted mb-0">&copy; 2026 eSchool Cart.</p>

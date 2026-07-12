@@ -37,9 +37,10 @@
                                 groups.
                             </p>
                             <div class="d-flex flex-wrap gap-3">
-                                <a href="#school-directory" class="btn btn-primary btn-lg px-4"
-                                    style="font-weight: 600; border-radius: var(--qu-radius-sm);">Find Your School</a>
-                                <a href="shop.html" class="btn btn-outline-light btn-lg px-4"
+                                <button type="button" class="btn btn-primary btn-lg px-4"
+                                    style="font-weight: 600; border-radius: var(--qu-radius-sm);"
+                                    data-bs-toggle="modal" data-bs-target="#schoolSearchModal">Find Your School</button>
+                                <a href="{{ route('website.shop') }}" class="btn btn-outline-light btn-lg px-4"
                                     style="font-weight: 600; border-radius: var(--qu-radius-sm);">Shop Uniforms</a>
                             </div>
                         </div>
@@ -67,9 +68,10 @@
                                 customized sizing packages pre-approved by your school board.
                             </p>
                             <div class="d-flex flex-wrap gap-3">
-                                <a href="#school-directory" class="btn btn-primary btn-lg px-4"
-                                    style="font-weight: 600; border-radius: var(--qu-radius-sm);">Find Your School</a>
-                                <a href="shop.html" class="btn btn-outline-light btn-lg px-4"
+                                <button type="button" class="btn btn-primary btn-lg px-4"
+                                    style="font-weight: 600; border-radius: var(--qu-radius-sm);"
+                                    data-bs-toggle="modal" data-bs-target="#schoolSearchModal">Find Your School</button>
+                                <a href="{{ route('website.shop') }}" class="btn btn-outline-light btn-lg px-4"
                                     style="font-weight: 600; border-radius: var(--qu-radius-sm);">Shop Uniforms</a>
                             </div>
                         </div>
@@ -97,9 +99,10 @@
                                 trousers, skirts, blazers, belts, ties, and socks under a single discounted rate.
                             </p>
                             <div class="d-flex flex-wrap gap-3">
-                                <a href="#school-directory" class="btn btn-primary btn-lg px-4"
-                                    style="font-weight: 600; border-radius: var(--qu-radius-sm);">Find Your School</a>
-                                <a href="shop.html" class="btn btn-outline-light btn-lg px-4"
+                                <button type="button" class="btn btn-primary btn-lg px-4"
+                                    style="font-weight: 600; border-radius: var(--qu-radius-sm);"
+                                    data-bs-toggle="modal" data-bs-target="#schoolSearchModal">Find Your School</button>
+                                <a href="{{ route('website.shop') }}" class="btn btn-outline-light btn-lg px-4"
                                     style="font-weight: 600; border-radius: var(--qu-radius-sm);">Shop Uniforms</a>
                             </div>
                         </div>
@@ -127,9 +130,10 @@
                                 Optimized to withstand high-tensile playground play and inter-school games.
                             </p>
                             <div class="d-flex flex-wrap gap-3">
-                                <a href="#school-directory" class="btn btn-primary btn-lg px-4"
-                                    style="font-weight: 600; border-radius: var(--qu-radius-sm);">Find Your School</a>
-                                <a href="shop.html" class="btn btn-outline-light btn-lg px-4"
+                                <button type="button" class="btn btn-primary btn-lg px-4"
+                                    style="font-weight: 600; border-radius: var(--qu-radius-sm);"
+                                    data-bs-toggle="modal" data-bs-target="#schoolSearchModal">Find Your School</button>
+                                <a href="{{ route('website.shop') }}" class="btn btn-outline-light btn-lg px-4"
                                     style="font-weight: 600; border-radius: var(--qu-radius-sm);">Shop Uniforms</a>
                             </div>
                         </div>
@@ -157,9 +161,10 @@
                                 Beautifully styled to meet the strict guidelines of leading Indian scholastic boards.
                             </p>
                             <div class="d-flex flex-wrap gap-3">
-                                <a href="#school-directory" class="btn btn-primary btn-lg px-4"
-                                    style="font-weight: 600; border-radius: var(--qu-radius-sm);">Find Your School</a>
-                                <a href="shop.html" class="btn btn-outline-light btn-lg px-4"
+                                <button type="button" class="btn btn-primary btn-lg px-4"
+                                    style="font-weight: 600; border-radius: var(--qu-radius-sm);"
+                                    data-bs-toggle="modal" data-bs-target="#schoolSearchModal">Find Your School</button>
+                                <a href="{{ route('website.shop') }}" class="btn btn-outline-light btn-lg px-4"
                                     style="font-weight: 600; border-radius: var(--qu-radius-sm);">Shop Uniforms</a>
                             </div>
                         </div>
@@ -1046,6 +1051,8 @@
             </form>
         </div>
     </section>
+
+    @include('website.components.school-search-modal')
 
     {{-- <!-- 19. Onboarding Hub (Become Partner / Become Vendor) --> --}}
    {{-- @include("website.partials.onboarding") --}}

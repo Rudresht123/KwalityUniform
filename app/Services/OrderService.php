@@ -130,11 +130,11 @@ class OrderService
             // 5. Create Order Items & Deduct Stock
             foreach ($validatedItems as $vItem) {
                 $variant = $vItem['variant'];
-                $item = $vItem['item'];
+                $item = $itemData = $vItem['item'];
 
                 $variant->decrement('stock_qty', $item->quantity);
 
-                OrderItem::create([
+                $orderItem = OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $item->product_id,
                     'variant_id' => $item->variant_id,
@@ -145,6 +145,9 @@ class OrderService
                     'quantity' => $item->quantity,
                     'line_total' => $vItem['price'] * $item->quantity,
                 ]);
+
+                // Create a snapshot of the product state at the time of purchase
+                app(\App\Services\OrderSnapshotService::class)->createSnapshot($orderItem, $variant);
             }
 
             // 6. Trigger confirmation emails WITHIN the transaction

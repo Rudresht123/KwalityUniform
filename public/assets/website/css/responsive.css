@@ -39,6 +39,8 @@
   .footer-links-geo {
     justify-content: center;
     flex-wrap: wrap;
+    position: relative;
+    z-index: 10;
   }
   
   .auth-card {

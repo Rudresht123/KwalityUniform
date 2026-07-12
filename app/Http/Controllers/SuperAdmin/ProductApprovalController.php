@@ -58,14 +58,13 @@ class ProductApprovalController extends BaseController
                 ->get();
         }
 
-        return view('super-admin.product_approvals.index', [
+        return view('super-admin.product_approvals.index', array_merge([
             'products'   => $products,
             'categories' => Category::orderBy('category_name')->get(),
-            ...$this->pageData(
-                'Product Approval Center',
-                'Home|Products|Approval Center'
-            ),
-        ]);
+        ], $this->pageData(
+            'Product Approval Center',
+            'Home|Products|Approval Center'
+        )));
     }
 
     /**
@@ -89,13 +88,12 @@ class ProductApprovalController extends BaseController
             ->latest()
             ->paginate(15);
 
-        return view('super-admin.product_approvals.approved', [
+        return view('super-admin.product_approvals.approved', array_merge([
             'products' => $products,
-            ...$this->pageData(
-                'Approved Products',
-                'Home|Products|Approved Products'
-            ),
-        ]);
+        ], $this->pageData(
+            'Approved Products',
+            'Home|Products|Approved Products'
+        )));
     }
 
     /**
@@ -115,10 +113,10 @@ class ProductApprovalController extends BaseController
 
         return response()->json([
             'success' => true,
-            'data' => [
-                ...$product->toArray(),
-                'primary_image_url' => $product->firstImage(),
-            ],
+            'data' => array_merge(
+                $product->toArray(),
+                ['primary_image_url' => $product->firstImage()]
+            ),
         ]);
     }
 

@@ -56,4 +56,117 @@ class OrderRepository
             ->where('id', $orderId)
             ->first();
     }
+
+    /**
+     * Get system-wide revenue trend for the last X days.
+     */
+    public function getRevenueTrend(int $days = 30): array
+    {
+        $labels = [];
+        $data = [];
+
+        for ($i = $days - 1; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            $labels[] = $date->format('d M');
+            $data[] = (float) Order::whereDate('created_at', $date->toDateString())->sum('grand_total');
+        }
+
+        return [
+            'labels' => $labels,
+            'data' => $data,
+        ];
+    }
+
+    /**
+     * Get system-wide order volume trend for the last X days.
+     */
+    public function getOrderTrend(int $days = 30): array
+    {
+        $labels = [];
+        $data = [];
+
+        for ($i = $days - 1; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            $labels[] = $date->format('d M');
+            $data[] = Order::whereDate('created_at', $date->toDateString())->count();
+        }
+
+        return [
+            'labels' => $labels,
+            'data' => $data,
+        ];
+    }
+
+    /**
+     * Get the latest orders for the operations list.
+     */
+    public function getLatestOrders(int $limit = 10)
+    {
+        return Order::with('user')->latest()->take($limit)->get();
+    }
+
+    /**
+     * Get daily revenue trend for a specific vendor.
+     */
+    public function getVendorRevenueTrend(int $vendorId, int $days = 30): array
+    {
+        $labels = [];
+        $data = [];
+
+        for ($i = $days - 1; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            $labels[] = $date->format('d M');
+            $data[] = (float) \App\Models\OrderItem::where('vendor_id', $vendorId)
+                ->whereDate('created_at', $date->toDateString())
+                ->sum('line_total');
+        }
+
+        return [
+            'labels' => $labels,
+            'data' => $data,
+        ];
+    }
+
+    /**
+     * Get daily order volume trend for a specific vendor.
+     */
+    public function getVendorOrderTrend(int $vendorId, int $days = 30): array
+    {
+        $labels = [];
+        $data = [];
+
+        for ($i = $days - 1; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            $labels[] = $date->format('d M');
+            $data[] = \App\Models\OrderItem::where('vendor_id', $vendorId)
+                ->whereDate('created_at', $date->toDateString())
+                ->distinct('order_id')
+                ->count();
+        }
+
+        return [
+            'labels' => $labels,
+            'data' => $data,
+        ];
+    }
+
+    /**
+     * Get daily order stats for a specific vendor.
+     */
+    public function getVendorOrderStats($vendorId): array
+    {
+        $today = now()->startOfDay();
+        return [
+            'orders_today' => \App\Models\OrderItem::where('vendor_id', $vendorId)
+                ->whereDate('created_at', $today)
+                ->distinct('order_id')
+                ->count(),
+            'revenue_today' => \App\Models\OrderItem::where('vendor_id', $vendorId)
+                ->whereDate('created_at', $today)
+                ->sum('line_total'),
+            'total_revenue' => \App\Models\OrderItem::where('vendor_id', $vendorId)
+                ->sum('line_total'),
+        ];
+    }
 }
+

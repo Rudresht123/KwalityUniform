@@ -10,18 +10,24 @@ class SchoolSearchController extends Controller
 {
     public function search(Request $request)
     {
-        $query = $request->query('q');
+        $query = $request->query('query') ?? $request->query('q');
 
         if (!$query) {
-            return response()->json([]);
+            return response()->json([
+                'success' => true, 
+                'schools' => []
+            ]);
         }
 
         $schools = School::active()
             ->where('school_name', 'like', '%' . $query . '%')
-            ->take(10)
+            ->take(15)
             ->get(['school_id', 'school_name', 'city', 'state']);
 
-        return response()->json($schools);
+        return response()->json([
+            'success' => true,
+            'schools' => $schools
+        ]);
     }
 
     public function standards(Request $request)

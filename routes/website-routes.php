@@ -9,6 +9,9 @@ Route::get('/shop/subcategories/{parent_id}', [WebsiteController::class, 'getSub
 Route::get('/product/{id}/json', [WebsiteController::class, 'showJson'])->name('website.product.json');
 Route::get('/about', [WebsiteController::class, 'about'])->name('website.about');
 Route::get('/contact', [WebsiteController::class, 'contact'])->name('website.contact');
+Route::get('/terms', [WebsiteController::class, 'terms'])->name('website.terms');
+Route::get('/privacy', [WebsiteController::class, 'privacy'])->name('website.privacy');
+Route::get('/returns', [WebsiteController::class, 'returns'])->name('website.returns');
 
 Route::get('/wishlist/count', [App\Http\Controllers\Website\WishlistController::class, 'count']);
 Route::get('/cart/count', [App\Http\Controllers\Website\CartController::class, 'count']);
