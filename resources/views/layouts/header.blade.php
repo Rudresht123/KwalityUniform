@@ -107,17 +107,19 @@
                     ->get()
                 as $notification)
                             <li class="dropdown-item border-bottom py-3 notification-item"
-                                id="notification-{{ $notification->id }}">
+                                id="notification-{{ $notification->id }}"
+                                style="position: relative !important;">
 
                                 <div class="d-flex align-items-start">
 
                                     <div class="pe-3">
-                                        <span class="avatar avatar-md bg-primary-transparent br-5">
-                                            <i class="ti ti-bell fs-18 text-primary"></i>
+                                        <span class="avatar bg-primary-transparent br-5" 
+                                              style="width: 24px !important; height: 24px !important; min-width: 24px !important; display: flex !important; align-items: center !important; justify-content: center !important;">
+                                            <i class="ti ti-bell fs-12 text-primary"></i>
                                         </span>
                                     </div>
 
-                                    <div class="flex-grow-1">
+                                    <div class="flex-grow-1" style="padding-right: 30px !important;">
 
                                         <p class="mb-1">
                                             <a href="javascript:void(0);"
@@ -125,24 +127,24 @@
                                                         '{{ $notification->id }}',
                                                         '{{ $notification->data['url'] ?? '#' }}'
                                                     )"
-                                                class="text-dark text-decoration-none fw-semibold">
+                                                class="text-dark text-decoration-none fw-semibold" style="font-size: 13px !important;">
 
                                                 {{ $notification->data['message'] ?? 'New Notification' }}
 
                                             </a>
                                         </p>
 
-                                        <small class="text-muted">
+                                        <small class="text-muted" style="font-size: 11px !important;">
                                             {{ $notification->created_at->diffForHumans() }}
                                         </small>
 
                                     </div>
 
-                                    <div>
+                                    <div style="position: absolute !important; top: 12px !important; right: 12px !important; z-index: 10 !important;">
                                         <a href="javascript:void(0);"
                                             onclick="hideNotification('{{ $notification->id }}')" class="text-muted">
 
-                                            <i class="ti ti-x fs-16"></i>
+                                            <i class="ti ti-x fs-14"></i>
 
                                         </a>
                                     </div>

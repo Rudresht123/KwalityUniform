@@ -29,13 +29,13 @@ class ProductStatusUpdatedNotification extends Notification implements ShouldQue
     public function toMail($notifiable): MailMessage
     {
         $status = strtoupper($this->product->approval_status);
-        
+
         return (new MailMessage)
             ->subject('Product Status Update: ' . $this->product->product_name)
             ->greeting('Hello ' . $notifiable->name . ',')
-            ->line('The status of your product "' . $this->product->product_name . '" has been updated to ' . $status . '.')
+            ->line('The status of your product "' . $this->product->product_name '" has been updated to ' . $status . '.')
             ->line('Message from Admin: ' . ($this->adminMessage ?: 'No specific message.'))
-            ->action('View Product', route('product.show', $this->product->product_id))
+            ->action('View Product', route('product.index'))
             ->line('Thank you for using our application!');
     }
 
@@ -46,7 +46,7 @@ class ProductStatusUpdatedNotification extends Notification implements ShouldQue
             'product_name' => $this->product->product_name,
             'status' => $this->product->approval_status,
             'message' => 'Your product ' . $this->product->product_name . ' has been ' . $this->product->approval_status,
-            'url' => route('product.show', $this->product->product_id)
+            'url' => route('product.index')
         ];
     }
-}
+    }

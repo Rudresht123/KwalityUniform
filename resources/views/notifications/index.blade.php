@@ -14,7 +14,7 @@
                 </div>
 
                 <button onclick="markNotificationAsRead(null)"
-                    class="btn btn-primary btn-sm">
+                    class="btn btn-primary btn-sm rounded-pill px-3">
                     <i class="ri-check-double-line me-1"></i>
                     Mark All Read
                 </button>
@@ -43,11 +43,11 @@
 
                         {{-- Content --}}
                         <div>
-                            <div class="{{ !$notification->read_at ? 'fw-semibold' : '' }}">
+                            <div class="{{ !$notification->read_at ? 'fw-semibold text-dark' : 'text-muted' }}" style="font-size: 14px; line-height: 1.4;">
                                 {{ $notification->data['message'] ?? 'New Notification' }}
                             </div>
 
-                            <small class="text-muted">
+                            <small class="text-muted" style="font-size: 11px;">
                                 {{ $notification->created_at->format('d M Y, h:i A') }}
                             </small>
                         </div>
@@ -59,7 +59,7 @@
 
                         @if(isset($notification->data['url']))
                             <a href="{{ $notification->data['url'] }}"
-                                class="btn btn-outline-primary btn-sm">
+                                class="btn btn-outline-primary btn-sm rounded-pill px-3" style="font-size: 12px;">
                                 View
                             </a>
                         @endif
@@ -67,7 +67,7 @@
                         @if(!$notification->read_at)
                             <button
                                 onclick="markNotificationAsRead('{{ $notification->id }}')"
-                                class="btn btn-light btn-sm">
+                                class="btn btn-light btn-sm rounded-pill px-3" style="font-size: 12px;">
                                 Read
                             </button>
                         @endif
@@ -81,9 +81,9 @@
                 <div class="text-center py-5">
                     <img src="{{ asset('assets/images/no-data.svg') }}"
                         width="120"
-                        class="mb-3">
+                        class="mb-3 opacity-50">
 
-                    <h6>No Notifications Found</h6>
+                    <h6 class="fw-semibold">No Notifications Found</h6>
 
                     <p class="text-muted mb-0">
                         You don't have any notifications yet.
@@ -106,30 +106,33 @@
 <style>
 .notification-row{
     transition: all .2s ease;
+    border-left: 3px solid transparent;
 }
 
 .notification-row:hover{
     background:#f8f9fa;
+    border-left: 3px solid #0d6efd;
 }
 
 .notification-dot{
-    width:10px;
-    height:10px;
+    width:8px;
+    height:8px;
     border-radius:50%;
     background:#0d6efd;
     display:block;
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.2);
 }
 
 .notification-icon{
-    width:42px;
-    height:42px;
-    border-radius:50%;
+    width:32px;
+    height:32px;
+    border-radius:8px;
     background:#eef4ff;
     color:#0d6efd;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:18px;
+    font-size:14px;
 }
 </style>
 

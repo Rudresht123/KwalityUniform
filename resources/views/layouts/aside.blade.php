@@ -174,6 +174,16 @@
                                     @endcanany
                                     @endif
 
+                                    @if(auth()->user()->hasRole('vendor'))
+                                    @can('vendor.fulfillment.view')
+                                        <li class="slide {{ request()->routeIs('vendor.orders.dispatch') ? 'active' : '' }}">
+                                            <a href="{{ route('vendor.orders.dispatch') }}" class="side-menu__item {{ request()->routeIs('vendor.orders.dispatch') ? 'active' : '' }}">
+                                                <i class="ti ti-package-arrival side-menu__icon"></i>
+                                                <span class="side-menu__label">Order Fulfillment Hub</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @endif
 
                                     @if(userRole() === 'super-admin')
                                     @can('product_approval_view')

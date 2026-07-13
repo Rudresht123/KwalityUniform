@@ -1,221 +1,315 @@
-@php
-    $breadcrumb = 'Vendor Order Management';
-    $title = 'Order Fulfillment Hub';
-@endphp
+@extends('layouts.common')
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-
+@push('styles')
 <style>
     :root {
-        --hub-bg: #F8FAFC;
-        --hub-card: #FFFFFF;
-        --hub-primary: #2563EB;
-        --hub-primary-soft: rgba(37, 99, 235, 0.1);
-        --hub-success: #10B981;
-        --hub-success-soft: rgba(16, 185, 129, 0.1);
-        --hub-danger: #EF4444;
-        --hub-danger-soft: rgba(239, 68, 68, 0.1);
-        --hub-text-main: #1E293B;
-        --hub-text-mute: #64748B;
-        --hub-border: #E2E8F0;
-        --hub-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        --hub-primary: #2563eb;
+        --hub-primary-soft: rgba(37, 99, 235, 0.08);
+        --hub-success: #10b981;
+        --hub-success-soft: rgba(16, 185, 129, 0.08);
+        --hub-border: #e2e8f0;
         --hub-radius: 16px;
+        --hub-card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
 
-    .fulfillment-hub {
-        background-color: var(--hub-bg);
+    .fulfillment-hub-container {
         font-family: 'Inter', sans-serif;
-        color: var(--hub-text-main);
-        padding: 24px;
-        min-height: 100vh;
+        padding: 1rem 0;
     }
 
-    .hub-title {
-        font-family: 'Poppins', sans-serif;
+    /* KPI Cards */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .kpi-card {
+        background: #fff;
+        border: 1px solid var(--hub-border);
+        border-radius: var(--hub-radius);
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        box-shadow: var(--hub-card-shadow);
+        transition: transform 0.2s;
+    }
+
+    .kpi-card:hover { transform: translateY(-2px); }
+
+    .kpi-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+    .kpi-data h3 {
+        font-size: 1.5rem;
         font-weight: 700;
-        font-size: 24px;
-        margin-bottom: 8px;
+        margin: 0;
+        color: #1e293b;
     }
 
-    .hub-subtitle {
-        color: var(--hub-text-mute);
-        font-size: 14px;
-        margin-bottom: 32px;
+    .kpi-data p {
+        font-size: 0.875rem;
+        color: #64748b;
+        margin: 0;
     }
 
-    /* Pipeline Section */
+    /* Pipeline Layout */
     .pipeline-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 24px;
-        margin-bottom: 40px;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 1.5rem;
+        align-items: start;
     }
 
     .pipeline-col {
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 1rem;
     }
 
     .pipeline-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0 8px;
-        margin-bottom: 8px;
+        padding: 0.5rem 0;
+        border-bottom: 2px solid var(--hub-border);
+        margin-bottom: 1rem;
     }
 
     .pipeline-label {
-        font-family: 'Poppins', sans-serif;
         font-weight: 600;
-        font-size: 15px;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        color: #475569;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 0.5rem;
     }
 
     .pipeline-count {
         background: var(--hub-primary-soft);
         color: var(--hub-primary);
-        font-size: 12px;
+        font-size: 0.75rem;
         font-weight: 700;
-        padding: 2px 8px;
-        border-radius: 10px;
+        padding: 0.125rem 0.625rem;
+        border-radius: 9999px;
     }
 
     /* Order Card */
     .order-card {
-        background: var(--hub-card);
+        background: #fff;
         border: 1px solid var(--hub-border);
         border-radius: var(--hub-radius);
-        padding: 16px;
-        box-shadow: var(--hub-shadow);
-        transition: all 0.2s ease;
+        padding: 1.25rem;
+        box-shadow: var(--hub-card-shadow);
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         cursor: pointer;
         position: relative;
+        overflow: hidden;
     }
 
     .order-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        transform: translateY(-4px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         border-color: var(--hub-primary);
+    }
+
+    .order-card.selected {
+        border-color: var(--hub-primary);
+        background-color: var(--hub-primary-soft);
+        box-shadow: 0 0 0 2px var(--hub-primary);
     }
 
     .order-card-header {
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 12px;
+        align-items: center;
+        margin-bottom: 1rem;
     }
 
     .order-id {
         font-weight: 700;
-        font-size: 14px;
-        color: var(--hub-text-main);
+        font-size: 0.875rem;
+        color: #1e293b;
     }
 
     .order-date {
-        font-size: 12px;
-        color: var(--hub-text-mute);
+        font-size: 0.75rem;
+        color: #94a3b8;
     }
 
     .item-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 8px 0;
-        border-bottom: 1px solid var(--hub-border);
-        font-size: 13px;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f1f5f9;
+        font-size: 0.875rem;
     }
 
     .item-row:last-child { border-bottom: none; }
 
-    .item-name { font-weight: 500; color: var(--hub-text-main); }
-    .item-qty { font-weight: 700; color: var(--hub-primary); }
+    .item-name { font-weight: 500; color: #334155; }
+    .item-qty { 
+        font-weight: 700; 
+        color: var(--hub-primary); 
+        background: var(--hub-primary-soft);
+        padding: 2px 6px;
+        border-radius: 4px;
+    }
 
-    /* Dispatch Panel */
-    .dispatch-panel {
-        background: var(--hub-card);
+    /* Dispatch Control Center */
+    .dispatch-control-center {
+        background: #fff;
         border: 1px solid var(--hub-border);
         border-radius: var(--hub-radius);
-        padding: 24px;
-        box-shadow: var(--hub-shadow);
+        padding: 1.5rem;
+        box-shadow: var(--hub-card-shadow);
         position: sticky;
-        top: 24px;
+        top: 2rem;
     }
 
-    .panel-title {
-        font-family: 'Poppins', sans-serif;
+    .control-title {
         font-weight: 600;
-        font-size: 18px;
-        margin-bottom: 20px;
+        font-size: 1.125rem;
+        margin-bottom: 1.5rem;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 0.75rem;
+        color: #1e293b;
     }
 
-    .form-label {
-        font-size: 13px;
+    .form-label-premium {
+        font-size: 0.75rem;
         font-weight: 600;
-        color: var(--hub-text-mute);
-        margin-bottom: 6px;
+        color: #64748b;
+        margin-bottom: 0.5rem;
+        display: block;
+        text-transform: uppercase;
     }
 
-    .form-select-premium {
-        border-radius: 10px;
+    .input-premium {
+        border-radius: 8px;
         border: 1px solid var(--hub-border);
-        padding: 10px;
-        font-size: 14px;
-        margin-bottom: 16px;
+        padding: 0.625rem;
+        font-size: 0.875rem;
         width: 100%;
-        transition: border-color 0.2s;
+        transition: all 0.2s;
+        margin-bottom: 1.25rem;
     }
 
-    .form-select-premium:focus {
+    .input-premium:focus {
         outline: none;
         border-color: var(--hub-primary);
         box-shadow: 0 0 0 3px var(--hub-primary-soft);
     }
 
-    .btn-ship {
+    .btn-dispatch-action {
         background: var(--hub-primary);
         color: white;
         border: none;
-        border-radius: 10px;
-        padding: 12px;
+        border-radius: 8px;
+        padding: 0.75rem;
         font-weight: 600;
         width: 100%;
         cursor: pointer;
-        transition: opacity 0.2s;
+        transition: all 0.2s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
     }
 
-    .btn-ship:hover { opacity: 0.9; }
+    .btn-dispatch-action:hover {
+        filter: brightness(1.1);
+        transform: translateY(-1px);
+    }
 
-    .checkbox-custom {
-        width: 18px;
-        height: 18px;
+    .checkbox-premium {
+        width: 1.1rem;
+        height: 1.1rem;
         cursor: pointer;
+        accent-color: var(--hub-primary);
+    }
+
+    /* Shipment Card */
+    .shipment-card {
+        background: #fff;
+        border: 1px solid var(--hub-border);
+        border-radius: var(--hub-radius);
+        padding: 1.25rem;
+        box-shadow: var(--hub-card-shadow);
+        transition: all 0.2s;
+    }
+
+    .shipment-card:hover {
+        border-color: var(--hub-primary);
+    }
+
+    .shipment-tracking {
+        font-family: 'Courier New', monospace;
+        font-weight: 700;
+        font-size: 0.875rem;
+        color: var(--hub-primary);
     }
 </style>
+@endpush
 
-<div class="fulfillment-hub">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="hub-title">Order Fulfillment Hub</h1>
-            <p class="hub-subtitle">Manage your confirmed orders and dispatch shipments to schools.</p>
+@section('content')
+
+
+    {{-- KPI Stats --}}
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-icon" style="background: var(--hub-primary-soft); color: var(--hub-primary);">
+                <i class="ti ti-package"></i>
+            </div>
+            <div class="kpi-data">
+                <h3>{{ $stats['pending_count'] }}</h3>
+                <p>Items to Ship</p>
+            </div>
         </div>
-        <div class="d-flex gap-3">
-            <button class="btn btn-outline-secondary rounded-pill px-4" onclick="window.print()">
-                <i class="ti ti-printer me-2"></i> Print Manifest
-            </button>
-            <a href="{{ route('dashboard') }}" class="btn btn-primary rounded-pill px-4">
-                <i class="ti ti-layout-dashboard me-2"></i> Back to Dashboard
-            </a>
+        <div class="kpi-card">
+            <div class="kpi-icon" style="background: rgba(0, 123, 255, 0.1); color: #007bff;">
+                <i class="ti ti-truck"></i>
+            </div>
+            <div class="kpi-data">
+                <h3>{{ $stats['transit_count'] }}</h3>
+                <p>Active Shipments</p>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon" style="background: var(--hub-success-soft); color: var(--hub-success);">
+                <i class="ti ti-circle-check"></i>
+            </div>
+            <div class="kpi-data">
+                <h3>{{ $stats['delivered_count'] }}</h3>
+                <p>Completed</p>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon" style="background: rgba(0,0,0,0.05); color: #333;">
+                <i class="ti ti-list-details"></i>
+            </div>
+            <div class="kpi-data">
+                <h3>{{ $stats['total_items'] }}</h3>
+                <p>Total Volume</p>
+            </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-lg-8">
+    <div class="row g-4">
+        <div class="col-lg-9">
             <div class="pipeline-grid">
                 {{-- Ready for Dispatch Column --}}
                 <div class="pipeline-col">
@@ -241,69 +335,111 @@
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center mt-3">
                                     <div class="form-check">
-                                        <input class="form-check-input checkbox-custom ship-checkbox" 
+                                        <input class="form-check-input checkbox-premium ship-checkbox" 
                                                type="checkbox" 
                                                value="{{ $item->id }}" 
                                                id="check-{{ $item->id }}">
-                                        <label class="form-check-label small" for="check-{{ $item->id }}">Select for shipment</label>
+                                        <label class="form-check-label small text-muted" for="check-{{ $item->id }}">Select for shipment</label>
                                     </div>
                                 </div>
                             </div>
                         @empty
                             <div class="text-center p-5 border rounded-4 bg-white">
-                                <i class="ti ti-check-circle fs-1 text-success"></i>
-                                <p class="text-mute mt-2">All caught up! No pending items.</p>
+                                <i class="ti ti-check-circle fs-1 text-success opacity-50"></i>
+                                <p class="text-muted mt-2 small">All caught up! No pending items.</p>
                             </div>
                         @endforelse
                     </div>
                 </div>
 
-                {{-- Shipped / In Transit Column (Simulated/Future) --}}
+                {{-- In Transit Column --}}
                 <div class="pipeline-col">
                     <div class="pipeline-header">
                         <span class="pipeline-label">
                             <i class="ti ti-truck text-info"></i> In Transit
                         </span>
-                        <span class="pipeline-count">0</span>
+                        <span class="pipeline-count">{{ $inTransitShipments->count() }}</span>
                     </div>
                     <div class="dispatch-list">
-                        <div class="text-center p-5 border rounded-4 bg-white">
-                            <i class="ti ti-clock fs-1 text-mute"></i>
-                            <p class="text-mute mt-2">No active shipments.</p>
-                        </div>
+                        @forelse($inTransitShipments as $shipment)
+                            <div class="shipment-card">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <span class="shipment-tracking">{{ $shipment->tracking_number }}</span>
+                                    <span class="badge bg-info-soft text-info" style="background: rgba(0, 123, 255, 0.1); color: #007bff; font-size: 0.7rem;">
+                                        {{ $shipment->status->value }}
+                                    </span>
+                                </div>
+                                <div class="small text-muted mb-2">
+                                    <i class="ti ti-building-community me-1"></i> {{ $shipment->courier->name }}
+                                </div>
+                                <div class="item-details">
+                                    @foreach($shipment->items as $item)
+                                        <div class="item-row">
+                                            <span class="item-name">{{ $item->orderItem->product->product_name }}</span>
+                                            <span class="item-qty">x{{ $item->quantity_shipped }}</span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @empty
+                            <div class="text-center p-5 border rounded-4 bg-white opacity-75">
+                                <i class="ti ti-clock fs-1 text-muted"></i>
+                                <p class="text-muted mt-2 small">No active shipments.</p>
+                                </div>
+                            @endforelse
                     </div>
                 </div>
 
-                {{-- Delivered Column (Simulated/Future) --}}
+                {{-- Delivered Column --}}
                 <div class="pipeline-col">
                     <div class="pipeline-header">
                         <span class="pipeline-label">
                             <i class="ti ti-circle-check text-success"></i> Delivered
                         </span>
-                        <span class="pipeline-count">0</span>
+                        <span class="pipeline-count">{{ $deliveredShipments->count() }}</span>
                     </div>
                     <div class="dispatch-list">
-                        <div class="text-center p-5 border rounded-4 bg-white">
-                            <i class="ti ti-circle-check fs-1 text-mute"></i>
-                            <p class="text-mute mt-2">No delivered items yet.</p>
-                        </div>
+                        @forelse($deliveredShipments as $shipment)
+                            <div class="shipment-card">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <span class="shipment-tracking">{{ $shipment->tracking_number }}</span>
+                                    <span class="badge bg-success-soft text-success" style="background: var(--hub-success-soft); color: var(--hub-success); font-size: 0.7rem;">
+                                        {{ $shipment->status->value }}
+                                        </span>
+                                </div>
+                                <div class="small text-muted mb-2">
+                                    <i class="ti ti-building-community me-1"></i> {{ $shipment->courier->name }}
+                                </div>
+                                <div class="item-details">
+                                    @foreach($shipment->items as $item)
+                                        <div class="item-row">
+                                            <span class="item-name">{{ $item->orderItem->product->product_name }}</span>
+                                            <span class="item-qty">x{{ $item->quantity_shipped }}</span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @empty
+                            <div class="text-center p-5 border rounded-4 bg-white opacity-75">
+                                <i class="ti ti-circle-check fs-1 text-muted"></i>
+                                <p class="text-muted mt-2 small">No delivered items yet.</p>
+                            </div>
+                        @endforelse
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-4">
-            <div class="dispatch-panel">
-                <div class="panel-title">
+        <div class="col-lg-3">
+            <div class="dispatch-control-center">
+                <div class="control-title">
                     <i class="ti ti-send text-primary"></i> Dispatch Items
                 </div>
-                <form action="{{ route('vendor.orders.dispatch') }}" method="POST" id="shipmentForm">
+                <form action="{{ route('vendor.orders.dispatch') }}" method="POST" id="shipmentForm" class="no-loader">
                     @csrf
-                    <input type="hidden" name="order_item_ids[]" id="selected_items">
-                    
-                    <div class="form-group mb-3">
-                        <label class="form-label">Select Courier</label>
-                        <select name="courier_id" class="form-select-premium" required>
+                    <div class="form-group">
+                        <label class="form-label-premium">Select Courier</label>
+                        <select name="courier_id" class="form-select input-premium" required>
                             <option value="">-- Select Courier --</option>
                             @foreach(\App\Models\Courier::all() as $courier)
                                 <option value="{{ $courier->id }}">{{ $courier->name }}</option>
@@ -311,63 +447,54 @@
                         </select>
                     </div>
 
-                    <div class="form-group mb-3">
-                        <label class="form-label">Tracking Number</label>
-                        <input type="text" name="tracking_number" class="form-select-premium" 
+                    <div class="form-group">
+                        <label class="form-label-premium">Tracking Number</label>
+                        <input type="text" name="tracking_number" class="form-control input-premium" 
                                placeholder="Enter courier tracking ID" required>
                     </div>
 
-                    <button type="submit" class="btn-ship">
-                        <i class="ti ti-upload me-2"></i> Create Shipment
+                    <button type="submit" class="btn-dispatch-action">
+                        <i class="ti ti-upload"></i> Create Shipment
                     </button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+@endsection
 
+@push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const checkboxes = document.querySelectorAll('.ship-checkbox');
-        const hiddenInput = document.getElementById('selected_items');
         const form = document.getElementById('shipmentForm');
-
-        function updateSelectedItems() {
-            const selected = Array.from(checkboxes)
-                .filter(i => i.checked)
-                .map(i => i.value);
-            
-            // Since we are sending an array in Laravel, we need multiple hidden inputs 
-            // or a comma-separated string that we handle in the controller.
-            // To keep it compatible with the current Controller, we'll use a different approach:
-            // We'll dynamically create hidden inputs for each selected ID.
-        }
 
         checkboxes.forEach(checkbox => {
             checkbox.addEventListener('change', () => {
                 const card = checkbox.closest('.order-card');
                 if (checkbox.checked) {
-                    card.style.borderColor = 'var(--hub-primary)';
-                    card.style.backgroundColor = 'var(--hub-primary-soft)';
+                    card.classList.add('selected');
                 } else {
-                    card.style.borderColor = 'var(--hub-border)';
-                    card.style.backgroundColor = 'var(--hub-card)';
+                    card.classList.remove('selected');
                 }
             });
         });
 
         form.addEventListener('submit', function(e) {
-            // Clear previous inputs
-            const existingInputs = form.querySelectorAll('input[name="order_item_ids[]"]');
-            existingInputs.forEach(el => el.remove());
-
-            // Add selected items
             const selected = Array.from(checkboxes).filter(i => i.checked);
             if (selected.length === 0) {
                 e.preventDefault();
-                alert('Please select at least one item to ship.');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Selection Required',
+                    text: 'Please select at least one item to ship.',
+                    confirmButtonColor: '#2563eb'
+                });
                 return;
             }
+
+            const existingInputs = form.querySelectorAll('input[name="order_item_ids[]"]');
+            existingInputs.forEach(el => el.remove());
 
             selected.forEach(item => {
                 const input = document.createElement('input');
@@ -379,3 +506,4 @@
         });
     });
 </script>
+@endpush

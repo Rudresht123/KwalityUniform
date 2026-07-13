@@ -36,7 +36,7 @@ class ProductApprovalRequestNotification extends Notification implements ShouldQ
             ->line('Vendor: ' . $this->product->vendor->business_name)
             ->action(
                 'Review Product',
-                route('product.show', $this->product->product_id)
+                route('product.index')
             )
             ->line('Thank you for using our application!');
     }
@@ -49,7 +49,7 @@ class ProductApprovalRequestNotification extends Notification implements ShouldQ
             'product_name' => $this->product->product_name,
             'vendor_name'  => $this->product->vendor->business_name,
             'message'      => 'New product approval request for ' . $this->product->product_name,
-            'url'          => route('product.show', $this->product->product_id),
+            'url'          => route('product.index'),
             'created_at'   => now()->toDateTimeString(),
         ];
     }
@@ -62,7 +62,7 @@ class ProductApprovalRequestNotification extends Notification implements ShouldQ
             'product_name' => $this->product->product_name,
             'vendor_name'  => $this->product->vendor->business_name,
             'message'      => 'New product approval request for ' . $this->product->product_name,
-            'url'          => route('product.show', $this->product->product_id),
+            'url'          => route('product.index'),
             'created_at'   => now()->toDateTimeString(),
         ]);
     }

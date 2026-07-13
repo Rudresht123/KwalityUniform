@@ -23,6 +23,7 @@ class PermissionSeeder extends Seeder
             'Product Approval'        => 'school',
             'Vendor Management'       => 'vendor',
             'Partnership Management'  => 'vendor',
+            'Order Fulfillment'       => 'vendor',
             'System Management'       => 'admin',
         ];
 
@@ -96,6 +97,10 @@ class PermissionSeeder extends Seeder
                 'stock_adjust'            => 'Adjust Stock',
                 'stock_history_view'      => 'View Stock History',
                 'product.stock_update'    => 'Update Product Stock',
+            ],
+            'Order Fulfillment' => [
+                'vendor.fulfillment.view' => 'View Order Fulfillment Hub',
+                'vendor.fulfillment.ship' => 'Ship Orders',
             ],
             'Product Approval' => [
                 'product_approval_view'   => 'View Approval Queue',

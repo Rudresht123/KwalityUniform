@@ -201,7 +201,7 @@ Route::prefix('product-approvals')->name('product-approval.')->group(function ()
 });
 
 Route::prefix('products')->name('product.')->group(function () {
-    Route::get('/index', [ProductController::class, 'index'])->name('index')->middleware('permission:product.view');
+    Route::get('/', [ProductController::class, 'index'])->name('index')->middleware('permission:product.view');
     Route::get('/create', [ProductController::class, 'create'])->name('create')->middleware('permission:product.create');
     Route::post('/store', [ProductController::class, 'store'])->name('store')->middleware('permission:product.create');
     Route::get('/show/{product}', [ProductController::class, 'show'])->name('show')->middleware('permission:product.view');

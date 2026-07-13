@@ -1,279 +1,215 @@
 <style>
-/*==============================
-      ALERTIFY PREMIUM UI
-===============================*/
+/*==========================================================================
+   ULTRA-SPECIFIC ALERTIFY OVERRIDE - PREMIUM LIVE TOASTS
+==========================================================================*/
 
-.ajs-notifier{
-    top:20px !important;
-    right:20px !important;
-    z-index:999999;
+/* Target with body to ensure maximum specificity */
+body .ajs-notifier {
+    top: 20px !important;
+    right: 20px !important;
+    z-index: 9999999 !important;
 }
 
-.ajs-notifier .ajs-message{
-
-    display:flex !important;
-    align-items:center;
-    gap:12px;
-
-    min-width:280px;
-    max-width:420px;
-    width:auto;
-
-    padding:14px 18px !important;
-
-    border:none !important;
-    border-radius:16px !important;
-
-    color:#fff !important;
-    font-size:14px;
-    font-weight:500;
-    line-height:1.45;
-
-    backdrop-filter:blur(16px);
-
-    box-shadow:
-        0 12px 35px rgba(0,0,0,.18);
-
-    overflow:hidden;
-    position:relative;
-
-    animation:toastIn .35s ease;
+body .ajs-notifier .ajs-message {
+    position: relative !important;
+    display: block !important;
+    min-width: 320px !important;
+    max-width: 420px !important;
+    padding: 18px 35px 18px 18px !important; /* Extra right padding for X button */
+    border: none !important;
+    border-radius: 16px !important;
+    color: #ffffff !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    line-height: 1.5 !important;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2) !important;
+    backdrop-filter: blur(12px) !important;
+    animation: toastIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    overflow: visible !important;
+    cursor: pointer !important;
 }
 
-/* Small shine */
-
-.ajs-notifier .ajs-message::before{
-
-    content:"";
-
-    position:absolute;
-    inset:0;
-
-    background:linear-gradient(
-        120deg,
-        transparent,
-        rgba(255,255,255,.08),
-        transparent
-    );
-
-    transform:translateX(-100%);
-    animation:shine 3s infinite;
+/* FORCE CLOSE BUTTON TO TOP RIGHT */
+body .ajs-notifier .ajs-message .ajs-close {
+    position: absolute !important;
+    top: 12px !important;
+    right: 12px !important;
+    width: 20px !important;
+    height: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: rgba(255,255,255,0.7) !important;
+    font-size: 16px !important;
+    opacity: 0.7 !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+    z-index: 1000 !important;
+    background: transparent !important;
+    border: none !important;
 }
 
-/*==============================
-        ICON
-===============================*/
-
-.ajs-message i{
-
-    width:28px;
-    height:28px;
-
-    min-width:28px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border-radius:50%;
-
-    background:rgba(255,255,255,.18);
-
-    font-size:15px;
+body .ajs-notifier .ajs-message .ajs-close:hover {
+    opacity: 1 !important;
+    color: #ffffff !important;
+    transform: scale(1.2) !important;
 }
 
-/*==============================
-       COLORS
-===============================*/
-
-.ajs-success{
-    background:linear-gradient(135deg,#16a34a,#22c55e)!important;
+/* CONTENT LAYOUT */
+.toast-content {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+    width: 100% !important;
 }
 
-.ajs-error{
-    background:linear-gradient(135deg,#dc2626,#ef4444)!important;
+.toast-content i {
+    flex-shrink: 0 !important;
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    background: rgba(255,255,255,0.2) !important;
+    font-size: 18px !important;
+    color: #fff !important;
+    margin-top: 2px !important;
 }
 
-.ajs-warning{
-    background:linear-gradient(135deg,#f59e0b,#fbbf24)!important;
+.toast-text {
+    flex: 1 !important;
+    word-break: break-word !important;
+    white-space: normal !important;
+    color: #fff !important;
+    font-size: 14px !important;
 }
 
-.ajs-message:not(.ajs-success):not(.ajs-error):not(.ajs-warning){
-    background:linear-gradient(135deg,#2563eb,#3b82f6)!important;
+.toast-link {
+    display: block !important;
+    margin-top: 8px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    text-decoration: underline !important;
+    opacity: 0.9 !important;
 }
 
-/*==============================
-      CLOSE BUTTON
-===============================*/
-
-.ajs-close{
-
-    color:#fff!important;
-
-    opacity:.75;
-
-    transition:.25s;
-
-    font-size:16px;
+/* VIBRANT GRADIENTS */
+body .ajs-notifier .ajs-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
 }
 
-.ajs-close:hover{
-
-    opacity:1;
-
-    transform:scale(1.15);
+body .ajs-notifier .ajs-error {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
 }
 
-/*==============================
-      ANIMATION
-===============================*/
-
-@keyframes toastIn{
-
-    from{
-
-        opacity:0;
-        transform:translateX(60px);
-    }
-
-    to{
-
-        opacity:1;
-        transform:translateX(0);
-    }
-
+body .ajs-notifier .ajs-warning {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
 }
 
-@keyframes shine{
-
-    from{
-
-        transform:translateX(-120%);
-    }
-
-    to{
-
-        transform:translateX(120%);
-    }
-
-}
-/* Content wrapper */
-
-.ajs-notifier .ajs-message{
-    display:flex;
-    align-items:flex-start;
+body .ajs-notifier .ajs-message:not(.ajs-success):not(.ajs-error):not(.ajs-warning) {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
 }
 
-.ajs-notifier .ajs-message span{
-    flex:1;
-    display:block;
-    word-break:break-word;
-    white-space:normal;
+/* ANIMATION */
+@keyframes toastIn {
+    from { opacity: 0; transform: translateX(50px) scale(0.9); }
+    to { opacity: 1; transform: translateX(0) scale(1); }
 }
 
-/* Icon */
-
-.ajs-notifier .ajs-message i{
-    flex-shrink:0;
-    width:28px;
-    height:28px;
-    min-width:28px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:50%;
-    margin-top:1px;
-}
-.toast-content{
-    display:flex;
-    align-items:flex-start;
-    gap:10px;
-}
-
-.toast-content i{
-    flex:0 0 28px;
-    width:28px;
-    height:28px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:50%;
-    background:rgba(255,255,255,.18);
-}
-
-.toast-text{
-    flex:1;
-    word-break:break-word;
-    line-height:1.45;
-}
-/* Remove extra margin Alertify adds */
-
-.ajs-notifier .ajs-message *{
-    margin:0;
-}
-.ajs-notifier .ajs-message {
-    max-width: 480px; /* increase from 420px */
+/* Cleanup default Alertify margins */
+body .ajs-notifier .ajs-message * {
+    margin: 0 !important;
 }
 </style>
 
 
 <script>
-   alertify.set('notifier','position','top-right');
+alertify.set('notifier','position','top-right');
 alertify.set('notifier','delay',4);
 alertify.defaults.notifier.closeButton = true;
-function toast(icon, message){
-    return `
+
+function toast(icon, message, url = null){
+    let content = `
         <div class="toast-content">
             <i class="${icon}"></i>
-            <div class="toast-text">${message}</div>
+            <div class="toast-text">
+                ${message}
+                ${url ? `<span class="toast-link">View Details →</span>` : ''}
+            </div>
         </div>
     `;
+    
+    return content;
 }
 
-function showSuccess(message){
-    alertify.success(
-        toast('ti-check', message)
-    );
+function showSuccess(message, url = null){
+    alertify.success(toast('ti-check', message, url));
+    if(url) {
+        // Add click listener to the last created alertify message
+        setTimeout(() => {
+            const msg = document.querySelector('.ajs-success');
+            if(msg) msg.onclick = () => window.location.href = url;
+        }, 50);
+    }
 }
 
-function showError(message) {
-    alertify.set('notifier', 'delay', 8); // longer for errors
-    alertify.error(toast('ti-x', message));
-    alertify.set('notifier', 'delay', 4); // reset back
-}
-function showWarning(message){
-    alertify.warning(
-        toast('ti-alert-triangle', message)
-    );
+function showError(message, url = null){
+    alertify.set('notifier', 'delay', 8); 
+    alertify.error(toast('ti-x', message, url));
+    alertify.set('notifier', 'delay', 4); 
+    if(url) {
+        setTimeout(() => {
+            const msg = document.querySelector('.ajs-error');
+            if(msg) msg.onclick = () => window.location.href = url;
+        }, 50);
+    }
 }
 
-function showInfo(message){
-    alertify.message(
-        toast('ti-info-circle', message)
-    );
-}</script>
+function showWarning(message, url = null){
+    alertify.warning(toast('ti-alert-triangle', message, url));
+    if(url) {
+        setTimeout(() => {
+            const msg = document.querySelector('.ajs-warning');
+            if(msg) msg.onclick = () => window.location.href = url;
+        }, 50);
+    }
+}
 
+function showInfo(message, url = null){
+    alertify.message(toast('ti-info-circle', message, url));
+    if(url) {
+        setTimeout(() => {
+            const msg = document.querySelector('.ajs-message:not(.ajs-success):not(.ajs-error):not(.ajs-warning)');
+            if(msg) msg.onclick = () => window.location.href = url;
+        }, 50);
+    }
+}
 </script>
 
 @if (session('success'))
     <script>
         showSuccess(@json(session('success')));
     </script>
-    @endif @if (session('error'))
-        <script>
-            showError(@json(session('error')));
-        </script>
-        @endif @if (session('warning'))
-            <script>
-                showWarning(@json(session('warning')));
-            </script>
-            @endif @if (session('info'))
-                <script>
-                    showInfo(@json(session('info')));
-                </script>
-            @endif
+@endif 
+@if (session('error'))
+    <script>
+        showError(@json(session('error')));
+    </script>
+@endif 
+@if (session('warning'))
+    <script>
+        showWarning(@json(session('warning')));
+    </script>
+@endif 
+@if (session('info'))
+    <script>
+        showInfo(@json(session('info')));
+    </script>
+@endif
 
-            @if ($errors->any())
+@if ($errors->any())
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             let messages = @json($errors->all());

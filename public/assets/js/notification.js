@@ -91,47 +91,17 @@ function showToast({
 
     toast.innerHTML = `
         <div class="toast-progress"></div>
-
         <div class="toast-unread-dot"></div>
-
-        <div class="toast-icon">
-            ${getToastIcon(type)}
-        </div>
-
         <div class="toast-content">
-
-            <div class="toast-header">
-                <div class="toast-title">
-                    ${title}
-                </div>
-
-                <div class="toast-actions">
-                    <span class="toast-time">
-                        just now
-                    </span>
-
-                    <button class="toast-close">
-                        ✕
-                    </button>
-                </div>
+            <div class="toast-icon">
+                ${getToastIcon(type)}
             </div>
-
-            <div class="toast-message">
-                ${message}
+            <div class="toast-text">
+                <div class="toast-title">${title}</div>
+                <div class="toast-message">${message}</div>
+                ${url ? `<div class="toast-link">View Details →</div>` : ''}
             </div>
-
-            ${
-                url
-                    ? `
-                    <div class="toast-footer">
-                        <span class="toast-link">
-                            View Details →
-                        </span>
-                    </div>
-                `
-                    : ''
-            }
-
+            <button class="toast-close">✕</button>
         </div>
     `;
 
@@ -145,7 +115,6 @@ function showToast({
         removeToast(toast);
     }, 7000);
 
-    // Pause auto close on hover
     toast.addEventListener('mouseenter', () => {
         clearTimeout(removeTimer);
     });
@@ -156,23 +125,14 @@ function showToast({
         }, 3000);
     });
 
-    // Click anywhere to open
     if (url) {
         toast.style.cursor = 'pointer';
-
         toast.addEventListener('click', (e) => {
-
-            if (
-                e.target.classList.contains('toast-close')
-            ) {
-                return;
-            }
-
+            if (e.target.classList.contains('toast-close')) return;
             window.location.href = url;
         });
     }
 
-    // Close Button
     toast.querySelector('.toast-close')
         ?.addEventListener('click', (e) => {
             e.stopPropagation();
