@@ -14,7 +14,7 @@ class StoreParentCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'      => ['required', 'string', 'max:80', 'unique:parent_categories,name'],
+            'name'      => ['required', 'string', 'max:80'],
             'is_active' => ['required', 'boolean'],
         ];
     }

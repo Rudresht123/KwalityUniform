@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\BaseController;
+use App\Models\SuperAdmin\School;
 use App\Models\SuperAdmin\SchoolSection;
-use App\Models\SuperAdmin\SchoolStandard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -15,13 +15,13 @@ class SchoolSectionController extends BaseController
     protected string $title = 'School Section Management';
 
     /**
-     * Display sections for a specific school standard.
+     * Display sections for a specific school.
      */
-    public function index(SchoolStandard $schoolStandard): View
+    public function index(School $school): View
     {
-        $sections = $schoolStandard->sections()->latest()->get();
+        $sections = $school->sections()->latest()->get();
 
-        return view('super-admin.school-section.index', compact('schoolStandard', 'sections'), $this->pageData('Manage Sections', 'Home|School Standards|' . $schoolStandard->standard_name . '|Sections'));
+        return view('super-admin.school-section.index', compact('school', 'sections'), $this->pageData('Manage Sections', 'Home|Schools|' . $school->school_name . '|Sections'));
     }
 
     /**
@@ -30,7 +30,6 @@ class SchoolSectionController extends BaseController
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'standard_id' => 'required|exists:school_standards,id',
             'school_id' => 'required|exists:schools,school_id',
             'section_name' => 'required|string|max:255',
             'is_active' => 'boolean',
@@ -39,7 +38,6 @@ class SchoolSectionController extends BaseController
         try {
             SchoolSection::create([
                 'school_id' => $request->school_id,
-                'standard_id' => $request->standard_id,
                 'section_name' => $request->section_name,
                 'is_active' => $request->boolean('is_active'),
             ]);

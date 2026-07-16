@@ -33,17 +33,7 @@
                                         <label class="form-label">School Name <span class="text-danger">*</span></label>
                                         <input type="text" name="school_name" class="form-control" value="{{ old('school_name', $school->school_name) }}" required>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">School Board <span class="text-danger">*</span></label>
-                                        <select name="school_board_id" class="form-select" required>
-                                            <option value="" disabled>Select Board</option>
-                                            @foreach($boards as $board)
-                                                <option value="{{ $board->id }}" {{ old('school_board_id', $school->school_board_id) == $board->id ? 'selected' : '' }}>
-                                                    {{ $board->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                             
                                     <div class="col-md-6">
                                         <label class="form-label">Principal Name <span class="text-danger">*</span></label>
                                         <input type="text" name="principal_name" class="form-control" value="{{ old('principal_name', $school->principal_name) }}" required>
@@ -65,7 +55,7 @@
                                 <div class="row g-3">
                                     <div class="col-md-12">
                                         <label class="form-label">Address <span class="text-danger">*</span></label>
-                                        <textarea name="address" class="form-control" rows="2" required>{{ old('address', $school->address) }}</textarea>
+                                        <textarea name="address" class="form-control"  required>{{ old('address', $school->address) }}</textarea>
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">City <span class="text-danger">*</span></label>

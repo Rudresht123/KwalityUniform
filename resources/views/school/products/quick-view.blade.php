@@ -122,7 +122,7 @@
 
                             <div class="product-price">
 
-                                ₹{{ number_format($product->price, 2) }}
+                                ₹{{ number_format($product->price ?? 0, 2) }}
 
                                 <small>
 
@@ -296,7 +296,7 @@
         transition: background .2s;
     }
     .btn-approve-school:hover {
-        background: var(--bs-primary-darken-1);
+        background: #4a4fb8 !important;
     }
     .btn-approve-school.approved {
         background: var(--bs-success);

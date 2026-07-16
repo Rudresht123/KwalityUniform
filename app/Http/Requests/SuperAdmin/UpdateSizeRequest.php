@@ -14,7 +14,7 @@ class UpdateSizeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'size_name' => 'required|string|max:20|unique:sizes,size_name,' . $this->size->size_id . ',size_id',
+            'size_name' => 'required|string|max:20',
             'display_name' => 'required|string|max:30',
             'sort_order' => 'required|integer',
             'is_active' => 'required|boolean',

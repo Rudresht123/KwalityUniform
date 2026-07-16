@@ -64,10 +64,6 @@ class DashboardController extends Controller
 
         return [
             'school' => $school,
-            'totalStandards' => $school->standards()->count(),
-            'activeStandards' => $school->standards()->where('is_active', true)->count(),
-            'inactiveStandards' => $school->standards()->where('is_active', false)->count(),
-            'recentStandards' => $school->standards()->latest()->take(5)->get(),
         ];
     }
 

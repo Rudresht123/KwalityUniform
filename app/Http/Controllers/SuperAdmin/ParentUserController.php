@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\BaseController;
+use App\Models\SuperAdmin\ParentProfile;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class ParentUserController extends BaseController
@@ -21,16 +24,22 @@ class ParentUserController extends BaseController
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+  public function index(Request $request)
     {
         if ($request->ajax()) {
-            $parents = User::role('parent')->latest();
+            $parents = User::role('parent')
+                ->select('users.*')
+                ->withCount('orders')
+                ->latest();
 
             return DataTables::of($parents)
                 ->addIndexColumn()
+                ->addColumn('registration_date', function ($row) {
+                    return $row->created_at->format('d M Y');
+                })
                 ->addColumn('status', function ($row) {
-                    return $row->is_active 
-                        ? '<span class="badge bg-success">ACTIVE</span>' 
+                    return $row->is_active
+                        ? '<span class="badge bg-success">ACTIVE</span>'
                         : '<span class="badge bg-danger">INACTIVE</span>';
                 })
                 ->addColumn('options', function ($row) {
@@ -40,7 +49,13 @@ class ParentUserController extends BaseController
                 ->make(true);
         }
 
-        return view('super-admin.parent-user.index', $this->pageData('Parent User Management', 'Home|User Management|Parents'));
+        $stats = [
+            'total_parents' => User::role('parent')->count(),
+            'active_parents' => User::role('parent')->where('is_active', true)->count(),
+            'new_this_month' => User::role('parent')->whereMonth('created_at', now()->month)->count(),
+        ];
+
+        return view('super-admin.parent-user.index', compact('stats'), $this->pageData('Parent User Report', 'Home|Reports|Parent Users'));
     }
 
     /**
@@ -83,7 +98,7 @@ class ParentUserController extends BaseController
             $user = $this->userService->create($data);
 
             // Create associated parent profile
-            \App\Models\SuperAdmin\Parent::create([
+            \App\Models\SuperAdmin\ParentProfile::create([
                 'user_id' => $user->id,
                 'address' => $request->address,
                 'city' => $request->city,
@@ -110,7 +125,7 @@ class ParentUserController extends BaseController
      */
     public function edit(User $user)
     {
-        $parent = \App\Models\SuperAdmin\Parent::where('user_id', $user->id)->first();
+        $parent = \App\Models\SuperAdmin\ParentProfile::where('user_id', $user->id)->first();
         return view('super-admin.parent-user.edit', compact('user', 'parent'), $this->pageData('Edit Parent User', 'Home|User Management|Parents|Edit'));
     }
 
@@ -142,7 +157,7 @@ class ParentUserController extends BaseController
             $this->userService->update($user, $request->all());
 
             // Update associated parent profile
-            $parent = \App\Models\SuperAdmin\Parent::where('user_id', $user->id)->first();
+            $parent = \App\Models\SuperAdmin\ParentProfile::where('user_id', $user->id)->first();
             if ($parent) {
                 $parent->update([
                     'address' => $request->address,
@@ -169,13 +184,28 @@ class ParentUserController extends BaseController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
-    {
-        try {
+    public function destroy(User $user): JsonResponse
+{
+    try {
+        DB::transaction(function () use ($user) {
+            ParentProfile::where('user_id', $user->id)->delete();
             $user->delete();
-            return redirect()->route('parent-user.index')->with('success', 'Parent user deleted successfully.');
-        } catch (Throwable $e) {
-            return back()->with('error', 'Failed to delete parent user: ' . $e->getMessage());
-        }
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Parent user deleted successfully.',
+        ], 200);
+
+    } catch (Throwable $e) {
+        report($e);
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to delete parent user.',
+            // Uncomment below only in local environment
+            // 'error' => config('app.debug') ? $e->getMessage() : null,
+        ], 500);
     }
+}
 }

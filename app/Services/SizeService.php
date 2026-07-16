@@ -7,9 +7,13 @@ use Illuminate\Support\Facades\DB;
 
 class SizeService
 {
-    public function getAllSizes()
+    public function getAllSizes($vendorId = null)
     {
-        return Size::latest();
+        $query = Size::latest();
+        if ($vendorId) {
+            $query->forVendor($vendorId);
+        }
+        return $query;
     }
 
     public function createSize(array $data)

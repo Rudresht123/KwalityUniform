@@ -80,6 +80,8 @@ class StoreProductRequest extends FormRequest
 
             'variants.*.selling_price' => 'required|numeric|min:0|lte:variants.*.mrp',
 
+            'variants.*.vendor_price' => 'required|numeric|min:0',
+
             'variants.*.stock_qty' => 'required|integer|min:0',
 
             'variants.*.low_stock_alert' => 'required|integer|min:0',
@@ -161,6 +163,8 @@ class StoreProductRequest extends FormRequest
             'variants.*.mrp.required' => 'MRP is required.',
             'variants.*.selling_price.required' => 'Selling price is required.',
             'variants.*.selling_price.lte' => 'Selling price cannot be greater than MRP.',
+
+            'variants.*.vendor_price.required' => 'Vendor price is required.',
 
             'variants.*.stock_qty.required' => 'Stock quantity is required.',
             'variants.*.low_stock_alert.required' => 'Low stock alert quantity is required.',

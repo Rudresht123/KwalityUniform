@@ -12,7 +12,6 @@ class SchoolSection extends Record
 
     protected $fillable = [
         'school_id',
-        'standard_id',
         'section_name',
         'is_active',
     ];
@@ -23,14 +22,6 @@ class SchoolSection extends Record
     public function school(): BelongsTo
     {
         return $this->belongsTo(School::class, 'school_id', 'school_id');
-    }
-
-    /**
-     * Get the standard that owns the section.
-     */
-    public function standard(): BelongsTo
-    {
-        return $this->belongsTo(SchoolStandard::class, 'standard_id', 'id');
     }
 
     /**

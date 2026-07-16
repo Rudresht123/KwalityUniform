@@ -12,7 +12,7 @@
                     </a>
                 </div>
                 <div class="card-body">
-                    <table id="parentTable" class="table datatable" style="width:100%">
+                    <table id="parentTable" class="table" style="width:100%">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -48,3 +48,4 @@
 </script>
 @endpush
 @endsection
+

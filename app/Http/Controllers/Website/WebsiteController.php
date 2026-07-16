@@ -9,7 +9,6 @@ use App\Models\SuperAdmin\School;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\SuperAdmin\SchoolPartnershipRequest;
-use App\Models\SuperAdmin\SchoolStandard;
 use App\Repositories\ProductRepository;
 use App\Services\EmailService;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +30,6 @@ class WebsiteController extends Controller
 public function shop(Request $request)
 {
     $schoolId = $request->query('school');
-    $standardId = $request->query('standard');
     $classId = $request->query('class');
     $parentCategoryId = $request->query('parent_category');
     $subCategoryId = $request->query('sub_category');
@@ -39,7 +37,6 @@ public function shop(Request $request)
 
     $filters = [
         'school' => $schoolId,
-        'standard' => $standardId,
         'class' => $classId,
         'parent_category' => $parentCategoryId,
         'sub_category' => $subCategoryId,
@@ -50,14 +47,6 @@ public function shop(Request $request)
     $schools = School::active()->get();
     $parentCategories = ParentCategory::active()->get();
 
-    $standards = collect();
-    if ($schoolId) {
-        $standards = SchoolStandard::where('school_id', $schoolId)
-            ->where('is_active', true)
-            ->select('id', 'standard_name')
-            ->get();
-    }
-
     $subCategories = collect();
     if ($parentCategoryId) {
         $subCategories = Category::where('parent_id', $parentCategoryId)
@@ -66,7 +55,7 @@ public function shop(Request $request)
     }
 
     if ($request->ajax()) {
-        return view('website.partials.shop-products', compact('products', 'filters', 'standards', 'subCategories'))->render();
+        return view('website.partials.shop-products', compact('products', 'filters', 'subCategories'))->render();
     }
 
     return view('website.pages.shop', [
@@ -75,7 +64,6 @@ public function shop(Request $request)
         'categories' => $parentCategories,
         'subCategories' => $subCategories,
         'filters' => $filters,
-        'standards' => $standards,
     ]);
 }
 

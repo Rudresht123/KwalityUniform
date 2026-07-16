@@ -7,9 +7,13 @@ use Illuminate\Support\Facades\DB;
 
 class ParentCategoryService
 {
-    public function getAllParentCategories()
+    public function getAllParentCategories($vendorId = null)
     {
-        return ParentCategory::active()->latest();
+        $query = ParentCategory::active()->latest();
+        if ($vendorId) {
+            $query->forVendor($vendorId);
+        }
+        return $query;
     }
 
     public function createParentCategory(array $data)

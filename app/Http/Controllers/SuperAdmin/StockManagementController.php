@@ -19,7 +19,7 @@ class StockManagementController extends BaseController
 
     public function index(Request $request)
     {
-        \Illuminate\Support\Facades\Gate::authorize('viewAnyStock');
+
 
         if ($request->ajax()) {
             $query = $this->stockRepo->getVariantsQuery()

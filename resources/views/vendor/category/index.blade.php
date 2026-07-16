@@ -24,7 +24,6 @@
                                 <th>#</th>
                                 <th>Category Name</th>
                                 <th>Type</th>
-                                <th>Size Required</th>
                                 <th>Status</th>
                                 <th width="120">Action</th>
                             </tr>
@@ -44,8 +43,7 @@
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
                 {data: 'category_name', name: 'category_name'},
-                {data: 'action_type', name: 'category_type'},
-                {data: 'size_status', name: 'requires_size'},
+                {data: 'parent_category', name: 'parent_category'},
                 {data: 'status', name: 'is_active'},
                 {data: 'options', name: 'options', orderable: false, searchable: false}
             ]

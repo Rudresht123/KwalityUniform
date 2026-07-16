@@ -6,6 +6,11 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\ScreenLockController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\School\SchoolProductController;
+use App\Http\Controllers\Vendor\CategoryController;
+use App\Http\Controllers\Vendor\ColorController;
+use App\Http\Controllers\Vendor\ParentCategoryController;
+use App\Http\Controllers\Vendor\SizeController;
+use App\Http\Controllers\Vendor\StockHistoryReportController;
 use App\Http\Middleware\CheckScreenLock;
 use Illuminate\Support\Facades\Route;
 
@@ -30,33 +35,33 @@ Route::prefix('eschoolkart')->group(function () {
 
         Route::get('global-settings', [\App\Http\Controllers\SuperAdmin\GlobalSettingController::class, 'index'])->name('global-settings.index');
         Route::put('global-settings', [\App\Http\Controllers\SuperAdmin\GlobalSettingController::class, 'update'])->name('global-settings.update');
-        });
-        });
-
-        // School Product Routes
-        Route::middleware(['auth'])->group(function () {
-            Route::get('/school-products/standards', [SchoolProductController::class, 'getStandards'])
-                ->name('school.products.standards');
-
-            Route::get('/school-products', [SchoolProductController::class, 'index'])
-                ->name('school.products.index');
-
-            Route::get('/school-products/approved', [SchoolProductController::class, 'approved'])
-                ->name('school.products.approved');
-
-            Route::get('/school-products/{productId}', [SchoolProductController::class, 'show'])
-                ->name('school.products.show');
-
-            Route::post('/school-products/{productId}/approve', [SchoolProductController::class, 'approveProduct']);
-
-            Route::post('/school-products/{productId}/unapprove', [SchoolProductController::class, 'unapproveProduct']);
-        });
-
-        // Screen Lock specialized routes within super-admin prefix
-    Route::middleware(['auth'])->group(function () {
-        Route::get('/screen-lock', [ScreenLockController::class, 'show'])->name('lockscreen');
-        Route::post('/screen-unlock', [ScreenLockController::class, 'unlock'])->name('lockscreen.unlock');
     });
+});
+
+// School Product Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/school-products/standards', [SchoolProductController::class, 'getStandards'])
+        ->name('school.products.standards');
+
+    Route::get('/school-products', [SchoolProductController::class, 'index'])
+        ->name('school.products.index');
+
+    Route::get('/school-products/approved', [SchoolProductController::class, 'approved'])
+        ->name('school.products.approved');
+
+    Route::get('/school-products/{productId}', [SchoolProductController::class, 'show'])
+        ->name('school.products.show');
+
+    Route::post('/school-products/{productId}/approve', [SchoolProductController::class, 'approveProduct']);
+
+    Route::post('/school-products/{productId}/unapprove', [SchoolProductController::class, 'unapproveProduct']);
+});
+
+// Screen Lock specialized routes within super-admin prefix
+Route::middleware(['auth'])->group(function () {
+    Route::get('/screen-lock', [ScreenLockController::class, 'show'])->name('lockscreen');
+    Route::post('/screen-unlock', [ScreenLockController::class, 'unlock'])->name('lockscreen.unlock');
+});
 
 Route::delete('/delete-record/{table}/{id}', [DeleteRecord::class, 'deleteRecord'])->name('deleteRecord');
 
@@ -94,11 +99,30 @@ require __DIR__ . '/website-routes.php';
 Route::middleware(['auth'])->group(function () {
     Route::get('/vendor/fulfillment', \App\Http\Livewire\VendorFulfillment::class)->name('vendor.fulfillment');
 
-    Route::middleware(['role:vendor'])->prefix('vendor')->name('vendor.')->group(function () {
-        Route::get('orders/dispatch', [App\Http\Controllers\Vendor\OrderDispatchController::class, 'index'])->name('orders.dispatch');
+     Route::middleware(['role:vendor'])->prefix('vendor')->name('vendor.')->group(function () {
+     Route::get('orders/dispatch', [App\Http\Controllers\Vendor\OrderDispatchController::class, 'index'])->name('orders.dispatch');
         Route::post('orders/dispatch', [App\Http\Controllers\Vendor\OrderDispatchController::class, 'ship'])->name('orders.ship');
-    });
+     });
 
+    Route::middleware(['role:vendor'])->prefix('vendor')->group(function () {
+       
+        // Stock History Report
+        Route::get('stock-history-report', [StockHistoryReportController::class, 'index'])->name('vendor.stock.history.report');
+
+        // Attribute Management
+        Route::resource('categories', CategoryController::class)
+            ->names('category');
+
+        Route::resource('parent-categories', ParentCategoryController::class)
+            ->names('parent-category');
+
+        Route::resource('sizes', SizeController::class)
+            ->names('size');
+
+        Route::resource('colors', ColorController::class)
+            ->names('color');
+    });
     Route::get('/school/distribution', \App\Http\Livewire\SchoolDistribution::class)->name('school.distribution');
     Route::get('/parent/orders', \App\Http\Livewire\ParentOrderTracking::class)->name('parent.orders');
 });
+

@@ -80,9 +80,18 @@ class ProductController extends BaseController
     {
 
         $vendors = Vendor::approved()->get();
-        $categories = Category::active()->get();
-        $sizes = Size::active()->orderBy('sort_order')->get();
-        $colors = Color::active()->get();
+        
+        if (auth()->user()->hasRole('vendor')) {
+            $vendorId = auth()->user()->vendor?->vendor_id;
+            $categories = Category::active()->forVendor($vendorId)->get();
+            $sizes = Size::active()->forVendor($vendorId)->orderBy('sort_order')->get();
+            $colors = Color::active()->forVendor($vendorId)->get();
+        } else {
+            $categories = Category::active()->get();
+            $sizes = Size::active()->orderBy('sort_order')->get();
+            $colors = Color::active()->get();
+        }
+
         return view('super-admin.product.create', compact('vendors', 'categories', 'sizes', 'colors'), $this->pageData('Create Product', 'Home|Products|Create'));
     }
 
@@ -192,9 +201,18 @@ class ProductController extends BaseController
 
         $product->load(['variants', 'primaryImage.file']);
         $vendors = Vendor::approved()->get();
-        $categories = Category::active()->get();
-        $sizes = Size::active()->orderBy('sort_order')->get();
-        $colors = Color::active()->get();
+        
+        if (auth()->user()->hasRole('vendor')) {
+            $vendorId = auth()->user()->vendor?->vendor_id;
+            $categories = Category::active()->forVendor($vendorId)->get();
+            $sizes = Size::active()->forVendor($vendorId)->orderBy('sort_order')->get();
+            $colors = Color::active()->forVendor($vendorId)->get();
+        } else {
+            $categories = Category::active()->get();
+            $sizes = Size::active()->orderBy('sort_order')->get();
+            $colors = Color::active()->get();
+        }
+
         return view('super-admin.product.edit', compact('product', 'vendors', 'categories', 'sizes', 'colors'), $this->pageData('Edit Product', 'Home|Products|Edit'));
     }
 

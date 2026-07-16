@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Parent extends Model
+class ParentProfile extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'parents';
+    protected $table = 'web_users';
 
     protected $fillable = [
         'user_id',

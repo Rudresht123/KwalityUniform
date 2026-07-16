@@ -36,7 +36,6 @@ class DashboardService
         $stats['inventory_alerts'] = $this->repository->getInventoryAlerts();
         $stats['notifications'] = $this->repository->getRecentNotifications();
         $stats['recentActivity'] = $this->repository->getRecentActivity();
-        $stats['schoolBoards'] = $this->repository->getSchoolBoardDistribution();
         $stats['parentCategoryCounts'] = $this->repository->getParentCategoryProductCounts();
         $stats['categoryCounts'] = $this->repository->getCategoryProductCounts();
         $stats['productUploadTrend'] = $this->repository->getProductUploadTrend();

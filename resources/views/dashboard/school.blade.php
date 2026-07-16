@@ -225,44 +225,6 @@
             </div>
         </div>
 
-        {{-- RECENT CLASSES --}}
-        <div class="section-label">Your Recent Classes</div>
-        <div class="panel">
-            <div class="panel-title d-flex justify-content-between align-items-center">
-                <span><i class="ti ti-list-details me-2 text-primary"></i>Class List</span>
-                <a href="{{ route('school-standard.edit', $school->school_id) }}" class="btn btn-sm btn-light text-primary fw-bold py-0 px-2" style="font-size: 11px;">Manage All</a>
-            </div>
-            <div class="table-responsive">
-                <table class="table align-middle mb-0">
-                    <thead class="bg-light">
-                        <tr>
-                            <th class="ps-4 border-0 small text-uppercase fw-bold text-muted">Class Name</th>
-                            <th class="border-0 small text-uppercase fw-bold text-muted">Status</th>
-                            <th class="border-0 small text-uppercase fw-bold text-muted">Created At</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($recentClasses ?? [] as $rClass)
-                            <tr>
-                                <td class="ps-4">
-                                    <div class="fw-semibold text-dark">{{ $rClass->class_name }}</div>
-                                </td>
-                                <td>
-                                    <x-status-badge :value="$rClass->is_active" :active="true" :inactive="false" />
-                                </td>
-                                <td>
-                                    <div class="small text-muted">{{ $rClass->created_at->format('M d, Y') }}</div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="3" class="text-center py-4 text-muted small italic">No classes defined yet.</td>
-                                </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
     </div>
 @endif
 

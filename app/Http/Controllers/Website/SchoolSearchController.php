@@ -29,20 +29,4 @@ class SchoolSearchController extends Controller
             'schools' => $schools
         ]);
     }
-
-    public function standards(Request $request)
-    {
-        $schoolId = $request->query('school_id');
-
-        if (!$schoolId) {
-            return response()->json(['success' => false, 'message' => 'School ID is required.'], 400);
-        }
-
-        $standards = \App\Models\SuperAdmin\SchoolStandard::where('school_id', $schoolId)
-            ->where('is_active', true)
-            ->orderBy('sort_order')
-            ->get(['id', 'standard_name']);
-
-        return response()->json(['success' => true, 'standards' => $standards]);
-    }
 }

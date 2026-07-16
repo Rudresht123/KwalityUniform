@@ -26,6 +26,7 @@ class ProductVariant extends Record
         'color_id',
         'mrp',
         'selling_price',
+        'vendor_price',
         'stock_qty',
         'low_stock_alert',
         'low_stock_notified_at',
@@ -39,6 +40,7 @@ class ProductVariant extends Record
     protected $casts = [
         'mrp' => 'decimal:2',
         'selling_price' => 'decimal:2',
+        'vendor_price' => 'decimal:2',
         'stock_qty' => 'integer',
         'low_stock_alert' => 'integer',
         'low_stock_notified_at' => 'datetime',

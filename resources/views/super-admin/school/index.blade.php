@@ -31,7 +31,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($schools as $school)
+                            @foreach($schools as $school)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $school->school_name }}</td>
@@ -53,11 +53,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="8" class="text-center">No schools found.</td>
-                                </tr>
-                            @endforelse
+                        @endforeach
                         </tbody>
                     </table>
                 </div>

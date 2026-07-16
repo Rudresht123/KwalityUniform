@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\DB;
 
 class SchoolSectionService
 {
-    public function getSectionsForStandard(string $standardId)
+    public function getSectionsForSchool(string $schoolId)
     {
-        return SchoolSection::where('school_standard_id', $standardId)->latest()->get();
+        return SchoolSection::where('school_id', $schoolId)->latest()->get();
     }
 
     public function createSection(array $data)

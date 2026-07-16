@@ -16,7 +16,7 @@ class UpdateParentCategoryRequest extends FormRequest
         $parentId = $this->route('parent_category')->parent_id;
 
         return [
-            'name'      => ['required', 'string', 'max:80', 'unique:parent_categories,name,' . $parentId . ',parent_id'],
+            'name'      => ['required', 'string', 'max:80'],
             'is_active' => ['required', 'boolean'],
         ];
     }

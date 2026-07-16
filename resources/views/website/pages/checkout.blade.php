@@ -54,22 +54,12 @@
 
                         <div class="checkout-panel-body">
                             <div class="delivery-toggle-group mb-4">
-                                <label class="delivery-toggle-option" id="deliv-school-container">
-                                    <input class="d-none" type="radio" name="delivery_type" id="delivery_school" value="school" {{ (session('checkout_details.delivery_type') ?? 'school') === 'school' ? 'checked' : '' }}>
+                                <label class="delivery-toggle-option is-selected" id="deliv-school-container">
+                                    <input class="d-none" type="radio" name="delivery_type" id="delivery_school" value="school" checked>
                                     <div class="delivery-toggle-icon"><i class="ti ti-building-community"></i></div>
                                     <div>
                                         <div class="delivery-toggle-title">Deliver to School</div>
                                         <div class="delivery-toggle-desc">Free &bull; Collect from campus</div>
-                                    </div>
-                                    <div class="delivery-toggle-check"><i class="ti ti-check"></i></div>
-                                </label>
-
-                                <label class="delivery-toggle-option" id="deliv-home-container">
-                                    <input class="d-none" type="radio" name="delivery_type" id="delivery_home" value="home" {{ (session('checkout_details.delivery_type') ?? 'home') === 'home' ? 'checked' : '' }}>
-                                    <div class="delivery-toggle-icon"><i class="ti-home"></i></div>
-                                    <div>
-                                        <div class="delivery-toggle-title">Home Delivery</div>
-                                        <div class="delivery-toggle-desc">Courier straight to your door</div>
                                     </div>
                                     <div class="delivery-toggle-check"><i class="ti ti-check"></i></div>
                                 </label>
@@ -110,15 +100,15 @@
                             <div class="row g-3" id="home-address-fields">
                                 <div class="col-md-6">
                                     <label class="checkout-field-label">Phone Number</label>
-                                    <input type="text" name="phone" id="field-phone-home" class="checkout-input" placeholder="+91 00000-00000" value="{{ session('checkout_details.phone') }}" required>
+                                    <input type="text" name="phone" id="field-phone-home" class="checkout-input" placeholder="+91 00000-00000" value="{{ session('checkout_details.phone') }}">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="checkout-field-label">City</label>
-                                    <input type="text" name="city" id="field-city-home" class="checkout-input" placeholder="Mumbai" value="{{ session('checkout_details.city') }}" required>
+                                    <input type="text" name="city" id="field-city-home" class="checkout-input" placeholder="Mumbai" value="{{ session('checkout_details.city') }}">
                                 </div>
                                 <div class="col-12">
                                     <label class="checkout-field-label">Detailed Address</label>
-                                    <textarea name="address" id="field-address-home" class="checkout-input" rows="3" placeholder="Street, Apartment, Area..." required>{{ session('checkout_details.address') }}</textarea>
+                                    <textarea name="address" id="field-address-home" class="checkout-input" rows="3" placeholder="Street, Apartment, Area...">{{ session('checkout_details.address') }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -590,6 +580,7 @@
         }
 
         function populateConfirmation() {
+            // Get details from JS object (set on success of save) or session
             const details = window.currentCheckoutDetails || @json(session('checkout_details'));
             
             if (details) {
@@ -600,17 +591,20 @@
                 document.getElementById('conf-payment').innerText = (details.payment_method || 'cod').replace('_', ' ');
                 
                 const badge = document.getElementById('conf-delivery-badge');
-                const deliveryType = details.delivery_type || 'school';
-                badge.innerText = deliveryType === 'school' ? 'School Delivery' : 'Home Delivery';
-                badge.className = 'review-detail-badge ' + (deliveryType === 'school' ? 'badge-school' : 'badge-home');
+                // Since only school delivery is active now, force it
+                const deliveryType = 'school'; 
+                badge.innerText = 'School Delivery';
+                badge.className = 'review-detail-badge badge-school';
                 
-                const shipping = deliveryType === 'home' ? 8.00 : 0;
-                document.getElementById('conf-shipping').innerText = shipping === 0 ? 'Free' : '₹' + shipping.toFixed(2);
+                const shipping = 0; // Free
+                document.getElementById('conf-shipping').innerText = 'Free';
                 
                 // Ensure subtotal is a number
                 const currentSubtotal = parseFloat(subtotal) || 0;
                 document.getElementById('conf-subtotal').innerText = '₹' + currentSubtotal.toLocaleString('en-IN', { minimumFractionDigits: 2 });
                 document.getElementById('conf-total').innerText = '₹' + (currentSubtotal + shipping).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+            } else {
+                console.error("No checkout details found");
             }
 
             const itemsList = document.getElementById('confirm-items-list');
@@ -663,46 +657,19 @@
 
         // 2. Dynamic Address Logic
         const radioSchool = document.getElementById('delivery_school');
-        const radioHome = document.getElementById('delivery_home');
         const deliverySchoolContainer = document.getElementById('deliv-school-container');
-        const deliveryHomeContainer = document.getElementById('deliv-home-container');
 
         function toggleAddress(isSchool) {
             const schoolDisplay = document.getElementById('school-address-display');
             const homeFields = document.getElementById('home-address-fields');
-            const homeInputs = homeFields.querySelectorAll('input, textarea');
-
-            if (isSchool) {
-                schoolDisplay.style.display = 'block';
-                homeFields.style.display = 'none';
-                homeInputs.forEach(input => {
-                    input.required = false;
-                    input.removeAttribute('name'); // Prevent overwriting school hidden inputs
-                });
-                deliverySchoolContainer.classList.add('is-selected');
-                deliveryHomeContainer.classList.remove('is-selected');
-            } else {
-                schoolDisplay.style.display = 'none';
-                homeFields.style.display = 'flex';
-                homeInputs.forEach(input => {
-                    input.required = true;
-                    // Restore names for home delivery
-                    if (input.id === 'field-phone-home') input.setAttribute('name', 'phone');
-                    if (input.id === 'field-city-home') input.setAttribute('name', 'city');
-                    if (input.id === 'field-address-home') input.setAttribute('name', 'address');
-                });
-                deliverySchoolContainer.classList.remove('is-selected');
-                deliveryHomeContainer.classList.add('is-selected');
-            }
+            
+            // Always show school address for now
+            schoolDisplay.style.display = 'block';
+            homeFields.style.display = 'none';
         }
 
-        radioSchool.addEventListener('change', () => toggleAddress(true));
-        radioHome.addEventListener('change', () => toggleAddress(false));
-        deliverySchoolContainer.addEventListener('click', () => { radioSchool.checked = true; toggleAddress(true); });
-        deliveryHomeContainer.addEventListener('click', () => { radioHome.checked = true; toggleAddress(false); });
-
         // Initialize address toggle
-        toggleAddress(radioSchool.checked);
+        toggleAddress(true);
 
         // Handle Form Submission (Step 1 -> Step 2)
         document.getElementById('checkout-form').addEventListener('submit', function(e) {

@@ -12,7 +12,6 @@ class ProductAssignment extends Record
     protected $fillable = [
         'product_id',
         'assignment_type',
-        'standard_id',
         'section_id',
     ];
 
@@ -22,14 +21,6 @@ class ProductAssignment extends Record
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id', 'product_id');
-    }
-
-    /**
-     * Get the standard this product is assigned to.
-     */
-    public function standard(): BelongsTo
-    {
-        return $this->belongsTo(SchoolStandard::class, 'standard_id', 'id');
     }
 
     /**

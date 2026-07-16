@@ -41,7 +41,6 @@ class School extends Record
         'is_active',
         'user_id',
         'school_type_id',
-        'school_board_id',
         'created_by',
         'updated_by',
         'image_id',
@@ -55,16 +54,6 @@ class School extends Record
     public function schoolType()
     {
         return $this->belongsTo(SchoolType::class, 'school_type_id');
-    }
-
-    public function board()
-    {
-        return $this->belongsTo(SchoolBoard::class, 'school_board_id');
-    }
-
-    public function standards(): HasMany
-    {
-        return $this->hasMany(SchoolStandard::class, 'school_id', 'school_id');
     }
 
     public function user()

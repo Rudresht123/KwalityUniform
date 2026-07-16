@@ -23,7 +23,6 @@ class StockController extends BaseController
      */
     public function index(Request $request)
     {
-        \Illuminate\Support\Facades\Gate::authorize('viewAnyStock');
 
         if ($request->ajax()) {
             $query = ProductVariant::with(['product', 'size', 'color'])

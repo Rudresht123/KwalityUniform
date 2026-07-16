@@ -465,6 +465,11 @@
         }
 
         $(document).ready(function() {
+            // Show toast on server-side error
+            @if($errors->has('email') || $errors->has('password'))
+                toast.error("{{ $errors->first('email') ?: $errors->first('password') }}");
+            @endif
+
             @if($errors->has('otp') || old('otp'))
                 setTimeout(function() {
                     const otpTab = document.querySelector('#otp-tab');

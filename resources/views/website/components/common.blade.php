@@ -86,11 +86,9 @@
       })();
     </script>
 
-
-    <!-- 1. Announcement Bar -->
-    <div class="qu-announcement">
-        🎒 Back to School Sale: Save 15% on All Complete School Uniform Bundles!
-    </div>
+<div class="qu-announcement">
+    🎒 School Uniforms Made Simple — Shop Quality Uniforms, Fast Delivery & Hassle-Free Ordering.
+</div>
 
     @include('components.login-modal')
     @include('components.register-modal')

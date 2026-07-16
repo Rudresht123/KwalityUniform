@@ -164,7 +164,7 @@
                 submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Updating...');
 
                 $.ajax({
-                    url: '{{ route('stock.adjust') }}',
+                    url: '{{ route('stock-adjustment.adjust') }}',
                     type: 'POST',
                     data: formData + '&_token={{ csrf_token() }}',
                     success: function(response) {

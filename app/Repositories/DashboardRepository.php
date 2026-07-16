@@ -58,7 +58,6 @@ class DashboardRepository
             'approved_products' => \App\Models\SuperAdmin\Product::where('approval_status', 'approved')->count(),
             'pending_products' => \App\Models\SuperAdmin\Product::where('approval_status', 'pending')->count(),
             'rejected_products' => \App\Models\SuperAdmin\Product::where('approval_status', 'rejected')->count(),
-            'total_standards' => \App\Models\SuperAdmin\SchoolStandard::count(),
             'total_users' => User::count(),
             'total_variants' => \App\Models\SuperAdmin\ProductVariant::count(),
             'low_stock_count' => $this->stockRepo->getInventoryAlerts()->count(),
@@ -125,7 +124,6 @@ class DashboardRepository
     public function getRecentVendors($limit = 10) { return $this->vendorRepo->getRecentVendors($limit); }
 
     public function getRecentSchools($limit = 5) { return $this->schoolRepo->getRecentSchools($limit); }
-    public function getSchoolBoardDistribution() { return $this->schoolRepo->getSchoolBoardDistribution(); }
     public function getSchoolProductStats($schoolId) { return $this->schoolRepo->getSchoolProductStats($schoolId); }
 
     public function getReturnRequests($limit = 10) { return $this->returnRepo->getReturnRequests($limit); }

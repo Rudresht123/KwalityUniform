@@ -57,28 +57,21 @@ class SchoolProductController extends BaseController
         ]);
     }
 
-    public function getStandards(Request $request)
+    public function getSchoolClasses(Request $request)
     {
         $school = $request->user()->school;
         if (!$school) {
             return response()->json(['success' => false, 'message' => 'No school associated with your account.'], 403);
         }
 
-        // Get active standards for the school
-        $standards = \App\Models\SuperAdmin\SchoolStandard::where('school_id', $school->school_id)
-            ->where('is_active', true)
-            ->orderBy('sort_order')
-            ->get(['id', 'standard_name']);
-
         // Get active classes for the school
         $classes = \App\Models\SuperAdmin\SchoolClass::where('school_id', $school->school_id)
             ->where('is_active', true)
             ->orderBy('class_name')
-            ->get(['id', 'standard_id', 'class_name']);
+            ->get(['id', 'class_name']);
 
         return response()->json([
             'success' => true, 
-            'standards' => $standards,
             'classes' => $classes
         ]);
     }
@@ -90,11 +83,8 @@ class SchoolProductController extends BaseController
             return response()->json(['success' => false, 'message' => 'No school associated with your account.'], 403);
         }
 
-        $standardIds = $request->input('standard_ids', []);
-        $classIds = $request->input('class_ids', []);
-
         try {
-            return \Illuminate\Support\Facades\DB::transaction(function () use ($productId, $school, $standardIds, $classIds) {
+            return \Illuminate\Support\Facades\DB::transaction(function () use ($productId, $school) {
                 $product = Product::findOrFail($productId);
 
                 $approval = SchoolProductApproval::updateOrCreate(
@@ -108,24 +98,6 @@ class SchoolProductController extends BaseController
                         'actioned_at' => now(),
                     ]
                 );
-
-                // Sync standards
-                $approval->standardApprovals()->delete();
-                foreach ($standardIds as $standardId) {
-                    \App\Models\SuperAdmin\SchoolProductStandardApproval::create([
-                        'school_product_approval_id' => $approval->school_product_approval_id,
-                        'standard_id' => $standardId,
-                    ]);
-                }
-
-                // Sync classes
-                $approval->classApprovals()->delete();
-                foreach ($classIds as $classId) {
-                    \App\Models\SuperAdmin\SchoolProductClassApproval::create([
-                        'school_product_approval_id' => $approval->school_product_approval_id,
-                        'class_id' => $classId,
-                    ]);
-                }
 
                 // Use the global helper to send notifications to Super Admins
                 $admins = \App\Models\User::role('super-admin')->get();

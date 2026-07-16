@@ -74,14 +74,6 @@ class SchoolProductApproval extends Record
     }
 
     /**
-     * Get the standards this product is approved for within the school.
-     */
-    public function standardApprovals()
-    {
-        return $this->hasMany(SchoolProductStandardApproval::class, 'school_product_approval_id', 'school_product_approval_id');
-    }
-
-    /**
      * Get the classes this product is approved for within the school.
      */
     public function classApprovals()

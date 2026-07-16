@@ -16,7 +16,7 @@ class ParentReportController extends BaseController
         if ($request->ajax()) {
             $parents = User::role('parent')
                 ->select('users.*')
-                ->withCount('orders') // Assuming an Order model exists
+                ->withCount('orders')
                 ->latest();
 
             return DataTables::of($parents)
@@ -25,8 +25,8 @@ class ParentReportController extends BaseController
                     return $row->created_at->format('d M Y');
                 })
                 ->addColumn('status', function ($row) {
-                    return $row->is_active 
-                        ? '<span class="badge bg-success">ACTIVE</span>' 
+                    return $row->is_active
+                        ? '<span class="badge bg-success">ACTIVE</span>'
                         : '<span class="badge bg-danger">INACTIVE</span>';
                 })
                 ->addColumn('options', function ($row) {

@@ -133,7 +133,7 @@
                                 </div>
                                 <span class="text-success fw-bold small">FREE</span>
                             </div>
-
+@if(false)
                             <div class="p-3 border rounded-3 d-flex align-items-center justify-content-between cursor-pointer"
                                 id="delivery-home"
                                 style="border: 2px solid #dee2e6; background-color: transparent; cursor: pointer;">
@@ -151,7 +151,7 @@
                             </div>
                         </div>
                     </div>
-
+@endif
                     <div class="summary-row">
                         <span class="summary-label">Subtotal</span>
                         <span class="summary-value" id="summary-subtotal">₹{{ number_format($subtotal, 2) }}</span>

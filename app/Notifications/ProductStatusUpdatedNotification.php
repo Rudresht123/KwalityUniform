@@ -31,12 +31,15 @@ class ProductStatusUpdatedNotification extends Notification implements ShouldQue
         $status = strtoupper($this->product->approval_status);
 
         return (new MailMessage)
-            ->subject('Product Status Update: ' . $this->product->product_name)
+            ->subject('Product Review Update - ' . $this->product->product_name)
             ->greeting('Hello ' . $notifiable->name . ',')
-            ->line('The status of your product "' . $this->product->product_name '" has been updated to ' . $status . '.')
-            ->line('Message from Admin: ' . ($this->adminMessage ?: 'No specific message.'))
-            ->action('View Product', route('product.index'))
-            ->line('Thank you for using our application!');
+            ->line('Your product has been reviewed by our administration team.')
+            ->line('**Product:** ' . $this->product->product_name)
+            ->line('**Current Status:** ' . ucfirst($status))
+            ->line('**Admin Remarks:** ' . ($this->adminMessage ?: 'No additional remarks were provided.'))
+            ->action('View Products', route('product.index'))
+            ->line('If you have any questions regarding this review, please contact our support team.')
+            ->salutation('Regards,' . PHP_EOL . 'eSchoolKart Uniform Software Team');
     }
 
     public function toArray($notifiable): array
@@ -49,4 +52,4 @@ class ProductStatusUpdatedNotification extends Notification implements ShouldQue
             'url' => route('product.index')
         ];
     }
-    }
+}

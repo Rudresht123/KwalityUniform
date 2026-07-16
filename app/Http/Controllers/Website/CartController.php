@@ -259,14 +259,15 @@ class CartController extends Controller
         $request->validate([
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:20',
-            'city' => 'required|string|max:100',
-            'address' => 'required|string',
-            'payment_method' => 'required|in:cod,upi,card',
-            'delivery_type' => 'required|in:school,home',
         ]);
 
-        session()->put('checkout_details', $request->all());
+        $data = $request->all();
+        $data['delivery_type'] = 'school';
+        $data['city'] = $data['city'] ?? 'N/A'; // Provide default if needed, or get from school
+        $data['address'] = $data['address'] ?? 'N/A';
+        $data['phone'] = $data['phone'] ?? 'N/A';
+
+        session()->put('checkout_details', $data);
 
         return response()->json([
             'success' => true,

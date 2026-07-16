@@ -25,6 +25,7 @@ use App\Http\Controllers\SuperAdmin\SchoolStandardController;
 use App\Http\Controllers\SuperAdmin\SchoolSectionController;
 use App\Http\Controllers\SuperAdmin\ProductAssignmentController;
 use App\Http\Controllers\SuperAdmin\PartnershipRequestController;
+
 Route::prefix('partnerships')->name('partnership.')->group(function () {
     Route::get('/index', [PartnershipRequestController::class, 'index'])->name('index')->middleware('permission:partnership.view');
     Route::post('/approve-school/{id}', [PartnershipRequestController::class, 'approveSchoolRequest'])->name('approve-school')->middleware('permission:partnership.approve');
@@ -52,15 +53,6 @@ Route::prefix('schools')->name('school.')->group(function () {
     Route::get('/show/{school}', [SchoolController::class, 'show'])->name('show')->middleware('permission:school.view');
 });
 
-Route::prefix('school-boards')->name('school-boards.')->group(function () {
-    Route::get('/index', [SchoolBoardController::class, 'index'])->name('index')->middleware('permission:school.view');
-    Route::get('/create', [SchoolBoardController::class, 'create'])->name('create')->middleware('permission:school.create');
-    Route::post('/store', [SchoolBoardController::class, 'store'])->name('store')->middleware('permission:school.create');
-    Route::get('/edit/{schoolBoard}', [SchoolBoardController::class, 'edit'])->name('edit')->middleware('permission:school.edit');
-    Route::put('/update/{schoolBoard}', [SchoolBoardController::class, 'update'])->name('update')->middleware('permission:school.edit');
-    Route::delete('/delete/{schoolBoard}', [SchoolBoardController::class, 'destroy'])->name('destroy')->middleware('permission:school.delete');
-    Route::get('/show/{schoolBoard}', [SchoolBoardController::class, 'show'])->name('show')->middleware('permission:school.view');
-});
 
 Route::prefix('roles')->name('role.')->group(function () {
     Route::get('/index', [RoleController::class, 'index'])->name('index')->middleware('permission:role.view');
@@ -72,68 +64,23 @@ Route::prefix('roles')->name('role.')->group(function () {
     Route::get('/show/{role}', [RoleController::class, 'show'])->name('show')->middleware('permission:role.view');
 });
 
-    Route::prefix('school-standards')->name('school-standard.')->group(function () {
-        Route::get('/index', [SchoolStandardController::class, 'index'])->name('index')->middleware('permission:school_standard.view');
-        Route::get('/create', [SchoolStandardController::class, 'create'])->name('create')->middleware('permission:school_standard.create');
-        Route::post('/store', [SchoolStandardController::class, 'store'])->name('store')->middleware('permission:school_standard.create');
-        Route::get('/manage/{school}', [SchoolStandardController::class, 'edit'])->name('edit')->middleware('permission:school_standard.edit');
-        Route::put('/update/{school}', [SchoolStandardController::class, 'update'])->name('update')->middleware('permission:school_standard.edit');
-        Route::delete('/delete/{schoolStandard}', [SchoolStandardController::class, 'destroy'])->name('destroy')->middleware('permission:school_standard.delete');
-    });
 
-    Route::prefix('school-sections')->name('school-section.')->group(function () {
-        Route::get('/index/{schoolStandard}', [SchoolSectionController::class, 'index'])->name('index')->middleware('permission:school_standard.view');
-        Route::post('/store', [SchoolSectionController::class, 'store'])->name('store')->middleware('permission:school_standard.create');
-        Route::delete('/delete/{schoolSection}', [SchoolSectionController::class, 'destroy'])->name('destroy')->middleware('permission:school_standard.delete');
-    });
 
-    Route::prefix('product-assignments')->name('product-assignment.')->group(function () {
-        Route::get('/index/{product}', [ProductAssignmentController::class, 'index'])->name('index')->middleware('permission:product.view');
-        Route::post('/store', [ProductAssignmentController::class, 'store'])->name('store')->middleware('permission:product.edit');
-        Route::delete('/delete/{productAssignment}', [ProductAssignmentController::class, 'destroy'])->name('destroy')->middleware('permission:product.edit');
-    });
-
-Route::prefix('categories')->name('category.')->group(function () {
-    Route::get('/index', [CategoryController::class, 'index'])->name('index')->middleware('permission:category.view');
-    Route::get('/create', [CategoryController::class, 'create'])->name('create')->middleware('permission:category.create');
-    Route::post('/store', [CategoryController::class, 'store'])->name('store')->middleware('permission:category.create');
-    Route::get('/edit/{category}', [CategoryController::class, 'edit'])->name('edit')->middleware('permission:category.edit');
-    Route::put('/update/{category}', [CategoryController::class, 'update'])->name('update')->middleware('permission:category.edit');
-    Route::delete('/delete/{category}', [CategoryController::class, 'destroy'])->name('destroy')->middleware('permission:category.delete');
+Route::prefix('school-sections')->name('school-section.')->group(function () {
+    Route::get('/index/{schoolStandard}', [SchoolSectionController::class, 'index'])->name('index')->middleware('permission:school_standard.view');
+    Route::post('/store', [SchoolSectionController::class, 'store'])->name('store')->middleware('permission:school_standard.create');
+    Route::delete('/delete/{schoolSection}', [SchoolSectionController::class, 'destroy'])->name('destroy')->middleware('permission:school_standard.delete');
 });
 
-Route::prefix('parent-categories')->name('parent-category.')->group(function () {
-    Route::get('/index', [ParentCategoryController::class, 'index'])->name('index')->middleware('permission:category.view');
-    Route::get('/create', [ParentCategoryController::class, 'create'])->name('create')->middleware('permission:category.create');
-    Route::post('/store', [ParentCategoryController::class, 'store'])->name('store')->middleware('permission:category.create');
-    Route::get('/edit/{parent_category}', [ParentCategoryController::class, 'edit'])->name('edit')->middleware('permission:category.edit');
-    Route::put('/update/{parent_category}', [ParentCategoryController::class, 'update'])->name('update')->middleware('permission:category.edit');
-    Route::delete('/delete/{parent_category}', [ParentCategoryController::class, 'destroy'])->name('destroy')->middleware('permission:category.delete');
+Route::prefix('product-assignments')->name('product-assignment.')->group(function () {
+    Route::get('/index/{product}', [ProductAssignmentController::class, 'index'])->name('index')->middleware('permission:product.view');
+    Route::post('/store', [ProductAssignmentController::class, 'store'])->name('store')->middleware('permission:product.edit');
+    Route::delete('/delete/{productAssignment}', [ProductAssignmentController::class, 'destroy'])->name('destroy')->middleware('permission:product.edit');
 });
 
 Route::prefix('audit-logs')->name('audit.')->group(function () {
     Route::get('/index', [AuditReportController::class, 'index'])->name('index')->middleware('permission:audit.view');
     Route::get('/show/{activity}', [AuditReportController::class, 'show'])->name('show')->middleware('permission:audit.view');
-});
-
-Route::prefix('sizes')->name('size.')->group(function () {
-    Route::get('/index', [SizeController::class, 'index'])->name('index')->middleware('permission:size.view');
-    Route::get('/create', [SizeController::class, 'create'])->name('create')->middleware('permission:size.create');
-    Route::post('/store', [SizeController::class, 'store'])->name('store')->middleware('permission:size.create');
-    Route::get('/show/{size}', [SizeController::class, 'show'])->name('show')->middleware('permission:size.view');
-    Route::get('/edit/{size}', [SizeController::class, 'edit'])->name('edit')->middleware('permission:size.edit');
-    Route::put('/update/{size}', [SizeController::class, 'update'])->name('update')->middleware('permission:size.edit');
-    Route::delete('/delete/{size}', [SizeController::class, 'destroy'])->name('destroy')->middleware('permission:size.delete');
-});
-
-Route::prefix('colors')->name('color.')->group(function () {
-    Route::get('/index', [ColorController::class, 'index'])->name('index')->middleware('permission:color.view');
-    Route::get('/create', [ColorController::class, 'create'])->name('create')->middleware('permission:color.create');
-    Route::post('/store', [ColorController::class, 'store'])->name('store')->middleware('permission:color.create');
-    Route::get('/show/{color}', [ColorController::class, 'show'])->name('show')->middleware('permission:color.view');
-    Route::get('/edit/{color}', [ColorController::class, 'edit'])->name('edit')->middleware('permission:color.edit');
-    Route::put('/update/{color}', [ColorController::class, 'update'])->name('update')->middleware('permission:color.edit');
-    Route::delete('/delete/{color}', [ColorController::class, 'destroy'])->name('destroy')->middleware('permission:color.delete');
 });
 
 Route::prefix('parent-users')->name('parent-user.')->group(function () {
@@ -144,8 +91,8 @@ Route::prefix('parent-users')->name('parent-user.')->group(function () {
     Route::put('/update/{user}', [ParentUserController::class, 'update'])->name('update')->middleware('permission:parent.edit');
     Route::delete('/delete/{user}', [ParentUserController::class, 'destroy'])->name('destroy')->middleware('permission:parent.delete');
     Route::get('/report', [ParentReportController::class, 'index'])->name('report')->middleware('permission:parent.view');
+    Route::get('/show', [ParentReportController::class, 'show'])->name('show')->middleware('permission:parent.show');
 });
-
 
 Route::prefix('admins')->name('admin.')->group(function () {
     Route::get('/index', [AdminController::class, 'index'])->name('index')->middleware('permission:admin.view');
@@ -156,24 +103,6 @@ Route::prefix('admins')->name('admin.')->group(function () {
     Route::put('/update/{admin}', [AdminController::class, 'update'])->name('update')->middleware('permission:admin.edit');
     Route::delete('/delete/{admin}', [AdminController::class, 'destroy'])->name('destroy')->middleware('permission:admin.delete');
 });
-
-Route::middleware(['auth'])->group(function () {
-    Route::prefix('stock')->name('stock.')->group(function () {
-        Route::get('/low-stock', [StockController::class, 'index'])->name('index');
-        Route::post('/adjust', [StockAdjustmentController::class, 'adjust'])->name('adjust')->middleware('permission:stock_adjust');
-    });
-
-    Route::prefix('stock-management')->name('stock-management.')->group(function () {
-        Route::get('/index', [StockManagementController::class, 'index'])->name('index');
-    });
-});
-
-Route::prefix('stock-adjustments')->name('stock-adjustment.')->group(function () {
-    Route::post('/adjust', [StockAdjustmentController::class, 'adjust'])->name('adjust')->middleware('permission:stock_adjust');
-    Route::get('/history', [StockAdjustmentController::class, 'history'])->name('history')->middleware('permission:stock_history_view');
-});
-
-
 
 Route::prefix('school-product-approvals')->name('school-product-approval.')->group(function () {
     Route::get('/index', [SchoolProductApprovalController::class, 'index'])->name('index')->middleware('permission:product_approval_view');
@@ -196,7 +125,7 @@ Route::prefix('product-approvals')->name('product-approval.')->group(function ()
     Route::get('/index', [ProductApprovalController::class, 'index'])->name('index')->middleware('permission:product_approval_view');
     Route::get('/approved', [ProductApprovalController::class, 'approved'])->name('approved')->middleware('permission:product_approval_view');
     Route::get('/preview/{productId}', [ProductApprovalController::class, 'preview'])->name('preview')->middleware('permission:product_approval_view');
-    Route::post('/approve', [ProductApprovalController::class, 'approve'])->name('approve')->middleware('permission:product_approval_action');
+    Route::post('/approve/{productId?}', [ProductApprovalController::class, 'approve'])->name('approve')->middleware('permission:product_approval_action');
     Route::post('/reject', [ProductApprovalController::class, 'reject'])->name('reject')->middleware('permission:product_approval_action');
 });
 
@@ -208,4 +137,17 @@ Route::prefix('products')->name('product.')->group(function () {
     Route::get('/edit/{product}', [ProductController::class, 'edit'])->name('edit')->middleware('permission:product.edit');
     Route::put('/update/{product}', [ProductController::class, 'update'])->name('update')->middleware('permission:product.edit');
     Route::delete('/delete/{product}', [ProductController::class, 'destroy'])->name('destroy')->middleware('permission:product.delete');
+});
+
+Route::prefix('stock-management')->name('stock-management.')->group(function () {
+    Route::get('/index', [StockManagementController::class, 'index'])->name('index')->middleware('permission:stock_view');
+});
+
+Route::prefix('stock')->name('stock.')->group(function () {
+    Route::get('/index', [StockController::class, 'index'])->name('index')->middleware('permission:stock_view');
+});
+
+Route::prefix('stock-adjustment')->name('stock-adjustment.')->group(function () {
+    Route::post('/adjust', [StockAdjustmentController::class, 'adjust'])->name('adjust')->middleware('permission:stock_adjust');
+    Route::get('/history', [StockAdjustmentController::class, 'history'])->name('history')->middleware('permission:stock_history_view');
 });

@@ -38,7 +38,7 @@
                         <div class="col-md-6">
                             <label class="form-label fw-bold">Parent Category</label>
                             <select name="parent_id" class="form-select @error('parent_id') is-invalid @enderror" required>
-                                @foreach($parents as $parent)
+                                @foreach(category(["vendor_id"=>auth()->user()->vendor->vendor_id ?? ""]) as $parent)
                                     <option value="{{ $parent->parent_id }}" {{ old('parent_id', $category->parent_id) == $parent->parent_id ? 'selected' : '' }}>
                                         {{ $parent->name }}
                                     </option>

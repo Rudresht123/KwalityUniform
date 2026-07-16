@@ -140,4 +140,24 @@ class Vendor extends Record
     public function products(){
         return $this->hasMany(Product::class,"vendor_id","vendor_id");
     }
+
+    public function parentCategories()
+    {
+        return $this->hasMany(ParentCategory::class, 'vendor_id', 'vendor_id');
+    }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class, 'vendor_id', 'vendor_id');
+    }
+
+    public function colors()
+    {
+        return $this->hasMany(Color::class, 'vendor_id', 'vendor_id');
+    }
+
+    public function sizes()
+    {
+        return $this->hasMany(Size::class, 'vendor_id', 'vendor_id');
+    }
 }

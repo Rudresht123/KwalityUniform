@@ -1,5 +1,5 @@
 @php
-    $breadcrumb = 'Vendor Dashboard';
+    $breadcrumb = 'Dashboard';
     $title = 'Vendor Business Overview';
 @endphp
 
@@ -36,6 +36,7 @@
         --teal-soft: #e3f4f8;
         --violet: #6f4ff2;
         --violet-soft: #efeafe;
+        --blue-soft: #e7f3ff;
         --gray-soft: #f1f1f7;
 
         --radius-lg: 18px;
@@ -49,6 +50,11 @@
         padding: 20px;
         border-radius: 20px;
         min-height: 100vh;
+    }
+
+    .g-root .ti {
+        font-size: 1.2em;
+        line-height: 1;
     }
 
     .g-root h1, .g-root h2, .g-root h3,
@@ -180,6 +186,14 @@
 
     .btn-pill-outline:hover { background: var(--primary-soft); }
 
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+    .page-header h1 { font-size: 28px; font-weight: 800; }
+
     /* ── Setup warning ── */
     .warn-panel {
         display: flex;
@@ -199,7 +213,7 @@
     /* ── KPI Grid ── */
     .kpi-row {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
         gap: 12px;
         margin-bottom: 8px;
     }
@@ -209,7 +223,7 @@
         background: var(--surface);
         border: 1px solid var(--line);
         border-radius: var(--radius-lg);
-        padding: 18px 20px 16px;
+        padding: 16px 18px 14px;
         box-shadow: var(--shadow-card);
         transition: transform .18s ease, box-shadow .18s ease;
         overflow: hidden;
@@ -236,7 +250,7 @@
     .kpi-meta {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        gap: 8px;
         margin-bottom: 14px;
     }
 
@@ -248,6 +262,7 @@
         letter-spacing: .4px;
     }
 
+    .kpi-meta .kpi-icon { margin-left: auto; }
     .kpi-icon {
         width: 36px;
         height: 36px;
@@ -263,10 +278,11 @@
     .icon-green { background: var(--green-soft); color: var(--green); }
     .icon-amber { background: var(--amber-soft); color: var(--amber); }
     .icon-red { background: var(--red-soft); color: var(--red); }
+    .icon-violet { background: var(--violet-soft); color: var(--violet); }
 
     .kpi-value {
-        font-size: 27px;
-        font-weight: 700;
+        font-size: 26px;
+        font-weight: 800;
         color: var(--ink);
         line-height: 1;
         letter-spacing: -.2px;
@@ -288,7 +304,7 @@
     /* ── Layout grids ── */
     .g-main-grid {
         display: grid;
-        grid-template-columns: 2.15fr 1fr;
+        grid-template-columns: 2fr 1fr;
         gap: 12px;
         align-items: start;
     }
@@ -301,7 +317,7 @@
 
     .g-side-col .panel:last-child { margin-bottom: 0; }
 
-    @media (max-width: 1100px) {
+    @media (max-width: 1200px) {
         .g-main-grid, .g-two-col { grid-template-columns: 1fr; }
     }
 
@@ -338,9 +354,111 @@
         border-bottom: 1px solid var(--line);
     }
 
-</style>
+    /* ── Quick Actions ── */
+    .quick-actions-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+    .action-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 20px;
+        border-radius: var(--radius-md);
+        background: var(--surface-soft);
+        border: 1px solid var(--line);
+        text-decoration: none;
+        color: var(--ink);
+        font-size: 12px;
+        font-weight: 600;
+        text-align: center;
+        transition: all .2s ease;
+    }
+    .action-card:hover {
+        transform: translateY(-2px);
+        background: var(--surface);
+        border-color: var(--primary-soft);
+        box-shadow: var(--shadow-card);
+        color: var(--primary);
+    }
+    .action-card i {
+        font-size: 22px;
+        color: var(--primary);
+    }
 
-<div class="g-root">
+    /* ── Tabbed Panel ── */
+    .tab-nav {
+        display: flex;
+        border-bottom: 1px solid var(--line);
+        margin-bottom: 18px;
+    }
+    .tab-nav-item {
+        padding: 10px 16px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink-soft);
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+        cursor: pointer;
+    }
+    .tab-nav-item.active {
+        color: var(--primary);
+        border-bottom-color: var(--primary);
+    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ── Skeleton Loaders ── */
+    .skeleton {
+        background-color: #e2e8f0;
+        border-radius: 4px;
+        animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes pulse {
+        50% { opacity: .5; }
+    }
+    .skeleton-text { height: 1em; }
+    .skeleton-h-20 { height: 20px; }
+    .skeleton-h-40 { height: 40px; }
+    .skeleton-w-100 { width: 100%; }
+    .skeleton-w-60 { width: 60%; }
+
+    .kpi-card .kpi-value.skeleton {
+        height: 27px;
+        width: 70%;
+        margin-bottom: 9px;
+    }
+    .kpi-card .kpi-trend.skeleton {
+        height: 12px;
+        width: 90%;
+    }
+
+    /* Hide content until loaded */
+    .g-root[data-loading="true"] .data-content {
+        display: none;
+    }
+    .g-root[data-loading="false"] .skeleton-container {
+        display: none;
+    }
+
+    /* ── Table styles ── */
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th, .data-table td {
+        padding: 12px 10px;
+        text-align: left;
+        font-size: 12.5px;
+        border-bottom: 1px solid var(--line);
+    }
+    .data-table th { font-weight: 600; color: var(--ink-soft); }
+    .data-table td { color: var(--ink); }
+    .data-table tr:last-child td { border-bottom: none; }
+
+</style>
+    
+<div class="g-root" data-loading="true">
     @if (!$vendor)
         <div class="warn-panel">
             <i class="ti ti-alert-triangle"></i>
@@ -350,30 +468,168 @@
             </div>
         </div>
     @else
-        {{-- ══════════════════════════════
-             HERO WELCOME
-        ══════════════════════════════ --}}
-        <div class="hero-panel">
-            <div class="hero-welcome">
-                <h2>Good morning, {{ $vendor->business_name }} 👋</h2>
-                <p>Here's what's happening with your business today.</p>
-            </div>
-            <div class="hero-actions">
-                <button class="btn-pill btn-pill-ghost">
-                    <i class="ti ti-download"></i> Download Report
-                </button>
-                <button class="btn-pill btn-pill-white">
-                    <i class="ti ti-plus"></i> Add Product
-                </button>
+        <div class="page-header">
+            <h1>Good morning, {{ $vendor->business_name }} 👋</h1>
+            <div class="page-filters">
+                {{-- Filter component will go here --}}
             </div>
         </div>
 
-        {{-- ══════════════════════════════
-             KPI ENGINE
-        ══════════════════════════════ --}}
-        <div class="section-label">Key metrics</div>
-        <div class="kpi-row">
+        {{-- ROW 1: QUICK ACTIONS & KEY KPIS --}}
+        <div class="g-main-grid">
+            <div class="panel">
+                <div class="panel-header" style="border:0; padding-bottom:0; margin-bottom:12px;">
+                    <h3 class="panel-title">Quick Actions</h3>
+                </div>
+                <div class="quick-actions-grid">
+                    <a href="#" class="action-card"><i class="ti ti-plus"></i> Add Product</a>
+                    <a href="#" class="action-card"><i class="ti ti-package"></i> Manage Inventory</a>
+                    <a href="#" class="action-card"><i class="ti ti-truck-delivery"></i> Dispatch Orders</a>
+                    <a href="#" class="action-card"><i class="ti ti-file-download"></i> Download Reports</a>
+                </div>
+            </div>
 
+            <div class="panel">
+                <div class="panel-header" style="border:0; padding-bottom:0; margin-bottom:12px;">
+                    <h3 class="panel-title">Today's Snapshot</h3>
+                </div>
+                <div class="kpi-row">
+                    <div class="kpi-card">
+                        <div class="kpi-meta"><span class="kpi-label">Today's Revenue</span></div>
+                        <div class="kpi-value skeleton-container"><div class="skeleton skeleton-h-20 skeleton-w-60"></div></div>
+                        <div class="kpi-value data-content" id="kpi-todays-revenue"></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-meta"><span class="kpi-label">Today's Orders</span></div>
+                        <div class="kpi-value skeleton-container"><div class="skeleton skeleton-h-20 skeleton-w-60"></div></div>
+                        <div class="kpi-value data-content" id="kpi-todays-orders"></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-meta"><span class="kpi-label">Pending Orders</span></div>
+                        <div class="kpi-value skeleton-container"><div class="skeleton skeleton-h-20 skeleton-w-60"></div></div>
+                        <div class="kpi-value data-content" id="kpi-pending-orders"></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-meta"><span class="kpi-label">Ready to Dispatch</span></div>
+                        <div class="kpi-value skeleton-container"><div class="skeleton skeleton-h-20 skeleton-w-60"></div></div>
+                        <div class="kpi-value data-content" id="kpi-ready-to-dispatch"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- ROW 2: CORE ANALYTICS --}}
+        <div class="section-label">Business Performance</div>
+        <div class="panel">
+            <div class="panel-header">
+                <h3 class="panel-title"><i class="ti ti-chart-line" style="color:var(--primary)"></i> Revenue &amp; Sales Trend</h3>
+                <select class="panel-select">
+                    <option>Last 30 Days</option>
+                    <option>Last 90 Days</option>
+                    <option>This Year</option>
+                </select>
+            </div>
+            <div style="height: 300px; width: 100%;">
+                <div class="skeleton-container"><div class="skeleton skeleton-w-100" style="height:300px;"></div></div>
+                <div id="revenueChart" class="data-content"></div>
+            </div>
+        </div>
+
+        {{-- ROW 3: SECONDARY KPIS & CHARTS --}}
+        <div class="g-main-grid">
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title"><i class="ti ti-pie-chart" style="color:var(--violet)"></i> Order Status Distribution</h3>
+                </div>
+                <div style="height: 260px;">
+                    <div class="skeleton-container"><div class="skeleton skeleton-w-100" style="height:260px; border-radius: 50%;"></div></div>
+                    <div id="orderStatusChart" class="data-content"></div>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title"><i class="ti ti-building-warehouse" style="color:var(--amber)"></i> Inventory Health</h3>
+                </div>
+                <div style="height: 260px;">
+                    <div class="skeleton-container"><div class="skeleton skeleton-w-100" style="height:260px;"></div></div>
+                    <div id="inventoryHealthChart" class="data-content"></div>
+                </div>
+            </div>
+        </div>
+
+        {{-- ROW 4: TABBED DATA GRIDS --}}
+        <div class="section-label">Operations</div>
+        <div class="panel">
+            <div class="tab-nav">
+                <div class="tab-nav-item active" data-tab="recent-orders">Recent Orders</div>
+                <div class="tab-nav-item" data-tab="top-products">Top Products</div>
+                <div class="tab-nav-item" data-tab="low-stock">Low Stock Alerts</div>
+            </div>
+
+            <div class="skeleton-container">
+                <div class="skeleton skeleton-h-20 skeleton-w-100 mb-2"></div>
+                <div class="skeleton skeleton-h-20 skeleton-w-100 mb-2"></div>
+                <div class="skeleton skeleton-h-20 skeleton-w-100"></div>
+            </div>
+
+            <div class="data-content">
+                <div id="tab-recent-orders" class="tab-content active">
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>Order ID</th><th>Customer</th><th>Amount</th><th>Status</th><th>Date</th></tr>
+                        </thead>
+                        <tbody id="recent-orders-body">
+                            {{-- Data will be injected by JS --}}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="tab-top-products" class="tab-content">
+                     <table class="data-table">
+                        <thead>
+                            <tr><th>Product</th><th>Category</th><th>Units Sold</th><th>Revenue</th></tr>
+                        </thead>
+                        <tbody id="top-products-body">
+                            {{-- Data will be injected by JS --}}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="tab-low-stock" class="tab-content">
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>Product</th><th>SKU</th><th>Stock</th><th>Status</th></tr>
+                        </thead>
+                        <tbody id="low-stock-body">
+                            {{-- Data will be injected by JS --}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        {{-- ROW 5: TERTIARY ANALYTICS --}}
+        <div class="g-two-col">
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title"><i class="ti ti-school" style="color:var(--green)"></i> Revenue by School</h3>
+                </div>
+                <div style="height: 280px;">
+                    <div class="skeleton-container"><div class="skeleton skeleton-w-100" style="height:280px;"></div></div>
+                    <div id="revenueBySchoolChart" class="data-content"></div>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title"><i class="ti ti-category-2" style="color:var(--primary)"></i> Revenue by Category</h3>
+                </div>
+                <div style="height: 280px;">
+                    <div class="skeleton-container"><div class="skeleton skeleton-w-100" style="height:280px;"></div></div>
+                    <div id="revenueByCategoryChart" class="data-content"></div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Old code for reference, can be removed --}}
+        <div style="display:none">
             <div class="kpi-card" style="--bar-color: var(--primary)">
                 <div class="kpi-meta">
                     <span class="kpi-label">Total Revenue</span>
@@ -384,152 +640,42 @@
                     <i class="ti ti-trending-up"></i> {{ $kpis['revenue_growth'] }}% vs last month
                 </div>
             </div>
-
-            <div class="kpi-card" style="--bar-color: var(--green)">
-                <div class="kpi-meta">
-                    <span class="kpi-label">Total Orders</span>
-                    <div class="kpi-icon icon-green"><i class="ti ti-shopping-cart"></i></div>
+            <div class="panel" style="margin-bottom:0">
+                <div class="panel-header">
+                    <h3 class="panel-title"><i class="ti ti-alert-circle" style="color:var(--red)"></i> Critical Inventory Alerts</h3>
                 </div>
-                <div class="kpi-value">{{ $kpis['orders_count'] }}</div>
-                <div class="kpi-trend trend-up">
-                    <i class="ti ti-trending-up"></i> {{ $kpis['orders_growth'] }}% vs last month
-                </div>
-            </div>
-
-            <div class="kpi-card" style="--bar-color: var(--amber)">
-                <div class="kpi-meta">
-                    <span class="kpi-label">Low Stock Items</span>
-                    <div class="kpi-icon icon-amber"><i class="ti ti-alert-triangle"></i></div>
-                </div>
-                <div class="kpi-value">{{ $kpis['low_stock_count'] }}</div>
-                <div class="kpi-trend text-mute">Across {{ $kpis['total_products'] }} products</div>
-            </div>
-
-            <div class="kpi-card" style="--bar-color: var(--red)">
-                <div class="kpi-meta">
-                    <span class="kpi-label">Out of Stock</span>
-                    <div class="kpi-icon icon-red"><i class="ti ti-circle-x"></i></div>
-                </div>
-                <div class="kpi-value">{{ $kpis['out_of_stock'] }}</div>
-                <div class="kpi-trend trend-down">Critical attention</div>
-            </div>
-        </div>
-
-        {{-- ══════════════════════════════
-             MAIN GRID: charts+tables (left) / insights+tasks (right)
-        ══════════════════════════════ --}}
-        <div class="section-label">Performance</div>
-        <div class="g-main-grid">
-
-            <div class="g-main-col">
-
-                <div class="panel">
-                    <div class="panel-header">
-                        <h3 class="panel-title"><i class="ti ti-chart-line" style="color:var(--primary)"></i> Revenue &amp; Order Growth</h3>
-                        <select class="panel-select">
-                            <option>Last 30 Days</option>
-                            <option>Last 90 Days</option>
-                            <option>Yearly</option>
-                        </select>
-                    </div>
-                    <div style="height: 300px; width: 100%;">
-                        <div id="revenueChart"></div>
-                    </div>
-                </div>
-
-                <div class="g-two-col">
-                    <div class="panel" style="margin-bottom:0">
-                        <div class="panel-header">
-                            <h3 class="panel-title"><i class="ti ti-package" style="color:var(--green)"></i> Top Performing Products</h3>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="premium-table">
-                                <thead>
-                                    <tr>
-                                        <th>Product</th>
-                                        <th>Sales</th>
-                                        <th style="text-align:right">Growth</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($top_selling_products as $product)
-                                        <tr>
-                                            <td style="font-weight:600">{{ $product->product_name }}</td>
-                                            <td>{{ $product->pivot->quantity ?? rand(100, 500) }} units</td>
-                                            <td style="text-align:right;font-weight:700" class="trend-up">+{{ rand(5, 20) }}%</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="panel" style="margin-bottom:0">
-                        <div class="panel-header">
-                            <h3 class="panel-title"><i class="ti ti-wallet" style="color:var(--primary)"></i> Financial Summary</h3>
-                        </div>
-                        <div class="payment-summary">
-                            <div class="payment-row">
-                                <span class="lbl">Total Billed</span>
-                                <span class="val">₹{{ number_format($payment_summary['total_billed'], 2) }}</span>
-                            </div>
-                            <div class="payment-row">
-                                <span class="lbl">Platform Fee (10%)</span>
-                                <span class="val neg">-₹{{ number_format($payment_summary['platform_fee'], 2) }}</span>
-                            </div>
-                            <div class="payment-row">
-                                <span class="lbl">Tax Deducted (5%)</span>
-                                <span class="val neg">-₹{{ number_format($payment_summary['tax_deducted'], 2) }}</span>
-                            </div>
-                            <div class="payment-row total">
-                                <span class="lbl">Estimated Payout</span>
-                                <span>₹{{ number_format($payment_summary['final_payout'], 2) }}</span>
-                            </div>
-                        </div>
-                        <button class="btn-pill btn-pill-outline" style="margin-top:14px">Request Settlement</button>
-                    </div>
-                </div>
-
-                <div class="panel" style="margin-bottom:0">
-                    <div class="panel-header">
-                        <h3 class="panel-title"><i class="ti ti-alert-circle" style="color:var(--red)"></i> Critical Inventory Alerts</h3>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="premium-table">
-                            <thead>
+                <div class="table-responsive">
+                    <table class="premium-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Variant</th>
+                                <th style="text-align:center">Current Stock</th>
+                                <th style="text-align:right">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($inventory_alerts as $alert)
                                 <tr>
-                                    <th>Product</th>
-                                    <th>Variant</th>
-                                    <th style="text-align:center">Current Stock</th>
-                                    <th style="text-align:right">Status</th>
+                                    <td style="font-weight:600">{{ $alert->product->product_name }}</td>
+                                    <td class="text-mute">{{ $alert->product->variants->first()->product_code ?? 'N/A' }}</td>
+                                    <td style="text-align:center;font-weight:700">{{ $alert->stock_qty }}</td>
+                                    <td style="text-align:right">
+                                        <span class="priority-pill {{ $alert->stock_qty == 0 ? 'p-high' : 'p-medium' }}">
+                                            {{ $alert->stock_qty == 0 ? 'Out of Stock' : 'Low Stock' }}
+                                        </span>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($inventory_alerts as $alert)
-                                    <tr>
-                                        <td style="font-weight:600">{{ $alert->product->product_name }}</td>
-                                        <td class="text-mute">{{ $alert->product->variants->first()->product_code ?? 'N/A' }}</td>
-                                        <td style="text-align:center;font-weight:700">{{ $alert->stock_qty }}</td>
-                                        <td style="text-align:right">
-                                            <span class="priority-pill {{ $alert->stock_qty == 0 ? 'p-high' : 'p-medium' }}">
-                                                {{ $alert->stock_qty == 0 ? 'Out of Stock' : 'Low Stock' }}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="4" style="text-align:center;padding:28px 0;color:var(--ink-faint)">No critical alerts. Your inventory is healthy!</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                            @empty
+                                <tr>
+                                    <td colspan="4" style="text-align:center;padding:28px 0;color:var(--ink-faint)">No critical alerts. Your inventory is healthy!</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
-
             </div>
-
             <div class="g-side-col">
-
                 <div class="panel">
                     <div class="panel-header">
                         <h3 class="panel-title"><i class="ti ti-lightbulb" style="color:var(--amber)"></i> AI Business Insights</h3>
@@ -548,7 +694,6 @@
                         </div>
                     @endforeach
                 </div>
-
                 <div class="panel">
                     <div class="panel-header">
                         <h3 class="panel-title"><i class="ti ti-list-check" style="color:var(--primary)"></i> Upcoming Tasks</h3>
@@ -572,7 +717,6 @@
                         <a href="#" style="color:var(--primary);font-weight:700;font-size:12px;text-decoration:none">View All Tasks <i class="ti ti-arrow-right"></i></a>
                     </div>
                 </div>
-
             </div>
         </div>
     @endif
@@ -580,18 +724,115 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const revenueData = @json($revenue_trend);
-        const orderData = @json($order_trend);
+        const rootEl = document.querySelector('.g-root');
 
-        initDashboardChart('#revenueChart', 'area', [
-            revenueData.data,
-            orderData.data
-        ], revenueData.labels, {
-            colors: ['#4338CA', '#158F63'],
-            height: 300,
-            chart: {
-                toolbar: { show: false }
-            }
+        // Mock API call - replace with actual fetch
+        setTimeout(() => {
+            // Dummy data - this should come from your API
+            const dashboardData = {
+                kpis: {
+                    todays_revenue: 12550,
+                    todays_orders: 42,
+                    pending_orders: 18,
+                    ready_to_dispatch: 24,
+                },
+                charts: {
+                    revenue_trend: {
+                        labels: @json($revenue_trend['labels']),
+                        series: [{ name: 'Revenue', data: @json($revenue_trend['data']) }, { name: 'Orders', data: @json($order_trend['data']) }]
+                    },
+                    order_status: {
+                        labels: ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'],
+                        series: [18, 35, 150, 280, 12]
+                    },
+                    inventory_health: {
+                        labels: ['In Stock', 'Low Stock', 'Out of Stock'],
+                        series: [{ data: [350, 45, 15] }]
+                    },
+                    revenue_by_school: {
+                        labels: ['Greenwood High', 'Oakridge Intl', 'Delhi Public School', 'National Public', 'Baldwin Boys'],
+                        series: [{ data: [45000, 38000, 32000, 25000, 18000] }]
+                    },
+                    revenue_by_category: {
+                        labels: ['Shirts', 'Trousers', 'Skirts', 'Blazers', 'Accessories'],
+                        series: [{ data: [62000, 51000, 45000, 35000, 21000] }]
+                    }
+                },
+                tables: {
+                    recent_orders: [
+                        { id: '#1256', customer: 'Ankit Sharma', amount: '₹1,299', status: 'Pending', date: '2024-07-15' },
+                        { id: '#1255', customer: 'Priya Singh', amount: '₹899', status: 'Processing', date: '2024-07-15' },
+                        { id: '#1254', customer: 'Rohan Mehta', amount: '₹2,450', status: 'Shipped', date: '2024-07-14' },
+                    ]
+                }
+            };
+
+            populateDashboard(dashboardData);
+            rootEl.dataset.loading = 'false';
+        }, 1500); // Simulate network delay
+
+        function populateDashboard(data) {
+            // KPIs
+            document.getElementById('kpi-todays-revenue').textContent = `₹${data.kpis.todays_revenue.toLocaleString()}`;
+            document.getElementById('kpi-todays-orders').textContent = data.kpis.todays_orders;
+            document.getElementById('kpi-pending-orders').textContent = data.kpis.pending_orders;
+            document.getElementById('kpi-ready-to-dispatch').textContent = data.kpis.ready_to_dispatch;
+
+            // Charts
+            initDashboardChart('#revenueChart', 'area', data.charts.revenue_trend.series, data.charts.revenue_trend.labels, {
+                colors: ['#4338CA', '#158F63'], height: 300, chart: { toolbar: { show: false } }
+            });
+
+            initDashboardChart('#orderStatusChart', 'donut', data.charts.order_status.series, data.charts.order_status.labels, {
+                colors: ['#F7B84B', '#4338CA', '#0E829B', '#158F63', '#D64545'], height: 300, legend: { position: 'bottom' }
+            });
+
+            initDashboardChart('#inventoryHealthChart', 'bar', data.charts.inventory_health.series, data.charts.inventory_health.labels, {
+                colors: ['#158F63', '#F7B84B', '#D64545'], height: 260, chart: { stacked: true, toolbar: { show: false } },
+                plotOptions: { bar: { horizontal: true } }, xaxis: { labels: { show: false } }
+            });
+
+            initDashboardChart('#revenueBySchoolChart', 'bar', data.charts.revenue_by_school.series, data.charts.revenue_by_school.labels, {
+                colors: ['#158F63'], height: 280, plotOptions: { bar: { horizontal: true, borderRadius: 4 } },
+                xaxis: { labels: { show: false } }
+            });
+
+            initDashboardChart('#revenueByCategoryChart', 'bar', data.charts.revenue_by_category.series, data.charts.revenue_by_category.labels, {
+                colors: ['#4338CA'], height: 280, plotOptions: { bar: { horizontal: true, borderRadius: 4 } },
+                xaxis: { labels: { show: false } }
+            });
+
+            // Tables
+            const recentOrdersBody = document.getElementById('recent-orders-body');
+            recentOrdersBody.innerHTML = data.tables.recent_orders.map(order => `
+                <tr>
+                    <td>${order.id}</td>
+                    <td>${order.customer}</td>
+                    <td>${order.amount}</td>
+                    <td>${order.status}</td>
+                    <td>${order.date}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Tab functionality
+        const tabNavItems = document.querySelectorAll('.tab-nav-item');
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabNavItems.forEach(item => {
+            item.addEventListener('click', () => {
+                tabNavItems.forEach(i => i.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                item.classList.add('active');
+                document.getElementById(`tab-${item.dataset.tab}`).classList.add('active');
+            });
         });
+
+        // Old chart initializations (for reference, can be removed)
+        /*
+        const paymentSummary = @json($payment_summary);
+        const topProducts = @json($top_selling_products);
+        initDashboardChart('#financialSummaryChart', 'donut', ...);
+        initDashboardChart('#topProductsChart', 'bar', ...);
+        */
     });
 </script>

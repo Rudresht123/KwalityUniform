@@ -520,7 +520,7 @@
                 <p>Review vendor submissions and maintain catalog quality before publication.</p>
                 <div class="pa-hero-badge">
                     <i class="ti ti-alert-circle"></i>
-                    <span id="pending-count">...</span>&nbsp;Pending Review
+                    <span>{{ $kpis['pending'] }}</span>&nbsp;Pending Review
                 </div>
             </div>
             <div class="pa-hero-actions">
@@ -542,28 +542,28 @@
                 <div class="pa-kpi-icon kpi-orange"><i class="ti ti-clock"></i></div>
                 <div>
                     <div class="pa-kpi-label">Pending Products</div>
-                    <div class="pa-kpi-value" id="kpi-pending">...</div>
+                    <div class="pa-kpi-value">{{ $kpis['pending'] }}</div>
                 </div>
             </div>
             <div class="pa-kpi">
                 <div class="pa-kpi-icon kpi-blue"><i class="ti ti-calendar"></i></div>
                 <div>
                     <div class="pa-kpi-label">Submitted Today</div>
-                    <div class="pa-kpi-value" id="kpi-today">...</div>
+                    <div class="pa-kpi-value">{{ $kpis['today'] }}</div>
                 </div>
             </div>
             <div class="pa-kpi">
                 <div class="pa-kpi-icon kpi-purple"><i class="ti ti-building"></i></div>
                 <div>
                     <div class="pa-kpi-label">Waiting Vendors</div>
-                    <div class="pa-kpi-value" id="kpi-vendors">...</div>
+                    <div class="pa-kpi-value">{{ $kpis['vendors'] }}</div>
                 </div>
             </div>
             <div class="pa-kpi">
                 <div class="pa-kpi-icon kpi-green"><i class="ti ti-activity"></i></div>
                 <div>
                     <div class="pa-kpi-label">Average Approval</div>
-                    <div class="pa-kpi-value" id="kpi-avg">2.4d</div>
+                    <div class="pa-kpi-value">{{ $kpis['avg'] }}d</div>
                 </div>
             </div>
         </div>
@@ -573,7 +573,7 @@
             <div class="pa-card-body">
                 <form id="filter-form" method="GET" action="{{ route('product-approval.index') }}"
                     class="row g-3 align-items-end pa-filter-bar">
-                    <input type="hidden" name="is_search" value="1">
+                  
                     {{-- Vendor --}}
                     @if(!auth()->user()->hasRole('vendor'))
                         <div class="col-md-3">
@@ -680,7 +680,7 @@
                             </thead>
                             <tbody>
 
-                                @forelse($products as $product)
+                                @foreach($products as $product)
                                     <tr>
 
                                         <td>
@@ -768,14 +768,7 @@
 
                                     </tr>
 
-                                @empty
-
-                                    <tr>
-                                        <td colspan="8" class="text-center py-5">
-                                            No products found
-                                        </td>
-                                    </tr>
-                                @endforelse
+                                @endforeach
 
                             </tbody>
                         </table>

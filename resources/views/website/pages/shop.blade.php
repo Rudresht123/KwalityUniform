@@ -51,41 +51,7 @@
                         </select>
                     </div>
 
-                    <!-- Standard Filter -->
-                    <div class="mb-4" id="shop-standard-filter-container"
-                        style="{{ request('school') ? '' : 'display:none' }}">
-                        <label for="shop-standard-select" class="form-label small fw-semibold">Standard / Grade</label>
-                        <select id="shop-standard-select" class="select2">
-                            <option value="all">All Standards</option>
-                            @if (request('school'))
-                                @php
-                                    $currentSchoolId = request('school');
-                                    $standards = \App\Models\SuperAdmin\SchoolStandard::where(
-                                        'school_id',
-                                        $currentSchoolId,
-                                    )
-                                        ->where('is_active', true)
-                                        ->get();
-                                @endphp
-                                @foreach ($standards as $std)
-                                    <option value="{{ $std->id }}"
-                                        {{ request('standard') == $std->id ? 'selected' : '' }}>
-                                        {{ $std->standard_name }}
-                                    </option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
 
-                    <!-- Class Filter -->
-                    <div class="mb-4" id="shop-class-filter-container"
-                        style="{{ request('school') ? '' : 'display:none' }}">
-                        <label for="shop-class-select" class="form-label small fw-semibold">Class / Section</label>
-                        <select id="shop-class-select" class="select2">
-                            <option value="all">All Classes</option>
-                            <!-- Populated dynamically -->
-                        </select>
-                    </div>
 
                     <!-- Category Filter -->
                     <div class="mb-4">

@@ -23,9 +23,23 @@ class ProductApprovalController extends BaseController
     {
         $this->authorize('viewAnyApprovalQueue', Product::class);
 
+        // Calculate KPIs
+        $pendingCount = Product::where('approval_status', 'pending')->count();
+        $todayCount = Product::where('approval_status', 'pending')
+            ->whereDate('created_at', now()->toDateString())
+            ->count();
+        $vendorsCount = Product::where('approval_status', 'pending')
+            ->distinct('vendor_id')
+            ->count('vendor_id');
+        
+        // Calculate average approval time (days)
+        $avgApprovalDays = Product::where('approval_status', 'approved')
+            ->selectRaw('AVG(DATEDIFF(updated_at, created_at)) as avg_days')
+            ->value('avg_days') ?: 0;
+
         $products = [];
 
-        if ($request->boolean('is_search')) {
+
             $products = Product::query()
                 ->with([
                     'vendor',
@@ -56,11 +70,17 @@ class ProductApprovalController extends BaseController
                 })
                 ->latest()
                 ->get();
-        }
+        
 
         return view('super-admin.product_approvals.index', array_merge([
             'products'   => $products,
             'categories' => Category::orderBy('category_name')->get(),
+            'kpis' => [
+                'pending' => $pendingCount,
+                'today' => $todayCount,
+                'vendors' => $vendorsCount,
+                'avg' => round($avgApprovalDays, 1),
+            ],
         ], $this->pageData(
             'Product Approval Center',
             'Home|Products|Approval Center'

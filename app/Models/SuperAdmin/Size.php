@@ -18,6 +18,7 @@ class Size extends Record
 
     protected $fillable = [
         'size_id',
+        'vendor_id',
         'size_name',
         'display_name',
         'sort_order',
@@ -43,13 +44,22 @@ class Size extends Record
             }
         });
     }
+public function getRouteKeyName()
+{
+    return 'size_id';
+}
 
-    public function getRouteKeyName()
-    {
-        return 'size_id';
-    }
+public function vendor()
+{
+    return $this->belongsTo(Vendor::class, 'vendor_id', 'vendor_id');
+}
 
-    public function scopeActive($query)
+public function scopeForVendor($query, $vendorId)
+{
+    return $query->where('vendor_id', $vendorId);
+}
+
+public function scopeActive($query)
     {
         return $query->where('is_active', true);
     }

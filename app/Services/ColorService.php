@@ -7,9 +7,13 @@ use Illuminate\Support\Facades\DB;
 
 class ColorService
 {
-    public function getAllColors()
+    public function getAllColors($vendorId = null)
     {
-        return Color::latest();
+        $query = Color::latest();
+        if ($vendorId) {
+            $query->forVendor($vendorId);
+        }
+        return $query;
     }
 
     public function createColor(array $data)

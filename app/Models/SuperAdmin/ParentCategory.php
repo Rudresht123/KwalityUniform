@@ -3,9 +3,11 @@
 namespace App\Models\SuperAdmin;
 
 use App\Models\Record;
+use App\Scopes\VendorScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class ParentCategory extends Record
 {
@@ -18,6 +20,7 @@ class ParentCategory extends Record
 
     protected $fillable = [
         'parent_id',
+        'vendor_id',
         'name',
         'is_active',
         'created_by',
@@ -31,12 +34,17 @@ class ParentCategory extends Record
         'deleted_at' => 'datetime',
     ];
 
-    protected static function boot()
+    protected static function booted(): void
     {
-        parent::boot();
+        parent::booted();
+        static::addGlobalScope(new VendorScope);
+
         static::creating(function ($model) {
             if (!$model->parent_id) {
                 $model->parent_id = (string) Str::uuid();
+            }
+            if (!$model->vendor_id && Auth::check() && Auth::user()->hasRole('Vendor') && Auth::user()->vendor) {
+                $model->vendor_id = Auth::user()->vendor->vendor_id;
             }
         });
     }
@@ -45,13 +53,23 @@ class ParentCategory extends Record
     {
         return 'parent_id';
     }
+public function subCategories()
+{
+    return $this->hasMany(Category::class, 'parent_id', 'parent_id');
+}
 
-    public function subCategories()
-    {
-        return $this->hasMany(Category::class, 'parent_id', 'parent_id');
-    }
+public function vendor()
+{
+    return $this->belongsTo(Vendor::class, 'vendor_id', 'vendor_id');
+}
 
-    public function scopeActive($query)
+public function scopeForVendor($query, $vendorId)
+{
+    return $query->where('vendor_id', $vendorId);
+}
+
+public function scopeActive($query)
+
     {
         return $query->where('is_active', true);
     }

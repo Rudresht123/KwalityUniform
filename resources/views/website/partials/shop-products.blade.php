@@ -52,7 +52,9 @@
                     </h4>
 
                     <div class="premium-card-footer">
-                        <div class="premium-price">{{ number_format($product->variants[0]?->selling_price, 2) }}</div>
+                        <div class="premium-price">
+                            {{ number_format($product->variants->first()?->selling_price ?? $product->selling_price ?? 0, 2) }}
+                        </div>
                         <div class="premium-add-btn-container">
                         </div>
 

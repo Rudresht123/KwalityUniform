@@ -77,6 +77,10 @@ function initDataTable(selector, options = {}) {
     );
 }
 
+function initializeDatatable(selector, options = {}) {
+    return initDataTable(selector, options);
+}
+
 
 /* ===================================================
    Auto Initialization

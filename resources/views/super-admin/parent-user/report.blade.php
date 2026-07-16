@@ -62,7 +62,7 @@
                     </button>
                 </div>
                 <div class="card-body">
-                    <table id="parentReportTable" class="table datatable" style="width:100%">
+                    <table id="parentReportTable" class="table" style="width:100%">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -83,6 +83,7 @@
 
 @push('scripts')
 <script>
+
     $(document).ready(function() {
         initializeDatatable('#parentReportTable',{
             processing: true,

@@ -257,34 +257,10 @@
     </div>
 
     {{-- ══════════════════════════════
-         BOARD DISTRIBUTION + VENDORS
+         VENDORS
     ══════════════════════════════ --}}
-    <div class="section-label">Board distribution &amp; vendors</div>
+    <div class="section-label">Vendors</div>
     <div class="g2">
-
-        <div class="panel">
-            <div class="panel-title">
-                <i class="ti ti-school" style="color:var(--primary)"></i>
-                Active schools by board
-            </div>
-            <div id="boardStacked" class="apex-chart"></div>
-
-            <div class="board-mini-grid">
-                @foreach ($schoolBoards as $board => $count)
-                    @php
-                        $color = $boardColors[$board] ?? $defaultColors[$loop->index % count($defaultColors)];
-                    @endphp
-                    <div class="board-mini">
-                        <div class="bm-val" style="color:{{ $color }}">
-                            {{ number_format($count) }}
-                        </div>
-                        <div class="bm-lbl">
-                            {{ ucwords(str_replace('_', ' ', $board)) }}
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
 
         <div class="panel">
             <div class="panel-title"><i class="ti ti-chart-bar" style="color:var(--primary)"></i> Top vendors by products</div>
@@ -887,32 +863,7 @@
             /* ────────────────────────────────────
                6. SCHOOLS BY BOARD — stacked horizontal bar
             ──────────────────────────────────── */
-            ChartHelper.bar({
-
-                id: "boardStacked",
-
-                categories: @json(array_map(fn($board) => ucwords($board), array_keys($schoolBoards))),
-
-                series: [
-                    ChartHelper.series(
-                        "Schools",
-                        @json(array_values($schoolBoards)),
-                        ChartHelper.colors.blue
-                    )
-                ],
-
-                legend: {
-                    show: false
-                },
-
-                plotOptions: {
-                    bar: {
-                        horizontal: false,
-                        borderRadius: 6
-                    }
-                }
-
-            });
+            // Removed due to removal of school board concept
         });
     </script>
 @endpush

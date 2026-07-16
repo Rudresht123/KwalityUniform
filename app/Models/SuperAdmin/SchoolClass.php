@@ -19,7 +19,7 @@ class SchoolClass extends Record
 
     protected $table = 'school_classes';
 
-    protected $fillable = ['school_id', 'standard_id', 'class_name', 'is_active', 'created_by', 'updated_by'];
+    protected $fillable = ['school_id', 'class_name', 'is_active', 'created_by', 'updated_by'];
 
     protected function casts(): array
     {
@@ -34,10 +34,5 @@ class SchoolClass extends Record
     public function school(): BelongsTo
     {
         return $this->belongsTo(School::class, 'school_id', 'school_id');
-    }
-
-    public function standard(): BelongsTo
-    {
-        return $this->belongsTo(SchoolStandard::class, 'standard_id', 'id');
     }
 }

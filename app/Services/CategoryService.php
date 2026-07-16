@@ -9,14 +9,22 @@ use Throwable;
 
 class CategoryService
 {
-    public function getAllCategories()
+    public function getAllCategories($vendorId = null)
     {
-        return Category::with('parentCategory')->latest();
+        $query = Category::with('parentCategory')->latest();
+        if ($vendorId) {
+            $query->forVendor($vendorId);
+        }
+        return $query;
     }
 
-    public function getActiveParents()
+    public function getActiveParents($vendorId = null)
     {
-        return ParentCategory::active()->get();
+        $query = ParentCategory::active();
+        if ($vendorId) {
+            $query->forVendor($vendorId);
+        }
+        return $query->get();
     }
 
     public function createCategory(array $data)

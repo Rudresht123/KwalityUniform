@@ -53,8 +53,7 @@ class SchoolController extends BaseController
      */
     public function create(): View
     {
-        $boards = \App\Models\SuperAdmin\SchoolBoard::all();
-        return view('super-admin.school.create', array_merge($this->pageData('Create School', 'Home|Schools|Create'), ['boards' => $boards]));
+        return view('super-admin.school.create', array_merge($this->pageData('Create School', 'Home|Schools|Create')));
     }
 
     /**
@@ -95,8 +94,7 @@ class SchoolController extends BaseController
      */
     public function edit(School $school): View
     {
-        $boards = \App\Models\SuperAdmin\SchoolBoard::all();
-        return view('super-admin.school.edit', array_merge(compact('school'), $this->pageData('Edit School', 'Home|Schools|Edit'), ['boards' => $boards]));
+        return view('super-admin.school.edit', array_merge(compact('school'), $this->pageData('Edit School', 'Home|Schools|Edit')));
     }
 
     /**

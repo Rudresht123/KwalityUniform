@@ -77,6 +77,22 @@
                 }
             });
         }
+
+        function confirmApprove(callback) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to approve this product?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, approve it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    callback();
+                }
+            });
+        }
         /*
     |--------------------------------------------------------------------------
     | Filters
@@ -150,7 +166,11 @@
 
                 ajaxRequest({
 
-                    url: buildUrl(routes.approve, id)
+                    url: routes.approve,
+
+                    data: {
+                        products: [id]
+                    }
 
                 });
 
@@ -174,12 +194,10 @@
 
             ajaxRequest({
 
-                url: buildUrl(
-                    routes.reject,
-                    $('#rejectModal').data('productId')
-                ),
+                url: routes.reject,
 
                 data: {
+                    products: [$('#rejectModal').data('productId')],
                     reason: $('#reject_reason').val()
                 },
 

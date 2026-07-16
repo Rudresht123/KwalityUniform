@@ -6,7 +6,6 @@ use App\Http\Controllers\BaseController;
 use App\Models\SuperAdmin\Product;
 use App\Models\SuperAdmin\ProductAssignment;
 use App\Models\SuperAdmin\SchoolSection;
-use App\Models\SuperAdmin\SchoolStandard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -21,11 +20,10 @@ class ProductAssignmentController extends BaseController
      */
     public function index(Product $product): View
     {
-        $standards = SchoolStandard::all();
         $sections = SchoolSection::all();
-        $assignments = $product->productAssignments()->with(['standard', 'section'])->get();
+        $assignments = $product->productAssignments()->with(['section'])->get();
 
-        return view('super-admin.product-assignment.index', compact('product', 'standards', 'sections', 'assignments'), $this->pageData('Assign Product to Standards/Sections', 'Home|Products|' . $product->product_name . '|Assignments'));
+        return view('super-admin.product-assignment.index', compact('product', 'sections', 'assignments'), $this->pageData('Assign Product to Sections', 'Home|Products|' . $product->product_name . '|Assignments'));
     }
 
     /**
@@ -35,16 +33,14 @@ class ProductAssignmentController extends BaseController
     {
         $request->validate([
             'product_id' => 'required|exists:products,product_id',
-            'assignment_type' => 'required|in:standard,section',
-            'standard_id' => 'nullable|required_if:assignment_type,standard|exists:school_standards,id',
-            'section_id' => 'nullable|required_if:assignment_type,section|exists:school_sections,id',
+            'assignment_type' => 'required|in:section',
+            'section_id' => 'required|exists:school_sections,id',
         ]);
 
         try {
             ProductAssignment::create([
                 'product_id' => $request->product_id,
                 'assignment_type' => $request->assignment_type,
-                'standard_id' => $request->standard_id,
                 'section_id' => $request->section_id,
             ]);
 

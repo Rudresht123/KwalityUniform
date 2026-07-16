@@ -18,6 +18,7 @@ class Color extends Record
 
     protected $fillable = [
         'color_id',
+        'vendor_id',
         'color_name',
         'hex_code',
         'is_active',
@@ -41,13 +42,22 @@ class Color extends Record
             }
         });
     }
+public function getRouteKeyName()
+{
+    return 'color_id';
+}
 
-    public function getRouteKeyName()
-    {
-        return 'color_id';
-    }
+public function vendor()
+{
+    return $this->belongsTo(Vendor::class, 'vendor_id', 'vendor_id');
+}
 
-    public function scopeActive($query)
+public function scopeForVendor($query, $vendorId)
+{
+    return $query->where('vendor_id', $vendorId);
+}
+
+public function scopeActive($query)
     {
         return $query->where('is_active', true);
     }
