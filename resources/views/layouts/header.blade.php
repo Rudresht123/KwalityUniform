@@ -25,6 +25,7 @@
                     .header-logo {
                         display: flex !important;
                         align-items: center;
+                        padding: 0px !important;
                     }
                 </style>
             </div> <!-- End::header-element --> <!-- Start::header-element -->

@@ -32,7 +32,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::TDdbdAWKOABnFNfM',
+            '_route' => 'generated::UgBnuTAwkGqh9Zlz',
           ),
           1 => NULL,
           2 => 
@@ -52,7 +52,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::l0iNabP5R32MqWYg',
+            '_route' => 'generated::XksLPHigLYA3wDZo',
           ),
           1 => NULL,
           2 => 
@@ -72,7 +72,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::7I41y99nnlDIw9l4',
+            '_route' => 'generated::xygq1A9Ji7POznHJ',
           ),
           1 => NULL,
           2 => 
@@ -111,7 +111,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::xtAHJhH7w4Yv6bfV',
+            '_route' => 'generated::mqFNjeE15cskqK2Z',
           ),
           1 => NULL,
           2 => 
@@ -964,6 +964,65 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/eschoolkart/stock-adjustment/adjust' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'stock-adjustment.adjust',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/eschoolkart/stock-history/report' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'stock-history.index',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/eschoolkart/stock-history/data' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'stock-history.data',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
       '/eschoolkart/stock/index' => 
       array (
         0 => 
@@ -984,13 +1043,13 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      '/eschoolkart/stock-adjustment/adjust' => 
+      '/eschoolkart/ajax/parent-category/store' => 
       array (
         0 => 
         array (
           0 => 
           array (
-            '_route' => 'stock-adjustment.adjust',
+            '_route' => 'ajax.parent-category.store',
           ),
           1 => NULL,
           2 => 
@@ -1003,19 +1062,56 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      '/eschoolkart/stock-adjustment/history' => 
+      '/eschoolkart/ajax/category/store' => 
       array (
         0 => 
         array (
           0 => 
           array (
-            '_route' => 'stock-adjustment.history',
+            '_route' => 'ajax.category.store',
           ),
           1 => NULL,
           2 => 
           array (
-            'GET' => 0,
-            'HEAD' => 1,
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/eschoolkart/ajax/size/store' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'ajax.size.store',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/eschoolkart/ajax/color/store' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'ajax.color.store',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
           ),
           3 => NULL,
           4 => false,
@@ -1220,7 +1316,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::LANVVbHfAPK65LXc',
+            '_route' => 'generated::Z7ZkLUwJbbWLefyR',
           ),
           1 => NULL,
           2 => 
@@ -1240,7 +1336,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::JmTNr4h5FXnkzUfB',
+            '_route' => 'generated::BjmWl2xYZnUkwd1Y',
           ),
           1 => NULL,
           2 => 
@@ -1277,7 +1373,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::b19ciXL31iA4ltWV',
+            '_route' => 'generated::ZmiawU5P1SdPsBzv',
           ),
           1 => NULL,
           2 => 
@@ -1313,7 +1409,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::l9sFZvAkLRONbRTp',
+            '_route' => 'generated::dn1J49A25dm21xm7',
           ),
           1 => NULL,
           2 => 
@@ -1481,7 +1577,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::pncPCLolTcyPUhO4',
+            '_route' => 'generated::L97rnFkhEFMXLYDM',
           ),
           1 => NULL,
           2 => 
@@ -1538,7 +1634,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::msneWdEKRhtcfs8j',
+            '_route' => 'generated::7R1mziQGKe6FMDHh',
           ),
           1 => NULL,
           2 => 
@@ -1678,7 +1774,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::5AoV0dwqIIIu6tlp',
+            '_route' => 'generated::2JqPkgRYqagc1OiW',
           ),
           1 => NULL,
           2 => 
@@ -1698,7 +1794,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::VkIZWtmEQngSqYoV',
+            '_route' => 'generated::pJaJMdOK8MnM6OK9',
           ),
           1 => NULL,
           2 => 
@@ -2408,7 +2504,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::MOLiWeoIe9ZJlY0B',
+            '_route' => 'generated::EbHJp3VO755pjlov',
           ),
           1 => NULL,
           2 => 
@@ -2459,7 +2555,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::xT7ewmG0xPuDa66u',
+            '_route' => 'generated::NNn9RQjJIjBWoH7N',
           ),
           1 => 
           array (
@@ -2482,7 +2578,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::maM9stXS0kOm6vAb',
+            '_route' => 'generated::dGO8kQJj4hSYDOQs',
           ),
           1 => 
           array (
@@ -2505,7 +2601,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::9XqE0NN61LgCstxp',
+            '_route' => 'generated::h0pqdglQxmCOkHrM',
           ),
           1 => 
           array (
@@ -3405,7 +3501,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::G753QeabN2TI1ut8',
+            '_route' => 'generated::XPJyWPOy0nJmLOQ6',
           ),
           1 => 
           array (
@@ -3427,7 +3523,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::VmnyjZWfJEykFWJo',
+            '_route' => 'generated::WGhWZecq3JO8OGVn',
           ),
           1 => 
           array (
@@ -4246,7 +4342,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::TDdbdAWKOABnFNfM' => 
+    'generated::UgBnuTAwkGqh9Zlz' => 
     array (
       'methods' => 
       array (
@@ -4258,7 +4354,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile',
-        'as' => 'generated::TDdbdAWKOABnFNfM',
+        'as' => 'generated::UgBnuTAwkGqh9Zlz',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4274,7 +4370,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::l0iNabP5R32MqWYg' => 
+    'generated::XksLPHigLYA3wDZo' => 
     array (
       'methods' => 
       array (
@@ -4286,7 +4382,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps',
-        'as' => 'generated::l0iNabP5R32MqWYg',
+        'as' => 'generated::XksLPHigLYA3wDZo',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4302,7 +4398,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::7I41y99nnlDIw9l4' => 
+    'generated::xygq1A9Ji7POznHJ' => 
     array (
       'methods' => 
       array (
@@ -4314,7 +4410,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@cspMaps',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@cspMaps',
-        'as' => 'generated::7I41y99nnlDIw9l4',
+        'as' => 'generated::xygq1A9Ji7POznHJ',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4385,7 +4481,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::xT7ewmG0xPuDa66u' => 
+    'generated::NNn9RQjJIjBWoH7N' => 
     array (
       'methods' => 
       array (
@@ -4422,7 +4518,7 @@ app('router')->setCompiledRoutes(
                 $component.\'.js\',
             );
         }";s:5:"scope";s:51:"Livewire\\Features\\SupportJsModules\\SupportJsModules";s:4:"this";N;s:4:"self";s:32:"00000000000008dd0000000000000000";}}',
-        'as' => 'generated::xT7ewmG0xPuDa66u',
+        'as' => 'generated::NNn9RQjJIjBWoH7N',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4438,7 +4534,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::maM9stXS0kOm6vAb' => 
+    'generated::dGO8kQJj4hSYDOQs' => 
     array (
       'methods' => 
       array (
@@ -4479,7 +4575,7 @@ app('router')->setCompiledRoutes(
                 \'text/css; charset=utf-8\',
             );
         }";s:5:"scope";s:53:"Livewire\\Features\\SupportCssModules\\SupportCssModules";s:4:"this";N;s:4:"self";s:32:"00000000000008df0000000000000000";}}',
-        'as' => 'generated::maM9stXS0kOm6vAb',
+        'as' => 'generated::dGO8kQJj4hSYDOQs',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4495,7 +4591,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::9XqE0NN61LgCstxp' => 
+    'generated::h0pqdglQxmCOkHrM' => 
     array (
       'methods' => 
       array (
@@ -4533,7 +4629,7 @@ app('router')->setCompiledRoutes(
                 \'text/css; charset=utf-8\',
             );
         }";s:5:"scope";s:53:"Livewire\\Features\\SupportCssModules\\SupportCssModules";s:4:"this";N;s:4:"self";s:32:"00000000000008e10000000000000000";}}',
-        'as' => 'generated::9XqE0NN61LgCstxp',
+        'as' => 'generated::h0pqdglQxmCOkHrM',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4549,7 +4645,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::xtAHJhH7w4Yv6bfV' => 
+    'generated::mqFNjeE15cskqK2Z' => 
     array (
       'methods' => 
       array (
@@ -4586,7 +4682,7 @@ app('router')->setCompiledRoutes(
                         \'exception\' => $exception,
                     ]), status: $status);
                 }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"0000000000000b260000000000000000";}}',
-        'as' => 'generated::xtAHJhH7w4Yv6bfV',
+        'as' => 'generated::mqFNjeE15cskqK2Z',
       ),
       'fallback' => false,
       'defaults' => 
@@ -7718,6 +7814,128 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
+    'stock-adjustment.adjust' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'eschoolkart/stock-adjustment/adjust',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'role:super-admin|admin|school|vendor',
+          3 => 'App\\Http\\Middleware\\CheckScreenLock',
+          4 => 'permission:stock_adjust',
+        ),
+        'uses' => 'App\\Http\\Controllers\\SuperAdmin\\StockAdjustmentController@adjust',
+        'controller' => 'App\\Http\\Controllers\\SuperAdmin\\StockAdjustmentController@adjust',
+        'as' => 'stock-adjustment.adjust',
+        'namespace' => NULL,
+        'prefix' => 'eschoolkart/stock-adjustment',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'stock-history.index' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'eschoolkart/stock-history/report',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'role:super-admin|admin|school|vendor',
+          3 => 'App\\Http\\Middleware\\CheckScreenLock',
+          4 => 'permission:stock_history_view',
+        ),
+        'uses' => 'App\\Http\\Controllers\\SuperAdmin\\StockHistoryReportController@index',
+        'controller' => 'App\\Http\\Controllers\\SuperAdmin\\StockHistoryReportController@index',
+        'as' => 'stock-history.index',
+        'namespace' => NULL,
+        'prefix' => 'eschoolkart/stock-history',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'stock-history.data' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'eschoolkart/stock-history/data',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'role:super-admin|admin|school|vendor',
+          3 => 'App\\Http\\Middleware\\CheckScreenLock',
+          4 => 'permission:stock_history_view',
+        ),
+        'uses' => 'App\\Http\\Controllers\\SuperAdmin\\StockHistoryReportController@data',
+        'controller' => 'App\\Http\\Controllers\\SuperAdmin\\StockHistoryReportController@data',
+        'as' => 'stock-history.data',
+        'namespace' => NULL,
+        'prefix' => 'eschoolkart/stock-history',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
     'stock.index' => 
     array (
       'methods' => 
@@ -7759,13 +7977,13 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'stock-adjustment.adjust' => 
+    'ajax.parent-category.store' => 
     array (
       'methods' => 
       array (
         0 => 'POST',
       ),
-      'uri' => 'eschoolkart/stock-adjustment/adjust',
+      'uri' => 'eschoolkart/ajax/parent-category/store',
       'action' => 
       array (
         'middleware' => 
@@ -7774,13 +7992,14 @@ app('router')->setCompiledRoutes(
           1 => 'auth',
           2 => 'role:super-admin|admin|school|vendor',
           3 => 'App\\Http\\Middleware\\CheckScreenLock',
-          4 => 'permission:stock_adjust',
+          4 => 'auth',
+          5 => 'role:super-admin|admin|school|vendor',
         ),
-        'uses' => 'App\\Http\\Controllers\\SuperAdmin\\StockAdjustmentController@adjust',
-        'controller' => 'App\\Http\\Controllers\\SuperAdmin\\StockAdjustmentController@adjust',
-        'as' => 'stock-adjustment.adjust',
+        'uses' => 'App\\Http\\Controllers\\SuperAdmin\\ParentCategoryController@ajaxStore',
+        'controller' => 'App\\Http\\Controllers\\SuperAdmin\\ParentCategoryController@ajaxStore',
+        'as' => 'ajax.parent-category.store',
         'namespace' => NULL,
-        'prefix' => 'eschoolkart/stock-adjustment',
+        'prefix' => 'eschoolkart/ajax',
         'where' => 
         array (
         ),
@@ -7799,14 +8018,13 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'stock-adjustment.history' => 
+    'ajax.category.store' => 
     array (
       'methods' => 
       array (
-        0 => 'GET',
-        1 => 'HEAD',
+        0 => 'POST',
       ),
-      'uri' => 'eschoolkart/stock-adjustment/history',
+      'uri' => 'eschoolkart/ajax/category/store',
       'action' => 
       array (
         'middleware' => 
@@ -7815,13 +8033,96 @@ app('router')->setCompiledRoutes(
           1 => 'auth',
           2 => 'role:super-admin|admin|school|vendor',
           3 => 'App\\Http\\Middleware\\CheckScreenLock',
-          4 => 'permission:stock_history_view',
+          4 => 'auth',
+          5 => 'role:super-admin|admin|school|vendor',
         ),
-        'uses' => 'App\\Http\\Controllers\\SuperAdmin\\StockAdjustmentController@history',
-        'controller' => 'App\\Http\\Controllers\\SuperAdmin\\StockAdjustmentController@history',
-        'as' => 'stock-adjustment.history',
+        'uses' => 'App\\Http\\Controllers\\SuperAdmin\\CategoryController@ajaxStore',
+        'controller' => 'App\\Http\\Controllers\\SuperAdmin\\CategoryController@ajaxStore',
+        'as' => 'ajax.category.store',
         'namespace' => NULL,
-        'prefix' => 'eschoolkart/stock-adjustment',
+        'prefix' => 'eschoolkart/ajax',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'ajax.size.store' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'eschoolkart/ajax/size/store',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'role:super-admin|admin|school|vendor',
+          3 => 'App\\Http\\Middleware\\CheckScreenLock',
+          4 => 'auth',
+          5 => 'role:super-admin|admin|school|vendor',
+        ),
+        'uses' => 'App\\Http\\Controllers\\SuperAdmin\\SizeController@ajaxStore',
+        'controller' => 'App\\Http\\Controllers\\SuperAdmin\\SizeController@ajaxStore',
+        'as' => 'ajax.size.store',
+        'namespace' => NULL,
+        'prefix' => 'eschoolkart/ajax',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'ajax.color.store' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'eschoolkart/ajax/color/store',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'role:super-admin|admin|school|vendor',
+          3 => 'App\\Http\\Middleware\\CheckScreenLock',
+          4 => 'auth',
+          5 => 'role:super-admin|admin|school|vendor',
+        ),
+        'uses' => 'App\\Http\\Controllers\\SuperAdmin\\ColorController@ajaxStore',
+        'controller' => 'App\\Http\\Controllers\\SuperAdmin\\ColorController@ajaxStore',
+        'as' => 'ajax.color.store',
+        'namespace' => NULL,
+        'prefix' => 'eschoolkart/ajax',
         'where' => 
         array (
         ),
@@ -8349,7 +8650,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::G753QeabN2TI1ut8' => 
+    'generated::XPJyWPOy0nJmLOQ6' => 
     array (
       'methods' => 
       array (
@@ -8370,7 +8671,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::G753QeabN2TI1ut8',
+        'as' => 'generated::XPJyWPOy0nJmLOQ6',
       ),
       'fallback' => false,
       'defaults' => 
@@ -8386,7 +8687,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::VmnyjZWfJEykFWJo' => 
+    'generated::WGhWZecq3JO8OGVn' => 
     array (
       'methods' => 
       array (
@@ -8407,7 +8708,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::VmnyjZWfJEykFWJo',
+        'as' => 'generated::WGhWZecq3JO8OGVn',
       ),
       'fallback' => false,
       'defaults' => 
@@ -8534,7 +8835,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::LANVVbHfAPK65LXc' => 
+    'generated::Z7ZkLUwJbbWLefyR' => 
     array (
       'methods' => 
       array (
@@ -8560,13 +8861,13 @@ app('router')->setCompiledRoutes(
         \'partials.notifications\',
         \\compact(\'notifications\')
     );
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"0000000000000c900000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"0000000000000c950000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
         array (
         ),
-        'as' => 'generated::LANVVbHfAPK65LXc',
+        'as' => 'generated::Z7ZkLUwJbbWLefyR',
       ),
       'fallback' => false,
       'defaults' => 
@@ -8582,7 +8883,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::JmTNr4h5FXnkzUfB' => 
+    'generated::BjmWl2xYZnUkwd1Y' => 
     array (
       'methods' => 
       array (
@@ -8613,7 +8914,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::JmTNr4h5FXnkzUfB',
+        'as' => 'generated::BjmWl2xYZnUkwd1Y',
       ),
       'fallback' => false,
       'defaults' => 
@@ -8667,7 +8968,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::b19ciXL31iA4ltWV' => 
+    'generated::ZmiawU5P1SdPsBzv' => 
     array (
       'methods' => 
       array (
@@ -8688,7 +8989,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::b19ciXL31iA4ltWV',
+        'as' => 'generated::ZmiawU5P1SdPsBzv',
       ),
       'fallback' => false,
       'defaults' => 
@@ -8742,7 +9043,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::l9sFZvAkLRONbRTp' => 
+    'generated::dn1J49A25dm21xm7' => 
     array (
       'methods' => 
       array (
@@ -8763,7 +9064,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::l9sFZvAkLRONbRTp',
+        'as' => 'generated::dn1J49A25dm21xm7',
       ),
       'fallback' => false,
       'defaults' => 
@@ -9234,7 +9535,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::pncPCLolTcyPUhO4' => 
+    'generated::L97rnFkhEFMXLYDM' => 
     array (
       'methods' => 
       array (
@@ -9255,7 +9556,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::pncPCLolTcyPUhO4',
+        'as' => 'generated::L97rnFkhEFMXLYDM',
       ),
       'fallback' => false,
       'defaults' => 
@@ -9345,7 +9646,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::msneWdEKRhtcfs8j' => 
+    'generated::7R1mziQGKe6FMDHh' => 
     array (
       'methods' => 
       array (
@@ -9366,7 +9667,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::msneWdEKRhtcfs8j',
+        'as' => 'generated::7R1mziQGKe6FMDHh',
       ),
       'fallback' => false,
       'defaults' => 
@@ -9678,7 +9979,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::5AoV0dwqIIIu6tlp' => 
+    'generated::2JqPkgRYqagc1OiW' => 
     array (
       'methods' => 
       array (
@@ -9699,7 +10000,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::5AoV0dwqIIIu6tlp',
+        'as' => 'generated::2JqPkgRYqagc1OiW',
       ),
       'fallback' => false,
       'defaults' => 
@@ -9715,7 +10016,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::VkIZWtmEQngSqYoV' => 
+    'generated::pJaJMdOK8MnM6OK9' => 
     array (
       'methods' => 
       array (
@@ -9736,7 +10037,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::VkIZWtmEQngSqYoV',
+        'as' => 'generated::pJaJMdOK8MnM6OK9',
       ),
       'fallback' => false,
       'defaults' => 
@@ -12060,7 +12361,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::MOLiWeoIe9ZJlY0B' => 
+    'generated::EbHJp3VO755pjlov' => 
     array (
       'methods' => 
       array (
@@ -12086,7 +12387,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 'Illuminate\\Foundation\\Http\\Middleware\\PreventRequestForgery',
         ),
-        'as' => 'generated::MOLiWeoIe9ZJlY0B',
+        'as' => 'generated::EbHJp3VO755pjlov',
       ),
       'fallback' => false,
       'defaults' => 
@@ -12118,7 +12419,7 @@ app('router')->setCompiledRoutes(
                         $config,
                         $isProduction
                     ))($request, $path);
-                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"0000000000000d030000000000000000";}}',
+                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"0000000000000d080000000000000000";}}',
         'as' => 'storage.local',
       ),
       'fallback' => false,
@@ -12151,7 +12452,7 @@ app('router')->setCompiledRoutes(
                         $config,
                         $isProduction
                     ))($request, $path);
-                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"0000000000000d050000000000000000";}}',
+                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"0000000000000d0a0000000000000000";}}',
         'as' => 'storage.local.upload',
       ),
       'fallback' => false,

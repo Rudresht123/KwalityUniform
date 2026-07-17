@@ -25,6 +25,7 @@ class StockController extends BaseController
     {
 
         if ($request->ajax()) {
+
             $query = ProductVariant::with(['product', 'size', 'color'])
                 ->whereColumn('stock_qty', '<=', 'low_stock_alert');
 
@@ -58,7 +59,7 @@ class StockController extends BaseController
                     return '<span class="badge bg-success">Healthy</span>';
                 })
                 ->addColumn('options', function ($row) {
-                    return '<button type="button" class="btn btn-icon btn-sm btn-primary btn-add-stock" data-id="' . $row->variant_id . '" title="Add Stock"><i class="ti-plus"></i> Add Stock</button>';
+                    return '<button type="button" class="btn btn-icon btn-sm btn-primary btn-add-stock" data-id="' . $row->variant_id . '" title="Add Stock"><i class="ti-plus"></i></button>';
                 })
                 ->rawColumns(['status', 'options'])
                 ->make(true);
@@ -72,11 +73,6 @@ class StockController extends BaseController
      */
     public function adjust(Request $request)
     {
-        $this->authorize('adjust', \App\Policies\StockPolicy::class); // Note: I'll keep the fix from before but I'll use the Gate now as it's more stable
-        
-        // Use the Gate for consistent authorization
-        \Illuminate\Support\Facades\Gate::authorize('adjustStock');
-
         $request->validate([
             'variant_id' => 'required|exists:product_variants,variant_id',
             'quantity' => 'required|integer|min:1',

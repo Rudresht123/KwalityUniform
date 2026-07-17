@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\SuperAdmin\ProductVariant;
 use App\Repositories\DashboardRepository;
 use Illuminate\Support\Facades\Cache;
 
@@ -74,9 +75,10 @@ class DashboardService
         $orderTrend = $this->repository->getVendorOrderTrend($vendor->vendor_id);
 
         $pendingProducts = $vendor->products()->where('approval_status', 'pending')->count();
-        $lowStockCount = \App\Models\SuperAdmin\ProductVariant::whereHas('product', function ($q) use ($vendor) {
+        $lowStockCount = ProductVariant::whereHas('product', function ($q) use ($vendor) {
             $q->where('vendor_id', $vendor->vendor_id);
         })->whereRaw('stock_qty <= low_stock_alert')->count();
+      
 
         return [
             'vendor' => $vendor,

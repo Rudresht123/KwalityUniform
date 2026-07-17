@@ -13,7 +13,7 @@
                             </div>
                         </div>
                             <div class="table-responsive">
-                                <table id="stock-table" class="table datatable" style="width:100%">
+                                <table id="stock-table" class="table" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -84,13 +84,14 @@
         </div>
     </div>
 
-    @push('scripts')
+
         <script>
             $(document).ready(function() {
-                const table = initDataTable$('#stock-table', {
+
+                initDataTable('#stock-table', {
                     processing: true,
                     serverSide: true,
-                    ajax: '{{ route('stock.index') }}',
+                    ajax: "{{ route('stock.index') }}",
                     columns: [{
                             data: 'DT_RowIndex',
                             name: 'DT_RowIndex',
@@ -99,7 +100,7 @@
                         },
                         {
                             data: 'product_name',
-                            name: 'product.product_name'
+                            name: 'product_name'
                         },
                         {
                             data: 'sku',
@@ -129,10 +130,7 @@
                             orderable: false,
                             searchable: false
                         },
-                    ],
-                    order: [
-                        [4, 'asc']
-                    ],
+                    ]
                 });
             });
 
@@ -181,7 +179,7 @@
                     }
                 });
             });
-            });
+            
         </script>
-    @endpush
+
 @endsection

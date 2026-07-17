@@ -54,7 +54,7 @@
 
 
                     <!-- Category Filter -->
-                    <div class="mb-4">
+                    <div class="mb-4" id="shop-category-select-container">
                         <label for="shop-category-select" class="form-label small fw-semibold">Garment Category</label>
                         <select id="shop-category-select" class="select2">
                             <option value="all">All Categories</option>
@@ -152,7 +152,7 @@
             const schoolSelect = document.getElementById('shop-school-select');
             const standardSelect = document.getElementById('shop-standard-select');
             const classSelect = document.getElementById('shop-class-select');
-            const standardContainer = document.getElementById('shop-standard-filter-container');
+            const standardContainer = document.getElementById('shop-category-select-container');
             const classContainer = document.getElementById('shop-class-filter-container');
             const categorySelect = document.getElementById('shop-category-select');
             const subcategorySelect = document.getElementById('shop-subcategory-select');
@@ -225,10 +225,10 @@
                         const data = await response.json();
 
                         if (data.success) {
-                            let options = '<option value="all">All Standards</option>';
+                            let options = '<option value="all">All Category</option>';
                             data.standards.forEach(s => {
                                 options +=
-                                `<option value="${s.id}">${s.standard_name}</option>`;
+                                `<option value="${s.category_id}">${s.category_name}</option>`;
                             });
                             if (standardSelect) {
                                 standardSelect.innerHTML = options;

@@ -62,16 +62,17 @@ class CategoryController extends BaseController
         return view('super-admin.category.create', compact('parents'), $this->pageData('Create Sub Category', 'Home|Product Attributes|Sub Categories|Create'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreCategoryRequest $request)
+    public function ajaxStore(Request $request)
     {
         try {
-            $this->categoryService->createCategory($request->validated());
-            return redirect()->route('category.index')->with('success', 'Sub category created successfully.');
+            $validated = $request->validate([
+                'category_name' => 'required|string|max:255',
+                'parent_id' => 'nullable|uuid|exists:parent_categories,parent_id',
+            ]);
+            $category = $this->categoryService->createCategory($validated);
+            return response()->json(['success' => true, 'category' => $category]);
         } catch (Throwable $e) {
-            return back()->withInput()->with('error', 'Failed to create sub category: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 

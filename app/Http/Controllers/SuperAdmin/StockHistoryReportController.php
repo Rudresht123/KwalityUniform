@@ -3,49 +3,37 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\BaseController;
-use App\Services\StockAdjustmentService;
-use App\Http\Requests\SuperAdmin\AdjustStockRequest;
+use App\Models\SuperAdmin\StockAdjustment;
 use Illuminate\Http\Request;
-use Throwable;
+use Yajra\DataTables\Facades\DataTables;
 
-class StockAdjustmentController extends BaseController
+class StockHistoryReportController extends BaseController
 {
-    protected $stockService;
-
-    public function __construct(StockAdjustmentService $stockService)
-    {
-        $this->stockService = $stockService;
-    }
-
-    public function adjust(AdjustStockRequest $request)
-    {
-        try {
-            $this->stockService->adjustStock(
-                $request->variant_id,
-                (int)$request->quantity,
-                $request->remarks
-            );
-
-            return response()->json(['success' => true, 'message' => 'Stock updated successfully.']);
-        } catch (Throwable $e) {
-            return response()->json(['success' => false, 'message' => 'Failed to update stock: ' . $e->getMessage()], 500);
-        }
-    }
-
-    public function historyReport()
+    public function index()
     {
         return view('super-admin.stock.history-report', $this->pageData('Stock History Report', 'Home|Inventory|Stock History'));
     }
 
-    public function history(Request $request)
+    public function data(Request $request)
     {
-        $query = \App\Models\SuperAdmin\StockAdjustment::with(['variant.product', 'variant.size', 'variant.color', 'creator']);
+        $query = StockAdjustment::with(['variant.product', 'variant.size', 'variant.color', 'creator']);
+
+        // Vendor filter
+        if (auth()->user()->hasRole('vendor')) {
+            $vendorId = auth()->user()->vendor?->vendor_id;
+            
+            $query->whereHas('variant', function ($q) use ($vendorId) {
+                $q->whereHas('product', function ($pq) use ($vendorId) {
+                    $pq->where('vendor_id', $vendorId);
+                });
+            });
+        }
 
         if ($request->filled('variant_id')) {
             $query->where('variant_id', $request->variant_id);
         }
 
-        return \Yajra\DataTables\Facades\DataTables::of($query)
+        return DataTables::of($query)
             ->addColumn('product_name', function ($row) {
                 return $row->variant->product->product_name ?? 'N/A';
             })

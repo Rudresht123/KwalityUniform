@@ -20,6 +20,7 @@
                         </select>
                     </td>
                     <td><input type="number" step="0.01" name="variants[${variantIndex}][mrp]" class="form-control form-control-sm mrp" placeholder="0.00" required></td>
+                    <td><input type="number" step="0.01" name="variants[${variantIndex}][vendor_price]" class="form-control form-control-sm vendor_price" placeholder="0.00" required></td>
                     <td><input type="number" step="0.01" name="variants[${variantIndex}][selling_price]" class="form-control form-control-sm selling_price" placeholder="0.00" required></td>
                     <td><input type="number" name="variants[${variantIndex}][stock_qty]" class="form-control form-control-sm" placeholder="0" required></td>
                     <td><input type="number" name="variants[${variantIndex}][low_stock_alert]" class="form-control form-control-sm" value="5" placeholder="5"></td>

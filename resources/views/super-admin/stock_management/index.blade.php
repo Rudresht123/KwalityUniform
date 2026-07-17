@@ -120,7 +120,7 @@
 
         // Adjust Stock
         $(document).on('click', '.btn-success-light', function() {
-            const variantId = $(this).attr('onclick').match(/'([^']+)'/)[1];
+            const variantId = $(this).data('id');
             $('#modal_variant_id').val(variantId);
             $('#modal_quantity').val('');
             $('#modal_remarks').val('');
@@ -143,24 +143,38 @@
                 },
                 error: function(xhr) {
                     $("#preloader").hide();
-                    toastr.error(xhr.responseJSON.message || 'Something went wrong');
+                    let message = 'Something went wrong.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        message = xhr.responseJSON.message;
+                    } else if (xhr.status === 403) {
+                        message = 'You do not have permission to perform this action.';
+                    }
+                    toastr.error(message);
                 }
             });
         });
 
         // View History
         $(document).on('click', '.btn-primary-light', function() {
-            const variantId = $(this).attr('onclick').match(/'([^']+)'/)[1];
+            const variantId = $(this).data('id');
+            console.log("Variant ID:", variantId);
+            if (!variantId) {
+                console.error("No Variant ID found!");
+                return;
+            }
             $('#historyModal').modal('show');
             
             const historyBody = $('#history-table tbody');
             historyBody.empty();
 
+            console.log("Fetching history for:", variantId);
+
             $.ajax({
-                url: '{{ route("stock-adjustment.history") }}',
+                url: '{{ route("stock-history.data") }}',
                 type: 'GET',
-                data: { variant_id: variantId },
+                data: { variant_id: variantId, type: 'modal' },
                 success: function(response) {
+                    console.log("AJAX Response:", response);
                     if (response.success) {
                         response.data.forEach(item => {
                             historyBody.append(`
@@ -176,7 +190,8 @@
                         });
                     }
                 },
-                error: function() {
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", status, error);
                     toastr.error('Failed to load history');
                 }
             });

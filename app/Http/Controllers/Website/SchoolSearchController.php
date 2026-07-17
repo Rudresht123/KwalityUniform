@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Website;
 
 use App\Http\Controllers\Controller;
+use App\Models\SuperAdmin\ParentCategory;
 use App\Models\SuperAdmin\School;
 use Illuminate\Http\Request;
 

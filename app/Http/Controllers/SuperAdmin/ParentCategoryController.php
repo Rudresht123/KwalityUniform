@@ -49,6 +49,19 @@ class ParentCategoryController extends BaseController
         }
     }
 
+    public function ajaxStore(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+            ]);
+            $parent = ParentCategory::create($validated);
+            return response()->json(['success' => true, 'parent' => $parent]);
+        } catch (Throwable $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+
     public function edit(ParentCategory $parentCategory)
     {
         return view('super-admin.parent-category.edit', compact('parentCategory'), $this->pageData('Edit Parent Category', 'Home|Product Attributes|Parent Categories|Edit'));

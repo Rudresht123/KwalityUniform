@@ -56,16 +56,17 @@ class ColorController extends BaseController
         return view('super-admin.color.create', $this->pageData('Create Color', 'Home|Product Attributes|Colors|Create'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreColorRequest $request)
+    public function ajaxStore(Request $request)
     {
         try {
-            $this->colorService->createColor($request->validated());
-            return redirect()->route('color.index')->with('success', 'Color created successfully.');
+            $validated = $request->validate([
+                'color_name' => 'required|string|max:255',
+                'hex_code' => 'nullable|string|max:7',
+            ]);
+            $color = $this->colorService->createColor($validated);
+            return response()->json(['success' => true, 'color' => $color]);
         } catch (Throwable $e) {
-            return back()->withInput()->with('error', 'Failed to create color: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 

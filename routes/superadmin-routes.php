@@ -143,11 +143,29 @@ Route::prefix('stock-management')->name('stock-management.')->group(function () 
     Route::get('/index', [StockManagementController::class, 'index'])->name('index')->middleware('permission:stock_view');
 });
 
+use App\Http\Controllers\SuperAdmin\StockHistoryReportController;
+
+// ... other imports
+
+Route::prefix('stock-adjustment')->name('stock-adjustment.')->group(function () {
+    Route::post('/adjust', [StockAdjustmentController::class, 'adjust'])->name('adjust')->middleware('permission:stock_adjust');
+});
+
+Route::prefix('stock-history')->name('stock-history.')->group(function () {
+    Route::get('/report', [StockHistoryReportController::class, 'index'])->name('index')->middleware('permission:stock_history_view');
+    Route::get('/data', [StockHistoryReportController::class, 'data'])->name('data')->middleware('permission:stock_history_view');
+});
+
 Route::prefix('stock')->name('stock.')->group(function () {
     Route::get('/index', [StockController::class, 'index'])->name('index')->middleware('permission:stock_view');
 });
 
-Route::prefix('stock-adjustment')->name('stock-adjustment.')->group(function () {
-    Route::post('/adjust', [StockAdjustmentController::class, 'adjust'])->name('adjust')->middleware('permission:stock_adjust');
-    Route::get('/history', [StockAdjustmentController::class, 'history'])->name('history')->middleware('permission:stock_history_view');
+Route::middleware(['auth', 'role:super-admin|admin|school|vendor'])->group(function () {
+    Route::prefix('ajax')->name('ajax.')->group(function () {
+        Route::post('/parent-category/store', [ParentCategoryController::class, 'ajaxStore'])->name('parent-category.store');
+        Route::post('/category/store', [CategoryController::class, 'ajaxStore'])->name('category.store');
+        Route::post('/size/store', [SizeController::class, 'ajaxStore'])->name('size.store');
+        Route::post('/color/store', [ColorController::class, 'ajaxStore'])->name('color.store');
+    });
 });
+

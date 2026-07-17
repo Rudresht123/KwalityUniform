@@ -335,7 +335,7 @@
                                         </li>
                                     @endcan --}}
 
-                                    @if(!auth()->user()->hasRole('vendor'))
+                                    @if(!auth()->user()->hasRole('school'))
                                     @can('parent.view')
                                         <li class="slide has-sub {{ request()->routeIs('parent-user.*') ? 'open' : '' }} {{ request()->routeIs('parent-user.*') ? 'active' : '' }}">
                                             <a href="javascript:void(0);" class="side-menu__item {{ request()->routeIs('parent-user.*') ? 'active' : '' }}">

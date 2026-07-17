@@ -72,7 +72,6 @@ public function getSubCategories($parent_id)
     $subCategories = Category::where('parent_id', $parent_id)
         ->where('is_active', true)
         ->get(['category_id', 'category_name']);
-
     return response()->json([
         'success' => true,
         'subCategories' => $subCategories,

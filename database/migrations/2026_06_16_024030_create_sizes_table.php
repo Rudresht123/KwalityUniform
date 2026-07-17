@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('sizes', function (Blueprint $table) {
             $table->uuid('size_id')->primary();
-            $table->string('size_name', 20)->unique();
+            $table->string('size_name', 20);
             $table->string('display_name', 30);
             $table->integer('sort_order')->default(0);
             $table->boolean('is_active')->default(true);

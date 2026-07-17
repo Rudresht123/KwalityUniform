@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('colors', function (Blueprint $table) {
             $table->uuid('color_id')->primary();
-            $table->string('color_name', 40)->unique();
+            $table->string('color_name', 40);
             $table->string('hex_code', 10)->nullable();
             $table->boolean('is_active')->default(true);
             $table->unsignedBigInteger('created_by');

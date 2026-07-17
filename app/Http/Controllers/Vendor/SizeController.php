@@ -50,6 +50,33 @@ class SizeController extends BaseController
         return view('vendor.size.create', $this->pageData('Create Size', 'Home|Sizes|Create'));
     }
 
+     public function ajaxStore(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'size_name' => 'required|string|max:255',
+                'sort_order' => 'nullable|integer',
+            ]);
+            
+            if (auth()->user()->hasRole('vendor')) {
+                $data['vendor_id'] = auth()->user()->vendor?->vendor_id;
+            }
+            $data['is_active'] = true;
+
+            $size = $this->sizeService->createSize($data);
+            return response()->json(['success' => true, 'size' => $size]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['success' => false, 'message' => $e->errors()], 422);
+        } catch (Throwable $e) {
+            // Detailed error for debugging
+            return response()->json([
+                'success' => false, 
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ], 500);
+        }
+    }
+
     public function store(Request $request)
     {
         try {

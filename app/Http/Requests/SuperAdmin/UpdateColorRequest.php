@@ -14,7 +14,7 @@ class UpdateColorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'color_name' => 'required|string|max:40|unique:colors,color_name',
+            'color_name' => 'required|string|max:40',
             'hex_code' => 'nullable|string|max:10',
             'is_active' => 'required|boolean',
         ];

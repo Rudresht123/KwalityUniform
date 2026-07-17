@@ -126,3 +126,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/parent/orders', \App\Http\Livewire\ParentOrderTracking::class)->name('parent.orders');
 });
 
+

@@ -18,22 +18,12 @@ return new class extends Migration
 
             $table->enum('assignment_type', ['standard', 'section']);
 
-            $table->foreignUuid('standard_id')
-                ->nullable()
-                ->constrained('school_standards')
-                ->cascadeOnDelete();
-
-            $table->foreignUuid('section_id')
-                ->nullable()
-                ->constrained('school_sections')
-                ->cascadeOnDelete();
 
             $table->timestamps();
 
             $table->index(['assignment_type']);
             $table->index(['product_id', 'assignment_type']);
-            $table->index(['standard_id']);
-            $table->index(['section_id']);
+    
         });
     }
 

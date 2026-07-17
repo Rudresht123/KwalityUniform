@@ -22,11 +22,7 @@ class ProductionSeeder extends Seeder
         ]);
 
         // 2. Product Attributes (Standardized values)
-        $this->call([
-            SizeSeeder::class,
-            ColorSeeder::class,
-            CategorySeeder::class,
-        ]);
+        
 
         $this->command->info('Production system data seeded successfully! No dummy data was added.');
     }

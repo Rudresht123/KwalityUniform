@@ -14,9 +14,14 @@
                             <tr>
                                 <th>#</th>
                                 <th>Date</th>
-                                <th>Product Name</th>
+                                <th>Product</th>
+                                <th>SKU</th>
+                                <th>Size</th>
+                                <th>Color</th>
+                                <th>Old Stock</th>
+                                <th>Added Qty</th>
+                                <th>New Stock</th>
                                 <th>Reason</th>
-                                <th>Quantity Change</th>
                                 <th>Notes</th>
                             </tr>
                         </thead>
@@ -31,17 +36,22 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
-        initializeDatatable('#stockHistoryTable', {
+        initDataTable('#stockHistoryTable', {
             processing: true,
             serverSide: true,
             ajax: "{{ route('vendor.stock.history.report') }}",
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                 { data: 'created_at', name: 'created_at' },
-                { data: 'product_name', name: 'product.name' },
-                { data: 'reason', name: 'reason' },
-                { data: 'quantity_change', name: 'quantity_change', searchable: false },
-                { data: 'notes', name: 'notes', orderable: false, searchable: false },
+                { data: 'product_name', name: 'product_name', orderable: false, searchable: false },
+                { data: 'sku', name: 'sku', orderable: false, searchable: false },
+                { data: 'size', name: 'size', orderable: false, searchable: false },
+                { data: 'color', name: 'color', orderable: false, searchable: false },
+                { data: 'old_stock', name: 'old_stock', orderable: false, searchable: false },
+                { data: 'added_quantity', name: 'added_quantity', orderable: false, searchable: false },
+                { data: 'new_stock', name: 'new_stock', orderable: false, searchable: false },
+                { data: 'reason', name: 'reason', orderable: false, searchable: false },
+                { data: 'remarks', name: 'remarks', orderable: false, searchable: false },
             ]
         });
     });

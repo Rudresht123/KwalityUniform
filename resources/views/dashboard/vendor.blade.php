@@ -482,12 +482,15 @@
                     <h3 class="panel-title">Quick Actions</h3>
                 </div>
                 <div class="quick-actions-grid">
-                    <a href="#" class="action-card"><i class="ti ti-plus"></i> Add Product</a>
-                    <a href="#" class="action-card"><i class="ti ti-package"></i> Manage Inventory</a>
-                    <a href="#" class="action-card"><i class="ti ti-truck-delivery"></i> Dispatch Orders</a>
+                    <a href="{{ route('product.index') }}" class="action-card"><i class="ti-plus"></i> Add Product</a>
+                    <a href="{{ route('stock-management.index') }}" class="action-card"><i class="ti-package"></i> Manage Inventory</a>
+                    <a href="{{ route('vendor.orders.dispatch') }}" class="action-card"><i class="ti ti-truck-delivery"></i> Dispatch Orders</a>
                     <a href="#" class="action-card"><i class="ti ti-file-download"></i> Download Reports</a>
                 </div>
+
+                
             </div>
+            
 
             <div class="panel">
                 <div class="panel-header" style="border:0; padding-bottom:0; margin-bottom:12px;">
@@ -516,6 +519,8 @@
                     </div>
                 </div>
             </div>
+
+            
         </div>
 
         {{-- ROW 2: CORE ANALYTICS --}}
@@ -560,11 +565,11 @@
         {{-- ROW 4: TABBED DATA GRIDS --}}
         <div class="section-label">Operations</div>
         <div class="panel">
-            <div class="tab-nav">
+            {{-- <div class="tab-nav">
                 <div class="tab-nav-item active" data-tab="recent-orders">Recent Orders</div>
                 <div class="tab-nav-item" data-tab="top-products">Top Products</div>
                 <div class="tab-nav-item" data-tab="low-stock">Low Stock Alerts</div>
-            </div>
+            </div> --}}
 
             <div class="skeleton-container">
                 <div class="skeleton skeleton-h-20 skeleton-w-100 mb-2"></div>
@@ -572,7 +577,7 @@
                 <div class="skeleton skeleton-h-20 skeleton-w-100"></div>
             </div>
 
-            <div class="data-content">
+           <!-- <div class="data-content">
                 <div id="tab-recent-orders" class="tab-content active">
                     <table class="data-table">
                         <thead>
@@ -604,7 +609,7 @@
                     </table>
                 </div>
             </div>
-        </div>
+        </div>-->
 
         {{-- ROW 5: TERTIARY ANALYTICS --}}
         <div class="g-two-col">
@@ -722,55 +727,65 @@
     @endif
 </div>
 
+<div class="card custom-card">
+        <div class="table-responsive">
+                    <table class="premium-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Variant</th>
+                                <th style="text-align:center">Current Stock</th>
+                                <th style="text-align:right">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($inventory_alerts as $alert)
+  
+                                <tr>
+                                    <td style="font-weight:600">{{ $alert->product->product_name }}</td>
+                                    <td class="text-mute">{{ $alert->product->variants->first()->sku ?? 'N/A' }}</td>
+                                    <td style="text-align:center;font-weight:700">{{ $alert->stock_qty }}</td>
+                                    <td style="text-align:right">
+                                        <span class="priority-pill {{ $alert->stock_qty == 0 ? 'p-high' : 'p-medium' }}">
+                                            {{ $alert->stock_qty == 0 ? 'Out of Stock' : 'Low Stock' }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" style="text-align:center;padding:28px 0;color:var(--ink-faint)">No critical alerts. Your inventory is healthy!</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const rootEl = document.querySelector('.g-root');
-
-        // Mock API call - replace with actual fetch
-        setTimeout(() => {
-            // Dummy data - this should come from your API
-            const dashboardData = {
-                kpis: {
-                    todays_revenue: 12550,
-                    todays_orders: 42,
-                    pending_orders: 18,
-                    ready_to_dispatch: 24,
-                },
-                charts: {
-                    revenue_trend: {
-                        labels: @json($revenue_trend['labels']),
-                        series: [{ name: 'Revenue', data: @json($revenue_trend['data']) }, { name: 'Orders', data: @json($order_trend['data']) }]
-                    },
-                    order_status: {
-                        labels: ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'],
-                        series: [18, 35, 150, 280, 12]
-                    },
-                    inventory_health: {
-                        labels: ['In Stock', 'Low Stock', 'Out of Stock'],
-                        series: [{ data: [350, 45, 15] }]
-                    },
-                    revenue_by_school: {
-                        labels: ['Greenwood High', 'Oakridge Intl', 'Delhi Public School', 'National Public', 'Baldwin Boys'],
-                        series: [{ data: [45000, 38000, 32000, 25000, 18000] }]
-                    },
-                    revenue_by_category: {
-                        labels: ['Shirts', 'Trousers', 'Skirts', 'Blazers', 'Accessories'],
-                        series: [{ data: [62000, 51000, 45000, 35000, 21000] }]
-                    }
-                },
-                tables: {
-                    recent_orders: [
-                        { id: '#1256', customer: 'Ankit Sharma', amount: '₹1,299', status: 'Pending', date: '2024-07-15' },
-                        { id: '#1255', customer: 'Priya Singh', amount: '₹899', status: 'Processing', date: '2024-07-15' },
-                        { id: '#1254', customer: 'Rohan Mehta', amount: '₹2,450', status: 'Shipped', date: '2024-07-14' },
-                    ]
+        
+        async function fetchDashboardData() {
+            try {
+                // The URL to your new API endpoint
+                const response = await fetch('/api/vendor/dashboard-data');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-            };
+                const data = await response.json();
+                populateDashboard(data);
 
-            populateDashboard(dashboardData);
-            rootEl.dataset.loading = 'false';
-        }, 1500); // Simulate network delay
+            } catch (error) {
+                console.error("Failed to fetch dashboard data:", error);
+                // Optionally, show an error message to the user in the UI
+            } finally {
+                rootEl.dataset.loading = 'false';
+            }
+        }
 
+        fetchDashboardData();
+        
         function populateDashboard(data) {
             // KPIs
             document.getElementById('kpi-todays-revenue').textContent = `₹${data.kpis.todays_revenue.toLocaleString()}`;

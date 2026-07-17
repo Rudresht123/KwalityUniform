@@ -8,6 +8,7 @@ use App\Http\Requests\SuperAdmin\UpdateSizeRequest;
 use App\Models\SuperAdmin\Size;
 use App\Services\SizeService;
 use Illuminate\Http\Request;
+use Laravel\Reverb\Loggers\Log;
 use Yajra\DataTables\Facades\DataTables;
 use Throwable;
 
@@ -53,16 +54,32 @@ class SizeController extends BaseController
         return view('super-admin.size.create', $this->pageData('Create Size', 'Home|Product Attributes|Sizes|Create'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreSizeRequest $request)
+    public function ajaxStore(Request $request)
     {
         try {
-            $this->sizeService->createSize($request->validated());
-            return redirect()->route('size.index')->with('success', 'Size created successfully.');
+            $data = $request->validate([
+                'size_name' => 'required|string|max:255',
+                'sort_order' => 'nullable|integer',
+            ]);
+            
+            if (auth()->user()->hasRole('vendor')) {
+                
+                $data['vendor_id'] = auth()->user()->vendor?->vendor_id;
+            }
+            $data['display_name']=$request->input("size_name");
+            $data['is_active'] = true;
+
+            $size = $this->sizeService->createSize($data);
+            return response()->json(['success' => true, 'size' => $size]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['success' => false, 'message' => $e->errors()], 422);
         } catch (Throwable $e) {
-            return back()->withInput()->with('error', 'Failed to create size: ' . $e->getMessage());
+            // Detailed error for debugging
+            return response()->json([
+                'success' => false, 
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ], 500);
         }
     }
 

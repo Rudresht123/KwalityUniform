@@ -67,18 +67,10 @@ class StockManagementController extends BaseController
                 })
                 ->addColumn('options', function ($row) {
                     return '
-        <button class="btn btn-icon btn-sm btn-primary-light"
-            onclick="viewStockHistory(\'' .
-                        $row->variant_id .
-                        '\')"
-            title="History">
-            <i class="ti-eye"></i>
-        </button>
+        
 
         <button class="btn btn-icon btn-sm btn-success-light"
-            onclick="adjustStock(\'' .
-                        $row->variant_id .
-                        '\')"
+            data-id="' . $row->variant_id . '"
             title="Adjust">
             <i class="ti-plus"></i>
         </button>
@@ -93,7 +85,11 @@ class StockManagementController extends BaseController
                 ->rawColumns(['product_image', 'status', 'options'])
                 ->make(true);
         }
-
+// <button class="btn btn-icon btn-sm btn-primary-light"
+//             data-id="' . $row->variant_id . '"
+//             title="History">
+//             <i class="ti-eye"></i>
+//         </button>
         return view('super-admin.stock_management.index', $this->pageData('Stock Management', 'Home|Inventory|Stock Management'));
     }
 }

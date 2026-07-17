@@ -24,6 +24,10 @@ class Record extends Model
                 if (Schema::hasColumn($table, 'updated_by') && empty($model->updated_by)) {
                     $model->updated_by = Auth::id();
                 }
+
+                  if (Schema::hasColumn($table, 'vendor_id') && empty($model->vendor_id)) {
+                    $model->vendor_id = auth()->user()->vendor->vendor_id;
+                }
             }
         });
 

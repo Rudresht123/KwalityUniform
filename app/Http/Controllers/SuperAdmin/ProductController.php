@@ -10,6 +10,7 @@ use App\Models\SuperAdmin\Product;
 use App\Models\SuperAdmin\Vendor;
 use App\Models\SuperAdmin\Size;
 use App\Models\SuperAdmin\Color;
+use App\Models\SuperAdmin\ParentCategory;
 use App\Models\SuperAdmin\ProductVariant;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -92,7 +93,9 @@ class ProductController extends BaseController
             $colors = Color::active()->get();
         }
 
-        return view('super-admin.product.create', compact('vendors', 'categories', 'sizes', 'colors'), $this->pageData('Create Product', 'Home|Products|Create'));
+        $parentCategories = ParentCategory::active()->get();
+        // ... (replace compact)
+        return view('super-admin.product.create', compact('vendors', 'categories', 'sizes', 'colors', 'parentCategories'), $this->pageData('Create Product', 'Home|Products|Create'));
     }
 
     /**
@@ -198,23 +201,8 @@ class ProductController extends BaseController
                 abort(403, 'Unauthorized access to this product.');
             }
         }
-
-        $product->load(['variants', 'primaryImage.file']);
-        $vendors = Vendor::approved()->get();
-        
-        if (auth()->user()->hasRole('vendor')) {
-            $vendorId = auth()->user()->vendor?->vendor_id;
-            $categories = Category::active()->forVendor($vendorId)->get();
-            $sizes = Size::active()->forVendor($vendorId)->orderBy('sort_order')->get();
-            $colors = Color::active()->forVendor($vendorId)->get();
-        } else {
-            $categories = Category::active()->get();
-            $sizes = Size::active()->orderBy('sort_order')->get();
-            $colors = Color::active()->get();
-        }
-
-        return view('super-admin.product.edit', compact('product', 'vendors', 'categories', 'sizes', 'colors'), $this->pageData('Edit Product', 'Home|Products|Edit'));
     }
+
 
     /**
      * Update the specified resource in storage.
