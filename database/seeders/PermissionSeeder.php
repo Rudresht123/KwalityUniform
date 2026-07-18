@@ -202,5 +202,11 @@ class PermissionSeeder extends Seeder
                 );
             }
         }
+
+        $superAdmin = \Spatie\Permission\Models\Role::where('name', 'super-admin')->first();
+        if ($superAdmin) {
+            $permissions = Permission::all();
+            $superAdmin->syncPermissions($permissions);
+        }
     }
 }
