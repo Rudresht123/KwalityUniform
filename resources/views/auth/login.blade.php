@@ -577,10 +577,18 @@
                         btn.prop('disabled', false).html(originalHtml);
                         if(xhr.status === 422) {
                             const errors = xhr.responseJSON.errors;
-                            if(errors.otp) $('#otpCodeError').text(errors.otp[0]);
-                            if(errors.email) $('#otpEmailError').text(errors.email[0]);
+                            if(errors.otp) {
+                                $('#otpCodeError').text(errors.otp[0]);
+                                toast.error(errors.otp[0]); // Add this
+                            }
+                            if(errors.email) {
+                                $('#otpEmailError').text(errors.email[0]);
+                                toast.error(errors.email[0]); // Add this
+                            }
                         } else {
-                            $('#otpCodeError').text('An error occurred. Please try again.');
+                            const message = 'An error occurred. Please try again.';
+                            $('#otpCodeError').text(message);
+                            toast.error(message); // Add this
                         }
                     }
                 });

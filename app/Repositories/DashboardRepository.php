@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\OrderItem;
 use App\Models\User;
 use App\Models\WebUser;
 use App\Models\Return;
@@ -75,12 +76,21 @@ class DashboardRepository
     /**
      * Delegate to Domain Repositories
      */
+    
+    public function getRecentOrders($vendorId) { return $this->orderRepo->getRecentOrders($vendorId); }
+    public function getVendorInventoryHealth($vendorId) { return $this->orderRepo->getVendorInventoryHealth($vendorId); }
+    public function getVendorOrderStatusDistribution($vendorId) { return $this->orderRepo->getVendorOrderStatusDistribution($vendorId); }
     public function getRevenueTrend(int $days = 30) { return $this->orderRepo->getRevenueTrend($days); }
     public function getOrderTrend(int $days = 30) { return $this->orderRepo->getOrderTrend($days); }
     public function getLatestOrders(int $limit = 10) { return $this->orderRepo->getLatestOrders($limit); }
     public function getVendorOrderStats($vendorId) { return $this->orderRepo->getVendorOrderStats($vendorId); }
-    public function getVendorRevenueTrend($vendorId, $days = 30) { return $this->orderRepo->getVendorRevenueTrend((int)$vendorId, $days); }
-    public function getVendorOrderTrend($vendorId, $days = 30) { return $this->orderRepo->getVendorOrderTrend((int)$vendorId, $days); }
+public function getVendorRevenueTrend(string $vendorId, string $filter) {
+    return $this->orderRepo->getVendorRevenueTrend($vendorId, $filter);
+}
+
+public function getVendorOrderTrend(string $vendorId, string $filter) {
+    return $this->orderRepo->getVendorOrderTrend($vendorId, $filter);
+}
     
     public function getTopSellingProducts($limit = 5, $vendorId = null) { return $this->productRepo->getTopSellingProducts($limit, $vendorId); }
     public function getProductOrderTrends($days = 30, $vendorId = null) { return $this->productRepo->getProductOrderTrends($days, $vendorId); }
@@ -217,4 +227,5 @@ class DashboardRepository
             'generated_at' => now(),
         ];
     }
+
 }

@@ -138,7 +138,7 @@ class OrderService
                     'order_id' => $order->id,
                     'product_id' => $item->product_id,
                     'variant_id' => $item->variant_id,
-                    'vendor_id' => $item->vendor_id,
+                    'vendor_id' => $item->product->vendor_id,
                     'product_name' => $item->product->product_name,
                     'sku' => $variant->sku,
                     'unit_price' => $vItem['price'],

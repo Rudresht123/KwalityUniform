@@ -325,6 +325,15 @@
                                             </a>
                                         </li>
                                     @endcan
+                                    
+                                    @can('courier.view')
+                                        <li class="slide {{ request()->routeIs('couriers.*') ? 'active' : '' }}">
+                                            <a href="{{ route('couriers.index') }}" class="side-menu__item {{ request()->routeIs('couriers.*') ? 'active' : '' }}">
+                                                <i class="ti ti-truck side-menu__icon"></i>
+                                                <span class="side-menu__label">Courier Management</span>
+                                            </a>
+                                        </li>
+                                    @endcan
 {{-- 
                                     @can('user.view')
                                         <li class="slide {{ request()->routeIs('user-status-report.*') ? 'active' : '' }}">
@@ -394,6 +403,14 @@
                                                     <li class="slide">
                                                         <a href="{{ route('school.index') }}" class="side-menu__item {{ request()->routeIs('school.index') ? 'active' : '' }}">
                                                             Manage Schools
+                                                        </a>
+                                                    </li>
+                                                @endcan
+                                                
+                                                @can('school_vendor.view')
+                                                    <li class="slide">
+                                                        <a href="{{ route('school-vendor-mapping.index') }}" class="side-menu__item {{ request()->routeIs('school-vendor-mapping.*') ? 'active' : '' }}">
+                                                            School Vendor Mapping
                                                         </a>
                                                     </li>
                                                 @endcan

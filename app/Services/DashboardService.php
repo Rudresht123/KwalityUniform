@@ -3,7 +3,10 @@
 namespace App\Services;
 
 use App\Models\SuperAdmin\ProductVariant;
+use App\Models\SuperAdmin\Vendor;
 use App\Repositories\DashboardRepository;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
 class DashboardService
@@ -71,20 +74,18 @@ class DashboardService
         }
 
         $orderStats = $this->repository->getVendorOrderStats($vendor->vendor_id);
-        $revenueTrend = $this->repository->getVendorRevenueTrend($vendor->vendor_id);
-        $orderTrend = $this->repository->getVendorOrderTrend($vendor->vendor_id);
+
+
 
         $pendingProducts = $vendor->products()->where('approval_status', 'pending')->count();
         $lowStockCount = ProductVariant::whereHas('product', function ($q) use ($vendor) {
             $q->where('vendor_id', $vendor->vendor_id);
         })->whereRaw('stock_qty <= low_stock_alert')->count();
-      
 
         return [
             'vendor' => $vendor,
             'order_stats' => $orderStats,
-            'revenue_trend' => $revenueTrend,
-            'order_trend' => $orderTrend,
+
             'kpis' => [
                 'total_products' => $vendor->products()->count(),
                 'approved_products' => $vendor->products()->where('approval_status', 'approved')->count(),
@@ -95,23 +96,23 @@ class DashboardService
                     $q->where('vendor_id', $vendor->vendor_id);
                 })->where('stock_qty', 0)->count(),
                 'revenue' => $orderStats['total_revenue'] ?? 0,
-                'revenue_growth' => rand(5, 25), 
+                'revenue_growth' => rand(5, 25),
                 'orders_count' => $orderStats['total_orders'] ?? 0,
                 'orders_growth' => rand(2, 15),
                 'net_earnings' => ($orderStats['total_revenue'] ?? 0) * 0.85,
                 'pending_settlements' => rand(1000, 3000),
             ],
             'top_selling_products' => $this->repository->getTopSellingProducts(5, $vendor->vendor_id),
-            'product_order_trends' => $this->repository->getProductOrderTrends(30, $vendor->vendor_id),
             'recent_products' => $vendor->products()->latest()->take(5)->get(),
             'inventory_alerts' => \App\Models\SuperAdmin\ProductVariant::whereHas('product', function ($q) use ($vendor) {
-                    $q->where('vendor_id', $vendor->vendor_id);
-                })
+                $q->where('vendor_id', $vendor->vendor_id);
+            })
                 ->whereRaw('stock_qty <= low_stock_alert')
                 ->with('product')
                 ->orderBy('stock_qty', 'asc')
                 ->take(5)
                 ->get(),
+            'recentOrders' => $this->repository->getRecentOrders($vendor->vendor_id),
             'recentActivity' => $this->repository->getRecentActivity(10, $vendor->vendor_id),
             'productTrends' => $this->repository->getVendorProductTrends($vendor->vendor_id),
             'parentCategoryCounts' => $this->repository->getParentCategoryProductCounts($vendor->vendor_id),
@@ -119,26 +120,6 @@ class DashboardService
             'productUploadTrend' => $this->repository->getProductUploadTrend($vendor->vendor_id),
             'inventorySummary' => $this->repository->getInventorySummary($vendor->vendor_id),
             'notifications' => $this->repository->getRecentNotifications(8, $vendor->vendor_id),
-            'ai_insights' => [
-                [
-                    'type' => 'positive',
-                    'icon' => 'ti-trending-up',
-                    'text' => 'Sales for your top products increased this week.',
-                    'action' => 'View'
-                ],
-                [
-                    'type' => 'warning',
-                    'icon' => 'ti-alert-circle',
-                    'text' => 'Some of your products are nearly out of stock.',
-                    'action' => 'Restock'
-                ],
-                [
-                    'type' => 'info',
-                    'icon' => 'ti-lightbulb',
-                    'text' => 'Try adding more product images to increase conversion.',
-                    'action' => 'Edit'
-                ],
-            ],
             'payment_summary' => [
                 'total_billed' => ($orderStats['total_revenue'] ?? 0),
                 'platform_fee' => ($orderStats['total_revenue'] ?? 0) * 0.10,
@@ -192,5 +173,59 @@ class DashboardService
             'notifications' => $this->repository->getRecentNotifications(8, $user->id),
             'recentActivity' => $this->repository->getRecentActivity(10), // Filtered inside getRecentActivity by user id
         ];
+    }
+
+    /**
+     * get Order trends data for vendor
+     */
+
+    public function revenuTrend(Request $request)
+    {
+        $filter = $request->string('filter', 'month')->toString();
+
+        $user = Auth::user();
+
+        $vendor = Vendor::where('user_id', $user->id)->firstOrFail();
+
+        $trend = $this->repository->getVendorRevenueTrend(
+            $vendor->vendor_id,
+            $filter
+        );
+
+        return response()->json($trend);
+    }
+    public function getVendorOrderStatusDistribution()
+    {
+        $user = Auth::user();
+
+        $vendor = Vendor::where('user_id', $user->id)->firstOrFail();
+
+        $trend = $this->repository->getVendorOrderStatusDistribution($vendor->vendor_id);
+
+        return response()->json($trend);
+    }
+
+
+    public function getVendorInventoryHealth()
+    {
+        $user = Auth::user();
+
+        $vendor = Vendor::where('user_id', $user->id)->firstOrFail();
+
+        $trend = $this->repository->getVendorInventoryHealth($vendor->vendor_id);
+
+        return response()->json($trend);
+    }
+
+    public function getVendorOrderTrend(Request $request)
+    {
+        $user = Auth::user();
+        $filter = $request->string('filter', 'month')->toString();
+
+        $vendor = Vendor::where('user_id', $user->id)->firstOrFail();
+
+        $trend = $this->repository->getVendorOrderTrend($vendor->vendor_id, $filter);
+
+        return response()->json($trend);
     }
 }

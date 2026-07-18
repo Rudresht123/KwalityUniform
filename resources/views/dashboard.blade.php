@@ -71,7 +71,7 @@
 
         color: var(--ink);
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        padding: 20px;
+       
         border-radius: 20px;
     }
 

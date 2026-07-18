@@ -34,7 +34,7 @@
                         </thead>
                         <tbody>
 
-                            @forelse($vendors as $vendor)
+                            @foreach($vendors as $vendor)
                                 <tr>
 
                                     <td>{{ $loop->iteration }}</td>
@@ -80,19 +80,7 @@
 
                                 </tr>
 
-                            @empty
-
-                                <tr>
-
-                                    <td colspan="11" class="text-center">
-
-                                        No vendors found.
-
-                                    </td>
-
-                                </tr>
-                            @endforelse
-
+                          @endforeach
                         </tbody>
                     </table>
                 </div>

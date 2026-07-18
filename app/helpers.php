@@ -231,4 +231,59 @@ if (!function_exists('emailButton')) {
     }
 }
 
+if (!function_exists('greetings')) {
+   function greetings(): array
+{
+    $hour = now()->hour;
+
+    $data = match (true) {
+        $hour >= 5 && $hour < 12 => [
+            'title' => 'Good Morning',
+            'icon' => '☀️',
+            'messages' => [
+                'Start your day by reviewing today\'s orders.',
+                'Every order delivered builds customer trust.',
+                'Keep your inventory updated for a productive day.',
+            ],
+        ],
+
+        $hour >= 12 && $hour < 17 => [
+            'title' => 'Good Afternoon',
+            'icon' => '🌤️',
+            'messages' => [
+                'Track your sales and maintain business momentum.',
+                'Review pending orders for timely deliveries.',
+                'A great afternoon starts with organized inventory.',
+            ],
+        ],
+
+        $hour >= 17 && $hour < 21 => [
+            'title' => 'Good Evening',
+            'icon' => '🌇',
+            'messages' => [
+                'Review today\'s performance before wrapping up.',
+                'Check pending deliveries and stock updates.',
+                'Another successful day, keep growing!',
+            ],
+        ],
+
+        default => [
+            'title' => 'Good Night',
+            'icon' => '🌙',
+            'messages' => [
+                'Rest well. Tomorrow is another opportunity to grow.',
+                'Your business insights will be ready tomorrow.',
+                'Thank you for choosing our platform.',
+            ],
+        ],
+    };
+
+    return [
+        'title'   => $data['title'],
+        'icon'    => $data['icon'],
+        'message' => $data['messages'][array_rand($data['messages'])],
+    ];
+}
+}
+
 ?>

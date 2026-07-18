@@ -25,6 +25,24 @@ use App\Http\Controllers\SuperAdmin\SchoolStandardController;
 use App\Http\Controllers\SuperAdmin\SchoolSectionController;
 use App\Http\Controllers\SuperAdmin\ProductAssignmentController;
 use App\Http\Controllers\SuperAdmin\PartnershipRequestController;
+use App\Http\Controllers\SuperAdmin\SchoolVendorMappingController;
+use App\Http\Controllers\SuperAdmin\CourierController;
+
+Route::prefix('couriers')->name('couriers.')->group(function () {
+    Route::get('/index', [CourierController::class, 'index'])->name('index')->middleware('permission:courier.view');
+    Route::get('/create', [CourierController::class, 'create'])->name('create')->middleware('permission:courier.create');
+    Route::post('/store', [CourierController::class, 'store'])->name('store')->middleware('permission:courier.create');
+    Route::get('/edit/{courier}', [CourierController::class, 'edit'])->name('edit')->middleware('permission:courier.edit');
+    Route::put('/update/{courier}', [CourierController::class, 'update'])->name('update')->middleware('permission:courier.edit');
+    Route::delete('/delete/{courier}', [CourierController::class, 'destroy'])->name('destroy')->middleware('permission:courier.delete');
+});
+
+Route::prefix('school-vendor-mapping')->name('school-vendor-mapping.')->group(function () {
+    Route::get('/index', [SchoolVendorMappingController::class, 'index'])->name('index')->middleware('permission:school_vendor.view');
+    Route::get('/create', [SchoolVendorMappingController::class, 'create'])->name('create')->middleware('permission:school_vendor.create');
+    Route::post('/store', [SchoolVendorMappingController::class, 'store'])->name('store')->middleware('permission:school_vendor.create');
+    Route::delete('/delete/{id}', [SchoolVendorMappingController::class, 'destroy'])->name('destroy')->middleware('permission:school_vendor.delete');
+});
 
 Route::prefix('partnerships')->name('partnership.')->group(function () {
     Route::get('/index', [PartnershipRequestController::class, 'index'])->name('index')->middleware('permission:partnership.view');
@@ -144,6 +162,7 @@ Route::prefix('stock-management')->name('stock-management.')->group(function () 
 });
 
 use App\Http\Controllers\SuperAdmin\StockHistoryReportController;
+use App\Services\DashboardService;
 
 // ... other imports
 
@@ -161,7 +180,13 @@ Route::prefix('stock')->name('stock.')->group(function () {
 });
 
 Route::middleware(['auth', 'role:super-admin|admin|school|vendor'])->group(function () {
+  
+  
     Route::prefix('ajax')->name('ajax.')->group(function () {
+        Route::get('/vendor/order-inventory-health', [DashboardService::class, 'getVendorInventoryHealth'])->name('vendor.invntory-health');
+        Route::get('/vendor/order-status-ditribution', [DashboardService::class, 'getVendorOrderStatusDistribution'])->name('vendor.order-status-ditribution');
+        Route::get('/vendor/revenu-trend', [DashboardService::class, 'revenuTrend'])->name('vendor.revenu-trend');
+        Route::get('/vendor/order-trend', [DashboardService::class, 'getVendorOrderTrend'])->name('vendor.order-trend');
         Route::post('/parent-category/store', [ParentCategoryController::class, 'ajaxStore'])->name('parent-category.store');
         Route::post('/category/store', [CategoryController::class, 'ajaxStore'])->name('category.store');
         Route::post('/size/store', [SizeController::class, 'ajaxStore'])->name('size.store');

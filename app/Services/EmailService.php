@@ -105,11 +105,12 @@ class EmailService
         } catch (\Throwable $e) {
 
             Log::error(
-                'Email Sending Failed',
+                'Email Sending Failed Exception',
                 [
                     'template' => $templateKey,
                     'recipient' => $to,
-                    'error' => $e->getMessage()
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
                 ]
             );
 

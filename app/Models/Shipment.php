@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use App\Enums\ShipmentStatus;
+use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Shipment extends Model
 {
+    use HasUuid;
+
     protected $primaryKey = 'id';
     public $incrementing = false;
     protected $keyType = 'string';

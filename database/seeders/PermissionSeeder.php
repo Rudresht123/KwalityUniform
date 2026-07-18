@@ -21,6 +21,8 @@ class PermissionSeeder extends Seeder
             'Product Approval'        => 'school',
             'Vendor Management'       => 'admin',
             'Partnership Management'  => 'admin',
+            'School Vendor Mapping'   => 'admin',
+            'Courier Management'      => 'admin',
             'Order Fulfillment'       => 'vendor',
             'System Management'       => 'admin',
         ];
@@ -111,7 +113,20 @@ class PermissionSeeder extends Seeder
                 'partnership.approve' => 'Approve Partnership Request',
                 'partnership.reject'  => 'Reject Partnership Request',
             ],
-            'System Management' => [
+            'School Vendor Mapping' => [
+                'school_vendor.view'   => 'View School Vendor Mappings',
+                'school_vendor.create' => 'Create Mapping',
+                'school_vendor.edit'   => 'Edit Mapping',
+                'school_vendor.delete' => 'Delete Mapping',
+            ],
+            'Courier Management' => [
+                'courier.view'   => 'View Couriers',
+                'courier.create' => 'Create Courier',
+                'courier.edit'   => 'Edit Courier',
+                'courier.delete' => 'Delete Courier',
+            ],
+            'Order Fulfillment' => [
+
                 'audit.view'            => 'View Audit Reports',
                 'global_settings.view'  => 'View Global Settings',
                 'global_settings.edit'  => 'Edit Global Settings',
@@ -145,6 +160,12 @@ class PermissionSeeder extends Seeder
             'color.create'    => 'color.view',
             'color.edit'      => 'color.view',
             'color.delete'    => 'color.view',
+            'school_vendor.create' => 'school_vendor.view',
+            'school_vendor.edit'   => 'school_vendor.view',
+            'school_vendor.delete' => 'school_vendor.view',
+            'courier.create' => 'courier.view',
+            'courier.edit'   => 'courier.view',
+            'courier.delete' => 'courier.view',
         ];
 
         foreach ($modules as $group => $permissions) {
