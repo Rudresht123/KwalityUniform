@@ -5,7 +5,7 @@
             <i class="bi bi-person-badge"></i>
         </div>
 
-        <h5>Kwality Uniform</h5>
+        <h5>eSchoolKart</h5>
         <p>Managing School Uniforms</p>
 
         <div class="loader-dots">

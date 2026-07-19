@@ -63,7 +63,7 @@ class DashboardRepository
             'total_variants' => \App\Models\SuperAdmin\ProductVariant::count(),
             'low_stock_count' => $this->stockRepo->getInventoryAlerts()->count(),
             'out_of_stock' => \App\Models\SuperAdmin\ProductVariant::where('stock_qty', 0)->count(),
-            
+
             'orders_today' => \App\Models\Order::whereDate('created_at', now()->toDateString())->count(),
             'revenue_today' => \App\Models\Order::whereDate('created_at', now()->toDateString())->sum('grand_total'),
             'total_revenue' => \App\Models\Order::sum('grand_total'),
@@ -76,26 +76,61 @@ class DashboardRepository
     /**
      * Delegate to Domain Repositories
      */
-    
-    public function getRecentOrders($vendorId) { return $this->orderRepo->getRecentOrders($vendorId); }
-    public function getVendorInventoryHealth($vendorId) { return $this->orderRepo->getVendorInventoryHealth($vendorId); }
-    public function getVendorOrderStatusDistribution($vendorId) { return $this->orderRepo->getVendorOrderStatusDistribution($vendorId); }
-    public function getRevenueTrend(int $days = 30) { return $this->orderRepo->getRevenueTrend($days); }
-    public function getOrderTrend(int $days = 30) { return $this->orderRepo->getOrderTrend($days); }
-    public function getLatestOrders(int $limit = 10) { return $this->orderRepo->getLatestOrders($limit); }
-    public function getVendorOrderStats($vendorId) { return $this->orderRepo->getVendorOrderStats($vendorId); }
-public function getVendorRevenueTrend(string $vendorId, string $filter) {
-    return $this->orderRepo->getVendorRevenueTrend($vendorId, $filter);
-}
 
-public function getVendorOrderTrend(string $vendorId, string $filter) {
-    return $this->orderRepo->getVendorOrderTrend($vendorId, $filter);
-}
-    
-    public function getTopSellingProducts($limit = 5, $vendorId = null) { return $this->productRepo->getTopSellingProducts($limit, $vendorId); }
-    public function getProductOrderTrends($days = 30, $vendorId = null) { return $this->productRepo->getProductOrderTrends($days, $vendorId); }
-    public function getPendingApprovals($limit = 5) { return $this->productRepo->getPendingApprovals($limit); }
-    public function getProductUploadTrend($vendorId = null) { return $this->productRepo->getProductUploadTrend($vendorId); }
+    public function getRecentOrders($vendorId)
+    {
+        return $this->orderRepo->getRecentOrders($vendorId);
+    }
+    public function getVendorInventoryHealth($vendorId)
+    {
+        return $this->orderRepo->getVendorInventoryHealth($vendorId);
+    }
+    public function getVendorOrderStatusDistribution($vendorId)
+    {
+        return $this->orderRepo->getVendorOrderStatusDistribution($vendorId);
+    }
+    public function getRevenueTrend(string $days = "week")
+    {
+        return $this->orderRepo->getRevenueTrend($days);
+    }
+    public function getOrderTrend(string $days = "week")
+    {
+        return $this->orderRepo->getOrderTrend($days);
+    }
+    public function getLatestOrders(int $limit = 10)
+    {
+        return $this->orderRepo->getLatestOrders($limit);
+    }
+    public function getVendorOrderStats($vendorId)
+    {
+        return $this->orderRepo->getVendorOrderStats($vendorId);
+    }
+    public function getVendorRevenueTrend(string $vendorId, string $filter)
+    {
+        return $this->orderRepo->getVendorRevenueTrend($vendorId, $filter);
+    }
+
+    public function getVendorOrderTrend(string $vendorId, string $filter)
+    {
+        return $this->orderRepo->getVendorOrderTrend($vendorId, $filter);
+    }
+
+    public function getTopSellingProducts($limit = 5, $vendorId = null)
+    {
+        return $this->productRepo->getTopSellingProducts($limit, $vendorId);
+    }
+    public function getProductOrderTrends($days = 30, $vendorId = null)
+    {
+        return $this->productRepo->getProductOrderTrends($days, $vendorId);
+    }
+    public function getPendingApprovals($limit = 5)
+    {
+        return $this->productRepo->getPendingApprovals($limit);
+    }
+    public function getProductUploadTrend($vendorId = null)
+    {
+        return $this->productRepo->getProductUploadTrend($vendorId);
+    }
 
     /**
      * Get product submission and approval trends for a specific vendor.
@@ -127,17 +162,38 @@ public function getVendorOrderTrend(string $vendorId, string $filter) {
         ];
     }
 
-    public function getInventoryAlerts($limit = 5) { return $this->stockRepo->getInventoryAlerts($limit); }
-    public function getInventorySummary($vendorId = null) { return $this->stockRepo->getInventorySummary($vendorId); }
+    public function getInventoryAlerts($limit = 5)
+    {
+        return $this->stockRepo->getInventoryAlerts($limit);
+    }
+    public function getInventorySummary($vendorId = null)
+    {
+        return $this->stockRepo->getInventorySummary($vendorId);
+    }
 
-    public function getTopVendorsByProducts($limit = 5) { return $this->vendorRepo->getTopVendorsByProducts($limit); }
-    public function getRecentVendors($limit = 10) { return $this->vendorRepo->getRecentVendors($limit); }
+    public function getTopVendorsByProducts($limit = 5)
+    {
+        return $this->vendorRepo->getTopVendorsByProducts($limit);
+    }
+    public function getRecentVendors($limit = 10)
+    {
+        return $this->vendorRepo->getRecentVendors($limit);
+    }
 
-    public function getRecentSchools($limit = 5) { return $this->schoolRepo->getRecentSchools($limit); }
-    public function getSchoolProductStats($schoolId) { return $this->schoolRepo->getSchoolProductStats($schoolId); }
+    public function getRecentSchools($limit = 5)
+    {
+        return $this->schoolRepo->getRecentSchools($limit);
+    }
+    public function getSchoolProductStats($schoolId)
+    {
+        return $this->schoolRepo->getSchoolProductStats($schoolId);
+    }
 
-    public function getReturnRequests($limit = 10) { return $this->returnRepo->getReturnRequests($limit); }
-    
+    public function getReturnRequests($limit = 10)
+    {
+        return $this->returnRepo->getReturnRequests($limit);
+    }
+
     public function getRegistrationTrends()
     {
         $labels = [];
@@ -168,14 +224,32 @@ public function getVendorOrderTrend(string $vendorId, string $filter) {
         ];
     }
 
-    public function getSupportTickets($limit = 10) { return $this->contactRepo->getLatestTickets($limit); }
+    public function getSupportTickets($limit = 10)
+    {
+        return $this->contactRepo->getLatestTickets($limit);
+    }
 
-    public function getTopCategories($limit = 5) { return $this->categoryRepo->getTopCategories($limit); }
-    public function getParentCategoryProductCounts($vendorId = null) { return $this->categoryRepo->getParentCategoryProductCounts($vendorId); }
-    public function getCategoryProductCounts($vendorId = null) { return $this->categoryRepo->getCategoryProductCounts($vendorId); }
+    public function getTopCategories($limit = 5)
+    {
+        return $this->categoryRepo->getTopCategories($limit);
+    }
+    public function getParentCategoryProductCounts($vendorId = null)
+    {
+        return $this->categoryRepo->getParentCategoryProductCounts($vendorId);
+    }
+    public function getCategoryProductCounts($vendorId = null)
+    {
+        return $this->categoryRepo->getCategoryProductCounts($vendorId);
+    }
 
-    public function getRecentActivity($limit = 10, $userId = null) { return $this->activityRepo->getRecentActivity($limit, $userId); }
-    public function getRecentNotifications($limit = 8, $userId = null) { return $this->notificationRepo->getRecentNotifications($limit, $userId); }
+    public function getRecentActivity($limit = 10, $userId = null)
+    {
+        return $this->activityRepo->getRecentActivity($limit, $userId);
+    }
+    public function getRecentNotifications($limit = 8, $userId = null)
+    {
+        return $this->notificationRepo->getRecentNotifications($limit, $userId);
+    }
 
     public function getSystemHealth()
     {
@@ -227,5 +301,4 @@ public function getVendorOrderTrend(string $vendorId, string $filter) {
             'generated_at' => now(),
         ];
     }
-
 }

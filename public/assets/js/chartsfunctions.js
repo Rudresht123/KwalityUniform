@@ -1,281 +1,323 @@
 /**
  * ==========================================================
  * Quality Uniform ERP
- * ApexCharts Helper
+ * ApexCharts Helper — clean, animated, premium defaults
  * ==========================================================
+ *
+ * Usage:
+ *   ChartHelper.area({ id: 'revenueChart', series: [...], categories: [...] })
+ *   ChartHelper.donut({ id: 'statusChart', series: [12,4,8], labels: [...] })
+ *
+ * Every chart type shares one visual language (colors, grid,
+ * tooltip, legend, animation) so charts across the dashboard
+ * never feel like they came from different libraries.
  */
 
 const ChartHelper = (() => {
-
     const charts = {};
 
+    /* ----------------------------------------------------------
+       Palette — muted, professional. `primary` is the workhorse;
+       the rest exist for multi-series charts, not decoration.
+    ---------------------------------------------------------- */
     const colors = {
-        primary: "#6259CA",
-        blue: "#2A78D6",
-        green: "#1BAF7A",
-        orange: "#FF9F43",
-        red: "#EA5455",
-        cyan: "#00CFE8",
-        yellow: "#FFC107",
-        gray: "#6C757D"
+        primary: "#4338CA",
+        indigo: "#3730A3",
+        blue: "#1D4ED8",
+        sky: "#0369A1",
+        cyan: "#0E7490",
+        emerald: "#047857",
+        green: "#15803D",
+        lime: "#4D7C0F",
+        amber: "#B45309",
+        orange: "#C2410C",
+        rose: "#BE123C",
+        red: "#B91C1C",
+        pink: "#BE185D",
+        violet: "#6D28D9",
+        purple: "#5B21B6",
+        gray: "#475569",
     };
 
-    const defaults = {
+    const palette = [
+        colors.primary,
+        colors.emerald,
+        colors.amber,
+        colors.sky,
+        colors.rose,
+        colors.violet,
+        colors.gray,
+    ];
 
-        chart: {
-            toolbar: {
-                show: false
-            },
-            zoom: {
-                enabled: false
-            },
-            animations: {
-                enabled: true,
-                easing: "easeinout",
-                speed: 700
-            }
-        },
-
-        dataLabels: {
-            enabled: false
-        },
-
-        stroke: {
-            width: 3,
-            curve: "smooth"
-        },
-
-        grid: {
-            borderColor: "#edf2f7",
-            strokeDashArray: 4
-        },
-
-        legend: {
-            position: "top",
-            horizontalAlign: "left",
-            fontSize: "13px"
-        },
-
-        tooltip: {
-            shared: true,
-            intersect: false
-        },
-
-        noData: {
-            text: "No data available"
-        }
-
-    };
-
-
-    /**
-     * Helper for Series
-     */
-    function series(name, data, color = null) {
-
+    /* ----------------------------------------------------------
+       Shared visual defaults, applied to every chart type.
+       Deep-mergeable via `config.*` overrides in create().
+    ---------------------------------------------------------- */
+    function baseOptions(type, config) {
         return {
-            name,
-            data,
-            color
-        };
+            chart: {
+                type,
+                height: config.height || 320,
+                fontFamily: "Inter, sans-serif",
+                background: "transparent",
+                foreColor: "#6b7280",
 
-    }
-
-
-    /**
-     * Destroy Existing Chart
-     */
-    function destroy(id) {
-
-        if (charts[id]) {
-
-            charts[id].destroy();
-
-            delete charts[id];
-
-        }
-
-    }
-
-
-    /**
-     * Create Chart
-     */
- /**
- * Generic Chart Creator
- */
-function create(type, config = {}) {
-
-    if (!config.id) {
-        console.error("Chart id is required.");
-        return null;
-    }
-
-    const element = document.querySelector(`#${config.id}`);
-
-    if (!element) {
-        console.warn(`Chart '${config.id}' not found.`);
-        return null;
-    }
-
-    destroy(config.id);
-
-    const options = {
-
-        chart: {
-            type,
-            height: config.height || 320,
-
-            toolbar: {
-                show: config.toolbar ?? true,
-
-                tools: {
-                    download: true,
-                    selection: true,
-                    zoom: true,
-                    zoomin: true,
-                    zoomout: true,
-                    pan: true,
-                    reset: true
+                toolbar: {
+                    show: config.toolbar ?? false,
+                    tools: {
+                        download: true,
+                        selection: false,
+                        zoom: false,
+                        zoomin: false,
+                        zoomout: false,
+                        pan: false,
+                        reset: false,
+                    },
+                    export: {
+                        csv: { filename: config.filename || config.id },
+                        svg: { filename: config.filename || config.id },
+                        png: { filename: config.filename || config.id },
+                    },
                 },
 
-                export: {
-                    csv: {
-                        filename: config.filename || config.id
+                zoom: {
+                    enabled: config.zoom ?? false,
+                },
+
+                animations: {
+                    enabled: true,
+                    easing: "easeout",
+                    speed: 600,
+                    animateGradually: {
+                        enabled: true,
+                        delay: 100,
                     },
-                    svg: {
-                        filename: config.filename || config.id
+                    dynamicAnimation: {
+                        enabled: true,
+                        speed: 300,
                     },
-                    png: {
-                        filename: config.filename || config.id
-                    }
-                }
+                },
+
+                dropShadow: {
+                    enabled: config.shadow ?? false,
+                    top: 2,
+                    left: 0,
+                    blur: 3,
+                    opacity: 0.15,
+                },
+
+                ...(config.chart || {}),
             },
 
-            zoom: {
-                enabled: config.zoom ?? false
+            theme: {
+                mode: config.theme || "light",
             },
 
-            animations: {
-                enabled: true,
-                easing: "easeinout",
-                speed: 700
+            colors:
+                config.colors ||
+                (config.series || []).map((s, i) => s.color || palette[i % palette.length]),
+
+            series: config.series || [],
+            labels: config.labels || [],
+
+            xaxis: {
+                categories: config.categories || [],
+                labels: {
+                    style: { fontSize: "12px", colors: "#9ca3af" },
+                },
+                axisBorder: { show: false },
+                axisTicks: { show: false },
+                ...(config.xaxis || {}),
             },
 
-            ...(config.chart || {})
-        },
+            yaxis: {
+                labels: {
+                    style: { fontSize: "12px", colors: "#9ca3af" },
+                },
+                ...(config.yaxis || {}),
+            },
 
-        theme: {
-            mode: config.theme || "light"
-        },
+            stroke: {
+                width: 0,
+                curve: "smooth",
+                lineCap: "round",
+                ...(config.stroke || {}),
+            },
 
-        series: config.series || [],
+            fill: {
+                type: config.fillType || "solid",
+                opacity: config.fillOpacity ?? 0.9,
+                gradient: {
+                    shade: "light",
+                    type: "vertical",
+                    shadeIntensity: 0.2,
+                    opacityFrom: 0.35,
+                    opacityTo: 0.05,
+                    stops: [0, 90, 100],
+                },
+                ...(config.fill || {}),
+            },
 
-        labels: config.labels || [],
+            markers: {
+                size: 0,
+                strokeWidth: 3,
+                strokeColors: "#fff",
+                hover: { size: 6 },
+                ...(config.markers || {}),
+            },
 
-        colors: config.colors ||
-            (config.series || []).map(s => s.color || colors.primary),
+            grid: {
+                borderColor: "#EEF2F7",
+                strokeDashArray: 4,
+                padding: { left: 10, right: 10, top: 5, bottom: 0 },
+                ...(config.grid || {}),
+            },
 
-        xaxis: {
-            categories: config.categories || [],
-            ...(config.xaxis || {})
-        },
+            legend: {
+                show: config.legend?.show ?? (config.series || []).length > 1,
+                position: "top",
+                horizontalAlign: "left",
+                fontSize: "13px",
+                fontWeight: 600,
+                markers: { radius: 12 },
+                itemMargin: { horizontal: 12 },
+                ...(config.legend || {}),
+            },
 
-        yaxis: config.yaxis || {},
+            tooltip: {
+                theme: "light",
+                shared: true,
+                intersect: false,
+                fillSeriesColor: false,
+                marker: { show: true },
+                style: { fontSize: "13px" },
+                ...(config.tooltip || {}),
+            },
 
-        stroke: {
-            width: 3,
-            curve: "smooth",
-            ...(config.stroke || {})
-        },
+            plotOptions: {
+                bar: {
+                    borderRadius: 8,
+                    borderRadiusApplication: "end",
+                    columnWidth: "45%",
+                    distributed: false,
+                },
+                pie: {
+                    donut: {
+                        size: "72%",
+                        labels: {
+                            show: true,
+                            total: { show: true, fontSize: "13px", color: "#9ca3af" },
+                            value: { fontSize: "20px", fontWeight: 700, color: "#1c1e21" },
+                        },
+                    },
+                },
+                radialBar: {
+                    hollow: { size: "62%" },
+                    dataLabels: {
+                        value: { fontSize: "20px", fontWeight: 700, color: "#1c1e21" },
+                    },
+                },
+                ...(config.plotOptions || {}),
+            },
 
-        fill: {
-            ...(config.fill || {})
-        },
+            dataLabels: {
+                enabled: false,
+                ...(config.dataLabels || {}),
+            },
 
-        markers: {
-            ...(config.markers || {})
-        },
+            states: {
+                hover: { filter: { type: "darken", value: 0.9 } },
+                active: { filter: { type: "darken", value: 0.85 } },
+                ...(config.states || {}),
+            },
 
-        grid: {
-            borderColor: "#edf2f7",
-            strokeDashArray: 4,
-            ...(config.grid || {})
-        },
+            responsive: config.responsive || [],
+            annotations: config.annotations || {},
 
-        legend: {
-            position: "top",
-            horizontalAlign: "left",
-            fontSize: "13px",
-            ...(config.legend || {})
-        },
-
-        tooltip: {
-            shared: true,
-            intersect: false,
-            ...(config.tooltip || {})
-        },
-
-        plotOptions: {
-            ...(config.plotOptions || {})
-        },
-
-        dataLabels: {
-            enabled: false,
-            ...(config.dataLabels || {})
-        },
-
-        responsive: config.responsive || [],
-
-        annotations: config.annotations || {},
-
-        states: config.states || {},
-
-        noData: {
-            text: "No data available"
-        }
-
-    };
-
-    const chart = new ApexCharts(element, options);
-
-    chart.render();
-
-    charts[config.id] = chart;
-
-    return chart;
-
-}
-
-
-    /**
-     * Update Existing Chart
-     */
-    function update(id, options) {
-
-        if (!charts[id]) {
-
-            console.warn(`Chart '${id}' not found.`);
-
-            return;
-
-        }
-
-        charts[id].updateOptions(options);
-
+            noData: {
+                text: "No data available",
+                style: { color: "#9ca3af", fontSize: "13px" },
+            },
+        };
     }
 
+    /**
+     * Build a `{ name, data, color }` series entry.
+     */
+    function series(name, data, color = null) {
+        return { name, data, color };
+    }
+
+    /**
+     * Destroy an existing chart instance by id, if any.
+     */
+    function destroy(id) {
+        if (charts[id]) {
+            charts[id].destroy();
+            delete charts[id];
+        }
+    }
+
+    /**
+     * Generic chart creator — every `type` helper below routes through this.
+     */
+    function create(type, config = {}) {
+        if (!config.id) {
+            console.error("ChartHelper: `id` is required.");
+            return null;
+        }
+
+        const element = document.querySelector(`#${config.id}`);
+
+        if (!element) {
+            console.warn(`ChartHelper: element '#${config.id}' not found.`);
+            return null;
+        }
+
+        destroy(config.id);
+
+        const options = baseOptions(type, config);
+        const chart = new ApexCharts(element, options);
+
+        chart.render();
+        charts[config.id] = chart;
+
+        return chart;
+    }
+
+    /**
+     * Patch an existing chart's options without a full re-render.
+     */
+    function update(id, options, redrawPaths = true, animate = true) {
+        if (!charts[id]) {
+            console.warn(`ChartHelper: chart '${id}' not found.`);
+            return;
+        }
+
+        charts[id].updateOptions(options, redrawPaths, animate);
+    }
+
+    /**
+     * Swap just the series data — cheapest way to animate value changes
+     * (e.g. polling a KPI endpoint) without touching axes/labels.
+     */
+    function updateSeries(id, newSeries, animate = true) {
+        if (!charts[id]) {
+            console.warn(`ChartHelper: chart '${id}' not found.`);
+            return;
+        }
+
+        charts[id].updateSeries(newSeries, animate);
+    }
 
     return {
-
         colors,
+        palette,
 
         series,
-
         create,
-
         update,
-
+        updateSeries,
         destroy,
 
         line(config) {
@@ -306,8 +348,6 @@ function create(type, config = {}) {
             return create("radar", config);
         },
 
-        charts
-
+        charts,
     };
-
 })();

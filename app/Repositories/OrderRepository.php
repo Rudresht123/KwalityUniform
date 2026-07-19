@@ -66,42 +66,173 @@ class OrderRepository
     /**
      * Get system-wide revenue trend for the last X days.
      */
-    public function getRevenueTrend(int $days = 30): array
-    {
-        $labels = [];
-        $data = [];
+public function getRevenueTrend(string $filter = 'month'): array
+{
+    return match ($filter) {
+        'week'    => $this->getDailyRevenueTrend(7),
+        'month'   => $this->getDailyRevenueTrend(30),
+        'monthly' => $this->getMonthlyRevenueTrend(),
+        'yearly'  => $this->getYearlyRevenueTrend(),
+        default   => $this->getDailyRevenueTrend(30),
+    };
+}
 
-        for ($i = $days - 1; $i >= 0; $i--) {
-            $date = now()->subDays($i);
-            $labels[] = $date->format('d M');
-            $data[] = (float) Order::whereDate('created_at', $date->toDateString())->sum('grand_total');
-        }
+/**
+ * Daily Revenue Trend
+ */
+private function getDailyRevenueTrend(int $days): array
+{
+    $labels = [];
+    $data   = [];
 
-        return [
-            'labels' => $labels,
-            'data' => $data,
-        ];
+    for ($i = $days - 1; $i >= 0; $i--) {
+
+        $date = now()->subDays($i);
+
+        $labels[] = $date->format('d M');
+
+        $data[] = (float) Order::whereDate('created_at', $date)
+            ->sum('grand_total');
     }
 
+    return [
+        'labels' => $labels,
+        'data'   => $data,
+    ];
+}
+
+/**
+ * Monthly Revenue Trend (Last 12 Months)
+ */
+private function getMonthlyRevenueTrend(): array
+{
+    $labels = [];
+    $data   = [];
+
+    for ($i = 11; $i >= 0; $i--) {
+
+        $month = now()->subMonths($i);
+
+        $labels[] = $month->format('M');
+
+        $data[] = (float) Order::whereYear('created_at', $month->year)
+            ->whereMonth('created_at', $month->month)
+            ->sum('grand_total');
+    }
+
+    return [
+        'labels' => $labels,
+        'data'   => $data,
+    ];
+}
+
+/**
+ * Yearly Revenue Trend (Last 5 Years)
+ */
+private function getYearlyRevenueTrend(): array
+{
+    $labels = [];
+    $data   = [];
+
+    for ($i = 4; $i >= 0; $i--) {
+
+        $year = now()->subYears($i)->year;
+
+        $labels[] = (string) $year;
+
+        $data[] = (float) Order::whereYear('created_at', $year)
+            ->sum('grand_total');
+    }
+
+    return [
+        'labels' => $labels,
+        'data'   => $data,
+    ];
+}
     /**
      * Get system-wide order volume trend for the last X days.
      */
-    public function getOrderTrend(int $days = 30): array
-    {
-        $labels = [];
-        $data = [];
+   public function getOrderTrend(string $filter = 'month'): array
+{
+    return match ($filter) {
+        'week'    => $this->getSuperAdminDailyOrderTrend(7),
+        'month'   => $this->getSuperAdminDailyOrderTrend(30),
+        'monthly' => $this->getSuperAdminMonthlyOrderTrend(),
+        'yearly'  => $this->getSuperAdminYearlyOrderTrend(),
+        default   => $this->getSuperAdminDailyOrderTrend(30),
+    };
+}
 
-        for ($i = $days - 1; $i >= 0; $i--) {
-            $date = now()->subDays($i);
-            $labels[] = $date->format('d M');
-            $data[] = Order::whereDate('created_at', $date->toDateString())->count();
-        }
+/**
+ * Super Admin Daily Order Trend
+ */
+private function getSuperAdminDailyOrderTrend(int $days): array
+{
+    $labels = [];
+    $data = [];
 
-        return [
-            'labels' => $labels,
-            'data' => $data,
-        ];
+    for ($i = $days - 1; $i >= 0; $i--) {
+
+        $date = now()->subDays($i);
+
+        $labels[] = $date->format('d M');
+
+        $data[] = Order::whereDate('created_at', $date)->count();
     }
+
+    return [
+        'labels' => $labels,
+        'data'   => $data,
+    ];
+}
+
+/**
+ * Super Admin Monthly Order Trend
+ */
+private function getSuperAdminMonthlyOrderTrend(): array
+{
+    $labels = [];
+    $data = [];
+
+    for ($i = 11; $i >= 0; $i--) {
+
+        $month = now()->subMonths($i);
+
+        $labels[] = $month->format('M');
+
+        $data[] = Order::whereYear('created_at', $month->year)
+            ->whereMonth('created_at', $month->month)
+            ->count();
+    }
+
+    return [
+        'labels' => $labels,
+        'data'   => $data,
+    ];
+}
+
+/**
+ * Super Admin Yearly Order Trend
+ */
+private function getSuperAdminYearlyOrderTrend(): array
+{
+    $labels = [];
+    $data = [];
+
+    for ($i = 4; $i >= 0; $i--) {
+
+        $year = now()->subYears($i)->year;
+
+        $labels[] = (string) $year;
+
+        $data[] = Order::whereYear('created_at', $year)->count();
+    }
+
+    return [
+        'labels' => $labels,
+        'data'   => $data,
+    ];
+}
 
     /**
      * Get the latest orders for the operations list.

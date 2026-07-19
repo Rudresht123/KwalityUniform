@@ -79,14 +79,17 @@
                                         </a> 
                                     </li> <!-- End::slide -->
                                     <!-- Start::slide -->
-                                    @can('partnership.view')
-                                        <li class="slide {{ request()->routeIs('partnership.*') ? 'active' : '' }}">
-                                            <a href="{{ route('partnership.index') }}" class="side-menu__item {{ request()->routeIs('partnership.index') ? 'active' : '' }}">
-                                                <i class="ti ti-user-check side-menu__icon"></i>
-                                                <span class="side-menu__label">Partnership Requests</span>
+                                    @can('courier.view')
+                                        <li class="slide {{ request()->routeIs('couriers.*') ? 'active' : '' }}">
+                                            <a href="{{ route('couriers.index') }}" class="side-menu__item {{ request()->routeIs('couriers.*') ? 'active' : '' }}">
+                                                <i class="ti ti-truck-delivery side-menu__icon"></i>
+                                                <span class="side-menu__label">Courier Management</span>
                                             </a>
                                         </li>
                                     @endcan
+
+                                  
+
 
                                     @if(!auth()->user()->hasRole('vendor'))
                                     @canany(['vendor.create', 'vendor.view'])
@@ -326,14 +329,9 @@
                                         </li>
                                     @endcan
                                     
-                                    @can('courier.view')
-                                        <li class="slide {{ request()->routeIs('couriers.*') ? 'active' : '' }}">
-                                            <a href="{{ route('couriers.index') }}" class="side-menu__item {{ request()->routeIs('couriers.*') ? 'active' : '' }}">
-                                                <i class="ti ti-truck side-menu__icon"></i>
-                                                <span class="side-menu__label">Courier Management</span>
-                                            </a>
-                                        </li>
-                                    @endcan
+
+                                    
+
 {{-- 
                                     @can('user.view')
                                         <li class="slide {{ request()->routeIs('user-status-report.*') ? 'active' : '' }}">
@@ -465,15 +463,15 @@
                                         </li>
 
                                     @endcanany
-
-                                    @can('audit.view')
-                                        <li class="slide {{ request()->routeIs('audit.*') ? 'active' : '' }}">
-                                            <a href="{{ route('audit.index') }}" class="side-menu__item {{ request()->routeIs('audit.*') ? 'active' : '' }}">
-                                                <i class="ti ti-history side-menu__icon"></i>
-                                                <span class="side-menu__label">Audit Logs</span>
+                                    @can('report.recent_orders.view')
+                                        <li class="slide {{ request()->routeIs('reports.recent-orders.*') ? 'active' : '' }}">
+                                            <a href="{{ route('reports.recent-orders.index') }}" class="side-menu__item {{ request()->routeIs('reports.recent-orders.*') ? 'active' : '' }}">
+                                                <i class="ti ti-report side-menu__icon"></i>
+                                                <span class="side-menu__label">Recent Orders Report</span>
                                             </a>
                                         </li>
                                     @endcan
+
                                 </ul>
                                 <div class="slide-right d-none" id="slide-right"><svg
                                         xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24"

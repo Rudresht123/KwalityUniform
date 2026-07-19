@@ -25,8 +25,6 @@ class DashboardService
     public function getSuperAdminStats(): array
     {
         $stats['kpis'] = $this->repository->getCoreKpis();
-        $stats['revenue_trend'] = $this->repository->getRevenueTrend();
-        $stats['order_trend'] = $this->repository->getOrderTrend();
         $stats['trends'] = $this->repository->getRegistrationTrends();
         $stats['top_categories'] = $this->repository->getTopCategories();
         $stats['system_health'] = $this->repository->getSystemHealth();
@@ -182,15 +180,18 @@ class DashboardService
     public function revenuTrend(Request $request)
     {
         $filter = $request->string('filter', 'month')->toString();
+        if (auth()->user()->hasRole('super-admin')) {
+            return $this->repository->getRevenueTrend($filter);
+        } else {
+            $user = Auth::user();
 
-        $user = Auth::user();
+            $vendor = Vendor::where('user_id', $user->id)->firstOrFail();
 
-        $vendor = Vendor::where('user_id', $user->id)->firstOrFail();
-
-        $trend = $this->repository->getVendorRevenueTrend(
-            $vendor->vendor_id,
-            $filter
-        );
+            $trend = $this->repository->getVendorRevenueTrend(
+                $vendor->vendor_id,
+                $filter
+            );
+        }
 
         return response()->json($trend);
     }
@@ -219,13 +220,18 @@ class DashboardService
 
     public function getVendorOrderTrend(Request $request)
     {
-        $user = Auth::user();
         $filter = $request->string('filter', 'month')->toString();
 
-        $vendor = Vendor::where('user_id', $user->id)->firstOrFail();
+        if (auth()->user()->hasRole('super-admin')) {
+            return $this->repository->getOrderTrend($filter);
+        } else {
+            $user = Auth::user();
+            $filter = $request->string('filter', 'month')->toString();
 
-        $trend = $this->repository->getVendorOrderTrend($vendor->vendor_id, $filter);
+            $vendor = Vendor::where('user_id', $user->id)->firstOrFail();
 
+            $trend = $this->repository->getVendorOrderTrend($vendor->vendor_id, $filter);
+        }
         return response()->json($trend);
     }
 }

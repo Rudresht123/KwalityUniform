@@ -32,7 +32,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::L8Myz6tQ1iSFRVJr',
+            '_route' => 'generated::Z3r4nR4uHWZJScPX',
           ),
           1 => NULL,
           2 => 
@@ -52,7 +52,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::W5B5VB3WFITcnHA7',
+            '_route' => 'generated::gXfWHmjwKfD6JUsw',
           ),
           1 => NULL,
           2 => 
@@ -72,7 +72,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::cmhwHsxdOERqbwEH',
+            '_route' => 'generated::NrVN8cIlD7Mk9XKr',
           ),
           1 => NULL,
           2 => 
@@ -111,7 +111,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::zTyvjfvCFiyn9fzE',
+            '_route' => 'generated::61sJEHjFEIOPly4N',
           ),
           1 => NULL,
           2 => 
@@ -264,6 +264,164 @@ app('router')->setCompiledRoutes(
           0 => 
           array (
             '_route' => 'notifications.hide',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/eschoolkart/couriers/index' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'couriers.index',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/eschoolkart/couriers/create' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'couriers.create',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/eschoolkart/couriers/store' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'couriers.store',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/eschoolkart/reports/recent-orders' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'reports.recent-orders.index',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/eschoolkart/reports/recent-orders/data' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'reports.recent-orders.data',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/eschoolkart/school-vendor-mapping/index' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'school-vendor-mapping.index',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/eschoolkart/school-vendor-mapping/create' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'school-vendor-mapping.create',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/eschoolkart/school-vendor-mapping/store' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'school-vendor-mapping.store',
           ),
           1 => NULL,
           2 => 
@@ -1396,7 +1554,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::nfo0QuQgkYqZ5l6e',
+            '_route' => 'generated::3GY1p0jYyCPswseC',
           ),
           1 => NULL,
           2 => 
@@ -1416,7 +1574,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::kvTrct0TZqPLtAkT',
+            '_route' => 'generated::ty4qlwsm2FPejGoj',
           ),
           1 => NULL,
           2 => 
@@ -1453,7 +1611,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::z35aBLONXEBLMXq7',
+            '_route' => 'generated::MaZxlUcO6wC8ASYI',
           ),
           1 => NULL,
           2 => 
@@ -1489,7 +1647,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::gFNezuFNSlQxU600',
+            '_route' => 'generated::0TA0iHIj8HQ3Y5dU',
           ),
           1 => NULL,
           2 => 
@@ -1657,7 +1815,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::BTv1yJ2XHHfcsOMe',
+            '_route' => 'generated::6m9ZuHUi2E6WX5ET',
           ),
           1 => NULL,
           2 => 
@@ -1714,7 +1872,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::22XJLnrk8TeB3DoW',
+            '_route' => 'generated::9Tgd073sLsZMMHSQ',
           ),
           1 => NULL,
           2 => 
@@ -1854,7 +2012,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::MTfacvgnlRjIqzVE',
+            '_route' => 'generated::mgzSANGLAKVCte8B',
           ),
           1 => NULL,
           2 => 
@@ -1874,7 +2032,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::lMiSQkmz1JJg9PSo',
+            '_route' => 'generated::zfZ4IGntxrN8keZI',
           ),
           1 => NULL,
           2 => 
@@ -2584,7 +2742,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::IOicknbXwfMu0mJU',
+            '_route' => 'generated::zME4Eqy5aSwEckSH',
           ),
           1 => NULL,
           2 => 
@@ -2602,7 +2760,7 @@ app('router')->setCompiledRoutes(
     ),
     2 => 
     array (
-      0 => '{^(?|/livewire\\-353ecfe1/(?|preview\\-file/([^/]++)(*:52)|js/([^/\\.]++)\\.js(*:76)|css/([^/\\.]++)\\.(?|css(*:105)|global\\.css(*:124)))|/eschoolkart/(?|p(?|ar(?|tnerships/(?|approve\\-(?|school/([^/]++)(*:199)|vendor/([^/]++)(*:222))|reject/([^/]++)/([^/]++)(*:255))|ent(?|\\-users/(?|edit/([^/]++)(*:294)|update/([^/]++)(*:317)|delete/([^/]++)(*:340))|s/([^/]++)(?|(*:362)|/edit(*:375)|(*:383))))|roduct(?|\\-(?|a(?|ssignments/(?|index/([^/]++)(*:440)|delete/([^/]++)(*:463))|pprovals/(?|preview/([^/]++)(*:500)|approve(?:/([^/]++))?(*:529)))|previews/([^/]++)(*:556))|s/(?|show/([^/]++)(*:583)|edit/([^/]++)(*:604)|update/([^/]++)(*:627)|delete/([^/]++)(*:650))))|vendors/(?|edit/([^/]++)(*:685)|update/([^/]++)(*:708)|delete/([^/]++)(*:731)|show/([^/]++)(*:752))|school(?|s/(?|edit/([^/]++)(*:788)|update/([^/]++)(*:811)|delete/([^/]++)(*:834)|show/([^/]++)(*:855))|\\-sections/(?|index/([^/]++)(*:892)|delete/([^/]++)(*:915)))|roles/(?|edit/([^/]++)(*:947)|update/([^/]++)(*:970)|delete/([^/]++)(*:993)|show/([^/]++)(*:1014))|a(?|udit\\-logs/show/([^/]++)(*:1052)|dmins/(?|show/([^/]++)(*:1083)|edit/([^/]++)(*:1105)|update/([^/]++)(*:1129)|delete/([^/]++)(*:1153))))|/s(?|chool\\-products/([^/]++)(?|(*:1197)|/(?|approve(*:1217)|unapprove(*:1235)))|etup\\-password/([^/]++)(?|(*:1272))|hop/subcategories/([^/]++)(*:1308)|torage/(.*)(?|(*:1331)))|/delete\\-record/([^/]++)/([^/]++)(*:1375)|/reset\\-password/([^/]++)(*:1409)|/ve(?|rify\\-email/([^/]++)/([^/]++)(*:1453)|ndor/(?|c(?|ategories/([^/]++)(?|(*:1495)|/edit(*:1509)|(*:1518))|olors/([^/]++)(?|(*:1545)|/edit(*:1559)|(*:1568)))|parent\\-categories/([^/]++)(?|(*:1609)|/edit(*:1623)|(*:1632))|sizes/([^/]++)(?|(*:1659)|/edit(*:1673)|(*:1682))))|/product/([^/]++)/json(*:1716)|/cart/remove/([^/]++)(*:1746)|/order/(?|s(?|uccess/([^/]++)(*:1784)|tream/([^/]++)(*:1807))|download/([^/]++)(*:1834)|email\\-invoice/([^/]++)(*:1866))|/my\\-orders/([^/]++)(?|(*:1899)|/pdf(*:1912))|/wishlist/([^/]++)(*:1940)|/api/schools/([^/]++)/standards(*:1980))/?$}sDu',
+      0 => '{^(?|/livewire\\-353ecfe1/(?|preview\\-file/([^/]++)(*:52)|js/([^/\\.]++)\\.js(*:76)|css/([^/\\.]++)\\.(?|css(*:105)|global\\.css(*:124)))|/eschoolkart/(?|couriers/(?|edit/([^/]++)(*:175)|update/([^/]++)(*:198)|delete/([^/]++)(*:221))|school(?|\\-(?|vendor\\-mapping/delete/([^/]++)(*:275)|sections/(?|index/([^/]++)(*:309)|delete/([^/]++)(*:332)))|s/(?|edit/([^/]++)(*:360)|update/([^/]++)(*:383)|delete/([^/]++)(*:406)|show/([^/]++)(*:427)))|p(?|ar(?|tnerships/(?|approve\\-(?|school/([^/]++)(*:486)|vendor/([^/]++)(*:509))|reject/([^/]++)/([^/]++)(*:542))|ent(?|\\-users/(?|edit/([^/]++)(*:581)|update/([^/]++)(*:604)|delete/([^/]++)(*:627))|s/([^/]++)(?|(*:649)|/edit(*:662)|(*:670))))|roduct(?|\\-(?|a(?|ssignments/(?|index/([^/]++)(*:727)|delete/([^/]++)(*:750))|pprovals/(?|preview/([^/]++)(*:787)|approve(?:/([^/]++))?(*:816)))|previews/([^/]++)(*:843))|s/(?|show/([^/]++)(*:870)|edit/([^/]++)(*:891)|update/([^/]++)(*:914)|delete/([^/]++)(*:937))))|vendors/(?|edit/([^/]++)(*:972)|update/([^/]++)(*:995)|delete/([^/]++)(*:1018)|show/([^/]++)(*:1040))|roles/(?|edit/([^/]++)(*:1072)|update/([^/]++)(*:1096)|delete/([^/]++)(*:1120)|show/([^/]++)(*:1142))|a(?|udit\\-logs/show/([^/]++)(*:1180)|dmins/(?|show/([^/]++)(*:1211)|edit/([^/]++)(*:1233)|update/([^/]++)(*:1257)|delete/([^/]++)(*:1281))))|/s(?|chool\\-products/([^/]++)(?|(*:1325)|/(?|approve(*:1345)|unapprove(*:1363)))|etup\\-password/([^/]++)(?|(*:1400))|hop/subcategories/([^/]++)(*:1436)|torage/(.*)(?|(*:1459)))|/delete\\-record/([^/]++)/([^/]++)(*:1503)|/reset\\-password/([^/]++)(*:1537)|/ve(?|rify\\-email/([^/]++)/([^/]++)(*:1581)|ndor/(?|c(?|ategories/([^/]++)(?|(*:1623)|/edit(*:1637)|(*:1646))|olors/([^/]++)(?|(*:1673)|/edit(*:1687)|(*:1696)))|parent\\-categories/([^/]++)(?|(*:1737)|/edit(*:1751)|(*:1760))|sizes/([^/]++)(?|(*:1787)|/edit(*:1801)|(*:1810))))|/product/([^/]++)/json(*:1844)|/cart/remove/([^/]++)(*:1874)|/order/(?|s(?|uccess/([^/]++)(*:1912)|tream/([^/]++)(*:1935))|download/([^/]++)(*:1962)|email\\-invoice/([^/]++)(*:1994))|/my\\-orders/([^/]++)(?|(*:2027)|/pdf(*:2040))|/wishlist/([^/]++)(*:2068)|/api/schools/([^/]++)/standards(*:2108))/?$}sDu',
     ),
     3 => 
     array (
@@ -2635,7 +2793,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::KyXA0ayELTPOsTTL',
+            '_route' => 'generated::RAZHA9OSJhVPX2dL',
           ),
           1 => 
           array (
@@ -2658,7 +2816,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::pjVqsRgp6oG5w1ed',
+            '_route' => 'generated::szCZC3Ib8hpGTM7g',
           ),
           1 => 
           array (
@@ -2681,7 +2839,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::40OwB1TQAG9hsXZ0',
+            '_route' => 'generated::cvGwnLDEjLUv0E5j',
           ),
           1 => 
           array (
@@ -2698,7 +2856,231 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      199 => 
+      175 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'couriers.edit',
+          ),
+          1 => 
+          array (
+            0 => 'courier',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      198 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'couriers.update',
+          ),
+          1 => 
+          array (
+            0 => 'courier',
+          ),
+          2 => 
+          array (
+            'PUT' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      221 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'couriers.destroy',
+          ),
+          1 => 
+          array (
+            0 => 'courier',
+          ),
+          2 => 
+          array (
+            'DELETE' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      275 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'school-vendor-mapping.destroy',
+          ),
+          1 => 
+          array (
+            0 => 'id',
+          ),
+          2 => 
+          array (
+            'DELETE' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      309 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'school-section.index',
+          ),
+          1 => 
+          array (
+            0 => 'schoolStandard',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      332 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'school-section.destroy',
+          ),
+          1 => 
+          array (
+            0 => 'schoolSection',
+          ),
+          2 => 
+          array (
+            'DELETE' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      360 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'school.edit',
+          ),
+          1 => 
+          array (
+            0 => 'school',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      383 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'school.update',
+          ),
+          1 => 
+          array (
+            0 => 'school',
+          ),
+          2 => 
+          array (
+            'PUT' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      406 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'school.destroy',
+          ),
+          1 => 
+          array (
+            0 => 'school',
+          ),
+          2 => 
+          array (
+            'DELETE' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      427 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'school.show',
+          ),
+          1 => 
+          array (
+            0 => 'school',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      486 => 
       array (
         0 => 
         array (
@@ -2720,7 +3102,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      222 => 
+      509 => 
       array (
         0 => 
         array (
@@ -2742,7 +3124,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      255 => 
+      542 => 
       array (
         0 => 
         array (
@@ -2765,7 +3147,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      294 => 
+      581 => 
       array (
         0 => 
         array (
@@ -2788,7 +3170,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      317 => 
+      604 => 
       array (
         0 => 
         array (
@@ -2810,7 +3192,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      340 => 
+      627 => 
       array (
         0 => 
         array (
@@ -2832,7 +3214,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      362 => 
+      649 => 
       array (
         0 => 
         array (
@@ -2855,7 +3237,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      375 => 
+      662 => 
       array (
         0 => 
         array (
@@ -2878,7 +3260,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      383 => 
+      670 => 
       array (
         0 => 
         array (
@@ -2920,7 +3302,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      440 => 
+      727 => 
       array (
         0 => 
         array (
@@ -2943,7 +3325,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      463 => 
+      750 => 
       array (
         0 => 
         array (
@@ -2965,7 +3347,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      500 => 
+      787 => 
       array (
         0 => 
         array (
@@ -2988,7 +3370,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      529 => 
+      816 => 
       array (
         0 => 
         array (
@@ -3011,7 +3393,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      556 => 
+      843 => 
       array (
         0 => 
         array (
@@ -3034,7 +3416,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      583 => 
+      870 => 
       array (
         0 => 
         array (
@@ -3057,7 +3439,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      604 => 
+      891 => 
       array (
         0 => 
         array (
@@ -3080,7 +3462,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      627 => 
+      914 => 
       array (
         0 => 
         array (
@@ -3102,7 +3484,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      650 => 
+      937 => 
       array (
         0 => 
         array (
@@ -3124,7 +3506,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      685 => 
+      972 => 
       array (
         0 => 
         array (
@@ -3147,7 +3529,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      708 => 
+      995 => 
       array (
         0 => 
         array (
@@ -3169,7 +3551,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      731 => 
+      1018 => 
       array (
         0 => 
         array (
@@ -3191,7 +3573,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      752 => 
+      1040 => 
       array (
         0 => 
         array (
@@ -3214,142 +3596,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      788 => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'school.edit',
-          ),
-          1 => 
-          array (
-            0 => 'school',
-          ),
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => true,
-          6 => NULL,
-        ),
-      ),
-      811 => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'school.update',
-          ),
-          1 => 
-          array (
-            0 => 'school',
-          ),
-          2 => 
-          array (
-            'PUT' => 0,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => true,
-          6 => NULL,
-        ),
-      ),
-      834 => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'school.destroy',
-          ),
-          1 => 
-          array (
-            0 => 'school',
-          ),
-          2 => 
-          array (
-            'DELETE' => 0,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => true,
-          6 => NULL,
-        ),
-      ),
-      855 => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'school.show',
-          ),
-          1 => 
-          array (
-            0 => 'school',
-          ),
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => true,
-          6 => NULL,
-        ),
-      ),
-      892 => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'school-section.index',
-          ),
-          1 => 
-          array (
-            0 => 'schoolStandard',
-          ),
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => true,
-          6 => NULL,
-        ),
-      ),
-      915 => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'school-section.destroy',
-          ),
-          1 => 
-          array (
-            0 => 'schoolSection',
-          ),
-          2 => 
-          array (
-            'DELETE' => 0,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => true,
-          6 => NULL,
-        ),
-      ),
-      947 => 
+      1072 => 
       array (
         0 => 
         array (
@@ -3372,7 +3619,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      970 => 
+      1096 => 
       array (
         0 => 
         array (
@@ -3394,7 +3641,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      993 => 
+      1120 => 
       array (
         0 => 
         array (
@@ -3416,7 +3663,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1014 => 
+      1142 => 
       array (
         0 => 
         array (
@@ -3439,7 +3686,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1052 => 
+      1180 => 
       array (
         0 => 
         array (
@@ -3462,7 +3709,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1083 => 
+      1211 => 
       array (
         0 => 
         array (
@@ -3485,7 +3732,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1105 => 
+      1233 => 
       array (
         0 => 
         array (
@@ -3508,7 +3755,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1129 => 
+      1257 => 
       array (
         0 => 
         array (
@@ -3530,7 +3777,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1153 => 
+      1281 => 
       array (
         0 => 
         array (
@@ -3552,7 +3799,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1197 => 
+      1325 => 
       array (
         0 => 
         array (
@@ -3575,13 +3822,13 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1217 => 
+      1345 => 
       array (
         0 => 
         array (
           0 => 
           array (
-            '_route' => 'generated::c9RTWz7uIJcWufzV',
+            '_route' => 'generated::yittdT4FeyRxkqPy',
           ),
           1 => 
           array (
@@ -3597,13 +3844,13 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1235 => 
+      1363 => 
       array (
         0 => 
         array (
           0 => 
           array (
-            '_route' => 'generated::aQkaKMzClcXVGwXL',
+            '_route' => 'generated::AHAhm03PzCjwTJac',
           ),
           1 => 
           array (
@@ -3619,7 +3866,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1272 => 
+      1400 => 
       array (
         0 => 
         array (
@@ -3661,7 +3908,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1308 => 
+      1436 => 
       array (
         0 => 
         array (
@@ -3684,7 +3931,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1331 => 
+      1459 => 
       array (
         0 => 
         array (
@@ -3726,7 +3973,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1375 => 
+      1503 => 
       array (
         0 => 
         array (
@@ -3749,7 +3996,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1409 => 
+      1537 => 
       array (
         0 => 
         array (
@@ -3772,7 +4019,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1453 => 
+      1581 => 
       array (
         0 => 
         array (
@@ -3796,7 +4043,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1495 => 
+      1623 => 
       array (
         0 => 
         array (
@@ -3819,7 +4066,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1509 => 
+      1637 => 
       array (
         0 => 
         array (
@@ -3842,7 +4089,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1518 => 
+      1646 => 
       array (
         0 => 
         array (
@@ -3884,7 +4131,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1545 => 
+      1673 => 
       array (
         0 => 
         array (
@@ -3907,7 +4154,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1559 => 
+      1687 => 
       array (
         0 => 
         array (
@@ -3930,7 +4177,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1568 => 
+      1696 => 
       array (
         0 => 
         array (
@@ -3972,7 +4219,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1609 => 
+      1737 => 
       array (
         0 => 
         array (
@@ -3995,7 +4242,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1623 => 
+      1751 => 
       array (
         0 => 
         array (
@@ -4018,7 +4265,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1632 => 
+      1760 => 
       array (
         0 => 
         array (
@@ -4060,7 +4307,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1659 => 
+      1787 => 
       array (
         0 => 
         array (
@@ -4083,7 +4330,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1673 => 
+      1801 => 
       array (
         0 => 
         array (
@@ -4106,7 +4353,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1682 => 
+      1810 => 
       array (
         0 => 
         array (
@@ -4148,7 +4395,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1716 => 
+      1844 => 
       array (
         0 => 
         array (
@@ -4171,7 +4418,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1746 => 
+      1874 => 
       array (
         0 => 
         array (
@@ -4193,7 +4440,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1784 => 
+      1912 => 
       array (
         0 => 
         array (
@@ -4216,7 +4463,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1807 => 
+      1935 => 
       array (
         0 => 
         array (
@@ -4239,7 +4486,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1834 => 
+      1962 => 
       array (
         0 => 
         array (
@@ -4262,7 +4509,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1866 => 
+      1994 => 
       array (
         0 => 
         array (
@@ -4284,7 +4531,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1899 => 
+      2027 => 
       array (
         0 => 
         array (
@@ -4307,7 +4554,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1912 => 
+      2040 => 
       array (
         0 => 
         array (
@@ -4330,7 +4577,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1940 => 
+      2068 => 
       array (
         0 => 
         array (
@@ -4352,7 +4599,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1980 => 
+      2108 => 
       array (
         0 => 
         array (
@@ -4422,7 +4669,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::L8Myz6tQ1iSFRVJr' => 
+    'generated::Z3r4nR4uHWZJScPX' => 
     array (
       'methods' => 
       array (
@@ -4434,7 +4681,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile',
-        'as' => 'generated::L8Myz6tQ1iSFRVJr',
+        'as' => 'generated::Z3r4nR4uHWZJScPX',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4450,7 +4697,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::W5B5VB3WFITcnHA7' => 
+    'generated::gXfWHmjwKfD6JUsw' => 
     array (
       'methods' => 
       array (
@@ -4462,7 +4709,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps',
-        'as' => 'generated::W5B5VB3WFITcnHA7',
+        'as' => 'generated::gXfWHmjwKfD6JUsw',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4478,7 +4725,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::cmhwHsxdOERqbwEH' => 
+    'generated::NrVN8cIlD7Mk9XKr' => 
     array (
       'methods' => 
       array (
@@ -4490,7 +4737,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@cspMaps',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@cspMaps',
-        'as' => 'generated::cmhwHsxdOERqbwEH',
+        'as' => 'generated::NrVN8cIlD7Mk9XKr',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4561,7 +4808,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::KyXA0ayELTPOsTTL' => 
+    'generated::RAZHA9OSJhVPX2dL' => 
     array (
       'methods' => 
       array (
@@ -4598,7 +4845,7 @@ app('router')->setCompiledRoutes(
                 $component.\'.js\',
             );
         }";s:5:"scope";s:51:"Livewire\\Features\\SupportJsModules\\SupportJsModules";s:4:"this";N;s:4:"self";s:32:"00000000000008dd0000000000000000";}}',
-        'as' => 'generated::KyXA0ayELTPOsTTL',
+        'as' => 'generated::RAZHA9OSJhVPX2dL',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4614,7 +4861,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::pjVqsRgp6oG5w1ed' => 
+    'generated::szCZC3Ib8hpGTM7g' => 
     array (
       'methods' => 
       array (
@@ -4655,7 +4902,7 @@ app('router')->setCompiledRoutes(
                 \'text/css; charset=utf-8\',
             );
         }";s:5:"scope";s:53:"Livewire\\Features\\SupportCssModules\\SupportCssModules";s:4:"this";N;s:4:"self";s:32:"00000000000008df0000000000000000";}}',
-        'as' => 'generated::pjVqsRgp6oG5w1ed',
+        'as' => 'generated::szCZC3Ib8hpGTM7g',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4671,7 +4918,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::40OwB1TQAG9hsXZ0' => 
+    'generated::cvGwnLDEjLUv0E5j' => 
     array (
       'methods' => 
       array (
@@ -4709,7 +4956,7 @@ app('router')->setCompiledRoutes(
                 \'text/css; charset=utf-8\',
             );
         }";s:5:"scope";s:53:"Livewire\\Features\\SupportCssModules\\SupportCssModules";s:4:"this";N;s:4:"self";s:32:"00000000000008e10000000000000000";}}',
-        'as' => 'generated::40OwB1TQAG9hsXZ0',
+        'as' => 'generated::cvGwnLDEjLUv0E5j',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4725,7 +4972,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::zTyvjfvCFiyn9fzE' => 
+    'generated::61sJEHjFEIOPly4N' => 
     array (
       'methods' => 
       array (
@@ -4762,7 +5009,7 @@ app('router')->setCompiledRoutes(
                         \'exception\' => $exception,
                     ]), status: $status);
                 }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"0000000000000b290000000000000000";}}',
-        'as' => 'generated::zTyvjfvCFiyn9fzE',
+        'as' => 'generated::61sJEHjFEIOPly4N',
       ),
       'fallback' => false,
       'defaults' => 
@@ -5080,6 +5327,493 @@ app('router')->setCompiledRoutes(
         array (
         ),
         'as' => 'notifications.hide',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'couriers.index' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'eschoolkart/couriers/index',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'role:super-admin|admin|school|vendor',
+          3 => 'App\\Http\\Middleware\\CheckScreenLock',
+          4 => 'permission:courier.view',
+        ),
+        'uses' => 'App\\Http\\Controllers\\SuperAdmin\\CourierController@index',
+        'controller' => 'App\\Http\\Controllers\\SuperAdmin\\CourierController@index',
+        'as' => 'couriers.index',
+        'namespace' => NULL,
+        'prefix' => 'eschoolkart/couriers',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'couriers.create' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'eschoolkart/couriers/create',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'role:super-admin|admin|school|vendor',
+          3 => 'App\\Http\\Middleware\\CheckScreenLock',
+          4 => 'permission:courier.create',
+        ),
+        'uses' => 'App\\Http\\Controllers\\SuperAdmin\\CourierController@create',
+        'controller' => 'App\\Http\\Controllers\\SuperAdmin\\CourierController@create',
+        'as' => 'couriers.create',
+        'namespace' => NULL,
+        'prefix' => 'eschoolkart/couriers',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'couriers.store' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'eschoolkart/couriers/store',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'role:super-admin|admin|school|vendor',
+          3 => 'App\\Http\\Middleware\\CheckScreenLock',
+          4 => 'permission:courier.create',
+        ),
+        'uses' => 'App\\Http\\Controllers\\SuperAdmin\\CourierController@store',
+        'controller' => 'App\\Http\\Controllers\\SuperAdmin\\CourierController@store',
+        'as' => 'couriers.store',
+        'namespace' => NULL,
+        'prefix' => 'eschoolkart/couriers',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'couriers.edit' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'eschoolkart/couriers/edit/{courier}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'role:super-admin|admin|school|vendor',
+          3 => 'App\\Http\\Middleware\\CheckScreenLock',
+          4 => 'permission:courier.edit',
+        ),
+        'uses' => 'App\\Http\\Controllers\\SuperAdmin\\CourierController@edit',
+        'controller' => 'App\\Http\\Controllers\\SuperAdmin\\CourierController@edit',
+        'as' => 'couriers.edit',
+        'namespace' => NULL,
+        'prefix' => 'eschoolkart/couriers',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'couriers.update' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'PUT',
+      ),
+      'uri' => 'eschoolkart/couriers/update/{courier}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'role:super-admin|admin|school|vendor',
+          3 => 'App\\Http\\Middleware\\CheckScreenLock',
+          4 => 'permission:courier.edit',
+        ),
+        'uses' => 'App\\Http\\Controllers\\SuperAdmin\\CourierController@update',
+        'controller' => 'App\\Http\\Controllers\\SuperAdmin\\CourierController@update',
+        'as' => 'couriers.update',
+        'namespace' => NULL,
+        'prefix' => 'eschoolkart/couriers',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'couriers.destroy' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'DELETE',
+      ),
+      'uri' => 'eschoolkart/couriers/delete/{courier}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'role:super-admin|admin|school|vendor',
+          3 => 'App\\Http\\Middleware\\CheckScreenLock',
+          4 => 'permission:courier.delete',
+        ),
+        'uses' => 'App\\Http\\Controllers\\SuperAdmin\\CourierController@destroy',
+        'controller' => 'App\\Http\\Controllers\\SuperAdmin\\CourierController@destroy',
+        'as' => 'couriers.destroy',
+        'namespace' => NULL,
+        'prefix' => 'eschoolkart/couriers',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'reports.recent-orders.index' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'eschoolkart/reports/recent-orders',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'role:super-admin|admin|school|vendor',
+          3 => 'App\\Http\\Middleware\\CheckScreenLock',
+          4 => 'permission:report.recent_orders.view',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Report\\OrderReportController@index',
+        'controller' => 'App\\Http\\Controllers\\Report\\OrderReportController@index',
+        'as' => 'reports.recent-orders.index',
+        'namespace' => NULL,
+        'prefix' => 'eschoolkart/reports',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'reports.recent-orders.data' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'eschoolkart/reports/recent-orders/data',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'role:super-admin|admin|school|vendor',
+          3 => 'App\\Http\\Middleware\\CheckScreenLock',
+          4 => 'permission:report.recent_orders.view',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Report\\OrderReportController@data',
+        'controller' => 'App\\Http\\Controllers\\Report\\OrderReportController@data',
+        'as' => 'reports.recent-orders.data',
+        'namespace' => NULL,
+        'prefix' => 'eschoolkart/reports',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'school-vendor-mapping.index' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'eschoolkart/school-vendor-mapping/index',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'role:super-admin|admin|school|vendor',
+          3 => 'App\\Http\\Middleware\\CheckScreenLock',
+          4 => 'permission:school_vendor.view',
+        ),
+        'uses' => 'App\\Http\\Controllers\\SuperAdmin\\SchoolVendorMappingController@index',
+        'controller' => 'App\\Http\\Controllers\\SuperAdmin\\SchoolVendorMappingController@index',
+        'as' => 'school-vendor-mapping.index',
+        'namespace' => NULL,
+        'prefix' => 'eschoolkart/school-vendor-mapping',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'school-vendor-mapping.create' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'eschoolkart/school-vendor-mapping/create',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'role:super-admin|admin|school|vendor',
+          3 => 'App\\Http\\Middleware\\CheckScreenLock',
+          4 => 'permission:school_vendor.create',
+        ),
+        'uses' => 'App\\Http\\Controllers\\SuperAdmin\\SchoolVendorMappingController@create',
+        'controller' => 'App\\Http\\Controllers\\SuperAdmin\\SchoolVendorMappingController@create',
+        'as' => 'school-vendor-mapping.create',
+        'namespace' => NULL,
+        'prefix' => 'eschoolkart/school-vendor-mapping',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'school-vendor-mapping.store' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'eschoolkart/school-vendor-mapping/store',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'role:super-admin|admin|school|vendor',
+          3 => 'App\\Http\\Middleware\\CheckScreenLock',
+          4 => 'permission:school_vendor.create',
+        ),
+        'uses' => 'App\\Http\\Controllers\\SuperAdmin\\SchoolVendorMappingController@store',
+        'controller' => 'App\\Http\\Controllers\\SuperAdmin\\SchoolVendorMappingController@store',
+        'as' => 'school-vendor-mapping.store',
+        'namespace' => NULL,
+        'prefix' => 'eschoolkart/school-vendor-mapping',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'school-vendor-mapping.destroy' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'DELETE',
+      ),
+      'uri' => 'eschoolkart/school-vendor-mapping/delete/{id}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'role:super-admin|admin|school|vendor',
+          3 => 'App\\Http\\Middleware\\CheckScreenLock',
+          4 => 'permission:school_vendor.delete',
+        ),
+        'uses' => 'App\\Http\\Controllers\\SuperAdmin\\SchoolVendorMappingController@destroy',
+        'controller' => 'App\\Http\\Controllers\\SuperAdmin\\SchoolVendorMappingController@destroy',
+        'as' => 'school-vendor-mapping.destroy',
+        'namespace' => NULL,
+        'prefix' => 'eschoolkart/school-vendor-mapping',
+        'where' => 
+        array (
+        ),
       ),
       'fallback' => false,
       'defaults' => 
@@ -8898,7 +9632,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::c9RTWz7uIJcWufzV' => 
+    'generated::yittdT4FeyRxkqPy' => 
     array (
       'methods' => 
       array (
@@ -8919,7 +9653,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::c9RTWz7uIJcWufzV',
+        'as' => 'generated::yittdT4FeyRxkqPy',
       ),
       'fallback' => false,
       'defaults' => 
@@ -8935,7 +9669,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::aQkaKMzClcXVGwXL' => 
+    'generated::AHAhm03PzCjwTJac' => 
     array (
       'methods' => 
       array (
@@ -8956,7 +9690,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::aQkaKMzClcXVGwXL',
+        'as' => 'generated::AHAhm03PzCjwTJac',
       ),
       'fallback' => false,
       'defaults' => 
@@ -9083,7 +9817,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::nfo0QuQgkYqZ5l6e' => 
+    'generated::3GY1p0jYyCPswseC' => 
     array (
       'methods' => 
       array (
@@ -9109,13 +9843,13 @@ app('router')->setCompiledRoutes(
         \'partials.notifications\',
         \\compact(\'notifications\')
     );
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"0000000000000c990000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"0000000000000ca50000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
         array (
         ),
-        'as' => 'generated::nfo0QuQgkYqZ5l6e',
+        'as' => 'generated::3GY1p0jYyCPswseC',
       ),
       'fallback' => false,
       'defaults' => 
@@ -9131,7 +9865,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::kvTrct0TZqPLtAkT' => 
+    'generated::ty4qlwsm2FPejGoj' => 
     array (
       'methods' => 
       array (
@@ -9162,7 +9896,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::kvTrct0TZqPLtAkT',
+        'as' => 'generated::ty4qlwsm2FPejGoj',
       ),
       'fallback' => false,
       'defaults' => 
@@ -9216,7 +9950,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::z35aBLONXEBLMXq7' => 
+    'generated::MaZxlUcO6wC8ASYI' => 
     array (
       'methods' => 
       array (
@@ -9237,7 +9971,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::z35aBLONXEBLMXq7',
+        'as' => 'generated::MaZxlUcO6wC8ASYI',
       ),
       'fallback' => false,
       'defaults' => 
@@ -9291,7 +10025,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::gFNezuFNSlQxU600' => 
+    'generated::0TA0iHIj8HQ3Y5dU' => 
     array (
       'methods' => 
       array (
@@ -9312,7 +10046,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::gFNezuFNSlQxU600',
+        'as' => 'generated::0TA0iHIj8HQ3Y5dU',
       ),
       'fallback' => false,
       'defaults' => 
@@ -9783,7 +10517,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::BTv1yJ2XHHfcsOMe' => 
+    'generated::6m9ZuHUi2E6WX5ET' => 
     array (
       'methods' => 
       array (
@@ -9804,7 +10538,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::BTv1yJ2XHHfcsOMe',
+        'as' => 'generated::6m9ZuHUi2E6WX5ET',
       ),
       'fallback' => false,
       'defaults' => 
@@ -9894,7 +10628,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::22XJLnrk8TeB3DoW' => 
+    'generated::9Tgd073sLsZMMHSQ' => 
     array (
       'methods' => 
       array (
@@ -9915,7 +10649,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::22XJLnrk8TeB3DoW',
+        'as' => 'generated::9Tgd073sLsZMMHSQ',
       ),
       'fallback' => false,
       'defaults' => 
@@ -10227,7 +10961,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::MTfacvgnlRjIqzVE' => 
+    'generated::mgzSANGLAKVCte8B' => 
     array (
       'methods' => 
       array (
@@ -10248,7 +10982,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::MTfacvgnlRjIqzVE',
+        'as' => 'generated::mgzSANGLAKVCte8B',
       ),
       'fallback' => false,
       'defaults' => 
@@ -10264,7 +10998,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::lMiSQkmz1JJg9PSo' => 
+    'generated::zfZ4IGntxrN8keZI' => 
     array (
       'methods' => 
       array (
@@ -10285,7 +11019,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::lMiSQkmz1JJg9PSo',
+        'as' => 'generated::zfZ4IGntxrN8keZI',
       ),
       'fallback' => false,
       'defaults' => 
@@ -12609,7 +13343,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::IOicknbXwfMu0mJU' => 
+    'generated::zME4Eqy5aSwEckSH' => 
     array (
       'methods' => 
       array (
@@ -12635,7 +13369,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 'Illuminate\\Foundation\\Http\\Middleware\\PreventRequestForgery',
         ),
-        'as' => 'generated::IOicknbXwfMu0mJU',
+        'as' => 'generated::zME4Eqy5aSwEckSH',
       ),
       'fallback' => false,
       'defaults' => 
@@ -12667,7 +13401,7 @@ app('router')->setCompiledRoutes(
                         $config,
                         $isProduction
                     ))($request, $path);
-                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"0000000000000d0c0000000000000000";}}',
+                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"0000000000000d180000000000000000";}}',
         'as' => 'storage.local',
       ),
       'fallback' => false,
@@ -12700,7 +13434,7 @@ app('router')->setCompiledRoutes(
                         $config,
                         $isProduction
                     ))($request, $path);
-                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"0000000000000d0e0000000000000000";}}',
+                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"0000000000000d1a0000000000000000";}}',
         'as' => 'storage.local.upload',
       ),
       'fallback' => false,

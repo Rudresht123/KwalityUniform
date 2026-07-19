@@ -23,6 +23,7 @@ class PermissionSeeder extends Seeder
             'Partnership Management'  => 'admin',
             'School Vendor Mapping'   => 'admin',
             'Courier Management'      => 'admin',
+            'Report Management'       => 'admin',
             'Order Fulfillment'       => 'vendor',
             'System Management'       => 'admin',
         ];
@@ -124,6 +125,9 @@ class PermissionSeeder extends Seeder
                 'courier.create' => 'Create Courier',
                 'courier.edit'   => 'Edit Courier',
                 'courier.delete' => 'Delete Courier',
+            ],
+            'Report Management' => [
+                'report.recent_orders.view' => 'View Recent Orders Report',
             ],
             'Order Fulfillment' => [
 

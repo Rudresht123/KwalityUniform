@@ -27,6 +27,7 @@ use App\Http\Controllers\SuperAdmin\ProductAssignmentController;
 use App\Http\Controllers\SuperAdmin\PartnershipRequestController;
 use App\Http\Controllers\SuperAdmin\SchoolVendorMappingController;
 use App\Http\Controllers\SuperAdmin\CourierController;
+use App\Http\Controllers\Report\OrderReportController;
 
 Route::prefix('couriers')->name('couriers.')->group(function () {
     Route::get('/index', [CourierController::class, 'index'])->name('index')->middleware('permission:courier.view');
@@ -35,6 +36,11 @@ Route::prefix('couriers')->name('couriers.')->group(function () {
     Route::get('/edit/{courier}', [CourierController::class, 'edit'])->name('edit')->middleware('permission:courier.edit');
     Route::put('/update/{courier}', [CourierController::class, 'update'])->name('update')->middleware('permission:courier.edit');
     Route::delete('/delete/{courier}', [CourierController::class, 'destroy'])->name('destroy')->middleware('permission:courier.delete');
+});
+
+Route::prefix('reports')->name('reports.')->group(function () {
+    Route::get('/recent-orders', [OrderReportController::class, 'index'])->name('recent-orders.index')->middleware('permission:report.recent_orders.view');
+    Route::get('/recent-orders/data', [OrderReportController::class, 'data'])->name('recent-orders.data')->middleware('permission:report.recent_orders.view');
 });
 
 Route::prefix('school-vendor-mapping')->name('school-vendor-mapping.')->group(function () {

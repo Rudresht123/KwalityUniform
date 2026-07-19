@@ -17,22 +17,33 @@ class SchoolVendorMappingController extends BaseController
             abort(403);
         }
 
-        $mappings = SchoolVendorMapping::with(['school', 'vendor']);
+        if ($request->ajax()) {
+            $mappings = SchoolVendorMapping::with(['school', 'vendor']);
 
-        if ($request->filled('school_id')) {
-            $mappings->where('school_id', $request->school_id);
+            return datatables()->of($mappings)
+                ->addColumn('school_name', function ($mapping) {
+                    return $mapping->school->school_name;
+                })
+                ->addColumn('vendor_name', function ($mapping) {
+                    return $mapping->vendor->business_name;
+                })
+                ->addColumn('actions', function ($mapping) {
+                    return '<form action="'.route('school-vendor-mapping.destroy', $mapping->id).'" method="POST" onsubmit="return confirm(\'Are you sure?\');">
+                                '.csrf_field().'
+                                '.method_field('DELETE').'
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>';
+                })
+                ->rawColumns(['actions'])
+                ->make(true);
         }
 
-        if ($request->filled('vendor_id')) {
-            $mappings->where('vendor_id', $request->vendor_id);
-        }
-
-        $mappings = $mappings->paginate(15);
         $schools = School::all();
         $vendors = Vendor::all();
 
-        return view('super-admin.school-vendor-mapping.index', compact('mappings', 'schools', 'vendors'), $this->pageData('School Vendor Mappings', 'Super Admin|School Vendor Mappings'));
+        return view('super-admin.school-vendor-mapping.index', compact('schools', 'vendors'), $this->pageData('School Vendor Mappings', 'Super Admin|School Vendor Mappings'));
     }
+
 
     public function create()
     {

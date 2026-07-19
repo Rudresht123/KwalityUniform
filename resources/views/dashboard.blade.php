@@ -717,6 +717,7 @@
     .payment-row.total .lbl { color: var(--ink); font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif; }
 
 </style>
+
     @if (auth()->user()->hasRole('super-admin') || auth()->user()->hasRole('admin'))
         @include('dashboard.super-admin')
     @elseif(auth()->user()->hasRole('vendor'))

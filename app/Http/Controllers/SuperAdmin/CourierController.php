@@ -35,12 +35,11 @@ class CourierController extends BaseController
         }
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'api_integration_key' => 'nullable|string|max:255',
-            'contact_person' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:20',
+            'name' => ['required', 'string', 'max:255'],
+            'api_integration_key' => ['nullable', 'string', 'max:255'],
+            'contact_person' => ['nullable', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:20'],
         ]);
-
         Courier::create($request->all());
 
         return redirect()->route('couriers.index')->with('success', 'Courier created successfully.');
@@ -62,10 +61,10 @@ class CourierController extends BaseController
         }
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'api_integration_key' => 'nullable|string|max:255',
-            'contact_person' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:20',
+            'name' => ['required', 'string', 'max:255'],
+            'api_integration_key' => ['nullable', 'string', 'max:255'],
+            'contact_person' => ['nullable', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:20'],
         ]);
 
         $courier->update($request->all());

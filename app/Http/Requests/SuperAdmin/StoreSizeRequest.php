@@ -48,6 +48,7 @@ class StoreSizeRequest extends FormRequest
     }
 
     /**
+     * 
      * Get custom validation messages.
      */
     public function messages(): array

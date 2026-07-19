@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\OrderStatus;
 use App\Enums\DeliveryType;
+use App\Models\SuperAdmin\Vendor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -67,4 +68,8 @@ class Order extends Model
         return $this->belongsToMany(Shipment::class, 'shipment_items', 'order_item_id', 'shipment_id')
             ->withPivot('quantity_shipped');
     }
+    public function vendor()
+{
+    return $this->belongsTo(Vendor::class,"vendor_id","vendor_id");
+}
 }

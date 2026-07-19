@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.common')
 
 @section('content')
 <div class="container-fluid">
@@ -8,7 +8,7 @@
             <a href="{{ route('couriers.create') }}" class="btn btn-primary">Add Courier</a>
         </div>
         <div class="card-body">
-            <table class="table table-bordered">
+            <table class="table datatable">
                 <thead>
                     <tr>
                         <th>Name</th>
