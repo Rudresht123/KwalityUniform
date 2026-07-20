@@ -185,6 +185,15 @@ Route::prefix('stock')->name('stock.')->group(function () {
     Route::get('/index', [StockController::class, 'index'])->name('index')->middleware('permission:stock_view');
 });
 
+Route::prefix('parent-categories')->name('parent-category.')->group(function () {
+    Route::get('/index', [ParentCategoryController::class, 'index'])->name('index')->middleware('permission:parent_category.view');
+    Route::get('/create', [ParentCategoryController::class, 'create'])->name('create')->middleware('permission:parent_category.create');
+    Route::post('/store', [ParentCategoryController::class, 'store'])->name('store')->middleware('permission:parent_category.create');
+    Route::get('/edit/{parentCategory}', [ParentCategoryController::class, 'edit'])->name('edit')->middleware('permission:parent_category.edit');
+    Route::put('/update/{parentCategory}', [ParentCategoryController::class, 'update'])->name('update')->middleware('permission:parent_category.edit');
+    Route::delete('/delete/{parentCategory}', [ParentCategoryController::class, 'destroy'])->name('destroy')->middleware('permission:parent_category.delete');
+});
+
 Route::middleware(['auth', 'role:super-admin|admin|school|vendor'])->group(function () {
   
   

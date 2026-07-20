@@ -86,7 +86,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('reports.recent-orders.data') }}",
+                url: "{{ auth()->user()->hasRole('vendor') ? route('vendor.recent-orders.data') : route('reports.recent-orders.data') }}",
                 data: function (d) {
                     d.order_no = $('#filter_order_no').val();
                     d.status   = $('#filter_status').val();

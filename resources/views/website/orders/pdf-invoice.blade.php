@@ -184,14 +184,22 @@
                     {{ $order->user->webUser->alternate_phone ?? $order->user->phone ?? 'N/A' }}
                 </td>
                 <td style="width: 50%;">
-                    <span class="party-label">Shipping To</span>
-                    <span class="party-name">{{ $order->user->name }}</span><br>
-                    @if($order->shippingAddress ?? null)
-                        {{ $order->shippingAddress->address_line1 ?? 'N/A' }}<br>
-                        {{ $order->shippingAddress->city ?? '' }}{{ ($order->shippingAddress->city ?? null) && ($order->shippingAddress->state ?? null) ? ', ' : '' }}{{ $order->shippingAddress->state ?? '' }}
-                        {{ $order->shippingAddress->zip_code ?? '' }}
+                    @if($order->delivery_type->value === 'school')
+                        <span class="party-label">School Delivery</span>
+                        <span class="party-name">{{ $order->school->school_name ?? 'School' }}</span><br>
+                        Student: {{ $order->student->student_name ?? 'N/A' }}<br>
+                        Class: {{ $order->student->student_class ?? 'N/A' }}<br>
+                        Section: {{ $order->student->student_section ?? 'N/A' }}
                     @else
-                        Same as billing address
+                        <span class="party-label">Shipping To</span>
+                        <span class="party-name">{{ $order->user->name }}</span><br>
+                        @if($order->shippingAddress ?? null)
+                            {{ $order->shippingAddress->address_line1 ?? 'N/A' }}<br>
+                            {{ $order->shippingAddress->city ?? '' }}{{ ($order->shippingAddress->city ?? null) && ($order->shippingAddress->state ?? null) ? ', ' : '' }}{{ $order->shippingAddress->state ?? '' }}
+                            {{ $order->shippingAddress->zip_code ?? '' }}
+                        @else
+                            Same as billing address
+                        @endif
                     @endif
                 </td>
             </tr>

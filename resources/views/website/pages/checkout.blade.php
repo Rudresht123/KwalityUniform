@@ -75,6 +75,22 @@
                                     <input type="email" name="email" id="field-email" class="checkout-input" placeholder="john@example.com" value="{{ session('checkout_details.email') }}" required>
                                 </div>
                             </div>
+                            
+                            {{-- Student Information Fields --}}
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <label class="checkout-field-label">Student Name</label>
+                                    <input type="text" name="student_name" class="checkout-input" placeholder="Enter student name" value="{{ session('checkout_details.student_name') }}" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="checkout-field-label">Class</label>
+                                    <input type="text" name="student_class" class="checkout-input" placeholder="e.g. 10th" value="{{ session('checkout_details.student_class') }}" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="checkout-field-label">Section</label>
+                                    <input type="text" name="student_section" class="checkout-input" placeholder="e.g. A" value="{{ session('checkout_details.student_section') }}" required>
+                                </div>
+                            </div>
 
                             <div id="school-address-display" class="school-address-card" style="display: none;">
                                 <div class="school-address-header">

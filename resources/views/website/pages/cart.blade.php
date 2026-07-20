@@ -133,25 +133,9 @@
                                 </div>
                                 <span class="text-success fw-bold small">FREE</span>
                             </div>
-@if(false)
-                            <div class="p-3 border rounded-3 d-flex align-items-center justify-content-between cursor-pointer"
-                                id="delivery-home"
-                                style="border: 2px solid #dee2e6; background-color: transparent; cursor: pointer;">
-                                <div class="form-check mb-0">
-                                    <input class="form-check-input" type="radio" name="delivery-option">
-                                    <label class="form-check-label ms-2 cursor-pointer" style="user-select: none;">
-                                        <span class="fw-bold text-dark small d-block" style="line-height: 1.2;">Home
-                                            Delivery</span>
-                                        <span class="text-secondary" style="font-size: 11px;">Direct residential courier
-                                            dispatch</span>
-                                    </label>
-                                </div>
-                                <span class="text-success fw-bold small">FREE</span>
-                                {{-- <span class="text-dark fw-bold small">$8.00</span> --}}
-                            </div>
                         </div>
                     </div>
-@endif
+
                     <div class="summary-row">
                         <span class="summary-label">Subtotal</span>
                         <span class="summary-value" id="summary-subtotal">₹{{ number_format($subtotal, 2) }}</span>
@@ -166,19 +150,15 @@
                         <span class="summary-total-value" id="summary-total">₹{{ number_format($subtotal, 2) }}</span>
                     </div>
 
-                    <a href="{{ route('website.checkout') }}"
-                        class="btn-checkout {{ $cartItems->isEmpty() ? 'disabled' : '' }}">
+                    <a href="{{ auth()->check() ? route('website.checkout') : '#' }}"
+                        class="btn-checkout {{ $cartItems->isEmpty() ? 'disabled' : '' }}"
+                        @guest onclick="event.preventDefault(); $('#auth-confirmation-modal').modal('show');" @endguest>
                         Proceed to Checkout <i class="ti ti-arrow-right ms-2"></i>
                     </a>
 
                     <div class="summary-trust-row">
                         <div class="trust-item">
-                            <i class="ti ti-shield-check"></i>
-                            <span>Secure Checkout</span>
-                        </div>
-                        <div class="trust-item">
-                            <i class="ti ti-truck-delivery"></i>
-                            <span>Free Delivery</span>
+                            <i class="ti ti-shield-check"></i> <span>Secure Checkout</span>
                         </div>
                     </div>
                 </div>
@@ -186,7 +166,27 @@
         </div>
     </main>
 
-
+    {{-- Custom Confirmation Modal --}}
+    <div class="modal fade" id="auth-confirmation-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-lg border-0" style="border-radius: 1rem;">
+                <div class="modal-body text-center p-5">
+                    <div class="mb-4 text-warning">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="fw-bold mb-3">Sign In Required</h3>
+                    <p class="text-muted fs-6 mb-4">Please log in to your account to securely proceed with your checkout.</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <button type="button" class="btn btn-light px-4 py-2" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary px-4 py-2" onclick="$('#auth-confirmation-modal').modal('hide'); $('#loginModal').modal('show');">Login Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         $(document).ready(function() {
@@ -208,31 +208,9 @@
                     'border': '2px solid var(--qu-primary)',
                     'background-color': 'rgba(30, 58, 138, 0.02)'
                 });
-                $('#delivery-home').css({
-                    'border': '2px solid #dee2e6',
-                    'background-color': 'transparent'
-                });
                 $('input[name="delivery-option"]').eq(0).prop('checked', true);
 
                 localStorage.setItem('qu_delivery_preference', 'school');
-
-                const currentSubtotal = $('#summary-subtotal').text().replace(/[₹,]/g, '');
-                updateTotals(currentSubtotal);
-            });
-
-            $('#delivery-home').on('click', function() {
-                deliveryFee = 0.00;
-                $(this).css({
-                    'border': '2px solid var(--qu-primary)',
-                    'background-color': 'rgba(30, 58, 138, 0.02)'
-                });
-                $('#delivery-school').css({
-                    'border': '2px solid #dee2e6',
-                    'background-color': 'transparent'
-                });
-                $('input[name="delivery-option"]').eq(1).prop('checked', true);
-
-                localStorage.setItem('qu_delivery_preference', 'home');
 
                 const currentSubtotal = $('#summary-subtotal').text().replace(/[₹,]/g, '');
                 updateTotals(currentSubtotal);

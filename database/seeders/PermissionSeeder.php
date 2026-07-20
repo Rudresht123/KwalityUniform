@@ -73,10 +73,6 @@ class PermissionSeeder extends Seeder
                 'category.create' => 'Create Category',
                 'category.edit'   => 'Edit Category',
                 'category.delete' => 'Delete Category',
-                'parent-category.view'   => 'View Parent Categories',
-                'parent-category.create' => 'Create Parent Category',
-                'parent-category.edit'   => 'Edit Parent Category',
-                'parent-category.delete' => 'Delete Parent Category',
                 'size.view'       => 'View Sizes',
                 'size.create'     => 'Create Size',
                 'size.edit'       => 'Edit Size',
@@ -94,6 +90,7 @@ class PermissionSeeder extends Seeder
                 'product.stock_update'    => 'Update Product Stock',
             ],
             'Order Fulfillment' => [
+                'vendor.fulfillment.hub.view' => 'View Fulfillment Hub',
                 'vendor.fulfillment.view' => 'View Order Fulfillment Hub',
                 'vendor.fulfillment.ship' => 'Ship Orders',
             ],
@@ -129,6 +126,9 @@ class PermissionSeeder extends Seeder
             'Report Management' => [
                 'report.recent_orders.view' => 'View Recent Orders Report',
             ],
+            'School Report Management' => [
+                'school.report.view' => 'View School Reports',
+            ],
             'Order Fulfillment' => [
 
                 'audit.view'            => 'View Audit Reports',
@@ -155,9 +155,6 @@ class PermissionSeeder extends Seeder
             'category.create' => 'category.view',
             'category.edit'   => 'category.view',
             'category.delete' => 'category.view',
-            'parent-category.create' => 'parent-category.view',
-            'parent-category.edit'   => 'parent-category.view',
-            'parent-category.delete' => 'parent-category.view',
             'size.create'    => 'size.view',
             'size.edit'      => 'size.view',
             'size.delete'    => 'size.view',
@@ -179,7 +176,7 @@ class PermissionSeeder extends Seeder
                 $category = $defaultCategory;
                 if (str_contains($slug, 'school.product')) {
                     $category = 'school';
-                } elseif (str_contains($slug, 'stock') || $slug === 'product.stock_update') {
+                } elseif (str_contains($slug, 'stock') || $slug === 'product.stock_update' || $slug === 'report.recent_orders.view') {
                     $category = 'vendor';
                 }
 

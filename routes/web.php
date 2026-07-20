@@ -101,20 +101,30 @@ Route::middleware(['auth'])->group(function () {
 
      Route::middleware(['role:vendor'])->prefix('vendor')->name('vendor.')->group(function () {
      Route::get('orders/dispatch', [App\Http\Controllers\Vendor\OrderDispatchController::class, 'index'])->name('orders.dispatch');
+     // New Fulfillment Hub
+     Route::get('fulfillment-hub', [App\Http\Controllers\Vendor\FulfillmentHubController::class, 'index'])->name('fulfillment.hub');
+     Route::get('fulfillment-hub/shipment/{shipment}', [App\Http\Controllers\Vendor\FulfillmentHubController::class, 'showShipment'])->name('fulfillment.shipment.show');
+     
         Route::post('orders/dispatch', [App\Http\Controllers\Vendor\OrderDispatchController::class, 'ship'])->name('orders.ship');
      });
 
     Route::middleware(['role:vendor'])->prefix('vendor')->group(function () {
        
+        // Stock Management
+        Route::get('stock-management', [App\Http\Controllers\SuperAdmin\StockManagementController::class, 'index'])->name('vendor.stock.index');
+        Route::post('stock-adjustment', [App\Http\Controllers\SuperAdmin\StockAdjustmentController::class, 'adjust'])->name('vendor.stock.adjust');
+        
         // Stock History Report
         Route::get('stock-history-report', [StockHistoryReportController::class, 'index'])->name('vendor.stock.history.report');
+        Route::get('stock-history-report/data', [StockHistoryReportController::class, 'data'])->name('vendor.stock.history.data');
+
+        // Recent Orders Report
+        Route::get('/recent-orders', [\App\Http\Controllers\Report\OrderReportController::class, 'index'])->name('vendor.recent-orders.index')->middleware('permission:report.recent_orders.view');
+        Route::get('/recent-orders/data', [\App\Http\Controllers\Report\OrderReportController::class, 'data'])->name('vendor.recent-orders.data')->middleware('permission:report.recent_orders.view');
 
         // Attribute Management
         Route::resource('categories', CategoryController::class)
             ->names('category');
-
-        Route::resource('parent-categories', ParentCategoryController::class)
-            ->names('parent-category');
 
         Route::resource('sizes', SizeController::class)
             ->names('size');
@@ -123,6 +133,9 @@ Route::middleware(['auth'])->group(function () {
             ->names('color');
     });
     Route::get('/school/distribution', \App\Http\Livewire\SchoolDistribution::class)->name('school.distribution');
+    Route::get('/school/dashboard', [\App\Http\Controllers\School\DashboardController::class, 'index'])->name('school.dashboard');
+    Route::get('/school/orders', [\App\Http\Controllers\School\OrderController::class, 'index'])->name('school.orders.index');
+    Route::get('/school/orders/{order}', [\App\Http\Controllers\School\OrderController::class, 'show'])->name('school.orders.show');
     Route::get('/parent/orders', \App\Http\Livewire\ParentOrderTracking::class)->name('parent.orders');
 });
 

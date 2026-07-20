@@ -259,11 +259,14 @@ class CartController extends Controller
         $request->validate([
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
+            'student_name' => 'required|string|max:255',
+            'student_class' => 'required|string|max:50',
+            'student_section' => 'required|string|max:50',
         ]);
 
         $data = $request->all();
         $data['delivery_type'] = 'school';
-        $data['city'] = $data['city'] ?? 'N/A'; // Provide default if needed, or get from school
+        $data['city'] = $data['city'] ?? 'N/A';
         $data['address'] = $data['address'] ?? 'N/A';
         $data['phone'] = $data['phone'] ?? 'N/A';
 

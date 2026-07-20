@@ -22,11 +22,13 @@ public function data(Request $request)
 {
     abort_if(Gate::denies('report.recent_orders.view'), 403);
 
-    $query = Order::with(['user', 'vendor']);
+    $query = Order::with(['user', 'vendor','items']);
 
     // Vendor Scope
     if (auth()->user()->hasRole('vendor')) {
-        $query->where('vendor_id', auth()->user()->vendor->vendor_id);
+        $query->whereHas('items', function ($q) {
+    $q->where('vendor_id', auth()->user()->vendor->vendor_id);
+});
     }
 
     // Filters

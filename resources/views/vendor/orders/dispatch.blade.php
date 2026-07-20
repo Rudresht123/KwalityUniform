@@ -2,210 +2,334 @@
 
 @push('styles')
 <style>
+    /* ============================
+       Fulfillment Hub — Premium
+       Same neutral-first language as the rest of the app:
+       flat cards with hairline borders, color reserved for
+       status meaning, no glow/blur shadows.
+    ============================ */
+
     :root {
-        --hub-primary: #2563eb;
-        --hub-primary-soft: rgba(37, 99, 235, 0.08);
-        --hub-success: #10b981;
-        --hub-success-soft: rgba(16, 185, 129, 0.08);
-        --hub-border: #e2e8f0;
-        --hub-radius: 16px;
-        --hub-card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --hub-primary: #375aa8;
+        --hub-primary-soft: #eef2fb;
+        --hub-success: #1a7f5a;
+        --hub-success-soft: #eaf6f0;
+        --hub-warning: #9a6a1e;
+        --hub-warning-soft: #faf3e6;
+        --hub-neutral: #4b5058;
+        --hub-neutral-soft: #f4f5f7;
+        --hub-border: #ececef;
+        --hub-text: #1c1e21;
+        --hub-muted: #8a8e96;
+        --hub-radius: 14px;
     }
 
     .fulfillment-hub-container {
         font-family: 'Inter', sans-serif;
-        padding: 1rem 0;
+        padding: 4px 0 1rem;
     }
 
-    /* KPI Cards */
+    /* ---------- KPI Cards ---------- */
     .kpi-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2.5rem;
+        gap: 1.25rem;
+        margin-bottom: 2rem;
     }
 
     .kpi-card {
         background: #fff;
         border: 1px solid var(--hub-border);
         border-radius: var(--hub-radius);
-        padding: 1.5rem;
+        padding: 1.375rem;
         display: flex;
         align-items: center;
-        gap: 1.25rem;
-        box-shadow: var(--hub-card-shadow);
-        transition: transform 0.2s;
+        gap: 1.1rem;
+        box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+        transition: box-shadow .2s ease, border-color .2s ease, transform .2s ease;
     }
 
-    .kpi-card:hover { transform: translateY(-2px); }
+    .kpi-card:hover {
+        transform: translateY(-1px);
+        border-color: #e0e2e7;
+        box-shadow: 0 4px 12px rgba(16, 24, 40, 0.05);
+    }
 
     .kpi-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.5rem;
+        font-size: 1.25rem;
+        flex-shrink: 0;
+        background: var(--hub-neutral-soft);
+        color: var(--hub-neutral);
     }
+
+    .kpi-icon.primary { background: var(--hub-primary-soft); color: var(--hub-primary); }
+    .kpi-icon.success { background: var(--hub-success-soft); color: var(--hub-success); }
+    .kpi-icon.warning { background: var(--hub-warning-soft); color: var(--hub-warning); }
 
     .kpi-data h3 {
         font-size: 1.5rem;
         font-weight: 700;
         margin: 0;
-        color: #1e293b;
+        color: var(--hub-text);
+        letter-spacing: -0.01em;
     }
 
     .kpi-data p {
-        font-size: 0.875rem;
-        color: #64748b;
-        margin: 0;
+        font-size: 0.8rem;
+        color: var(--hub-muted);
+        margin: 2px 0 0;
     }
 
-    /* Pipeline Layout */
+    /* ---------- Pipeline Layout ---------- */
     .pipeline-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 1.25rem;
         align-items: start;
     }
 
     .pipeline-col {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 0.75rem;
     }
 
     .pipeline-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0.5rem 0;
-        border-bottom: 2px solid var(--hub-border);
-        margin-bottom: 1rem;
+        padding: 0.25rem 0.25rem 0.75rem;
+        border-bottom: 1px solid var(--hub-border);
+        margin-bottom: 0.25rem;
     }
 
     .pipeline-label {
         font-weight: 600;
-        font-size: 0.9rem;
+        font-size: 0.82rem;
         text-transform: uppercase;
-        letter-spacing: 0.025em;
-        color: #475569;
+        letter-spacing: 0.05em;
+        color: var(--hub-muted);
         display: flex;
         align-items: center;
         gap: 0.5rem;
     }
 
+    .pipeline-label i { font-size: 0.95rem; }
+
     .pipeline-count {
-        background: var(--hub-primary-soft);
-        color: var(--hub-primary);
-        font-size: 0.75rem;
+        background: var(--hub-neutral-soft);
+        color: var(--hub-neutral);
+        font-size: 0.72rem;
         font-weight: 700;
-        padding: 0.125rem 0.625rem;
+        padding: 2px 9px;
         border-radius: 9999px;
     }
 
-    /* Order Card */
-    .order-card {
+    .dispatch-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    /* ---------- Order / Shipment Cards — flat, hairline border, no glow ---------- */
+    .order-card,
+    .shipment-card {
         background: #fff;
         border: 1px solid var(--hub-border);
         border-radius: var(--hub-radius);
-        padding: 1.25rem;
-        box-shadow: var(--hub-card-shadow);
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 1.1rem 1.2rem;
+        transition: border-color .15s ease, background .15s ease;
         cursor: pointer;
         position: relative;
-        overflow: hidden;
     }
 
-    .order-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        border-color: var(--hub-primary);
+    .order-card:hover,
+    .shipment-card:hover {
+        border-color: #d7dae0;
     }
 
     .order-card.selected {
         border-color: var(--hub-primary);
         background-color: var(--hub-primary-soft);
-        box-shadow: 0 0 0 2px var(--hub-primary);
     }
 
     .order-card-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 1rem;
+        margin-bottom: 0.75rem;
     }
 
     .order-id {
         font-weight: 700;
-        font-size: 0.875rem;
-        color: #1e293b;
+        font-size: 0.85rem;
+        color: var(--hub-text);
     }
 
     .order-date {
-        font-size: 0.75rem;
-        color: #94a3b8;
+        font-size: 0.72rem;
+        color: #a3a7ae;
     }
 
     .item-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0.5rem 0;
-        border-bottom: 1px solid #f1f5f9;
-        font-size: 0.875rem;
+        padding: 0.4rem 0;
+        border-bottom: 1px solid #f4f5f7;
+        font-size: 0.85rem;
     }
 
     .item-row:last-child { border-bottom: none; }
 
-    .item-name { font-weight: 500; color: #334155; }
-    .item-qty { 
-        font-weight: 700; 
-        color: var(--hub-primary); 
-        background: var(--hub-primary-soft);
-        padding: 2px 6px;
-        border-radius: 4px;
+    .item-name { font-weight: 500; color: #33363b; }
+
+    .item-qty {
+        font-weight: 700;
+        font-size: 0.78rem;
+        color: var(--hub-neutral);
+        background: var(--hub-neutral-soft);
+        padding: 2px 8px;
+        border-radius: 6px;
     }
 
-    /* Dispatch Control Center */
+    .select-shipment-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.85rem;
+        padding-top: 0.75rem;
+        border-top: 1px dashed var(--hub-border);
+    }
+
+    .select-shipment-row label {
+        font-size: 0.78rem;
+        color: var(--hub-muted);
+        cursor: pointer;
+    }
+
+    .checkbox-premium {
+        width: 1.05rem;
+        height: 1.05rem;
+        cursor: pointer;
+        accent-color: var(--hub-primary);
+    }
+
+    /* Shipment status pill */
+    .shipment-tracking {
+        font-family: 'SFMono-Regular', Consolas, monospace;
+        font-weight: 700;
+        font-size: 0.8rem;
+        color: var(--hub-text);
+        letter-spacing: .01em;
+    }
+
+    .status-pill {
+        display: inline-block;
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 3px 9px;
+        border-radius: 20px;
+        letter-spacing: .02em;
+        text-transform: capitalize;
+        white-space: nowrap;
+    }
+
+    .status-pill.info    { background: var(--hub-primary-soft); color: var(--hub-primary); }
+    .status-pill.success { background: var(--hub-success-soft); color: var(--hub-success); }
+    .status-pill.warning { background: var(--hub-warning-soft); color: var(--hub-warning); }
+
+    .shipment-courier {
+        font-size: 0.78rem;
+        color: var(--hub-muted);
+        margin-bottom: 0.6rem;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    /* ---------- Empty states ---------- */
+    .pipeline-empty {
+        text-align: center;
+        padding: 2.75rem 1.25rem;
+        border: 1px dashed var(--hub-border);
+        border-radius: var(--hub-radius);
+        background: #fafafb;
+    }
+
+    .pipeline-empty i {
+        font-size: 1.6rem;
+        color: #c4c7cd;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .pipeline-empty p {
+        font-size: 0.82rem;
+        color: var(--hub-muted);
+        margin: 0;
+    }
+
+    /* ---------- Dispatch Control Center ---------- */
     .dispatch-control-center {
         background: #fff;
         border: 1px solid var(--hub-border);
         border-radius: var(--hub-radius);
-        padding: 1.5rem;
-        box-shadow: var(--hub-card-shadow);
+        padding: 1.375rem;
+        box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
         position: sticky;
-        top: 2rem;
+        top: 1.5rem;
     }
 
     .control-title {
         font-weight: 600;
-        font-size: 1.125rem;
-        margin-bottom: 1.5rem;
+        font-size: 1rem;
+        margin-bottom: 1.25rem;
         display: flex;
         align-items: center;
-        gap: 0.75rem;
-        color: #1e293b;
+        gap: 0.65rem;
+        color: var(--hub-text);
+    }
+
+    .control-title-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--hub-primary-soft);
+        color: var(--hub-primary);
+        font-size: 1rem;
+        flex-shrink: 0;
     }
 
     .form-label-premium {
-        font-size: 0.75rem;
+        font-size: 0.72rem;
         font-weight: 600;
-        color: #64748b;
-        margin-bottom: 0.5rem;
+        color: var(--hub-muted);
+        margin-bottom: 0.4rem;
         display: block;
         text-transform: uppercase;
+        letter-spacing: .04em;
     }
 
     .input-premium {
         border-radius: 8px;
         border: 1px solid var(--hub-border);
-        padding: 0.625rem;
-        font-size: 0.875rem;
+        padding: 0.6rem 0.7rem;
+        font-size: 0.85rem;
         width: 100%;
-        transition: all 0.2s;
-        margin-bottom: 1.25rem;
+        transition: border-color .15s ease, box-shadow .15s ease;
+        margin-bottom: 1.1rem;
+        background: #fff;
+        color: var(--hub-text);
     }
 
     .input-premium:focus {
@@ -214,16 +338,30 @@
         box-shadow: 0 0 0 3px var(--hub-primary-soft);
     }
 
-    .btn-dispatch-action {
-        background: var(--hub-primary);
-        color: white;
-        border: none;
+    .selection-summary {
+        font-size: 0.78rem;
+        color: var(--hub-muted);
+        background: var(--hub-neutral-soft);
         border-radius: 8px;
-        padding: 0.75rem;
+        padding: 0.6rem 0.75rem;
+        margin-bottom: 1.1rem;
+    }
+
+    .selection-summary strong {
+        color: var(--hub-text);
+    }
+
+    .btn-dispatch-action {
+        background: var(--hub-text);
+        color: #fff;
+        border: none;
+        border-radius: 9px;
+        padding: 0.7rem;
         font-weight: 600;
+        font-size: 0.88rem;
         width: 100%;
         cursor: pointer;
-        transition: all 0.2s;
+        transition: background .15s ease;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -231,47 +369,18 @@
     }
 
     .btn-dispatch-action:hover {
-        filter: brightness(1.1);
-        transform: translateY(-1px);
-    }
-
-    .checkbox-premium {
-        width: 1.1rem;
-        height: 1.1rem;
-        cursor: pointer;
-        accent-color: var(--hub-primary);
-    }
-
-    /* Shipment Card */
-    .shipment-card {
-        background: #fff;
-        border: 1px solid var(--hub-border);
-        border-radius: var(--hub-radius);
-        padding: 1.25rem;
-        box-shadow: var(--hub-card-shadow);
-        transition: all 0.2s;
-    }
-
-    .shipment-card:hover {
-        border-color: var(--hub-primary);
-    }
-
-    .shipment-tracking {
-        font-family: 'Courier New', monospace;
-        font-weight: 700;
-        font-size: 0.875rem;
-        color: var(--hub-primary);
+        background: #33363b;
     }
 </style>
 @endpush
 
 @section('content')
-
+<div class="fulfillment-hub-container">
 
     {{-- KPI Stats --}}
     <div class="kpi-grid">
         <div class="kpi-card">
-            <div class="kpi-icon" style="background: var(--hub-primary-soft); color: var(--hub-primary);">
+            <div class="kpi-icon primary">
                 <i class="ti ti-package"></i>
             </div>
             <div class="kpi-data">
@@ -280,7 +389,7 @@
             </div>
         </div>
         <div class="kpi-card">
-            <div class="kpi-icon" style="background: rgba(0, 123, 255, 0.1); color: #007bff;">
+            <div class="kpi-icon">
                 <i class="ti ti-truck"></i>
             </div>
             <div class="kpi-data">
@@ -289,7 +398,7 @@
             </div>
         </div>
         <div class="kpi-card">
-            <div class="kpi-icon" style="background: var(--hub-success-soft); color: var(--hub-success);">
+            <div class="kpi-icon success">
                 <i class="ti ti-circle-check"></i>
             </div>
             <div class="kpi-data">
@@ -298,7 +407,7 @@
             </div>
         </div>
         <div class="kpi-card">
-            <div class="kpi-icon" style="background: rgba(0,0,0,0.05); color: #333;">
+            <div class="kpi-icon">
                 <i class="ti ti-list-details"></i>
             </div>
             <div class="kpi-data">
@@ -311,11 +420,12 @@
     <div class="row g-4">
         <div class="col-lg-9">
             <div class="pipeline-grid">
+
                 {{-- Ready for Dispatch Column --}}
                 <div class="pipeline-col">
                     <div class="pipeline-header">
                         <span class="pipeline-label">
-                            <i class="ti ti-package text-primary"></i> Ready to Dispatch
+                            <i class="ti ti-package"></i> Ready to Dispatch
                         </span>
                         <span class="pipeline-count">{{ $pendingItems->count() }}</span>
                     </div>
@@ -327,26 +437,26 @@
                                     <span class="order-id">Order #{{ $item->order->order_number }}</span>
                                     <span class="order-date">{{ $item->order->created_at->format('d M, H:i') }}</span>
                                 </div>
+
                                 <div class="item-details">
                                     <div class="item-row">
                                         <span class="item-name">{{ $item->product->product_name }}</span>
                                         <span class="item-qty">x{{ $item->quantity }}</span>
                                     </div>
                                 </div>
-                                <div class="d-flex justify-content-between align-items-center mt-3">
-                                    <div class="form-check">
-                                        <input class="form-check-input checkbox-premium ship-checkbox" 
-                                               type="checkbox" 
-                                               value="{{ $item->id }}" 
-                                               id="check-{{ $item->id }}">
-                                        <label class="form-check-label small text-muted" for="check-{{ $item->id }}">Select for shipment</label>
-                                    </div>
+
+                                <div class="select-shipment-row">
+                                    <input class="checkbox-premium ship-checkbox"
+                                           type="checkbox"
+                                           value="{{ $item->id }}"
+                                           id="check-{{ $item->id }}">
+                                    <label for="check-{{ $item->id }}">Select for shipment</label>
                                 </div>
                             </div>
                         @empty
-                            <div class="text-center p-5 border rounded-4 bg-white">
-                                <i class="ti ti-check-circle fs-1 text-success opacity-50"></i>
-                                <p class="text-muted mt-2 small">All caught up! No pending items.</p>
+                            <div class="pipeline-empty">
+                                <i class="ti ti-circle-check"></i>
+                                <p>All caught up! No pending items.</p>
                             </div>
                         @endforelse
                     </div>
@@ -356,22 +466,23 @@
                 <div class="pipeline-col">
                     <div class="pipeline-header">
                         <span class="pipeline-label">
-                            <i class="ti ti-truck text-info"></i> In Transit
+                            <i class="ti ti-truck"></i> In Transit
                         </span>
                         <span class="pipeline-count">{{ $inTransitShipments->count() }}</span>
                     </div>
+
                     <div class="dispatch-list">
                         @forelse($inTransitShipments as $shipment)
                             <div class="shipment-card">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
                                     <span class="shipment-tracking">{{ $shipment->tracking_number }}</span>
-                                    <span class="badge bg-info-soft text-info" style="background: rgba(0, 123, 255, 0.1); color: #007bff; font-size: 0.7rem;">
-                                        {{ $shipment->status->value }}
-                                    </span>
+                                    <span class="status-pill info">{{ $shipment->status->value }}</span>
                                 </div>
-                                <div class="small text-muted mb-2">
-                                    <i class="ti ti-building-community me-1"></i> {{ $shipment->courier->name }}
+
+                                <div class="shipment-courier">
+                                    <i class="ti ti-building-community"></i> {{ $shipment->courier->name }}
                                 </div>
+
                                 <div class="item-details">
                                     @foreach($shipment->items as $item)
                                         <div class="item-row">
@@ -382,11 +493,11 @@
                                 </div>
                             </div>
                         @empty
-                            <div class="text-center p-5 border rounded-4 bg-white opacity-75">
-                                <i class="ti ti-clock fs-1 text-muted"></i>
-                                <p class="text-muted mt-2 small">No active shipments.</p>
-                                </div>
-                            @endforelse
+                            <div class="pipeline-empty">
+                                <i class="ti ti-clock"></i>
+                                <p>No active shipments.</p>
+                            </div>
+                        @endforelse
                     </div>
                 </div>
 
@@ -394,22 +505,23 @@
                 <div class="pipeline-col">
                     <div class="pipeline-header">
                         <span class="pipeline-label">
-                            <i class="ti ti-circle-check text-success"></i> Delivered
+                            <i class="ti ti-circle-check"></i> Delivered
                         </span>
                         <span class="pipeline-count">{{ $deliveredShipments->count() }}</span>
                     </div>
+
                     <div class="dispatch-list">
                         @forelse($deliveredShipments as $shipment)
                             <div class="shipment-card">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
                                     <span class="shipment-tracking">{{ $shipment->tracking_number }}</span>
-                                    <span class="badge bg-success-soft text-success" style="background: var(--hub-success-soft); color: var(--hub-success); font-size: 0.7rem;">
-                                        {{ $shipment->status->value }}
-                                        </span>
+                                    <span class="status-pill success">{{ $shipment->status->value }}</span>
                                 </div>
-                                <div class="small text-muted mb-2">
-                                    <i class="ti ti-building-community me-1"></i> {{ $shipment->courier->name }}
+
+                                <div class="shipment-courier">
+                                    <i class="ti ti-building-community"></i> {{ $shipment->courier->name }}
                                 </div>
+
                                 <div class="item-details">
                                     @foreach($shipment->items as $item)
                                         <div class="item-row">
@@ -420,23 +532,33 @@
                                 </div>
                             </div>
                         @empty
-                            <div class="text-center p-5 border rounded-4 bg-white opacity-75">
-                                <i class="ti ti-circle-check fs-1 text-muted"></i>
-                                <p class="text-muted mt-2 small">No delivered items yet.</p>
+                            <div class="pipeline-empty">
+                                <i class="ti ti-circle-check"></i>
+                                <p>No delivered items yet.</p>
                             </div>
                         @endforelse
                     </div>
                 </div>
+
             </div>
         </div>
 
         <div class="col-lg-3">
             <div class="dispatch-control-center">
                 <div class="control-title">
-                    <i class="ti ti-send text-primary"></i> Dispatch Items
+                    <span class="control-title-icon">
+                        <i class="ti ti-send"></i>
+                    </span>
+                    Dispatch Items
                 </div>
+
                 <form action="{{ route('vendor.orders.dispatch') }}" method="POST" id="shipmentForm" class="no-loader">
                     @csrf
+
+                    <div id="selectionSummary" class="selection-summary" style="display:none;">
+                        <strong id="selectionCount">0</strong> item(s) selected for this shipment
+                    </div>
+
                     <div class="form-group">
                         <label class="form-label-premium">Select Courier</label>
                         <select name="courier_id" class="form-select input-premium" required>
@@ -449,7 +571,7 @@
 
                     <div class="form-group">
                         <label class="form-label-premium">Tracking Number</label>
-                        <input type="text" name="tracking_number" class="form-control input-premium" 
+                        <input type="text" name="tracking_number" class="form-control input-premium"
                                placeholder="Enter courier tracking ID" required>
                     </div>
 
@@ -465,36 +587,41 @@
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const checkboxes = document.querySelectorAll('.ship-checkbox');
         const form = document.getElementById('shipmentForm');
+        const summary = document.getElementById('selectionSummary');
+        const summaryCount = document.getElementById('selectionCount');
+
+        function refreshSummary() {
+            const selected = Array.from(checkboxes).filter(i => i.checked);
+            summaryCount.textContent = selected.length;
+            summary.style.display = selected.length > 0 ? 'block' : 'none';
+        }
 
         checkboxes.forEach(checkbox => {
             checkbox.addEventListener('change', () => {
                 const card = checkbox.closest('.order-card');
-                if (checkbox.checked) {
-                    card.classList.add('selected');
-                } else {
-                    card.classList.remove('selected');
-                }
+                card.classList.toggle('selected', checkbox.checked);
+                refreshSummary();
             });
         });
 
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', function (e) {
             const selected = Array.from(checkboxes).filter(i => i.checked);
+
             if (selected.length === 0) {
                 e.preventDefault();
                 Swal.fire({
                     icon: 'warning',
                     title: 'Selection Required',
                     text: 'Please select at least one item to ship.',
-                    confirmButtonColor: '#2563eb'
+                    confirmButtonColor: '#375aa8',
                 });
                 return;
             }
 
-            const existingInputs = form.querySelectorAll('input[name="order_item_ids[]"]');
-            existingInputs.forEach(el => el.remove());
+            form.querySelectorAll('input[name="order_item_ids[]"]').forEach(el => el.remove());
 
             selected.forEach(item => {
                 const input = document.createElement('input');

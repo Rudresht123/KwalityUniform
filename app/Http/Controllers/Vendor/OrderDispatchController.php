@@ -24,13 +24,13 @@ class OrderDispatchController extends BaseController
         $vendorId = Auth::user()->vendor->vendor_id;
 
         // 1. Ready to Dispatch: Confirmed orders not yet shipped
-        $pendingItems = OrderItem::where('vendor_id', $vendorId)
-            ->whereHas('order', function($q) {
-                $q->where('status', 'confirmed');
-            })
-            ->whereDoesntHave('shipmentItem')
-            ->with(['order', 'product'])
-            ->get();
+        $pendingItems = OrderItem::whereHas('order', function($q) use ($vendorId) {
+            $q->where('vendor_id', $vendorId)
+              ->where('status', 'confirmed');
+        })
+        ->whereDoesntHave('shipmentItem')
+        ->with(['order', 'product'])
+        ->get();
 
         // 2. In Transit: Shipments with status SHIPPED or IN_TRANSIT
         $inTransitShipments = Shipment::where('vendor_id', $vendorId)

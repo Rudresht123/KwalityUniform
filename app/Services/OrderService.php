@@ -7,6 +7,7 @@ use App\Models\OrderItem;
 use App\Models\SuperAdmin\ProductVariant;
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Services\CatalogService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,13 @@ use Throwable;
 
 class OrderService
 {
+    protected CatalogService $catalogService;
+
+    public function __construct(CatalogService $catalogService)
+    {
+        $this->catalogService = $catalogService;
+    }
+
     /**
      * Place an order with strict inventory reservation and validation.
      *
@@ -51,6 +59,7 @@ class OrderService
             // 2. Final Stock, Status & Price Validation
             $validatedItems = [];
             $detectedSchoolId = null;
+            $detectedVendorId = null;
 
             foreach ($cartItems as $item) {
                 $variant = ProductVariant::where('variant_id', $item->variant_id)
@@ -65,7 +74,7 @@ class OrderService
                     throw new Exception("Product {$item->product->product_name} is no longer available.");
                 }
 
-                // Price Consistency Check: Prevent charging a price different from what was in the cart
+                // Price Consistency Check
                 $currentPrice = $variant->selling_price ?? $variant->price ?? 0;
                 if (abs($item->unit_price - $currentPrice) > 0.01) {
                     throw new Exception("The price for {$item->product->product_name} has changed. Please update your cart and try again.");
@@ -77,15 +86,28 @@ class OrderService
                     throw new Exception("Insufficient stock for {$item->product->product_name} ({$sizeName} / {$colorName}). Only {$variant->stock_qty} left.");
                 }
 
-                // Capture school_id from the first product (Assuming single school per order)
+                // Capture school_id
                 if (!$detectedSchoolId) {
                     $detectedSchoolId = $item->product->schoolApprovals->first()?->school_id;
+                }
+
+                // Resolve Vendor for this category
+                $activeVendor = $this->catalogService->getActiveVendor(
+                    \App\Models\School::findOrFail($detectedSchoolId),
+                    $item->product->category
+                );
+
+                if (!$detectedVendorId) {
+                    $detectedVendorId = $activeVendor->vendor_id;
+                } elseif ($detectedVendorId !== $activeVendor->vendor_id) {
+                    throw new Exception("All items in an order must belong to the same active vendor: {$activeVendor->business_name}.");
                 }
 
                 $validatedItems[] = [
                     'variant' => $variant,
                     'item' => $item,
                     'price' => $currentPrice,
+                    'vendor_id' => $activeVendor->vendor_id,
                 ];
             }
 
@@ -98,11 +120,15 @@ class OrderService
             $shipping = 0;
             $grandTotal = $subtotal + $shipping;
 
-            // 4. Create Order with School Attribution
+            // 4. Create Order with School and Vendor Attribution
             $order = Order::create([
                 'order_number' => 'ORD-' . strtoupper(Str::random(10)),
                 'user_id' => Auth::id(),
                 'school_id' => $detectedSchoolId,
+                'vendor_id' => $detectedVendorId, // Automatically determined
+                'student_name' => $details['student_name'] ?? null,
+                'student_class' => $details['student_class'] ?? null,
+                'student_section' => $details['student_section'] ?? null,
                 'cart_id' => $cart->cart_id,
                 'delivery_type' => $details['delivery_type'],
                 'status' => 'pending',
@@ -130,7 +156,7 @@ class OrderService
             // 5. Create Order Items & Deduct Stock
             foreach ($validatedItems as $vItem) {
                 $variant = $vItem['variant'];
-                $item = $itemData = $vItem['item'];
+                $item = $vItem['item'];
 
                 $variant->decrement('stock_qty', $item->quantity);
 
@@ -138,7 +164,7 @@ class OrderService
                     'order_id' => $order->id,
                     'product_id' => $item->product_id,
                     'variant_id' => $item->variant_id,
-                    'vendor_id' => $item->product->vendor_id,
+                    'vendor_id' => $vItem['vendor_id'], // Explicitly use vendor from active partnership
                     'product_name' => $item->product->product_name,
                     'sku' => $variant->sku,
                     'unit_price' => $vItem['price'],
