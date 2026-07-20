@@ -8,10 +8,10 @@
     <div class="geo-page-header-overlay"></div>
 
     <div class="container">
-        <span class="badge-geo mb-3">QualityUniform</span>
+        <span class="badge-geo mb-3">eSchoolKart</span>
 
         <h1 class="display-4 fw-bold text-white mb-3">
-            About QualityUniform
+            About eSchoolKart
         </h1>
 
         <p class="text-white-50 fs-5 col-lg-7">
@@ -45,7 +45,7 @@
                 </h2>
 
                 <p class="text-muted mb-4 fs-5">
-                    QualityUniform is a dedicated marketplace created to make
+                    eSchoolKart is a dedicated marketplace created to make
                     school uniform shopping easier, faster and more reliable.
                     We connect schools, trusted vendors and parents through
                     one seamless platform.
@@ -132,7 +132,7 @@
             </span>
 
             <h2 class="fw-bold">
-                Why Thousands Trust QualityUniform
+                Why Thousands Trust eSchoolKart
             </h2>
 
             <p class="text-muted col-lg-7 mx-auto">

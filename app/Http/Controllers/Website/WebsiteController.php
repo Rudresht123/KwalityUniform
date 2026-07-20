@@ -30,14 +30,12 @@ class WebsiteController extends Controller
 public function shop(Request $request)
 {
     $schoolId = $request->query('school');
-    $classId = $request->query('class');
     $parentCategoryId = $request->query('parent_category');
     $subCategoryId = $request->query('sub_category');
     $search = $request->query('search');
 
     $filters = [
         'school' => $schoolId,
-        'class' => $classId,
         'parent_category' => $parentCategoryId,
         'sub_category' => $subCategoryId,
         'search' => $search,
@@ -146,7 +144,7 @@ public function show($id)
         $contactInfo = [
             'address' => \App\Models\GlobalSetting::get('contact_address', 'Sector 81, Noida, Uttar Pradesh'),
             'phone'   => \App\Models\GlobalSetting::get('contact_phone', '+91 98765 43210'),
-            'email'   => \App\Models\GlobalSetting::get('contact_email', 'support@qualityuniform.com'),
+            'email'   => \App\Models\GlobalSetting::get('contact_email', 'support@eSchoolKart.com'),
             'hours'   => \App\Models\GlobalSetting::get('working_hours', 'Mon - Sat<br>9:00 AM - 6:00 PM'),
         ];
 

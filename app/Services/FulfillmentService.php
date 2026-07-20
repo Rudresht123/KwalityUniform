@@ -107,6 +107,11 @@ class FulfillmentService
                     ]);
                 }
                 $this->orderRepository->updateStatus($order->id, OrderStatus::PACKED);
+                
+                // Notify Vendor
+                if ($order->vendor) {
+                    $order->vendor->notify(new \App\Notifications\ShipmentCreatedNotification($shipment));
+                }
             }
 
             return $shipment;
@@ -118,7 +123,7 @@ class FulfillmentService
      */
     public function createHomeShipment(string $orderId, string $courierId): Shipment
     {
-        $order = \App\Models\Order::with('items')->findOrFail($orderId);
+        $order = \App\Models\Order::with('items', 'vendor')->findOrFail($orderId);
 
         return DB::transaction(function () use ($order, $courierId) {
             $shipment = $this->shipmentRepository->create([
@@ -138,6 +143,11 @@ class FulfillmentService
             }
 
             $this->orderRepository->updateStatus($order->id, OrderStatus::PACKED);
+            
+            // Notify Vendor
+            if ($order->vendor) {
+                $order->vendor->notify(new \App\Notifications\ShipmentCreatedNotification($shipment));
+            }
 
             return $shipment;
         });

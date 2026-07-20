@@ -19,41 +19,71 @@ class OrderDispatchController extends BaseController
     /**
      * List all items from confirmed orders that this vendor needs to ship.
      */
-    public function index(Request $request)
-    {
-        $vendorId = Auth::user()->vendor->vendor_id;
+public function index(Request $request)
+{
+    $vendorId = Auth::user()->vendor->vendor_id;
 
-        // 1. Ready to Dispatch: Confirmed orders not yet shipped
-        $pendingItems = OrderItem::whereHas('order', function($q) use ($vendorId) {
-            $q->where('vendor_id', $vendorId)
-              ->where('status', 'confirmed');
+    // Ready to Dispatch
+    $pendingItems = OrderItem::query()
+        ->whereHas('order', function ($query) use ($vendorId) {
+            $query->where('vendor_id', $vendorId)
+                  ->where('status', 'confirmed');
         })
         ->whereDoesntHave('shipmentItem')
-        ->with(['order', 'product'])
+        ->with([
+            'order',
+            'product',
+        ])
         ->get();
 
-        // 2. In Transit: Shipments with status SHIPPED or IN_TRANSIT
-        $inTransitShipments = Shipment::where('vendor_id', $vendorId)
-            ->whereIn('status', [ShipmentStatus::SHIPPED, ShipmentStatus::IN_TRANSIT])
-            ->with(['courier', 'items.orderItem.product', 'items.orderItem.order'])
-            ->get();
 
-        // 3. Delivered: Shipments with status DELIVERED or COMPLETED
-        $deliveredShipments = Shipment::where('vendor_id', $vendorId)
-            ->whereIn('status', [ShipmentStatus::DELIVERED, ShipmentStatus::COMPLETED])
-            ->with(['courier', 'items.orderItem.product', 'items.orderItem.order'])
-            ->get();
+    // Base Shipment Query
+    $shipmentQuery = Shipment::query()
+        ->where('vendor_id', $vendorId)
+        ->with([
+            'courier',
+            'items.orderItem.product',
+            'items.orderItem.order',
+        ]);
 
-        // KPIs
-        $stats = [
-            'pending_count' => $pendingItems->count(),
-            'transit_count' => $inTransitShipments->count(),
-            'delivered_count' => $deliveredShipments->count(),
-            'total_items' => $pendingItems->sum('quantity'),
-        ];
+    // In Transit Shipments
+    $inTransitShipments = (clone $shipmentQuery)
+        ->whereIn('status', [
+            ShipmentStatus::SHIPPED,
+            ShipmentStatus::IN_TRANSIT,
+        ])
+        ->get();
 
-        return view('vendor.orders.dispatch', compact('pendingItems', 'inTransitShipments', 'deliveredShipments', 'stats'), $this->pageData('Fulfillment Hub', 'Home|Orders|Dispatch'));
-    }
+    // Delivered Shipments
+    $deliveredShipments = (clone $shipmentQuery)
+        ->whereIn('status', [
+            ShipmentStatus::DELIVERED,
+            ShipmentStatus::COMPLETED,
+        ])
+        ->get();
+
+    // Dashboard Statistics
+    $stats = [
+        'pending_count'   => $pendingItems->count(),
+        'transit_count'   => $inTransitShipments->count(),
+        'delivered_count' => $deliveredShipments->count(),
+        'total_items'     => $pendingItems->sum('quantity'),
+    ];
+
+    return view(
+        'vendor.orders.dispatch',
+        compact(
+            'pendingItems',
+            'inTransitShipments',
+            'deliveredShipments',
+            'stats'
+        ),
+        $this->pageData(
+            'Fulfillment Hub',
+            'Home|Orders|Dispatch'
+        )
+    );
+}
 
     /**
      * Create a shipment for the selected items.

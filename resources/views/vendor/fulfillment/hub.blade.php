@@ -4,7 +4,7 @@
 <div class="container-fluid fulfillment-hub">
     {{-- Pipeline Columns --}}
     <div class="row flex-nowrap overflow-auto pb-3 gap-3">
-        @foreach(['ready' => 'Ready for Dispatch', 'shipment_created' => 'Shipment Created', 'transit' => 'In Transit', 'delivered' => 'Delivered'] as $key => $title)
+        @foreach(['ready' => 'Pending / Ready', 'shipment_created' => 'Shipment Created', 'transit' => 'In Transit', 'delivered' => 'Delivered'] as $key => $title)
         <div class="col-md-3 pipeline-col p-2 bg-light rounded shadow-sm">
             <h6 class="fw-bold mb-3 px-2">{{ $title }} ({{ $pipeline[$key]->count() }})</h6>
             <div class="pipeline-items">

@@ -19,9 +19,9 @@ class FulfillmentHubController extends BaseController
             ->with(['items.product', 'shipments.courier', 'shippingAddress'])
             ->get();
 
-        // Grouping into pipeline stages (High-performance collection filtering)
+        // Grouping into pipeline stages
         $pipeline = [
-            'ready' => $orders->where('status', OrderStatus::PACKED),
+            'ready' => $orders->whereIn('status', [OrderStatus::PACKED, OrderStatus::PENDING]),
             'shipment_created' => Shipment::where('vendor_id', $vendorId)->where('status', 'shipment_created')->get(),
             'transit' => Shipment::where('vendor_id', $vendorId)->where('status', 'in_transit')->get(),
             'delivered' => Shipment::where('vendor_id', $vendorId)->where('status', 'delivered')->get(),

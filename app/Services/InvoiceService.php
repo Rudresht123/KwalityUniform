@@ -19,7 +19,7 @@ class InvoiceService
      */
     public function generateInvoice(Order $order): string
     {
-        $order->load(['items.variant.size', 'items.variant.color', 'user', 'shippingAddress']);
+        $order->load(['items.variant.size', 'items.variant.color', 'user', 'shippingAddress', 'school']);
 
         // Render the PDF using the unified 'emails.invoice' view
         return Pdf::loadView('emails.invoice', compact('order'))->output();
@@ -34,7 +34,7 @@ class InvoiceService
      */
     public function downloadPdf(Order $order)
     {
-        $order->load(['items.variant.size', 'items.variant.color', 'user', 'shippingAddress']);
+        $order->load(['items.variant.size', 'items.variant.color', 'user', 'shippingAddress', 'school']);
 
         // Directly return the PDF as a download response using the unified 'emails.invoice' view
         return Pdf::loadView('emails.invoice', compact('order'))

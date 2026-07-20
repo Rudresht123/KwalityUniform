@@ -7,6 +7,7 @@
     <style>
         @page { size: A4; margin: 14mm 16mm; }
         * { box-sizing: border-box; }
+
         body {
             font-family: 'DejaVu Sans', sans-serif;
             color: #334155;
@@ -16,11 +17,15 @@
             font-size: 12px;
         }
 
-        .invoice-box { max-width: 100%; margin: auto; padding: 0; }
+        .invoice-box {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0;
+        }
 
         /* Letterhead stripe */
-        .brand-bar-gold { height: 2px; background: #B8860B; }
-        .brand-bar-navy { height: 3px; background: #0F172A; margin-bottom: 20px; }
+        .brand-bar-gold { height: 5px; background: linear-gradient(90deg, #7C3AED 0%, #EC4899 50%, #F59E0B 100%); }
+        .brand-bar-navy { height: 1px; background: #E2E8F0; margin-bottom: 20px; }
 
         /* Header */
         .header-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
@@ -30,8 +35,8 @@
             display: inline-block;
             width: 34px;
             height: 34px;
-            background: #0F172A;
-            color: #fff;
+            background: linear-gradient(135deg, #7C3AED 0%, #4C1D95 100%);
+            color: #FFFFFF;
             text-align: center;
             font-weight: 800;
             font-size: 14px;
@@ -40,41 +45,42 @@
             margin-right: 10px;
             letter-spacing: 0.5px;
         }
+
         .company-name-row td { padding: 0; }
-        .company-info h2 { margin: 0 0 2px; color: #0F172A; font-size: 18px; letter-spacing: 0.2px; font-weight: 800; }
-        .company-info .tagline { margin: 0 0 6px; font-size: 9px; color: #B8860B; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+        .company-info h2 { margin: 0 0 2px; color: #4C1D95; font-size: 18px; letter-spacing: 0.2px; font-weight: 800; }
+        .company-info .tagline { margin: 0 0 6px; font-size: 9px; color: #EC4899; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
         .company-info p { margin: 1px 0; font-size: 10px; color: #64748B; }
 
         .invoice-meta-box {
-            border: 1px solid #E2E8F0;
+            border: 1px solid #DDD6FE;
             border-radius: 8px;
-            background: #F8FAFC;
+            background: #F5F3FF;
             padding: 12px 16px;
         }
         .invoice-meta-box h1 {
             margin: 0 0 8px;
-            color: #0F172A;
+            color: #4C1D95;
             font-size: 16px;
             font-weight: 800;
             letter-spacing: 1.2px;
             text-transform: uppercase;
-            border-bottom: 1px solid #E2E8F0;
+            border-bottom: 1px solid #DDD6FE;
             padding-bottom: 8px;
         }
         .invoice-meta-box table { width: 100%; border-collapse: collapse; }
         .invoice-meta-box td { padding: 2px 0; font-size: 10.5px; }
-        .invoice-meta-box .meta-label { color: #94A3B8; text-transform: uppercase; font-size: 8.5px; letter-spacing: 0.4px; }
-        .invoice-meta-box .meta-value { color: #1E293B; font-weight: 700; text-align: right; }
+        .invoice-meta-box .meta-label { color: #8B7FC7; text-transform: uppercase; font-size: 8.5px; letter-spacing: 0.4px; }
+        .invoice-meta-box .meta-value { color: #312E81; font-weight: 700; text-align: right; }
 
         /* Section titles */
         .section-title {
             font-size: 10px;
             font-weight: 800;
-            color: #0F172A;
+            color: #4C1D95;
             margin-bottom: 8px;
             text-transform: uppercase;
             letter-spacing: 0.6px;
-            border-bottom: 1.5px solid #B8860B;
+            border-bottom: 1.5px solid #7C3AED;
             padding-bottom: 5px;
         }
 
@@ -85,18 +91,20 @@
             vertical-align: top;
             font-size: 10.5px;
             padding: 12px 14px;
-            background: #F8FAFC;
-            border: 1px solid #EDF2F7;
             border-radius: 8px;
         }
-        .details-table .party-label { display: block; font-size: 8.5px; font-weight: 700; color: #B8860B; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
-        .details-table .party-name { font-weight: 700; color: #1E293B; font-size: 12px; }
+        .details-table .bill-to { background: #F5F3FF; border: 1px solid #DDD6FE; }
+        .details-table .ship-to { background: #ECFEFF; border: 1px solid #A5F3FC; }
+        .details-table .party-label { display: block; font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+        .details-table .bill-to .party-label { color: #7C3AED; }
+        .details-table .ship-to .party-label { color: #0891B2; }
+        .details-table .party-name { font-weight: 700; color: #312E81; font-size: 12px; }
 
         /* Items */
         .items-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; }
         .items-table th {
-            background: #0F172A;
-            color: #fff;
+            background: linear-gradient(90deg, #4C1D95 0%, #6D28D9 100%);
+            color: #FFFFFF;
             padding: 9px 10px;
             text-align: left;
             font-size: 9px;
@@ -111,23 +119,25 @@
         .item-sku { font-size: 9px; color: #94A3B8; }
 
         /* Totals */
-        .totals-container { float: right; width: 270px; margin-top: 4px; }
+        .totals-wrap { width: 100%; overflow: hidden; margin-bottom: 4px; }
+        .totals-container { float: right; width: 270px; }
         .totals-table { width: 100%; border-collapse: collapse; }
         .totals-table td { padding: 4px 4px; font-size: 11px; }
         .totals-table .label { color: #64748B; }
-        .totals-table .value { text-align: right; font-weight: 600; color: #1E293B; }
+        .totals-table .value { text-align: right; font-weight: 600; color: #312E81; }
         .totals-table .grand-total td {
-            background: #0F172A;
-            color: #fff;
+            background: linear-gradient(90deg, #4C1D95 0%, #7C3AED 100%);
+            color: #FFFFFF;
             padding: 10px 12px;
             border-radius: 7px;
         }
         .totals-table .grand-total td:first-child { border-radius: 7px 0 0 7px; }
         .totals-table .grand-total td:last-child { border-radius: 0 7px 7px 0; }
         .totals-table .grand-total .label { font-weight: 700; color: #E2E8F0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; }
-        .totals-table .grand-total .value { font-weight: 800; color: #fff; font-size: 16px; }
+        .totals-table .grand-total .value { font-weight: 800; color: #FFFFFF; font-size: 16px; }
 
         /* Payment info */
+        .payment-section { clear: both; padding-top: 20px; }
         .payment-table { width: 100%; border-collapse: collapse; }
         .payment-table td { padding: 4px 0; font-size: 11px; }
         .payment-table .p-label { color: #64748B; width: 130px; }
@@ -143,20 +153,20 @@
         }
         .status-paid, .status-completed, .status-delivered { background: #DCFCE7; color: #15803D; }
         .status-pending, .status-processing { background: #FEF3C7; color: #B45309; }
-        .status-cod { background: #DBEAFE; color: #1D4ED8; }
+        .status-cod { background: #CFFAFE; color: #0E7490; }
         .status-cancelled, .status-failed { background: #FEE2E2; color: #B91C1C; }
         .status-default { background: #E2E8F0; color: #475569; }
 
         .notes-section {
             margin-top: 16px;
             padding: 10px 14px;
-            background: #FAFAF7;
-            border-left: 3px solid #B8860B;
+            background: #FAF5FF;
+            border-left: 3px solid #7C3AED;
             font-size: 10.5px;
             color: #64748B;
             border-radius: 0 6px 6px 0;
         }
-        .notes-section strong { color: #1E293B; }
+        .notes-section strong { color: #312E81; }
 
         .footer {
             margin-top: 26px;
@@ -167,11 +177,12 @@
             padding-top: 12px;
         }
         .footer p { margin: 2px 0; }
-        .footer .thanks { color: #0F172A; font-weight: 700; font-size: 11.5px; margin-bottom: 3px; letter-spacing: 0.2px; }
-        .footer .rule-dot { color: #B8860B; margin: 0 6px; }
+        .footer .thanks { color: #4C1D95; font-weight: 700; font-size: 11.5px; margin-bottom: 3px; letter-spacing: 0.2px; }
+        .footer .rule-dot { color: #7C3AED; margin: 0 6px; }
     </style>
 </head>
 <body>
+
     <div class="invoice-box">
         <div class="brand-bar-gold"></div>
         <div class="brand-bar-navy"></div>
@@ -181,7 +192,7 @@
                 <td style="width: 55%;">
                     <table class="company-name-row">
                         <tr>
-                            <td style="width: 44px;"><span class="logo-mark">QU</span></td>
+                            <td style="width: 44px;"><span class="logo-mark">eSK</span></td>
                             <td>
                                 <div class="company-info">
                                     <h2>eSchoolKart</h2>
@@ -219,20 +230,20 @@
 
         <table class="details-table">
             <tr>
-                <td>
+                <td class="bill-to">
                     <span class="party-label">Billed To</span>
                     <span class="party-name">{{ $order->user->name ?? 'Guest Customer' }}</span><br>
                     {{ $order->user->email ?? 'N/A' }}<br>
                     {{ $order->user->phone ?? 'N/A' }}
                 </td>
-                <td>
+                <td class="ship-to">
                     <span class="party-label">Shipping To</span>
-                    @if($order->delivery_type === 'school' && $order->school)
+                    @if($order->delivery_type->value === 'school' && $order->school)
                         <span class="party-name">{{ $order->school->school_name }}</span><br>
                         {{ $order->school->address ?? 'N/A' }}<br>
                         {{ $order->school->city ?? 'N/A' }}{{ ($order->school->city ?? null) && ($order->school->state ?? null) ? ', ' : '' }}{{ $order->school->state ?? 'N/A' }}<br>
                         {{ $order->school->pincode ?? 'N/A' }}
-                    @elseif($order->delivery_type === 'home' && $order->shippingAddress)
+                    @elseif($order->delivery_type->value === 'home' && $order->shippingAddress)
                         <span class="party-name">{{ $order->shippingAddress->full_name ?? 'Guest Customer' }}</span><br>
                         {{ $order->shippingAddress->address_line1 ?? 'N/A' }}<br>
                         {{ $order->shippingAddress->city ?? 'N/A' }}{{ ($order->shippingAddress->city ?? null) && ($order->shippingAddress->state ?? null) ? ', ' : '' }}{{ $order->shippingAddress->state ?? 'N/A' }}<br>
@@ -261,7 +272,7 @@
                 @foreach($order->items as $item)
                     <tr>
                         <td>
-                            <strong style="color: #1E293B;">{{ $item->product_name }}</strong><br>
+                            <strong style="color: #312E81;">{{ $item->product_name }}</strong><br>
                             <span class="item-sku">
                                 SKU: {{ $item->sku }} &middot;
                                 {{ $item->variant->size->display_name ?? 'Standard' }} /
@@ -269,37 +280,37 @@
                             </span>
                         </td>
                         <td style="text-align: center;">{{ $item->quantity }}</td>
-                        <td style="text-align: right;">₹{{ number_format($item->unit_price, 2) }}</td>
-                        <td style="text-align: right;">₹{{ number_format($item->quantity * $item->unit_price, 2) }}</td>
+                        <td style="text-align: right;">&#8377;{{ number_format($item->unit_price, 2) }}</td>
+                        <td style="text-align: right;">&#8377;{{ number_format($item->quantity * $item->unit_price, 2) }}</td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
 
-        <div class="totals-container">
-            <table class="totals-table">
-                <tr>
-                    <td class="label">Subtotal</td>
-                    <td class="value">&#8377;{{ number_format($order->subtotal, 2) }}</td>
-                </tr>
-                <tr>
-                    <td class="label">Shipping Charge</td>
-                    <td class="value">&#8377;{{ number_format($order->shipping_charge, 2) }}</td>
-                </tr>
-                <tr>
-                    <td class="label">Tax (GST)</td>
-                    <td class="value">&#8377;{{ number_format($order->tax_amount ?? 0, 2) }}</td>
-                </tr>
-                <tr class="grand-total">
-                    <td class="label">Grand Total</td>
-                    <td class="value">&#8377;{{ number_format($order->grand_total, 2) }}</td>
-                </tr>
-            </table>
+        <div class="totals-wrap">
+            <div class="totals-container">
+                <table class="totals-table">
+                    <tr>
+                        <td class="label">Subtotal</td>
+                        <td class="value">&#8377;{{ number_format($order->subtotal, 2) }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Shipping Charge</td>
+                        <td class="value">&#8377;{{ number_format($order->shipping_charge, 2) }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Tax (GST)</td>
+                        <td class="value">&#8377;{{ number_format($order->tax_amount ?? 0, 2) }}</td>
+                    </tr>
+                    <tr class="grand-total">
+                        <td class="label">Grand Total</td>
+                        <td class="value">&#8377;{{ number_format($order->grand_total, 2) }}</td>
+                    </tr>
+                </table>
+            </div>
         </div>
 
-        </div>
-
-        <div style="clear: both; padding-top: 20px;">
+        <div class="payment-section">
             <div class="section-title">Payment</div>
             <table class="payment-table">
                 <tr>

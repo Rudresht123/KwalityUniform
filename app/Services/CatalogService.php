@@ -6,22 +6,23 @@ use App\Models\Partnership;
 use App\Models\SuperAdmin\Vendor;
 use App\Models\SuperAdmin\Category;
 use App\Models\SuperAdmin\Product;
-use App\Models\School;
+use App\Models\SuperAdmin\School;
 use Illuminate\Database\Eloquent\Collection;
 
 class CatalogService
 {
     /**
      * Determine the active vendor for a school and category.
+     * Returns null if no active partnership is found.
      */
-    public function getActiveVendor(School $school, Category $category): Vendor
+    public function getActiveVendor(School $school, Category $category): ?Vendor
     {
         $partnership = Partnership::where('school_id', $school->id)
             ->where('category_id', $category->category_id)
             ->where('status', 'active')
-            ->firstOrFail();
+            ->first();
 
-        return $partnership->vendor;
+        return $partnership?->vendor;
     }
 
     /**

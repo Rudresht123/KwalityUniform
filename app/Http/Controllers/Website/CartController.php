@@ -262,13 +262,13 @@ class CartController extends Controller
             'student_name' => 'required|string|max:255',
             'student_class' => 'required|string|max:50',
             'student_section' => 'required|string|max:50',
+            'phone' => 'required|string|max:20',
+            'address' => 'required|string',
+            'city' => 'required|string|max:100',
         ]);
 
         $data = $request->all();
-        $data['delivery_type'] = 'school';
-        $data['city'] = $data['city'] ?? 'N/A';
-        $data['address'] = $data['address'] ?? 'N/A';
-        $data['phone'] = $data['phone'] ?? 'N/A';
+        $data['delivery_type'] = 'school'; // Or logic to toggle based on selection
 
         session()->put('checkout_details', $data);
 
@@ -314,16 +314,17 @@ class CartController extends Controller
 
         try {
             // 1. Place the order using the atomic OrderService
-            $order = $orderService->placeOrder($cart, $details);
+            $result = $orderService->placeOrder($cart, $details);
 
-            // 2. Trigger Order Confirmation (Immediate Email with PDF Attachment)
-            \Illuminate\Support\Facades\Mail::to($details['email'])->send(new \App\Mail\OrderConfirmedMail($order));
+            // Handle split orders (collection) or single order
+            $orderNumber = $result instanceof \Illuminate\Support\Collection 
+                ? $result->pluck('order_number')->implode(', ')
+                : $result->order_number;
 
             return response()->json([
                 'success' => true,
-                'message' => 'Thank you! Your order has been placed successfully.',
-                'order_number' => $order->order_number,
-                'order_id' => $order->id,
+                'message' => 'Thank you! Your order(s) has been placed successfully.',
+                'order_number' => $orderNumber,
             ]);
         } catch (\Exception $e) {
             Log::error('Checkout failed: ' . $e->getMessage(), [

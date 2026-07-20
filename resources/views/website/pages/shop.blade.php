@@ -150,9 +150,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const schoolSelect = document.getElementById('shop-school-select');
-            const standardSelect = document.getElementById('shop-standard-select');
             const classSelect = document.getElementById('shop-class-select');
-            const standardContainer = document.getElementById('shop-category-select-container');
             const classContainer = document.getElementById('shop-class-filter-container');
             const categorySelect = document.getElementById('shop-category-select');
             const subcategorySelect = document.getElementById('shop-subcategory-select');
@@ -164,7 +162,6 @@
             async function shopAjaxFilter() {
 
                 const school = schoolSelect.value;
-                const standard = standardSelect ? standardSelect.value : 'all';
                 const classVal = classSelect ? classSelect.value : 'all';
                 const category = categorySelect.value;
                 const subcategory = subcategorySelect ? subcategorySelect.value : 'all';
@@ -173,13 +170,13 @@
                 // Build URL
                 const params = new URLSearchParams();
                 if (school) params.append('school', school);
-                if (standard !== 'all') params.append('standard', standard);
                 if (classVal !== 'all') params.append('class', classVal);
                 if (category !== 'all') params.append('parent_category', category);
                 if (subcategory !== 'all') params.append('sub_category', subcategory);
                 if (search) params.append('search', search);
 
                 const url = `{{ route('website.shop') }}?${params.toString()}`;
+
 
 
                 // Show loader
@@ -205,40 +202,8 @@
                 }
             }
 
-            // Handle school change to update standards
+            // Handle school change (removed standard population logic)
             $(document).on('change', '#shop-school-select', async function() {
-                const schoolId = $(this).val();
-
-                if (schoolId === 'all' || schoolId === 'generic') {
-                    standardContainer.style.display = 'none';
-                    if (standardSelect) {
-                        standardSelect.value = 'all';
-                        $(standardSelect).trigger('change.select2');
-                    }
-                } else {
-                    standardContainer.style.display = 'block';
-
-                    try {
-                        // Update URL to include the query parameter school_id as expected by SchoolSearchController
-                        const response = await fetch(
-                            `/api/schools/${schoolId}/standards?school_id=${schoolId}`);
-                        const data = await response.json();
-
-                        if (data.success) {
-                            let options = '<option value="all">All Category</option>';
-                            data.standards.forEach(s => {
-                                options +=
-                                `<option value="${s.category_id}">${s.category_name}</option>`;
-                            });
-                            if (standardSelect) {
-                                standardSelect.innerHTML = options;
-                                $(standardSelect).trigger('change.select2');
-                            }
-                        }
-                    } catch (error) {
-                        console.error('Error fetching standards:', error);
-                    }
-                }
                 shopAjaxFilter();
             });
 

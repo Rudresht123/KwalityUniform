@@ -414,10 +414,6 @@
                                     </p>
                                     <div class="school-divider"></div>
                                     <div class="school-footer">
-                                        <div>
-                                            <small>Available</small>
-                                            <strong>{{ $school->products_count ?? '50+' }} Products</strong>
-                                        </div>
                                         <span class="explore-btn">
                                             Explore <i class="bi bi-arrow-right"></i>
                                         </span>
@@ -957,7 +953,7 @@
         <div class="container text-center text-white" style="max-width: 600px;">
             <span class="badge-geo mb-3"
                 style="background: rgba(255,255,255,0.15); color: #FFF; border-color: transparent;">Stay Informed</span>
-            <h3 class="h2 fw-bold mb-2 text-white">Join the eSchool Cart Newsletter</h3>
+            <h3 class="h2 fw-bold mb-2 text-white">Join the eSchoolKart Newsletter</h3>
             <p class="text-white-50 small mb-4">Subscribe to receive notifications about Back-To-School sizing days,
                 partner school directory expansions, and seasonal uniform promotions.</p>
 
