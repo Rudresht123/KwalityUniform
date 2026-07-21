@@ -138,7 +138,7 @@ const ChartHelper = (() => {
             },
 
             stroke: {
-                width: 0,
+                width: 3,
                 curve: "smooth",
                 lineCap: "round",
                 ...(config.stroke || {}),

@@ -58,9 +58,13 @@ class UserStatusReportController extends BaseController
                         : '<span class="badge bg-danger">Inactive/Suspended</span>';
                 })
                 ->addColumn('actions', function ($user) {
-                    return '
-                        <button class="btn btn-sm btn-primary btn-toggle-status" data-id="'.$user->id.'">Toggle Status</button>
-                    ';
+                    $html = '<button class="btn btn-sm btn-primary btn-toggle-status" data-id="'.$user->id.'">Toggle Status</button>';
+                    
+                    if (auth()->id() !== $user->id) {
+                        $html .= ' <a href="'.route('impersonate.start', $user->id).'" class="btn btn-sm btn-warning" title="Impersonate"><i class="ti ti-user-circle"></i></a>';
+                    }
+                    
+                    return $html;
                 })
 
                 ->rawColumns(['status_badge', 'actions'])

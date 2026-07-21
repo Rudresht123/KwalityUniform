@@ -56,6 +56,8 @@
                         .blue)
                 ]
             });
+            console.log(@json($productUploadTrend['labels']));
+console.log(@json($productUploadTrend['counts']));
 
             /* ────────────────────────────────────
                2. PRODUCT STATUS — doughnut

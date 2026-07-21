@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid">
     <!-- Filter Card -->
-    <div class="card mb-4">
+    {{-- <div class="card mb-4">
         <div class="card-header">
             <h5 class="card-title">Filters</h5>
         </div>
@@ -31,7 +31,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Table Card -->
     <div class="card">
@@ -40,7 +40,7 @@
             <a href="{{ route('school-vendor-mapping.create') }}" class="btn btn-primary">Add Mapping</a>
         </div>
         <div class="card-body">
-            <table class="table table-bordered" id="mappings-table">
+            <table class="table" id="mappings-table">
                 <thead>
                     <tr>
                         <th>School</th>
@@ -56,33 +56,33 @@
 
 @push('scripts')
 <script>
-    $(function() {
-        var table = $('#mappings-table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "{{ route('school-vendor-mapping.index') }}",
-                data: function (d) {
-                    d.school_id = $('#filter_school').val();
-                    d.vendor_id = $('#filter_vendor').val();
-                }
-            },
-            columns: [
-                { data: 'school_name', name: 'school.school_name' },
-                { data: 'vendor_name', name: 'vendor.business_name' },
-                { data: 'actions', name: 'actions', orderable: false, searchable: false }
-            ]
-        });
+    const table = initDataTable('#mappings-table', {
+        serverSide: true,
+        ajax: {
+            url: "{{ route('school-vendor-mapping.index') }}",
+            data: function (d) {
+                d.school_id = $('#filter_school').val();
+                d.vendor_id = $('#filter_vendor').val();
+            }
+        },
+        columns: [
+            { data: 'school_name', name: 'school.school_name' },
+            { data: 'vendor_name', name: 'vendor.business_name' },
+            { data: 'actions', name: 'actions', orderable: false, searchable: false }
+        ]
+    });
 
-        $('#btn-filter').click(function() {
-            table.draw();
-        });
+    $('#btn-filter').on('click', function () {
+        table.ajax.reload();
+    });
 
-        $('#btn-reset').click(function() {
-            $('#filter_school').val('');
-            $('#filter_vendor').val('');
-            table.draw();
-        });
+    $('#btn-reset').on('click', function () {
+        $('#filter_school').val('').trigger('change');
+        $('#filter_vendor').val('').trigger('change');
+
+        table.ajax.reload();
     });
 </script>
 @endpush
+
+

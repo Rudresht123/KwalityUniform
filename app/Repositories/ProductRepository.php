@@ -168,7 +168,7 @@ class ProductRepository
             $query = Product::whereMonth('created_at', $date->month)
                 ->whereYear('created_at', $date->year);
 
-            if ($vendorId) {
+            if ($vendorId !== null) {
                 $query->where('vendor_id', $vendorId);
             }
 

@@ -20,7 +20,6 @@ class ParentCategory extends Record
 
     protected $fillable = [
         'parent_id',
-        'vendor_id',
         'name',
         'is_active',
         'created_by',

@@ -20,9 +20,10 @@
           <a href="{{ route('website.terms') }}">Terms & Conditions</a>
           <a href="{{ route('website.privacy') }}">Privacy Policy</a>
           <a href="{{ route('website.returns') }}">Return Policy</a>
-          <a href="/login" style="font-size: 10px; color: #6b7280; opacity: 0.6; margin-left: 10px;">Admin</a>
+
           {{-- <a href="#become-partner-section" onclick="switchOnboardingTab('school')">Become Partner</a>
           <a href="#become-partner-section" onclick="switchOnboardingTab('vendor')">Become Vendor</a> --}}
         </div>
       </div>
     </footer>
+    
