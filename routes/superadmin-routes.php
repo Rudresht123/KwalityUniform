@@ -170,7 +170,16 @@ Route::prefix('stock-management')->name('stock-management.')->group(function () 
 use App\Http\Controllers\SuperAdmin\StockHistoryReportController;
 use App\Services\DashboardService;
 
+use App\Http\Controllers\SuperAdmin\ImpersonationController;
+
 // ... other imports
+
+Route::middleware(['auth', 'role:super-admin'])->prefix('impersonate')->name('impersonate.')->group(function () {
+    Route::get('/start/{user}', [ImpersonationController::class, 'start'])->name('start');
+    Route::get('/stop', [ImpersonationController::class, 'stop'])->name('stop');
+});
+
+// ... other routes
 
 Route::prefix('stock-adjustment')->name('stock-adjustment.')->group(function () {
     Route::post('/adjust', [StockAdjustmentController::class, 'adjust'])->name('adjust')->middleware('permission:stock_adjust');
