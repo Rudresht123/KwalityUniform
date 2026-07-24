@@ -161,6 +161,11 @@
                     <a href="{{ route('admin.index') }}" class="side-menu__item {{ request()->routeIs('admin.index') ? 'active' : '' }}">Manage Admins</a>
                 </li>
             @endcan
+            @can('user.view')
+                <li class="slide">
+                    <a href="{{ route('user-status-report.index') }}" class="side-menu__item {{ request()->routeIs('user-status-report.index') ? 'active' : '' }}">User Status Report</a>
+                </li>
+            @endcan
         </ul>
     </li>
 @endcanany

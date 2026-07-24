@@ -4,19 +4,22 @@
 
         
         $(document).on('click', '.add-variant-btn', function() {
+            // Function to generate a random unique barcode
+            function generateBarcode() {
+                return 'BC-' + Math.floor(Math.random() * 1000000000).toString().padStart(9, '0');
+            }
+
             let row = `
                 <tr class="variant-row">
                     <td><input type="text" name="variants[${variantIndex}][sku]" class="form-control form-control-sm" placeholder="e.g. SKU-01" required></td>
                     <td>
-                        <select name="variants[${variantIndex}][size_id]" class="form-control select2 ">
+                        <select name="variants[${variantIndex}][size_id]" class="form-control select2 size-select">
                             <option value="">N/A</option>
-                            @foreach($sizes as $size) <option value="{{ $size->size_id }}">{{ $size->size_name }}</option> @endforeach
                         </select>
                     </td>
                     <td>
-                        <select name="variants[${variantIndex}][color_id]" class="form-control select2">
+                        <select name="variants[${variantIndex}][color_id]" class="form-control select2 color-select">
                             <option value="">N/A</option>
-                            @foreach($colors as $color) <option value="{{ $color->color_id }}">{{ $color->color_name }}</option> @endforeach
                         </select>
                     </td>
                     <td><input type="number" step="0.01" name="variants[${variantIndex}][mrp]" class="form-control form-control-sm mrp" placeholder="0.00" required></td>
@@ -24,7 +27,7 @@
                     <td><input type="number" step="0.01" name="variants[${variantIndex}][selling_price]" class="form-control form-control-sm selling_price" placeholder="0.00" required></td>
                     <td><input type="number" name="variants[${variantIndex}][stock_qty]" class="form-control form-control-sm" placeholder="0" required></td>
                     <td><input type="number" name="variants[${variantIndex}][low_stock_alert]" class="form-control form-control-sm" value="5" placeholder="5"></td>
-                    <td><input type="text" name="variants[${variantIndex}][barcode]" class="form-control form-control-sm" placeholder="UPC/EAN"></td>
+                    <td><input type="text" name="variants[${variantIndex}][barcode]" class="form-control form-control-sm" value="${generateBarcode()}" placeholder="UPC/EAN"></td>
                     <input type="hidden" name="variants[${variantIndex}][is_active]" value="1">
                     <td class="text-center">
                         <div class="variant-action-group">
@@ -34,7 +37,23 @@
                     </td>
                 </tr>
             `;
-            $(this).closest('tr').after(row);
+            let newRow = $(row);
+            
+            // Populate options from the first row's select
+            let firstRow = $('#variants-table tbody tr:first');
+            newRow.find('.size-select').html(firstRow.find('.size-select').html());
+            newRow.find('.color-select').html(firstRow.find('.color-select').html());
+            
+            // Clear dropdown values before appending
+            newRow.find('select').val('');
+            
+            $(this).closest('tr').after(newRow);
+            
+            // Initialize Select2 on the new elements specifically
+            newRow.find('.select2').each(function() {
+                $(this).select2();
+            });
+            
             variantIndex++;
         });
 

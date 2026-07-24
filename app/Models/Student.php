@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\SuperAdmin\School;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,10 @@ class Student extends Model
     use HasFactory, HasUuid;
 
     protected $fillable = [
+        'id',
+        'name',
+        'class',
+        'section',
         'school_id',
         'user_id',
         'student_name',

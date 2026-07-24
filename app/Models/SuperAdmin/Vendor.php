@@ -160,4 +160,9 @@ class Vendor extends Record
     {
         return $this->hasMany(Size::class, 'vendor_id', 'vendor_id');
     }
+
+    public function tieups()
+    {
+        return $this->hasMany(\App\Models\VendorSchoolTieup::class, 'vendor_id', 'vendor_id');
+    }
 }

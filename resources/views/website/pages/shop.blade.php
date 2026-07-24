@@ -3,17 +3,21 @@
 
 @section('content')
     <!-- Page Header (Full Width Banner with Background Image) -->
-    <div class="geo-page-header"
-        style="background-image: url('https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&q=80&w=1200');">
-        <div class="container">
-            <h1 class="display-6 fw-extrabold text-white mb-2">Uniform Catalogue</h1>
-            <ul class="geo-breadcrumb mb-0">
-                <li><a href="index.html">Home</a></li>
-                <li>&bull;</li>
-                <li class="active-item">Uniform Catalogue</li>
-            </ul>
-        </div>
+   
+    
+
+    <div class="geo-page-header">
+    <div class="container">
+        <span class="badge-geo mb-3">eSchoolKart</span>
+        <h1 class="display-4 fw-bold text-white mb-3">Uniform Catalogue</h1>
+
+        <ul class="geo-breadcrumb mt-4">
+            <li><a href="{{ url('/') }}">Home</a></li>
+            <li>&bull;</li>
+            <li class="active-item">Uniform Catalogue</li>
+        </ul>
     </div>
+</div>
 
     <!-- Main Content -->
     <main class="container-fluid py-5">

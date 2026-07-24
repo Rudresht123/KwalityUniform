@@ -21,6 +21,7 @@ class PermissionSeeder extends Seeder
             'Product Approval'        => 'school',
             'Vendor Management'       => 'admin',
             'Partnership Management'  => 'admin',
+            'Tie-up Management'       => null, // Accessible by vendor and school
             'School Vendor Mapping'   => 'admin',
             'Courier Management'      => 'admin',
             'Report Management'       => 'admin',
@@ -110,6 +111,11 @@ class PermissionSeeder extends Seeder
                 'partnership.view'    => 'View Partnership Requests',
                 'partnership.approve' => 'Approve Partnership Request',
                 'partnership.reject'  => 'Reject Partnership Request',
+            ],
+            'Tie-up Management' => [
+                'tieup.request' => 'Request Vendor Tie-up',
+                'tieup.view'    => 'View Tie-up Requests',
+                'tieup.approve' => 'Approve/Reject Tie-up',
             ],
             'School Vendor Mapping' => [
                 'school_vendor.view'   => 'View School Vendor Mappings',

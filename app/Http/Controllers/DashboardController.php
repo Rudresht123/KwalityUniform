@@ -28,14 +28,14 @@ class DashboardController extends Controller
         if ($user->hasRole(['super-admin', 'admin'])) {
             $data = $this->dashboardService->getSuperAdminStats();
         } elseif ($user->hasRole('school')) {
-            $data = $this->getSchoolStats($user);
+            $stats = $this->getSchoolStats($user);
+            $data = ['stats' => $stats];
         } elseif ($user->hasRole('vendor')) {
             $data = $this->getVendorStats($user);
         } elseif ($user->hasRole('parent')) {
             $data = $this->getParentStats($user);
         }
 
-    
         return view('dashboard', $data);
     }
 
@@ -56,15 +56,7 @@ class DashboardController extends Controller
      */
     private function getSchoolStats(User $user): array
     {
-        $school = \App\Models\SuperAdmin\School::where('user_id', $user->id)->first();
-
-        if (!$school) {
-            return ['school' => null];
-        }
-
-        return [
-            'school' => $school,
-        ];
+        return $this->dashboardService->getSchoolStats($user);
     }
 
     /**

@@ -18,7 +18,12 @@ class ImpersonationController extends Controller
         // Login as the target user
         Auth::login($user);
 
-        return redirect()->route('superadmin.admin.index')->with('success', 'You are now impersonating ' . $user->name);
+        // Redirect based on the impersonated user's role
+        if ($user->hasRole('vendor')) {
+            return redirect()->route('dashboard')->with('success', 'You are now impersonating vendor: ' . $user->name);
+        }
+
+        return redirect()->route('dashboard')->with('success', 'You are now impersonating ' . $user->name);
     }
 
     public function stop()
@@ -26,10 +31,13 @@ class ImpersonationController extends Controller
         $adminId = Session::pull('admin_user_id');
 
         if ($adminId) {
+            // Login as admin first
             Auth::loginUsingId($adminId);
-            return redirect()->route('superadmin.admin.index')->with('success', 'Impersonation ended.');
+            
+            // Now that the user is the admin again, they have permission to access admin.index
+            return redirect()->route('admin.index')->with('success', 'Impersonation ended.');
         }
 
-        return redirect()->route('superadmin.admin.index')->with('error', 'Invalid impersonation session.');
+        return redirect()->route('admin.index')->with('error', 'Invalid impersonation session.');
     }
 }

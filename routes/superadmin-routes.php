@@ -176,7 +176,6 @@ use App\Http\Controllers\SuperAdmin\ImpersonationController;
 
 Route::middleware(['auth', 'role:super-admin'])->prefix('impersonate')->name('impersonate.')->group(function () {
     Route::get('/start/{user}', [ImpersonationController::class, 'start'])->name('start');
-    Route::get('/stop', [ImpersonationController::class, 'stop'])->name('stop');
 });
 
 // ... other routes
@@ -204,8 +203,7 @@ Route::prefix('parent-categories')->name('parent-category.')->group(function () 
 });
 
 Route::middleware(['auth', 'role:super-admin|admin|school|vendor'])->group(function () {
-  
-  
+
     Route::prefix('ajax')->name('ajax.')->group(function () {
         Route::get('/vendor/order-inventory-health', [DashboardService::class, 'getVendorInventoryHealth'])->name('vendor.invntory-health');
         Route::get('/vendor/order-status-ditribution', [DashboardService::class, 'getVendorOrderStatusDistribution'])->name('vendor.order-status-ditribution');
@@ -215,6 +213,7 @@ Route::middleware(['auth', 'role:super-admin|admin|school|vendor'])->group(funct
         Route::post('/category/store', [CategoryController::class, 'ajaxStore'])->name('category.store');
         Route::post('/size/store', [SizeController::class, 'ajaxStore'])->name('size.store');
         Route::post('/color/store', [ColorController::class, 'ajaxStore'])->name('color.store');
+        Route::get('/supcategoryies/{id}', [CategoryController::class, 'getSubcategory'])->name('category.subcategory');
     });
 });
 

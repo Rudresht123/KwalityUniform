@@ -17,7 +17,8 @@
     <script src="{{ asset('assets/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('assets/libs/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/icons.css') }}">
-
+    @include('partials.datatable-fix')
+    </head>
     <script src="{{ asset('assets/js/main.js') }}"></script>
 
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
@@ -59,6 +60,7 @@
 </head>
 
 <body>
+    @include('partials.impersonation-banner')
     @include('components.loader')
     @include('layouts.off-canvas')
     @include('components.alerts')

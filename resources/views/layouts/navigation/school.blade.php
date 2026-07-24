@@ -30,4 +30,14 @@
             @endcan
         </ul>
     </li>
+@endcanany
+
+@can('tieup.approve')
+    <li class="slide {{ request()->routeIs('tieups.*') ? 'active' : '' }}">
+        <a href="{{ route('tieups.index') }}" class="side-menu__item {{ request()->routeIs('tieups.*') ? 'active' : '' }}">
+      
+      <i class="ti-briefcase side-menu__icon"></i>
+            <span class="side-menu__label">Vendor Tie-ups</span>
+        </a>
+    </li>
 @endcan

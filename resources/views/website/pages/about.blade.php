@@ -45,24 +45,13 @@
                 </h2>
 
                 <p class="text-muted mb-4 fs-5">
-                    eSchoolKart is a dedicated marketplace created to make
-                    school uniform shopping easier, faster and more reliable.
-                    We connect schools, trusted vendors and parents through
-                    one seamless platform.
+                  eSchoolKart is a digital platform that makes purchasing school uniforms, books, stationery, and other school essentials simple, convenient, and transparent. Parents can easily browse products, compare available options, and place orders from participating sellers through a secure and user-friendly platform.
                 </p>
 
                 <p class="text-muted mb-4">
-                    Every product listed on our marketplace is carefully
-                    reviewed to ensure it matches official school
-                    specifications while maintaining premium quality,
-                    durability and student comfort.
+                  Our mission is to streamline the school shopping experience by bringing together schools, parents, and sellers on a single platform that promotes convenience, transparency, and accessibility, while helping families save time and make informed purchasing decisions.
                 </p>
 
-                <p class="text-muted mb-5">
-                    From everyday uniforms and winter wear to accessories,
-                    we make purchasing simple with secure payments,
-                    fast delivery and complete order tracking.
-                </p>
 
                 <div class="row g-3">
 

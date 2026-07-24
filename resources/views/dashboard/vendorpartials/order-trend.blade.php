@@ -24,21 +24,24 @@
     </div>
 
     <div class="col-xl-4 col-lg-5">
-        <div class="card custom-card">
+        <div class="panel">
 
-            <div class="card-header border-bottom">
-                <div>
-                    <h5 class="card-title mb-1">Recent Orders</h5>
-                    <p class="text-muted fs-12 mb-0">
-                        Latest orders received
-                    </p>
-                </div>
-            </div>
+       <div class="panel-header d-flex justify-content-between align-items-center">
+    <h3 class="panel-title mb-0">
+        <i class="ti ti-chart-line text-primary"></i>
+        Recent Orders
+    </h3>
 
-          <div class="card-body recent-orders-body p-0">
+    <a href="{{ route('reports.recent-orders.index') }}" class="text-decoration-none fw-semibold">
+        View All
+        <i class="ti ti-chevron-right ms-1"></i>
+    </a>
+</div>
+
+          <div class="card-body recent-orders-body p-0" style="height: 395px;oveflow:hidden;">
 
                 @forelse($recentOrders as $order)
-                    <div class="d-flex align-items-center justify-content-between  py-3 border p-2 mb-2 radius-3">
+                    <div class="d-flex align-items-center justify-content-between  py-3 border p-2 mb-2 radius-3" style="border-radius:10px;">
 
                         <div class="d-flex align-items-center">
 
@@ -169,7 +172,7 @@
 
             id: 'order-performance-chart',
 
-            height: 300,
+            height: 350,
 
             categories: data.labels,
 
@@ -227,4 +230,17 @@
         });
 
     }
+    const container = document.querySelector('.recent-orders-body');
+
+let timer;
+
+container.addEventListener('scroll', () => {
+    container.classList.add('scrolling');
+
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+        container.classList.remove('scrolling');
+    }, 800);
+});
 </script>

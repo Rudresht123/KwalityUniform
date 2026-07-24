@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers\Website;
+
 use App\Http\Controllers\Controller;
 use App\Models\ContactMessage;
 use App\Models\SuperAdmin\Category;
@@ -27,73 +29,73 @@ class WebsiteController extends Controller
         ]);
     }
 
-public function shop(Request $request)
-{
-    $schoolId = $request->query('school');
-    $parentCategoryId = $request->query('parent_category');
-    $subCategoryId = $request->query('sub_category');
-    $search = $request->query('search');
+    public function shop(Request $request)
+    {
+        $schoolId = $request->query('school');
+        $parentCategoryId = $request->query('parent_category');
+        $subCategoryId = $request->query('sub_category');
+        $search = $request->query('search');
 
-    $filters = [
-        'school' => $schoolId,
-        'parent_category' => $parentCategoryId,
-        'sub_category' => $subCategoryId,
-        'search' => $search,
-    ];
+        $filters = [
+            'school' => $schoolId,
+            'parent_category' => $parentCategoryId,
+            'sub_category' => $subCategoryId,
+            'search' => $search,
+        ];
 
-    $products = new ProductRepository()->searchProducts($filters);
-    $schools = School::active()->get();
-    $parentCategories = ParentCategory::active()->get();
+        $products = new ProductRepository()->searchProducts($filters);
+        $schools = School::active()->get();
+        $parentCategories = ParentCategory::active()->get();
 
-    $subCategories = collect();
-    if ($parentCategoryId) {
-        $subCategories = Category::where('parent_id', $parentCategoryId)
+        $subCategories = collect();
+        if ($parentCategoryId) {
+            $subCategories = Category::where('parent_id', $parentCategoryId)
+                ->where('is_active', true)
+                ->get(['category_id', 'category_name']);
+        }
+
+        if ($request->ajax()) {
+            return view('website.partials.shop-products', compact('products', 'filters', 'subCategories'))->render();
+        }
+
+        return view('website.pages.shop', [
+            'products' => $products,
+            'schools' => $schools,
+            'categories' => $parentCategories,
+            'subCategories' => $subCategories,
+            'filters' => $filters,
+        ]);
+    }
+
+    public function getSubCategories($parent_id)
+    {
+        $subCategories = Category::where('parent_id', $parent_id)
             ->where('is_active', true)
             ->get(['category_id', 'category_name']);
+        return response()->json([
+            'success' => true,
+            'subCategories' => $subCategories,
+        ]);
     }
 
-    if ($request->ajax()) {
-        return view('website.partials.shop-products', compact('products', 'filters', 'subCategories'))->render();
+    public function show($id)
+    {
+        $product = Product::approved()
+            ->active()
+            ->with(['variants', 'images', 'schoolApprovals.school'])
+            ->findOrFail($id);
+
+        if (Auth::check()) {
+            \DB::table('user_recently_viewed')->updateOrInsert(
+                ['user_id' => Auth::id(), 'product_id' => $product->product_id],
+                ['updated_at' => now()]
+            );
+        }
+
+        return view('website.pages.product-details', [
+            'product' => $product,
+        ]);
     }
-
-    return view('website.pages.shop', [
-        'products' => $products,
-        'schools' => $schools,
-        'categories' => $parentCategories,
-        'subCategories' => $subCategories,
-        'filters' => $filters,
-    ]);
-}
-
-public function getSubCategories($parent_id)
-{
-    $subCategories = Category::where('parent_id', $parent_id)
-        ->where('is_active', true)
-        ->get(['category_id', 'category_name']);
-    return response()->json([
-        'success' => true,
-        'subCategories' => $subCategories,
-    ]);
-}
-
-public function show($id)
-{
-    $product = Product::approved()
-        ->active()
-        ->with(['variants', 'images', 'schoolApprovals.school'])
-        ->findOrFail($id);
-
-    if (Auth::check()) {
-        \DB::table('user_recently_viewed')->updateOrInsert(
-            ['user_id' => Auth::id(), 'product_id' => $product->product_id],
-            ['updated_at' => now()]
-        );
-    }
-
-    return view('website.pages.product-details', [
-        'product' => $product,
-    ]);
-}
     public function showJson($id)
     {
         $product = Product::approved()
@@ -110,22 +112,24 @@ public function show($id)
             'school' => $product->schoolApprovals->first()?->school?->school_name ?? 'General Wear',
             'fabric' => $product->fabric_composition,
             'gender' => $product->gender_type,
-            'variants' => $product->variants->map(
-                fn($variant) => [
-                    'variant_id' => $variant->variant_id,
-                    'size_id' => $variant->size?->size_id,
-                    'display_name' => $variant->size?->display_name,
-                    'size_name' => $variant->size?->size_name,
-                    'mrp' => $variant?->mrp,
-                    'selling_price' => $variant?->selling_price,
-                    'stock_qty' => $variant?->stock_qty,
-                    'sku' => $variant?->sku,
-                    'color_id' => $variant->color?->color_id,
-                    'color_name' => $variant->color?->color_name,
-                    'hex_code' => $variant->color?->hex_code,
-                    'price' => $variant->price,
-                ],
-            ),
+            'variants' =>  $product->variants
+                ->sortBy(fn($variant) => $variant->size?->sequence ?? PHP_INT_MAX)
+                ->values()->map(
+                    fn($variant) => [
+                        'variant_id' => $variant->variant_id,
+                        'size_id' => $variant->size?->size_id,
+                        'display_name' => $variant->size?->display_name,
+                        'size_name' => $variant->size?->size_name,
+                        'mrp' => $variant?->mrp,
+                        'selling_price' => $variant?->selling_price,
+                        'stock_qty' => $variant?->stock_qty,
+                        'sku' => $variant?->sku,
+                        'color_id' => $variant->color?->color_id,
+                        'color_name' => $variant->color?->color_name,
+                        'hex_code' => $variant->color?->hex_code,
+                        'price' => $variant->price,
+                    ],
+                ),
             'images' => $product->images->map(fn($image) => getFileUrl($image->file_id))->toArray(),
         ];
 
@@ -142,10 +146,9 @@ public function show($id)
     public function contact()
     {
         $contactInfo = [
-            'address' => \App\Models\GlobalSetting::get('contact_address', 'Sector 81, Noida, Uttar Pradesh'),
-            'phone'   => \App\Models\GlobalSetting::get('contact_phone', '+91 98765 43210'),
-            'email'   => \App\Models\GlobalSetting::get('contact_email', 'support@eSchoolKart.com'),
-            'hours'   => \App\Models\GlobalSetting::get('working_hours', 'Mon - Sat<br>9:00 AM - 6:00 PM'),
+            'address' => \App\Models\GlobalSetting::get('contact_address', 'NIYADER GANJ, DADRI, UTTAR PRADESH'),
+            'email'   => \App\Models\GlobalSetting::get('contact_email', 'eschoolkart.support@gmail.com'),
+            'hours'   => \App\Models\GlobalSetting::get('working_hours', 'Mon - Sat<br>10:00 AM - 6:00 PM'),
         ];
 
         return view('website.pages.contact', compact('contactInfo'));
@@ -280,41 +283,41 @@ public function show($id)
         }
     }
 
-public function storeContact(Request $request)
-{
-    try {
-        $validated = $request->validate([
-            'full_name' => 'required|string|max:255',
-            'email'     => 'required|email|max:255',
-            'phone'     => 'nullable|string|max:20',
-            'subject'   => 'required|string|max:255',
-            'message'   => 'required|string',
-        ]);
+    public function storeContact(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'full_name' => 'required|string|max:255',
+                'email'     => 'required|email|max:255',
+                'phone'     => 'nullable|string|max:20',
+                'subject'   => 'required|string|max:255',
+                'message'   => 'required|string',
+            ]);
 
-        ContactMessage::create($validated);
+            ContactMessage::create($validated);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Thank you! Your message has been submitted successfully. We will get back to you soon.',
-        ]);
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Validation failed.',
-            'errors'  => $e->errors(),
-        ], 422);
-    } catch (\Throwable $e) {
-        Log::error('Contact Form Error', [
-            'message' => $e->getMessage(),
-            'trace'   => $e->getTraceAsString(),
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Thank you! Your message has been submitted successfully. We will get back to you soon.',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed.',
+                'errors'  => $e->errors(),
+            ], 422);
+        } catch (\Throwable $e) {
+            Log::error('Contact Form Error', [
+                'message' => $e->getMessage(),
+                'trace'   => $e->getTraceAsString(),
+            ]);
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Something went wrong. Please try again later.',
-        ], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong. Please try again later.',
+            ], 500);
+        }
     }
-}
 
     public function recentlyViewed()
     {
@@ -338,4 +341,3 @@ public function storeContact(Request $request)
         ]);
     }
 }
-

@@ -239,7 +239,7 @@ private function getSuperAdminYearlyOrderTrend(): array
      */
     public function getLatestOrders(int $limit = 10)
     {
-        return Order::with('user')->latest()->take($limit)->get();
+        return Order::with(['user', 'student'])->latest()->take($limit)->get();
     }
 
     /**

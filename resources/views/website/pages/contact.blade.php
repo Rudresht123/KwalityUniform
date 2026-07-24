@@ -150,35 +150,7 @@
 
     </div>
 
-    <div class="card-geo p-4 mb-4">
-
-        <div class="d-flex">
-
-            <div class="me-4">
-
-                <i class="fa-solid fa-phone fs-2 text-success"></i>
-
-            </div>
-
-            <div>
-
-                <h5 class="fw-bold">
-
-                    Call Us
-
-                </h5>
-
-                <p class="text-muted mb-0">
-
-                    {{ $contactInfo['phone'] }}
-
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
+  
 
     <div class="card-geo p-4 mb-4">
 

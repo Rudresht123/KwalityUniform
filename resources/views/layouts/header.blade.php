@@ -265,11 +265,37 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    if (redirectUrl) {
+                    if (redirectUrl && redirectUrl !== '#') {
                         window.location.href = redirectUrl;
                     } else {
                         location.reload();
                     }
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function hideNotification(id) {
+        fetch('{{ route('notifications.hide') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    notification_id: id
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    $('#notification-' + id).remove();
+                    // Update badges if necessary
+                    let badge = $('#notification-icon-badge');
+                    let count = parseInt(badge.text()) - 1;
+                    badge.text(count > 0 ? count : 0);
+                    if (count <= 0) badge.addClass('d-none');
+                    $('#notifiation-data').text((count > 0 ? count : 0) + ' Unread');
                 }
             })
             .catch(error => console.error('Error:', error));

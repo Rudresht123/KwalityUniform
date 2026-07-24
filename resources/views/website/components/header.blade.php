@@ -14,8 +14,7 @@
             </a>
 
             <nav class="nav-links">
-                <a href="{{ url('/') }}" class="nav-item-link {{ request()->is('/') ? 'active' : '' }}">Home /
-                    Schools</a>
+                <a href="{{ url('/') }}" class="nav-item-link {{ request()->is('/') ? 'active' : '' }}">Home</a>
                 <a href="{{ route('website.shop') }}"
                     class="nav-item-link {{ request()->routeIs('website.shop') ? 'active' : '' }}">Catalogue</a>
                 @auth

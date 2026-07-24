@@ -121,4 +121,20 @@ class Product extends Record
     {
         return $this->primaryImage ? getFileUrl($this->primaryImage->file_id) : asset("assets/images/no_image.jpg");
     }
+
+    public function scopeAuthorizedForSchool($query, $schoolId)
+    {
+        return $query->whereHas('vendor', function($q) use ($schoolId) {
+            $q->whereHas('tieups', function($t) use ($schoolId) {
+                $t->where('school_id', $schoolId)
+                  ->where('status', 'approved');
+            });
+        })
+        ->whereIn('category_id', function($q) use ($schoolId) {
+            $q->select('main_category_id')
+              ->from('vendor_school_tieups')
+              ->where('school_id', $schoolId)
+              ->where('status', 'approved');
+        });
+    }
 }

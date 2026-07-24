@@ -2,10 +2,13 @@
 
 namespace App\Repositories;
 
+use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
 use App\Models\WebUser;
 use App\Models\Return;
+use App\Models\Student;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class DashboardRepository
@@ -72,6 +75,74 @@ class DashboardRepository
             'total_returns' => $this->returnRepo->getTotalReturnsCount(),
         ];
     }
+
+    public function getStudentRegistrationTrend($schoolId)
+    {
+        $data = Student::where('school_id', $schoolId)
+            ->where('created_at', '>=', now()->subMonths(11)->startOfMonth())
+            ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as total')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('total', 'month');
+
+        $trend = [];
+
+        for ($i = 11; $i >= 0; $i--) {
+            $date = Carbon::now()->subMonths($i);
+
+            $key = $date->format('Y-m');
+            $label = $date->format('M');
+
+            $trend[$label] = $data[$key] ?? 0;
+        }
+
+        return $trend;
+    }
+  public function getOrderCompletionTrend($schoolId)
+{
+    $orders = Order::where('school_id', $schoolId)
+        ->where('status', 'completed')
+        ->where('created_at', '>=', now()->subMonths(11)->startOfMonth())
+        ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month, COUNT(*) as total")
+        ->groupByRaw("DATE_FORMAT(created_at, '%Y-%m')")
+        ->orderByRaw("DATE_FORMAT(created_at, '%Y-%m')")
+        ->pluck('total', 'month')
+        ->toArray();
+
+    $labels = [];
+    $data = [];
+
+    for ($i = 11; $i >= 0; $i--) {
+        $date = now()->subMonths($i);
+
+        $key = $date->format('Y-m');
+
+        $labels[] = $date->format('M');      // Aug, Sep, Oct...
+        // or use ->format('M Y') for "Aug 2026"
+
+        $data[] = $orders[$key] ?? 0;
+    }
+
+    return [
+        'labels' => $labels,
+        'data'   => $data,
+    ];
+}
+
+   public function getSchoolOrderStatusDistribution($schoolId)
+{
+    $data = Order::where('school_id', $schoolId)
+        ->selectRaw('status, COUNT(*) as total')
+        ->groupBy('status')
+        ->pluck('total', 'status');
+
+    return [
+        'Pending'    => $data['pending'] ?? 0,
+        'Processing' => $data['processing'] ?? 0,
+        'Completed'  => $data['completed'] ?? 0,
+        'Cancelled'  => $data['cancelled'] ?? 0,
+    ];
+}
 
     /**
      * Delegate to Domain Repositories

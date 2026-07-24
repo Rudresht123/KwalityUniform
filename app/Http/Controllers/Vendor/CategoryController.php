@@ -34,8 +34,8 @@ class CategoryController extends BaseController
                     return $row->parentCategory ? $row->parentCategory->name : 'N/A';
                 })
                 ->addColumn('status', function ($row) {
-                    return $row->is_active 
-                        ? '<span class="badge bg-success">ACTIVE</span>' 
+                    return $row->is_active
+                        ? '<span class="badge bg-success">ACTIVE</span>'
                         : '<span class="badge bg-danger">INACTIVE</span>';
                 })
                 ->addColumn('options', function ($row) {
@@ -104,11 +104,11 @@ class CategoryController extends BaseController
             }
 
             $this->categoryService->deleteCategory($category);
-            
+
             if (request()->ajax()) {
                 return response()->json(['status' => true, 'message' => 'Category deleted successfully.']);
             }
-            
+
             return redirect()->route('category.index')->with('success', 'Category deleted successfully.');
         } catch (Throwable $e) {
             if (request()->ajax()) {
@@ -117,4 +117,6 @@ class CategoryController extends BaseController
             return back()->with('error', 'Failed to delete category: ' . $e->getMessage());
         }
     }
+
+    
 }

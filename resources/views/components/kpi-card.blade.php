@@ -1,4 +1,4 @@
-<div {{ $attributes->merge(['class' => 'metric-tile']) }}>
+<div class="metric-tile">
     @if(isset($icon))
         <div class="metric-icon {{ $iconClass ?? 'bg-primary-transparent text-primary' }}">
             <i class="{{ $icon }}"></i>

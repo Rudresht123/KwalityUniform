@@ -34,13 +34,13 @@ class CategoryController extends BaseController
                     return '<span class="badge bg-primary-transparent">' . strtoupper($row->parentCategory->name ?? 'N/A') . '</span>';
                 })
                 ->addColumn('size_status', function ($row) {
-                    return $row->requires_size 
-                        ? '<span class="badge bg-success-transparent">REQUIRED</span>' 
+                    return $row->requires_size
+                        ? '<span class="badge bg-success-transparent">REQUIRED</span>'
                         : '<span class="badge bg-secondary-transparent">NOT REQUIRED</span>';
                 })
                 ->addColumn('status', function ($row) {
-                    return $row->is_active 
-                        ? '<span class="badge bg-success">ACTIVE</span>' 
+                    return $row->is_active
+                        ? '<span class="badge bg-success">ACTIVE</span>'
                         : '<span class="badge bg-danger">INACTIVE</span>';
                 })
                 ->addColumn('options', function ($row) {
@@ -105,24 +105,32 @@ class CategoryController extends BaseController
     {
         try {
             $this->categoryService->deleteCategory($category);
-            
+
             if (request()->ajax()) {
                 return response()->json([
-                    'status' => true, 
+                    'status' => true,
                     'message' => 'Sub category deleted successfully.'
                 ]);
             }
-            
+
             return redirect()->route('category.index')->with('success', 'Sub category deleted successfully.');
         } catch (Throwable $e) {
             if (request()->ajax()) {
                 return response()->json([
-                    'status' => false, 
+                    'status' => false,
                     'message' => 'Failed to delete sub category: ' . $e->getMessage()
                 ], 500);
             }
-            
+
             return back()->with('error', 'Failed to delete sub category: ' . $e->getMessage());
         }
+    }
+
+    public function getSubcategory($id)
+    {
+        $vendorId = auth()->user()->vendor->vendor_id;
+        return Category::active()
+            ->forVendor($vendorId)
+            ->where('parent_id', $id)->select('category_id', 'category_name')->get();
     }
 }

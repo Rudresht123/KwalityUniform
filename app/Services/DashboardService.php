@@ -2,12 +2,15 @@
 
 namespace App\Services;
 
+use App\Models\Order;
+use App\Models\StudentDistribution;
 use App\Models\SuperAdmin\ProductVariant;
 use App\Models\SuperAdmin\Vendor;
 use App\Repositories\DashboardRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Reverb\Loggers\Log;
 
 class DashboardService
 {
@@ -154,23 +157,49 @@ class DashboardService
      */
     public function getSchoolStats(\App\Models\User $user): array
     {
+        Log::info('DashboardService: Fetching stats for User ID: ' . $user->id);
+
         $school = \App\Models\SuperAdmin\School::where('user_id', $user->id)->first();
+        Log::info('DashboardService: School found: ' . ($school ? $school->school_name : 'NULL'));
 
         if (!$school) {
+            Log::warning('DashboardService: No school associated with user ' . $user->id);
             return ['school' => null];
         }
 
-        return [
-            'school' => $school,
-            'product_stats' => $this->repository->getSchoolProductStats($school->school_id),
-            'kpis' => [
-                'total_classes' => $school->classes()->count(),
-                'active_classes' => $school->classes()->where('is_active', true)->count(),
-            ],
-            'recentClasses' => $school->classes()->latest()->take(5)->get(),
-            'notifications' => $this->repository->getRecentNotifications(8, $user->id),
-            'recentActivity' => $this->repository->getRecentActivity(10), // Filtered inside getRecentActivity by user id
+        $schoolId = $school->school_id;
+
+        // Fetch aggregated data
+        $kpis = [
+            'total_students' => \App\Models\Student::where('school_id', $schoolId)->count(),
+            'registered_students' => \App\Models\Student::where('school_id', $schoolId)->whereNotNull('user_id')->count(),
+            'total_revenue' => \App\Models\Order::where('school_id', $schoolId)->sum('grand_total'),
+            'pending_orders' => \App\Models\Order::where('school_id', $schoolId)->where('status', 'pending')->count(),
         ];
+
+        // Distribution Report: Students with distributions
+        $distributedStudents = StudentDistribution::with([
+            'orderItem.order.student'
+        ])
+            ->whereHas('orderItem.order', function ($query) use ($schoolId) {
+                $query->where('school_id', $schoolId);
+            })
+            ->latest('delivered_at')
+            ->limit(10)
+            ->get();
+
+        $result = [
+            'school' => $school,
+            'kpis' => $kpis,
+            'registration_trend' => $this->repository->getStudentRegistrationTrend($schoolId),
+            'completion_trend' => $this->repository->getOrderCompletionTrend($schoolId),
+            'status_distribution' => $this->repository->getSchoolOrderStatusDistribution($schoolId),
+            'recent_orders' => Order::with("student")->where('school_id', $schoolId)->latest()->take(10)->get(),
+            'distributed_students' => $distributedStudents,
+            'notifications' => $this->repository->getRecentNotifications(8, $user->id),
+        ];
+
+        return $result;
     }
 
     /**

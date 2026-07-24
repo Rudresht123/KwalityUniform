@@ -491,180 +491,278 @@
         }
     </script>
 
+<section class="how-section py-5">
 
-    <section class="how-section py-5">
+    <div class="container">
 
-        <div class="container">
+        <div class="text-center mb-5">
 
-            <div class="text-center mb-5">
+            <span class="how-badge">
+                How It Works
+            </span>
 
-                <span class="how-badge">
+            <h2 class="how-title">
+                Order Your Uniform
+                <span>In 5 Easy Steps</span>
+            </h2>
 
-                    How It Works
+            <p class="how-desc">
+                A simple and seamless ordering experience designed for
+                parents, students and schools.
+            </p>
 
-                </span>
+        </div>
 
-                <h2 class="how-title">
+        <div class="row g-4 steps-row">
 
-                    Order Your Uniform
-                    <span>In 3 Easy Steps</span>
-
-                </h2>
-
-                <p class="how-desc">
-
-                    A simple and seamless ordering experience designed for
-                    parents, students and schools.
-
-                </p>
-
+            <!-- STEP 1 -->
+            <div class="col-lg col-md-6">
+                <div class="step-card">
+                    <div class="step-connector"></div>
+                    <div class="step-icon-wrap">
+                        <div class="step-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21a8 8 0 0 0-16 0"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                        <span class="step-number">01</span>
+                    </div>
+                    <h4>Create Profile</h4>
+                    <p>Register your account and link your profile with your school to access approved products.</p>
+                </div>
             </div>
 
-            <div class="timeline-line"></div>
-
-            <div class="row g-4 position-relative">
-
-                <!-- STEP 1 -->
-
-                <div class="col-lg-4">
-
-                    <div class="step-card">
-
-                        <div class="step-number">
-
-                            01
-
-                        </div>
-
+            <!-- STEP 2 -->
+            <div class="col-lg col-md-6">
+                <div class="step-card">
+                    <div class="step-connector"></div>
+                    <div class="step-icon-wrap">
                         <div class="step-icon">
-
-                            <div class="step-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M3 21h18" />
-                                    <path d="M5 21V7a2 2 0 0 1 2-2h4v16" />
-                                    <path d="M11 21V3h6a2 2 0 0 1 2 2v16" />
-                                    <path d="M7 9h2" />
-                                    <path d="M7 13h2" />
-                                    <path d="M7 17h2" />
-                                    <path d="M15 7h2" />
-                                    <path d="M15 11h2" />
-                                    <path d="M15 15h2" />
-                                </svg>
-                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M8 4l4 3 4-3 3 4-3 2v10H8V10L5 8l3-4z"/>
+                            </svg>
                         </div>
-
-                        <h4>
-
-                            Choose School
-
-                        </h4>
-
-                        <p>
-
-                            Select your school to access officially approved
-                            uniforms and accessories.
-
-                        </p>
-
+                        <span class="step-number">02</span>
                     </div>
-
+                    <h4>Try Your Size</h4>
+                    <p>Visit your school's wardrobe to try uniforms and find your perfect size before ordering.</p>
                 </div>
+            </div>
 
-                <!-- STEP 2 -->
-
-                <div class="col-lg-4">
-
-                    <div class="step-card">
-
-                        <div class="step-number">
-
-                            02
-
-                        </div>
-
+            <!-- STEP 3 -->
+            <div class="col-lg col-md-6">
+                <div class="step-card">
+                    <div class="step-connector"></div>
+                    <div class="step-icon-wrap">
                         <div class="step-icon">
-
-                            <div class="step-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M6 7h12l-1 13H7L6 7z" />
-                                    <path d="M9 7a3 3 0 0 1 6 0" />
-                                    <path d="M9 11l2 2 4-4" />
-                                </svg>
-                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="7"/>
+                                <path d="m21 21-4.3-4.3"/>
+                            </svg>
                         </div>
-
-                        <h4>
-
-                            Pick Products
-
-                        </h4>
-
-                        <p>
-
-                            Browse your school's catalogue and choose the
-                            required size and quantity.
-
-                        </p>
-
+                        <span class="step-number">03</span>
                     </div>
-
+                    <h4>Browse Products</h4>
+                    <p>Explore your school's official uniforms, books, shoes, bags, and accessories.</p>
                 </div>
+            </div>
 
-                <!-- STEP 3 -->
-
-                <div class="col-lg-4">
-
-                    <div class="step-card">
-
-                        <div class="step-number">
-
-                            03
-
-                        </div>
-
+            <!-- STEP 4 -->
+            <div class="col-lg col-md-6">
+                <div class="step-card">
+                    <div class="step-connector"></div>
+                    <div class="step-icon-wrap">
                         <div class="step-icon">
-
-                            <div class="step-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M10 17H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h9v12z" />
-                                    <path d="M10 9h5l3 3v5h-2" />
-                                    <circle cx="7.5" cy="17.5" r="1.5" />
-                                    <circle cx="16.5" cy="17.5" r="1.5" />
-                                    <path d="M10 17h5" />
-                                </svg>
-                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="9" cy="20" r="1"/>
+                                <circle cx="18" cy="20" r="1"/>
+                                <path d="M5 5h2l2.5 10h8.5l2-7H8"/>
+                            </svg>
                         </div>
-
-                        <h4>
-
-                            Fast Delivery
-
-                        </h4>
-
-                        <p>
-
-                            Sit back while we deliver your order safely
-                            to your doorstep.
-
-                        </p>
-
+                        <span class="step-number">04</span>
                     </div>
-
+                    <h4>Place Your Order</h4>
+                    <p>Select your required products, review your cart, and securely place your order online.</p>
                 </div>
+            </div>
 
+            <!-- STEP 5 -->
+            <div class="col-lg col-md-6">
+                <div class="step-card step-card-last">
+                    <div class="step-icon-wrap">
+                        <div class="step-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 21h18"/>
+                                <path d="M5 21V7a2 2 0 0 1 2-2h4v16"/>
+                                <path d="M11 21V3h6a2 2 0 0 1 2 2v16"/>
+                                <path d="M7 9h2"/>
+                                <path d="M15 7h2"/>
+                            </svg>
+                        </div>
+                        <span class="step-number">05</span>
+                    </div>
+                    <h4>Collect from School</h4>
+                    <p>Your order is delivered to your school for convenient collection at the designated distribution point.</p>
+                </div>
             </div>
 
         </div>
 
-    </section>
+    </div>
 
-    <!-- 11. Why Choose eSchool Cart -->
+</section>
+
+<style>
+.how-section {
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    background: #fafbfc;
+}
+
+.how-badge {
+    display: inline-block;
+    background: rgba(59,130,246,0.1);
+    color: #3b82f6;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    margin-bottom: 1rem;
+}
+
+.how-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #1a1d29;
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+}
+
+.how-title span {
+    display: block;
+    color: #3b82f6;
+    font-size: 1.9rem;
+}
+
+.how-desc {
+    max-width: 520px;
+    margin: 0 auto;
+    color: #7c8291;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.steps-row {
+    position: relative;
+}
+
+.step-card {
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 16px;
+    padding: 2rem 1.5rem 1.75rem;
+    height: 100%;
+    text-align: center;
+    position: relative;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.step-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(59,130,246,0.1);
+    border-color: rgba(59,130,246,0.25);
+}
+
+.step-icon-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+}
+
+.step-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 18px rgba(59,130,246,0.28);
+    position: relative;
+    z-index: 2;
+}
+
+.step-number {
+    position: absolute;
+    top: -8px;
+    right: calc(50% - 44px);
+    background: #1a1d29;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    border: 2px solid #fafbfc;
+}
+
+.step-connector {
+    display: none;
+}
+
+@media (min-width: 992px) {
+    .step-connector {
+        display: block;
+        position: absolute;
+        top: 2.75rem;
+        left: 50%;
+        width: 100%;
+        height: 2px;
+        background: repeating-linear-gradient(
+            to right,
+            #d7dce4 0,
+            #d7dce4 6px,
+            transparent 6px,
+            transparent 12px
+        );
+        z-index: 1;
+    }
+}
+
+.step-card h4 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #1a1d29;
+    margin-bottom: 0.6rem;
+}
+
+.step-card p {
+    font-size: 0.88rem;
+    color: #8b93a1;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+</style>
+<!-- 11. Why Choose eSchool Cart -->
     <section class="py-5 bg-light">
         <div class="container">
             <div class="text-center mb-5">
@@ -947,6 +1045,91 @@
             </details>
         </div>
     </section>
+
+
+    <section class="admin-portal-section py-5">
+
+    <div class="container-fluid">
+
+        <div class="admin-portal">
+
+            <div class="row align-items-center g-5">
+
+                <!-- LEFT CONTENT -->
+                <div class="col-lg-6">
+
+                    <span class="portal-badge">
+                        <i class="ti ti-shield-lock"></i>
+                        ADMIN PORTAL
+                    </span>
+
+                    <h2 class="portal-title">
+                        Manage Your School Operations
+                        <span>From One Powerful Dashboard</span>
+                    </h2>
+
+                    <p class="portal-desc">
+                        Securely access your administration dashboard to manage
+                        schools, vendors, products, orders, inventory, reports,
+                        and day-to-day operations from one centralized platform.
+                    </p>
+
+                    <div class="portal-features">
+
+                        <div class="portal-feature">
+                            <i class="ti-package"></i>
+                            <span>Product Management</span>
+                        </div>
+
+                        <div class="portal-feature">
+                            <i class="ti-shopping-cart"></i>
+                            <span>Order Tracking</span>
+                        </div>
+
+                      
+                    
+
+                        <div class="portal-feature">
+                            <i class="ti ti-chart-bar"></i>
+                            <span>Reports & Analytics</span>
+                        </div>
+
+                        <div class="portal-feature">
+                            <i class="ti ti-shield-check"></i>
+                            <span>Role Based Access</span>
+                        </div>
+
+                    </div>
+
+                    <a href="{{ route('login') }}" class="portal-btn">
+                        Access Admin Portal
+                        <i class="ti ti-arrow-right"></i>
+                    </a>
+
+                    <div class="portal-note">
+                        <i class="ti ti-info-circle"></i>
+                        For School Administrators, Vendors and Authorized Staff only.
+                    </div>
+
+                </div>
+
+                <!-- RIGHT IMAGE -->
+
+                <div class="col-lg-6 text-center">
+
+                    <img src="{{ asset('assets/website/images/login.png') }}"
+                         class="img-fluid portal-image"
+                         alt="Admin Dashboard">
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
     <!-- 18. Newsletter -->
     <section class="py-5" style="background: linear-gradient(135deg, #1E3A8A 0%, #0F172A 100%);">

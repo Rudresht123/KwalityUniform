@@ -14,6 +14,21 @@ use App\Http\Controllers\Vendor\StockHistoryReportController;
 use App\Http\Middleware\CheckScreenLock;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\SuperAdmin\ImpersonationController;
+
+use App\Http\Controllers\TieUpController;
+
+// Tie-up routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/tieups', [TieUpController::class, 'index'])->name('tieups.index');
+    Route::post('/tieups', [TieUpController::class, 'store'])->name('tieups.store');
+    Route::patch('/tieups/{id}', [TieUpController::class, 'update'])->name('tieups.update');
+});
+
+// ... existing routes
+
+Route::middleware(['auth'])->get('/impersonate/stop', [ImpersonationController::class, 'stop'])->name('impersonate.stop');
+
 // Protect all administrative routes with auth and prefix 'eschoolkart'
 Route::prefix('eschoolkart')->group(function () {
     Route::middleware(['auth', 'role:super-admin|admin|school|vendor', CheckScreenLock::class])->group(function () {

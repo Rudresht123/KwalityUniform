@@ -21,6 +21,7 @@ class Order extends Model
         'user_id',
         'school_id',
         'vendor_id',
+        'student_id',
         'cart_id',
         'delivery_type',
         'status',
@@ -30,9 +31,6 @@ class Order extends Model
         'shipping_charge',
         'grand_total',
         'customer_note',
-        'student_name',
-        'student_class',
-        'student_section',
         'placed_at',
         'delivered_at',
         'payment_status',
@@ -41,6 +39,8 @@ class Order extends Model
     protected $casts = [
         'delivery_type' => DeliveryType::class,
         'status' => OrderStatus::class,
+        'placed_at' => 'datetime',
+        'delivered_at' => 'datetime',
     ];
 
     public function user(): BelongsTo
@@ -73,7 +73,12 @@ class Order extends Model
             ->withPivot('quantity_shipped');
     }
     public function vendor()
-{
-    return $this->belongsTo(Vendor::class,"vendor_id","vendor_id");
-}
+    {
+        return $this->belongsTo(Vendor::class,"vendor_id","vendor_id");
+    }
+
+    public function student(): BelongsTo
+    {
+        return $this->belongsTo(Student::class, 'student_id',"id");
+    }
 }

@@ -80,6 +80,8 @@ class OrderService
             foreach ($groupedItems as $vendorId => $items) {
                 $subtotal = collect($items)->sum(fn($i) => $i['price'] * $i['item']->quantity);
                 $schoolId = $items[0]['school_id'];
+                // Link or create a student record
+
 
                 $student = \App\Models\Student::firstOrCreate([
                     'school_id' => $schoolId,
@@ -89,8 +91,10 @@ class OrderService
                     'student_section' => $details['student_section'] ?? null,
                 ]);
 
+
+
                 $order = Order::create([
-                    'order_number' => 'ORD-' . strtoupper(Str::random(10)),
+                    'order_number' => generateOrderNumber($school->school_id),
                     'user_id' => Auth::id(),
                     'school_id' => $schoolId,
                     'vendor_id' => $vendorId,
@@ -104,6 +108,8 @@ class OrderService
                     'grand_total' => $subtotal,
                     'placed_at' => now(),
                 ]);
+
+                \Log::info('OrderService: Order created with ID:', ['id' => $order->id, 'student_id' => $order->student_id]);
 
                 // Create Order Items
                 foreach ($items as $vItem) {

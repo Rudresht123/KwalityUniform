@@ -284,6 +284,79 @@ if (!function_exists('greetings')) {
         'message' => $data['messages'][array_rand($data['messages'])],
     ];
 }
+
+
+if (! function_exists('generateOrderNumber')) {
+
+    function generateOrderNumber(School $school): string
+    {
+        $schoolCode = generateSchoolCode($school->school_name);
+
+        // Financial Year (April - March)
+        $startYear = now()->month >= 4 ? now()->year : now()->year - 1;
+        $financialYear = $startYear . '-' . substr($startYear + 1, -2);
+
+        $prefix = "{$schoolCode}/{$financialYear}/";
+
+        $lastOrder = Order::where('school_id', $school->school_id)
+            ->where('order_number', 'like', $prefix . '%')
+            ->latest('id')
+            ->first();
+
+        $sequence = 1;
+
+        if ($lastOrder) {
+            $sequence = (int) substr($lastOrder->order_number, -4) + 1;
+        }
+
+        return $prefix . str_pad($sequence, 4, '0', STR_PAD_LEFT);
+    }
+}
+
+if (! function_exists('generateSchoolCode')) {
+
+    function generateSchoolCode(string $schoolName): string
+    {
+        $ignoreWords = [
+            'SCHOOL',
+            'PUBLIC',
+            'INTERNATIONAL',
+            'HIGH',
+            'SR',
+            'SECONDARY',
+            'SENIOR',
+            'PRIMARY',
+            'THE',
+            'OF',
+            'AND',
+        ];
+
+        $words = preg_split('/\s+/', strtoupper(trim($schoolName)));
+
+        $code = '';
+
+        foreach ($words as $word) {
+
+            if (in_array($word, $ignoreWords)) {
+                continue;
+            }
+
+            $code .= substr($word, 0, 1);
+
+            if (strlen($code) >= 3) {
+                break;
+            }
+        }
+
+        // If still less than 3 characters, fill from first word
+        if (strlen($code) < 3) {
+            $firstWord = preg_replace('/[^A-Z]/', '', strtoupper($words[0] ?? 'SCH'));
+            $code = strtoupper(substr($firstWord, 0, 3));
+        }
+
+        return $code;
+    }
+}
 }
 
 ?>

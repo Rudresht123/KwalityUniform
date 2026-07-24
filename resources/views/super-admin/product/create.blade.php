@@ -10,8 +10,6 @@
             <div class="d-flex align-items-center justify-content-between mb-4">
                 <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                        data-bs-target="#addParentCategoryModal">+ Parent Category</button>
-                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                         data-bs-target="#addCategoryModal">+ Sub Category</button>
                     <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                         data-bs-target="#addSizeModal">+ Size</button>
@@ -70,8 +68,6 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                            data-bs-target="#addParentCategoryModal">+</button>
                                     </div>
                                 </div>
                                 <div class="col-md-{{ auth()->user()->hasRole('vendor') ? '12' : '6' }}">
@@ -369,7 +365,8 @@
                                                         class="form-control form-control-sm" placeholder="SKU" required>
                                                 </td>
                                                 <td>
-                                                    <select name="variants[0][size_id]" class="form-control select2 size-select">
+                                                    <select name="variants[0][size_id]"
+                                                        class="form-control select2 size-select">
                                                         <option value="">N/A</option>
                                                         @foreach ($sizes as $size)
                                                             <option value="{{ $size->size_id }}">{{ $size->size_name }}
@@ -378,7 +375,8 @@
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <select name="variants[0][color_id]" class="form-control select2 color-select">
+                                                    <select name="variants[0][color_id]"
+                                                        class="form-control select2 color-select">
                                                         <option value="">N/A</option>
                                                         @foreach ($colors as $color)
                                                             <option value="{{ $color->color_id }}">
@@ -402,7 +400,9 @@
                                                 <td><input type="number" name="variants[0][low_stock_alert]"
                                                         class="form-control form-control-sm" value="5"></td>
                                                 <td><input type="text" name="variants[0][barcode]"
-                                                        class="form-control form-control-sm" placeholder="Barcode"></td>
+                                                        class="form-control form-control-sm"
+                                                        value="BC-{{ mt_rand(100000000, 999999999) }}"
+                                                        placeholder="Barcode"></td>
                                                 <input type="hidden" name="variants[0][is_active]" value="1">
                                                 <td class="text-center">
                                                     <div class="variant-action-group">
@@ -520,23 +520,22 @@
                     $('#category_id').html('<option value="">Select Sub Category</option>');
                     return;
                 }
-
+                let url = "{{ route('ajax.category.subcategory', ':id') }}".replace(':id', parentId);
                 $.ajax({
-                    url: '/shop/subcategories/' + parentId,
+                    url: url,
                     type: 'GET',
                     dataType: 'json',
 
                     success: function(response) {
+
                         let options = '<option value="">Select Sub Category</option>';
-                        $.each(response.subCategories, function(index, item) {
-
+                        $.each(response, function(index, item) {
                             options += `
-                    <option value="${item.category_id}">
-                        ${item.category_name }
-                    </option>
-                `;
+        <option value="${item.category_id}">
+            ${item.category_name}
+        </option>
+    `;
                         });
-
                         $('#category_id').html(options);
                     },
 
@@ -556,154 +555,153 @@
             });
 
             // Helper for AJAX Forms
-          function handleAjaxForm(formId, routeUrl, targetSelector, modalId, type) {
+            function handleAjaxForm(formId, routeUrl, targetSelector, modalId, type) {
 
-    $(formId).on('submit', function (e) {
+                $(formId).on('submit', function(e) {
 
-        e.preventDefault();
+                    e.preventDefault();
 
-        const form = $(this);
-        const submitBtn = form.find('[type="submit"]');
+                    const form = $(this);
+                    const submitBtn = form.find('[type="submit"]');
 
-        submitBtn.prop('disabled', true);
-        $("#preloader").show();
+                    submitBtn.prop('disabled', true);
+                    $("#preloader").show();
 
-        $.ajax({
+                    $.ajax({
 
-            url: routeUrl,
-            type: 'POST',
-            data: form.serialize(),
-            dataType: 'json',
+                        url: routeUrl,
+                        type: 'POST',
+                        data: form.serialize(),
+                        dataType: 'json',
 
-            success: function (res) {
+                        success: function(res) {
 
-                if (!res.success) {
+                            if (!res.success) {
 
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: res.message ?? 'Something went wrong.'
-                    });
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: res.message ?? 'Something went wrong.'
+                                });
 
-                    return;
-                }
+                                return;
+                            }
 
-                switch (type) {
+                            switch (type) {
 
-                    case 'parent':
+                                case 'parent':
 
-                        $('#parent_id').append(
-                            `<option value="${res.parent.parent_id}" selected>
+                                    $('#parent_id').append(
+                                        `<option value="${res.parent.parent_id}" selected>
                                 ${res.parent.name}
                             </option>`
-                        );
+                                    );
 
-                        break;
+                                    break;
 
-                    case 'subcat':
+                                case 'subcat':
 
-                        $('#category_id').append(
-                            `<option value="${res.category.category_id}" selected>
+                                    $('#category_id').append(
+                                        `<option value="${res.category.category_id}" selected>
                                 ${res.category.category_name}
                             </option>`
-                        );
+                                    );
 
-                        break;
+                                    break;
 
-                    case 'size':
+                                case 'size':
 
-                        $('.size-select').append(
-                            `<option value="${res.size.size_id}" selected>
-                                ${res.size.size_name}
-                            </option>`
-                        );
+                                    // Add to all selects using Select2 API
+                                    $('.size-select').each(function() {
+                                        var newOption = new Option(res.size.size_name, res.size.size_id, false, false);
+                                        $(this).append(newOption).trigger('change');
+                                    });
 
-                        break;
+                                    break;
 
-                    case 'color':
+                                case 'color':
 
-                        $('.color-select').append(
-                            `<option value="${res.color.color_id}" selected>
-                                ${res.color.color_name}
-                            </option>`
-                        );
+                                    // Add to all selects using Select2 API
+                                    $('.color-select').each(function() {
+                                        var newOption = new Option(res.color.color_name, res.color.color_id, false, false);
+                                        $(this).append(newOption).trigger('change');
+                                    });
 
-                        break;
-                }
+                                    break;
+                            }
 
-                $(modalId).modal('hide');
+                            $(modalId).modal('hide');
 
-                form[0].reset();
+                            form[0].reset();
 
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: res.message ?? 'Created successfully.',
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-
-            },
-
-            error: function (xhr) {
-
-                console.error(xhr);
-
-                let message = 'Something went wrong. Please try again.';
-
-                if (xhr.responseJSON) {
-
-                    // Validation Errors
-                    if (xhr.status === 422) {
-
-                        if (xhr.responseJSON.errors) {
-
-                            let errors = [];
-
-                            $.each(xhr.responseJSON.errors, function (field, msgs) {
-                                errors.push(msgs[0]);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: res.message ?? 'Created successfully.',
+                                timer: 1500,
+                                showConfirmButton: false
                             });
 
-                            message = errors.join('<br>');
+                        },
 
-                        } else if (xhr.responseJSON.message) {
+                        error: function(xhr) {
 
-                            message = xhr.responseJSON.message;
+                            console.error(xhr);
+
+                            let message = 'Something went wrong. Please try again.';
+
+                            if (xhr.responseJSON) {
+
+                                // Validation Errors
+                                if (xhr.status === 422) {
+
+                                    if (xhr.responseJSON.errors) {
+
+                                        let errors = [];
+
+                                        $.each(xhr.responseJSON.errors, function(field, msgs) {
+                                            errors.push(msgs[0]);
+                                        });
+
+                                        message = errors.join('<br>');
+
+                                    } else if (xhr.responseJSON.message) {
+
+                                        message = xhr.responseJSON.message;
+                                    }
+                                }
+
+                                // Other Laravel JSON Errors
+                                else if (xhr.responseJSON.message) {
+
+                                    message = xhr.responseJSON.message;
+                                }
+                            } else if (xhr.responseText) {
+
+                                message = xhr.responseText;
+                            }
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                html: message,
+                                confirmButtonText: 'OK'
+                            });
+
+                        },
+
+                        complete: function() {
+
+                            submitBtn.prop('disabled', false);
+
+                            $("#preloader").hide();
                         }
-                    }
 
-                    // Other Laravel JSON Errors
-                    else if (xhr.responseJSON.message) {
+                    });
 
-                        message = xhr.responseJSON.message;
-                    }
-                }
-                else if (xhr.responseText) {
-
-                    message = xhr.responseText;
-                }
-
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    html: message,
-                    confirmButtonText: 'OK'
                 });
 
-            },
-
-            complete: function () {
-
-                submitBtn.prop('disabled', false);
-
-                $("#preloader").hide();
             }
-
-        });
-
-    });
-
-}
 
             // Initialize handlers
             handleAjaxForm('#ajaxParentCategoryForm', "{{ route('ajax.parent-category.store') }}", '#parent_id',

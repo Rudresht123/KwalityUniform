@@ -30,6 +30,7 @@
 </head>
 
 <body data-page="home">
+    @include('partials.impersonation-banner')
 
     <!-- Premium Loader Wrapper -->
     <div id="premium-loader" class="premium-loader-wrap">

@@ -11,6 +11,10 @@ class StudentDistribution extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
+    protected $casts = [
+        'delivered_at' => 'datetime',
+    ];
+
     protected $fillable = [
         'order_item_id',
         'status',
@@ -21,5 +25,9 @@ class StudentDistribution extends Model
     public function orderItem(): BelongsTo
     {
         return $this->belongsTo(OrderItem::class);
+    }
+
+    public function student(){
+        return $this->belongsTo(User::class,"collected_by","id");
     }
 }
